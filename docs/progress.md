@@ -7,6 +7,30 @@ Stage: implementation
 
 ## Выполнение MVP
 
+- **M2.4 implementation принят:** все3P2 ADDRESSED, независимые spec/quality PASS; root256tests/types/lint/build/NFT PASS. Сам M2.4 = blocked: настоящий индекс не создан из-за401. M2.5 проверяет offline этап и продолжение со stubs по прямому разрешению пользователя; live качество не объявляется готовым.
+
+- M2.4 fix1: все3 замечания воспроизведены assertion-level RED (4ошибки на временных synthetic данных). Идёт исправление; реальный каталог и бюджет не затронуты.
+
+- M2.4 review нашёл3P2: недостижимый semantic eval, риск перезаписи env-каталога и потерю embeddings завершённого батча при последующем сбое. Исправления переданы исходному исполнителю с регрессионными тестами. Платных вызовов по-прежнему0.
+
+- M2.4 implementation: root234tests/types/lint/build/NFT PASS; no index/cache written. Independent review идёт. Frozen lexical eval exit1:11/12top3, Recall5macro88.33%/micro81.25%, negatives4/4/hardconstraintsPASS. Semantic/live acceptance не выполнен.
+
+- M2.4 RED зафиксирован: index/runtime+runner ещё отсутствовали; реализация идёт. Runtime metadata согласовано как semantic/lexical+warnings+canonicalSnapshot, чтобы UI честно показывал фактический режим.
+
+- **M2.3 done:** persistentguard+guardedtransport; P1diskfailure fixedRED→GREEN, reviewPASS. Root206tests/typecheck/lintPASS; budget60tests. Paidmodeoff, realledgerнеинициализирован, key401/$0. M2.4 starts versionedindex/cache + lexicalmetadata/evalrunner, no actual paidindex.
+
+- Дополнительная проверка M2.2 на реальном каталоге: все16 hard-filter sets совпали с независимой разметкой, exit0. Semantic oracle критерии в поиск не передавались.
+
+- **M2.2 done:** root200unit/types/lintPASS, independent review+6edgeprobesPASS. **M2.3 ещё in_progress:** review P1 diskcommitfailure unlocks unknowncost; originalexecutor fixes with transientI/O regression before acceptance/anypaidcalls.
+
+- **M2.1 done:** root reproduces RED absentgeo/rank; independent testsreviewPASS. M2.2 starts implementation of previously written behaviorcases; real labels frozen.
+
+- M2.3 RED зафиксирован перед реализацией spend guard; прежние88tests PASS. Внутренний RankingContext согласован с intent/сервернымnow для корректного visitMinutes; HTTP не принимает scores/подмену времени.
+
+- Исправлена несогласованность tracker: M1.1 остался todo/empty evidence при существующем source commit и сохранённых PASS reports. Запись восстановлена по проверенным артефактам; добавлена обязательная parent/children/dependency integrity сверка после обновлений, без повторной реализации.
+
+- **M1 завершён**, stage commit `10f4981`. Integrated root gates всеexit0 (88unit/26e2e); collector originals сохранены отдельно без автоматического коммита. **M2.1/M2.3 in_progress:** параллельно search behavior tests и persistent budget guard, без paid calls.
+
 Этап 1 прошёл интеграционные проверки и независимые task reviews.
 Созданы Next16.4.2/React19.3.1/TypeScript strict/Tailwind, pinned Node24.21.0 и
 pnpm11.0.8, lockfile/CI, Zod-контракты/импорт и доступные UI primitives.
@@ -53,11 +77,13 @@ Read-only `/api/v1/key`/`credits` вернул401: ключ присутству
 файла на принятый каталог. Offline/stub разработка продолжается.
 
 Лимит подготовки/индексации/тестов/повторов$2, live-eval$0.50 внутри него, демо$4
-сохранены. Spend guard ещё предстоит M2.3 до любых paid calls. Public model metadata
+сохранены. Persistent single-host spend guard принят в M2.3 после fault-injection fix/review;
+paid mode выключен, serverless paid запрещён. См. [budget.md](budget.md). Public model metadata
 проверена без ключа; старые исследования не повторялись.
 
 ## Следующий этап
 
-M2.1→M2.2: поведенческие тесты и детерминированные фильтры/ранжирование.
-Параллельно M2.3: persistent spend guard. Затем индекс/lexical fallback и backend.
+M2.1/M2.2/M2.3 проверены; M2.4 реализует индекс/кеш/lexical fallback и runner.
+Далее M2.5 acceptance и M3 текстовый API с явно выбранным demo parser без платных вызовов.
+Недействующий ключ не блокирует независимую offline-разработку; live gates остаются честно незавершёнными.
 MVP не объявляется рабочим P0 по наличию shell или одной сборке.

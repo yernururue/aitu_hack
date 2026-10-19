@@ -115,10 +115,10 @@ tests/e2e/search-shell.spec.ts, workflow CI.
 - [x] Реализовать shell с пресетами локации и вводом; при отказе geolocation
   показать ручной выбор. Synthetic fixture всегда имеет видимый demo watermark.
 - [x] M1.2a: ограничить filesystem tracing каталогом; проверить отсутствие raw/private/env и исходников сборщика в production NFT.
-- [ ] `pnpm lint && pnpm typecheck && pnpm test && pnpm build`: все exit 0.
+- [x] `pnpm lint && pnpm typecheck && pnpm test && pnpm build`: все exit 0.
   Создать scripts для этих имён команд; tests:e2e пока может проверять только shell.
 - [x] Проверить 390/1440 px и отказ разрешения в браузере; сохранить evidence.
-- [ ] Обновить прогресс; создать отдельный коммит этапа после проверки.
+- [x] Обновить прогресс; создать отдельный коммит этапа после проверки.
 
 ## Этап 2. Поиск, расстояния и жёсткие ограничения
 
@@ -131,28 +131,38 @@ now: Date): Poi[]`; `rankCandidates(candidates: Poi[], context: RankingContext):
 `retrieve(request: RecommendRequest, intent: Intent, now: Date): Promise<RankedPoi[]>`.
 `RankedPoi = {poi: Poi, distanceM: number, score: number,
 visitMinutes: {min: number, max: number, isEstimate: true}}`.
-`RankingContext = {query: string, origin: Coordinates, profileId: ProfileId,
-savedIds: string[], dismissedIds: string[], queryVector: number[]|null, index: Index|null}`.
+`RankingContext = {query: string, origin: Coordinates, profileId: ProfileId|null,
+savedIds: string[], dismissedIds: string[], intent: Intent, now: Date,
+queryVector: number[]|null, index: Index|null,
+semanticScores?: Readonly<Record<string,number>>}`.
+`intent/now` нужны для ограничения оценки посещения по длительности и закрытию.
+`semanticScores` — только серверная инъекция конечных нормализованных0–1значений;
+HTTP её не принимает. `retrieve` допускает необязательный четвёртый аргумент
+server-only dependencies (catalog/provider) для детерминированных тестов.
 
-- [ ] Написать failing tests по eval cases: радиус, бюджет с неизвестной ценой,
+- [x] Написать failing tests по eval cases: радиус, бюджет с неизвестной ценой,
   outlet confirmed/reported, неизвестные/ночные часы, no-match, Unicode RU/KK.
-- [ ] Проверить FAIL через `pnpm test -- tests/unit/filters.test.ts tests/unit/retrieve.test.ts`.
-- [ ] Использовать geolib getDistance либо одну протестированную реализацию
+- [x] Проверить FAIL через `pnpm test -- tests/unit/filters.test.ts tests/unit/retrieve.test.ts`.
+- [x] Использовать geolib getDistance либо одну протестированную реализацию
   Haversine; название поля distanceKind всегда straight_line.
-- [ ] Реализовать фильтры и ranking с весами spec; применять ограничения раньше score.
-- [ ] Реализовать кодовую оценку посещения и отсечение по закрытию из контракта;
+- [x] Реализовать фильтры и ranking с весами spec; применять ограничения раньше score.
+- [x] Реализовать кодовую оценку посещения и отсечение по закрытию из контракта;
   тестировать открытый overnight и недостаток времени до закрытия отдельно.
-- [ ] Подготовить retrieval runner для размеченных случаев; JSONL с expected/actual IDs.
-- [ ] До первого платного вызова реализовать единый spend guard и журнал usage
+- [x] Подготовить retrieval runner для размеченных случаев; JSONL с expected/actual IDs.
+- [x] До первого платного вызова реализовать единый spend guard и журнал usage
   для embeddings/LLM/аудио/повторов: лимит подготовки $2, live-eval $0.50 внутри него,
   резерв демо $4. Проверять прогноз до вызова и usage после; ограничить concurrency,
   резервировать стоимость in-flight вызовов, запретить новые вызовы при неизвестном
   расходе. Тестировать отказ при превышении с provider stubs. .env не является guard.
 - [ ] Сформировать документы и индекс через OpenRouter embeddings после настройки
   ключа; не отправлять сырые выгрузки целиком и не повторять индексацию без смены hash.
-- [ ] Проверить отказ от смешанных dimensions/model/hash; lexical fallback явно помечен.
-- [ ] Запустить unit tests и `pnpm build`, записать фактическое число POI и модель индекса.
+- [x] Проверить отказ от смешанных dimensions/model/hash; lexical fallback явно помечен.
+- [x] Запустить unit tests и `pnpm build`, записать фактическое число POI и модель индекса.
+  M2.4 code принят: 256tests/build/NFT PASS. Каталог298; настоящего индекса нет (401),
+  кандидат text-embedding-3-small/1536. Lexical Recall@5 88,33%, gate не пройден.
+  Продолжение offline со stubs разрешено пользователем; M2.4 остаётся blocked.
 - [ ] Развернуть ранний preview при доступе к хостингу, проверить загрузку snapshot.
+  Read-only Vercel auth вернул403; preview не развёрнут.
 - [ ] Зафиксировать проверенный этап отдельным коммитом.
 
 ## Этап 3. Структурированный RAG и полный текстовый путь

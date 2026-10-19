@@ -162,6 +162,42 @@ URL, координат и часов. Сервер проверяет схем�
 `Index = {schemaVersion: "1.0", model: string, dimensions: number,
 datasetHash: string, documentVersion: "poi-v1", vectors: {poiId, values: number[]}[]}`.
 Все значения конечны, размерности совпадают, IDs существуют и уникальны.
+`datasetHash` вычисляется как SHA-256 UTF-8 `JSON.stringify(CatalogSchema.parse(catalog))`
+(канонический порядок ключей runtime-схемы, без pretty-print). File SHA-256 в labels
+проверяется отдельно и не подменяет canonical datasetHash.
 Не смешивать модели/размерности. Несовпадение hash блокирует векторный поиск;
-допустим явно помеченный lexical fallback. Генерировать вектора по описанию,
-категории, тегам и подтверждённым фактам, не по произвольным URL.
+допустим явно помеченный lexical fallback. Генерировать вектора по имени, описанию,
+категории, тегам и подтверждённым фактам, не по произвольным URL или отзывам.
+
+## Внутренний retrieval context
+
+`RankingContext` дополнительно получает валидный `Intent` и серверный `now: Date`,
+чтобы `visitMinutes` ограничивался выбранной длительностью и остатком до закрытия.
+`profileId` допускает null. Необязательный `semanticScores: Readonly<Record<string,number>>`
+передаёт только внутренние конечные scores0–1; клиентский POST такого поля не принимает.
+`retrieve` допускает четвёртый server-only dependencies аргумент для catalog/provider
+инъекции в тестах. Ответ HTTP и правила извлечения/фактов остаются по v1 выше.
+
+`retrieveWithMetadata` — внутренний дополнительный интерфейс
+`{candidates: RankedPoi[], mode: "semantic"|"lexical", warnings: string[],
+dataSnapshot: string}`; `dataSnapshot` — canonical datasetHash.
+`retrieve` сохраняет прежний результат `RankedPoi[]`. Mode/warnings отражают реальное
+использование индекса; downstream не объявляет lexical поиск векторным.
+
+
+## Кеш векторов оценочных запросов
+
+Внутренний `QueryVectorCacheSchema` / `QueryVectorCache`:
+`{schemaVersion:"1.0", model:string, dimensions:integer1..1536,
+datasetHash:canonicalCatalogSHA256, queries:Record<queryHash,number[]>}`.
+`queryHash` — SHA-256 UTF-8 исходного текста запроса без подмены gold-критериями.
+Вектора конечны, ненулевые и имеют заданную размерность; модель, размерность и
+хеш каталога должны совпадать с проверенным индексом. Кеш не хранит текст запросов.
+
+`evaluateCases` допускает server-only `index/queryCache/embed/checkpointQueries`
+инъекции. CLI по умолчанию только читает кеш и не вызывает сеть; отсутствие либо
+несовместимость данных даёт помеченный lexical fallback. Явный `--prepare-queries`
+может готовить недостающие query vectors через guarded `live_eval` только после
+проверки полного индекса и конфигурации бюджета. Успешный батч сохраняется атомарно
+с fsync до следующего вызова; финальный POI-index публикуется только после полной
+валидации. См. [indexing.md](indexing.md). HTTP v1 не принимает эти параметры.

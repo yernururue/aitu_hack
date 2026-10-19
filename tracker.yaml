@@ -21,27 +21,27 @@ budget:
   recorded_openrouter_spend_usd: 0.0
   spend_basis: "No paid OpenRouter project calls recorded; not an account balance verification; separate collector/Apify billing is excluded"
   account_balance_verified: false
-  enforcement: "Not implemented; env values are configuration, not enforced caps"
+  enforcement: "Implemented and independently reviewed persistent single-host guard; paid mode off; Vercel/Lambda/Netlify paid mode prohibited; credentials HTTP401"
   before_first_paid_call:
     - "Configure server-only OpenRouter credentials without exposing secrets"
     - "Implement and test cost guard, preflight estimates, usage ledger and bounded retries"
     - "Check remaining preparation budget and live-eval subcap before every paid batch; reserve demo funds"
-  dataset_volume: "Collection ongoing; received unreviewed normalized files report 99 place records and 976 reviews. Accepted/imported POI count remains unknown."
+  dataset_volume: "298 accepted real POI /591 short sourced review excerpts; verified36 in3zones/3categories; original298/1953collector snapshot preserved"
 handoff:
   state: "ready"
-  application_state: "not_implemented"
-  current_scope: "Continue approved MVP from next_task_id; handoff session stopped before scaffold as requested"
+  application_state: "search_and_budget_implemented_api_pending"
+  current_scope: "M1 done; M2 search and cost guard accepted; continue versioned index then text API/UI; live blocked by401"
   internal_deadline: "2026-10-20T20:00:00+05:00"
   submission_deadline: "2026-10-20T23:59:00+05:00"
   collector_work:
-    state: "received_unreviewed"
+    state: "accepted_for_app_import"
     paths:
       - "data/"
       - "scripts/astana_data.py"
       - "scripts/collect_astana.py"
       - "scripts/test_astana_data.py"
-    notes: "Root inspected data/normalized/astana/places.json (99 records), reviews.json (976 records) and report.json. Existing untracked collector files are unreviewed; preserve them. These counts do not establish accepted ingestion, provenance or contract compatibility; review in M1.3."
-next_task_id: "M1.6"
+    notes: "M1.3 independently accepted298realPOI/591excerpts and reviewed36demo slice. Original collector code/snapshots preserved separately, no paid recollection. Collection C6 remains owned by collector integrator; publication rights not established."
+next_task_id: "M2.5"
 workflow:
   tracker_writer: "Single main integrator updates tracker after every finished task"
   completion_rule: "Mark done only after acceptance verification; record exact commands, exit codes and limitations here and in docs/progress.md"
@@ -121,15 +121,18 @@ stages:
           - "Independent handoff_review subagent: no actionable findings; repeated offline checks exit 0. No collector files changed."
   - id: "M1"
     title: "Runnable app and validated input data"
-    status: "todo"
+    status: "done"
     tasks:
       - id: "M1.1"
         title: "Pin compatible runtime and scaffold project"
-        status: "todo"
+        status: "done"
+        owner: "scaffold_executor"
         depends_on:
           - "H0.7"
         acceptance: "Verify Node LTS/Next/React/pnpm compatibility; preserve harness; add TS strict, lockfile, CI and lint/typecheck/test/build scripts."
-        evidence: []
+        evidence:
+          - "Restored status/evidence from completed implementation reports and root verification: Node24.21.0/Next16.4.2/React19.3.1/pnpm11.0.8 pinned with lockfile, strict TS and CI; frozen install/peers/lint/typecheck/2tests/build/harness exit0."
+          - "Independent M1.1-review.md spec PASS /quality PASS; source included in10f4981 and later integrated88tests/build/e2e pass. Integrator detected stale todo/empty evidence during parent-child integrity audit and corrected bookkeeping; no code repeated or collector files changed."
       - id: "M1.2"
         title: "Implement contracts and import with behavioral tests"
         status: "done"
@@ -184,7 +187,7 @@ stages:
           - "Independent reviewer spec PASS / quality PASS, no findings. Build exposed separate dynamic filesystem tracing issue (raw/normalized/collector files in NFT manifest); tracked as M1.2a before stage acceptance. Backend still not implemented at shell task."
       - id: "M1.6"
         title: "Verify stage and record evidence"
-        status: "in_progress"
+        status: "done"
         owner: "root_integrator"
         depends_on:
           - "M1.2a"
@@ -192,48 +195,75 @@ stages:
           - "M1.4"
           - "M1.5"
         acceptance: "pnpm lint/typecheck/test/build exit 0; browser shell at 390/1440 px and denied location checked; progress/evidence and stage commit recorded."
-        evidence: []
+        evidence:
+          - "Integrated root Node24 gate: lint/typecheck/88unit/build/check-build-artifacts/26shellPlaywright/harness/diff-check all exit0. Build has no dynamic filesystem warning; 390/1440 and denied geolocation verified; independent task reviews PASS."
+          - "Stage commit created and git log verified: 10f4981 feat: add validated real catalog and responsive search shell. Collector data/README, data/collection and original Python collector files remain untracked/preserved, not auto-committed with app."
   - id: "M2"
     title: "Retrieval, distance and hard constraints"
-    status: "todo"
+    status: "blocked"
     tasks:
       - id: "M2.1"
         title: "Write failing filter and retrieval behavior tests"
-        status: "todo"
+        status: "done"
+        owner: "scaffold_executor"
         depends_on:
           - "M1.6"
         acceptance: "Cover radius, unknown price, confirmed/reported facts, unknown/overnight hours, closing time, no match and RU/KK Unicode; record expected failure."
-        evidence: []
+        evidence:
+          - "Root Node24 targeted Vitest filters/retrieve exit1: two suites fail resolving absent geo/rank modules before implementation. Tests cover radius, unknown/zero budget, confirmed/reported facts, unknown/closed/24h/previous-day overnight/closing, RU/KK/accents, profile constraints, weights, max8 and durations; assertions not yet executed."
+          - "Independent reviewer spec PASS /test quality PASS, no findings; handchecked timestamps/duration bounds/weights. No production search code or oracle labels changed."
       - id: "M2.2"
         title: "Implement deterministic filters, ranking and duration"
-        status: "todo"
+        status: "done"
+        owner: "scaffold_executor"
         depends_on:
           - "M2.1"
         acceptance: "Hard constraints run before weighted ranking; tested distance is straight_line; visit duration and previous-day overnight/closing checks follow contract."
-        evidence: []
+        evidence:
+          - "Additional root real-data cross-check exit0: filterCandidates output equals independently labelled hardEligibleIds for all16 realcases (fixedUIconstraints + declared requiredfacts), without injecting gold semantic tags/names/IDs."
+          - "Root integrated Node24 pnpm test200tests/6suites, typecheck, lint all exit0 after both implementations; searchtarget58behaviorcases green. Deterministicgeo/hardfilters/mergedovernight+24h/closingtime/visitcaps/Unicodeweights/profiles implemented without network."
+          - "Independent data_executor review spec PASS /quality PASS; six additional boundary probes exit0, no findings. Index remains type-only untilM2.4; real labels unchanged, no semantic/live quality claim."
       - id: "M2.3"
         title: "Implement paid-call cost guard and credential setup"
-        status: "todo"
+        status: "done"
+        owner: "ai_executor"
         depends_on:
           - "M1.6"
         acceptance: "Server-only OpenRouter configuration; tested preflight cap, actual usage accounting and bounded retries; $2 preparation ceiling and $0.50 eval subcap preserve $4 demo reserve; env values alone do not satisfy gate."
         evidence:
+          - "Persistent single-host guard/config/pricing/transport implemented: hardprep$2/eval$0.50nested/demo$4separate, concurrentreservationcap2, actualusage.cost before schemaerrors, unknown/overshoot/crash freeze, noautoreset/retries; paiddefaultoff/serverlessdenied. No realledger/auth/paidcalls."
+          - "Fix1 P1 durableI/O failure: five fault-injection REDcases then lockretention/save-load guard GREEN. Root206tests/6suites,typecheck,lint exit0; budget60tests. Independent scoped re-review findingADDRESSED, spec PASS /quality PASS. Credentials still401; live/index gated. Conservative Haikuquote can exceedevalsubcap, not relaxed."
+          - "Root200unit/typecheck/lint pass, but independent review CHANGES REQUIRED P1: ledger transaction releaseslock after failed durable settle(null), allowing newreserve after unknowncost until expiry. Originalexecutor fix1 assigned with transientI/O/newguard regression. Paid/authcalls0; guard not accepted."
+          - "RED Node24 pnpm test -- tests/unit/budget.test.ts exit1 before budget module implementation; existing88tests pass. Stub scenarios include persistent concurrency/restart/caps/eval/demo/unknowncost/overshoot/timeout/429/retry accounting; no auth/paid network."
           - "Credential preflight (GET /api/v1/key and /credits, read-only/no generation) returned HTTP 401. Key value never printed. Public model metadata verified and saved in /tmp/aituhack-mvp/model-preflight.json. Offline/stub development continues; live calls blocked until credential works and guard verified."
       - id: "M2.4"
         title: "Build versioned embeddings index and retrieval runner"
-        status: "todo"
+        status: "blocked"
+        owner: "scaffold_executor"
         depends_on:
           - "M2.2"
           - "M2.3"
         acceptance: "Check remaining budget before paid indexing; index only prepared documents; preserve model/dimensions/hash; avoid unchanged reindexing; runner emits expected/actual JSONL; incompatible index uses labelled lexical fallback."
-        evidence: []
+        evidence:
+          - "Implementation ACCEPTED after3P2fix RED→GREEN, independent scoped re-review allADDRESSED/specPASS/qualityPASS. Root256tests/typecheck/lint/build/check-build-artifacts exit0. Semanticrunner reachable in syntheticofflinecache/injected tests; canonicalpathprotection and durableperbatch checkpoints verified."
+          - "Remaining external acceptance BLOCKED: no realembeddingindex/querycache because keyHTTP401/paidoff. Rootdryrun298docs/45770bytes exit0 noartifacts; real lexicaleval exit1 (top3=11/12, macroRecall5=.8833333333, micro=.8125, negative4/4, hardPASS), no semanticqualityclaim orpaidcalls."
+          - "Fix1 RED reproduces all3reviewfindings atassertion level:4failed syntheticcases for envcatalog overwrite, absentcheckpoint afterinterruption and unreachable semantic evaluation via cache/injection. Zero realfile/network/auth/paid effects. Implementing originalauthor fixes before re-review."
+          - "Independent review CHANGES REQUIRED 3P2 reproducedsynthetic/no-network: semanticrunner has noqueryembed/vector path; envconfiguredcatalog canbeoverwritten byCLI output; completedbatchcachelost onlaterfailure causingpaidrepeat. Originalexecutor fix1assigned with RED regressions, guardedopt-in/offlinequerycache and perbatchdurablecheckpoint. Earlier234tests/buildPASS insufficient foracceptance."
+          - "Implementation ready, independent review pending. Root234tests/typecheck/lint/build/build-artifact gate exit0. Dryrun298shortdocs/45770bytes, modeltext-embedding-3-small/dim1536, no real/fake index/cache written. Canonicalhash4677a7a004ef0626f4b911814a8f3b825f81e61ab8b03f82cb00d977fe6950a6."
+          - "Root eval:retrieval exit1: lexical top3=11/12, macroRecall5=.8833333333, micro=.8125, negatives4/4, hardconstraintsPASS; quality/semantic acceptance notmet, labels unchanged. Liveindex blocked401/paidoff/$0."
+          - "RED targeted index.test.ts exit1 before executableIndex API/evalrunner implementation. Tests cover canonicalhash/model/dims/IDs/finite/zero/cosine/cache/guardedbatches/nofetchfallback/dryrunno realvectors/oracleisolation/macro-micro metrics. No productionindex or paidcalls created."
       - id: "M2.5"
         title: "Verify retrieval and early preview"
-        status: "todo"
+        status: "in_progress"
+        owner: "root_integrator"
         depends_on:
           - "M2.4"
+        dependency_waivers:
+          - "M2.4"
+        waiver_reason: "User explicitly authorized continuing without a key using stubs. M2.4 implementation is verified/reviewed; only real paid-index artifact is blocked by HTTP401. Offline stage acceptance must not claim live semantic quality."
         acceptance: "Unit tests and pnpm build pass; record actual POI count/index model; deploy early preview when hosting access permits and verify snapshot; progress and stage commit recorded."
-        evidence: []
+        evidence:
+          - "Offline continuation authorized by user instruction without key use stubs; M2.4 code/review accepted, only actualpaidindex gate unmet. Root integrated256tests/typecheck/lint/build/NFT exit0; actualcatalog298, indexmodelnone (configuredembeddingcandidate only). Vercelread-only /v2/user HTTP403; earlypreview unavailable, no deployment."
   - id: "M3"
     title: "Structured RAG and full text path"
     status: "todo"

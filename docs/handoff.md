@@ -5,8 +5,14 @@
 [progress.md](progress.md) содержит актуальные проверки и ограничения.
 
 Рабочая папка `/Users/macbook/Yernur/projects/aituhack`, ветка `codex/p0-mvp`.
-Этап1: scaffold/contracts/реальные298POI/UI390+1440/labels12RU+4negative проверены;
-backend и retrieval пока не реализованы. Следом M2.1 и независимый M2.3.
+M1 завершён (commit `10f4981`): scaffold/contracts/298реальныхPOI/UI390+1440/labels12RU+4negative.
+M2.1–M2.3 проверены: deterministic filters/ranking + persistent single-host budget guard.
+M2.4 implementation принят после3P2fix/re-review:256tests/types/lint/build/NFT PASS.
+M2.4 task blocked: настоящий индекс отсутствует из-за401. Lexical top3=11/12,
+Recall5macro88.33%, semantic/quality gate не пройден. API ещё отсутствует; далее M3.
+M2.5 допускает offline продолжение по явному разрешению пользователя со stubs;
+зависимость от live части M2.4 записана как waiver, не как ложный done.
+Ближайший шаг всегда брать из tracker, а не из исторического текста этапа.
 Runtime Node24.21.0/pnpm11.0.8. Отчёты исполнителей/review и briefs текущей сессии:
 `/tmp/aituhack-mvp/`; root — единственный writer tracker.
 
@@ -18,8 +24,9 @@ Runtime Node24.21.0/pnpm11.0.8. Отчёты исполнителей/review и 
 
 OpenRouter$0 paid calls; $2prep incl$0.50eval/$4demo reserve.
 Ключ в `.env.local` присутствует, но read-only auth401; не выводить секреты,
-не просить ключ в чате. Offline/stub продолжать. Перед paid calls нужен проверенный
-persistent guard M2.3. Публикация данных/physical phone/live/deployment ещё не проверены.
+не просить ключ в чате. Offline/stub продолжать. Persistent guard M2.3 проверен, paid mode выключен;
+перед paid calls всё равно нужны действующий ключ, долговечное хранилище ledger
+и явная серверная настройка. Serverless paid запрещён текущей реализацией. Публикация данных/physical phone/live/deployment ещё не проверены.
 
 Всегда отдельный implementer и независимый reviewer, непересекающиеся owned files,
 сразу tracker status/evidence/next после каждой проверенной подзадачи.

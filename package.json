@@ -19,7 +19,9 @@
     "test:e2e": "playwright test",
     "import:poi": "tsx scripts/import-poi.ts",
     "import:collector": "tsx scripts/import-collector.ts",
-    "check:build-artifacts": "node scripts/check-build-trace.mjs"
+    "check:build-artifacts": "node scripts/check-build-trace.mjs",
+    "build:index": "tsx scripts/build-index.ts",
+    "eval:retrieval": "tsx scripts/eval-retrieval.ts"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "1.3.1",
