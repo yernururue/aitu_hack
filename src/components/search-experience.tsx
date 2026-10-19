@@ -2,30 +2,46 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight, Clock3, MapPin, Navigation, Search, ShieldCheck, Star, SlidersHorizontal } from "lucide-react";
+import { ArrowUpRight, Clock3, MapPin, Search, ShieldCheck, SlidersHorizontal } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { SearchForm, CATEGORY_LABELS, type SearchMode } from "@/components/search-form";
 import { RecommendResponseSchema, type RecommendResponse } from "@/lib/contracts/response";
+import { PlaceCard } from "@/components/place-card";
+import { PlaceDetails } from "@/components/place-details";
+import { ProfileSwitcher } from "@/components/profile-switcher";
+import { loadDemoPreferences, persistDemoPreferences, resetDemoPreferences, updateDemoPreference, type DemoPreferences } from "@/lib/preferences";
+import type { Recommendation } from "@/lib/contracts/response";
 import type { RecommendRequest } from "@/lib/contracts/request";
 
 export type DatasetInfo = { available: boolean; count: number; synthetic: boolean };
 type SearchState = { status: "idle" | "loading" | "error" } | { status: "response"; response: RecommendResponse };
 
-function formatDistance(meters: number) {
-  return meters < 1000 ? `${Math.round(meters)} м` : `${(meters / 1000).toLocaleString("ru-RU", { maximumFractionDigits: 1 })} км`;
-}
-
 export function SearchExperience({ dataset, aiMode }: { dataset: DatasetInfo; aiMode: SearchMode }) {
+  const [preferences, setPreferences] = useState<DemoPreferences>({ profileId: null, savedIds: [], dismissedIds: [] });
+  const [preferencesReady, setPreferencesReady] = useState(false);
+  const [historyMessage, setHistoryMessage] = useState("");
+  const [selected, setSelected] = useState<Recommendation | null>(null);
+  const detailTrigger = useRef<HTMLButtonElement>(null);
+  const resultsHeading = useRef<HTMLHeadingElement>(null);
   const [state, setState] = useState<SearchState>({ status: "idle" });
   const [submitted, setSubmitted] = useState<{ request: RecommendRequest; locationLabel: string } | null>(null);
   const sequence = useRef(0);
   const controller = useRef<AbortController | null>(null);
   const response = state.status === "response" ? state.response : null;
   const contextFilters = response?.usedContext.filters ?? submitted?.request.filters;
+  const contextProfileId = response ? response.usedContext.profileId : submitted?.request.profileId ?? null;
+  const contextIsDemo = response ? response.usedContext.isDemoProfile : contextProfileId !== null;
   const companyLabels = { solo: "Один / одна", couple: "Вдвоём", friends: "С друзьями", family: "С семьёй" } as const;
   const profileLabels = { student: "Студент", tourist: "Турист", family: "Семья" } as const;
   const synthetic = dataset.synthetic || Boolean(response?.recommendations.some(({ poi }) => poi.sources.some((source) => source.kind === "synthetic")));
+
+  useEffect(() => {
+    let disposed = false;
+    // Hydrate browser-owned history after mount; the first render matches SSR.
+    queueMicrotask(() => { if (!disposed) { setPreferences(loadDemoPreferences()); setPreferencesReady(true); } });
+    return () => { disposed = true; };
+  }, []);
 
   useEffect(() => () => { sequence.current++; controller.current?.abort(); }, []);
 
@@ -34,6 +50,7 @@ export function SearchExperience({ dataset, aiMode }: { dataset: DatasetInfo; ai
     controller.current?.abort();
     const nextController = new AbortController();
     controller.current = nextController;
+    setSelected(null);
     setSubmitted({ request, locationLabel });
     setState({ status: "loading" });
     try {
@@ -47,6 +64,19 @@ export function SearchExperience({ dataset, aiMode }: { dataset: DatasetInfo; ai
     } catch {
       if (currentSequence === sequence.current && !nextController.signal.aborted) setState({ status: "error" });
     }
+  }
+
+  function applyPreferences(next: DemoPreferences, message: string, persist = true) {
+    setPreferences(next);
+    const stored = !persist || persistDemoPreferences(next);
+    setHistoryMessage(stored ? message : `${message} Браузер не дал сохранить изменения; они действуют только на этом экране.`);
+    sequence.current++; controller.current?.abort(); setSelected(null);
+    if (submitted) void search({ ...submitted.request, profileId: next.profileId, savedIds: [...next.savedIds], dismissedIds: [...next.dismissedIds] }, submitted.locationLabel);
+    else setState({ status: "idle" });
+  }
+  function resetHistory() {
+    const reset = resetDemoPreferences();
+    applyPreferences(reset.state, reset.persisted ? "Демо-история сброшена. Запрос и фильтры сохранены в форме." : "История очищена на этом экране. Браузер не дал удалить сохранение; после перезагрузки оно может вернуться.", false);
   }
 
   const title = state.status === "loading" ? "Ищем места рядом"
@@ -63,13 +93,14 @@ export function SearchExperience({ dataset, aiMode }: { dataset: DatasetInfo; ai
         <div className="city-label"><span className="city-dot" />Астана<span className="city-country">, Казахстан</span></div>
       </header>
       <main className="workspace">
-        <aside className="search-sidebar" aria-label="Условия поиска"><SearchForm aiMode={aiMode} synthetic={synthetic} onSearch={search} loading={state.status === "loading"} /></aside>
+        <aside className="search-sidebar" aria-label="Условия поиска"><SearchForm preferences={preferences} profileControls={<ProfileSwitcher preferences={preferences} ready={preferencesReady} onChange={(profileId) => applyPreferences({ ...preferences, profileId }, "Демо-профиль изменён.")} onReset={resetHistory} />} aiMode={aiMode} synthetic={synthetic} onSearch={search} loading={state.status === "loading"} /></aside>
         <section className="results-area" aria-labelledby="page-title">
           <div className="results-intro"><span className="eyebrow">Рядом есть куда</span><h1 id="page-title">Куда сегодня<span>?</span></h1><p>На кофе, на прогулку или за новым впечатлением.<br className="desktop-break" /> Найдите место под ваше время и настроение.</p></div>
           {synthetic && <p className="synthetic-warning" role="note">Синтетические тестовые данные — не реальные места</p>}
-          <div className="results-toolbar"><h2><SlidersHorizontal aria-hidden="true" />Ваши варианты</h2><span>{response ? `${response.recommendations.length} из 3` : "До 3 мест"}</span></div>
+          {historyMessage && <p className="history-message" role="status">{historyMessage}</p>}
+          <div className="results-toolbar"><h2 ref={resultsHeading} tabIndex={-1}><SlidersHorizontal aria-hidden="true" />Ваши варианты</h2><span>{response ? `${response.recommendations.length} из 3` : "До 3 мест"}</span></div>
           {submitted && contextFilters && <div className="search-context" aria-label="Что учтено">
-            <span className="context-title">Что учтено</span>
+            <span className="context-title">{response ? "Что учтено" : "Условия запроса"}</span>
             <span><MapPin aria-hidden="true" />{response?.usedContext.locationLabel ?? submitted.locationLabel}</span>
             <span>{contextFilters.radiusM / 1000} км</span><span>Посещение до {contextFilters.durationMinutes} мин</span>
             <span>{companyLabels[contextFilters.company]}</span>
@@ -78,7 +109,7 @@ export function SearchExperience({ dataset, aiMode }: { dataset: DatasetInfo; ai
             {contextFilters.maxSpendKzt !== null && <span>До {contextFilters.maxSpendKzt.toLocaleString("ru-RU")} ₸ / чел.</span>}
             {contextFilters.openNow && <span>По расписанию открыто</span>}
             {response?.usedContext.filters.requiredFacts.map((fact) => <span key={fact}>Требуется: {{ quiet: "подтверждённая тишина", outlets: "розетки", wifi: "Wi-Fi", childFriendly: "подходит детям", indoor: "в помещении" }[fact]}</span>)}
-            <span>{response?.usedContext.isDemoProfile ? `Демо-профиль: ${response.usedContext.profileId ? profileLabels[response.usedContext.profileId] : "демонстрационная история"}` : "Без демо-профиля"}</span>
+            <span>{contextIsDemo ? `Демо-профиль: ${contextProfileId ? profileLabels[contextProfileId] : "демонстрационная история"}` : "Без демо-профиля"}</span>
           </div>}
           <div className="result-announcement" aria-live="polite" aria-atomic="true"><h3 className={response?.recommendations.length ? "result-heading" : "sr-only"}>{title}</h3></div>
           {(!response || response.recommendations.length === 0) && <Card className={`empty-canvas ${state.status === "loading" ? "is-loading" : ""}`} aria-busy={state.status === "loading"}>
@@ -89,19 +120,7 @@ export function SearchExperience({ dataset, aiMode }: { dataset: DatasetInfo; ai
           </Card>}
           {response && response.recommendations.length > 0 && <div className="recommendation-list">
             <p className={response.status === "degraded" ? "degraded-notice" : "response-message"}>{response.message}</p>
-            {response.recommendations.map((recommendation) => <Card role="article" aria-label={recommendation.poi.name} data-poi-id={recommendation.poi.id} className="recommendation-card" key={recommendation.poi.id}>
-              <div className="recommendation-meta"><span>{CATEGORY_LABELS[recommendation.poi.category]}</span><span><Navigation aria-hidden="true" />{formatDistance(recommendation.distanceM)} по прямой</span></div>
-              <h3>{recommendation.poi.name}</h3>
-              {recommendation.poi.rating && <p className="rating"><Star aria-hidden="true" />{recommendation.poi.rating.value.toLocaleString("ru-RU")}<span>· {recommendation.poi.rating.count.toLocaleString("ru-RU")} оценок</span></p>}
-              {recommendation.poi.description.text && <div className="catalog-description"><span className="mini-label">Из каталога</span><p className="place-description">{recommendation.poi.description.text}</p></div>}
-              <div className="place-data-labels">
-                <span>{recommendation.poi.price ? `${recommendation.poi.price.min.toLocaleString("ru-RU")}–${recommendation.poi.price.max.toLocaleString("ru-RU")} ₸ / чел.` : "Цена не подтверждена"}</span>
-                <span>{recommendation.poi.hours ? "Есть расписание в каталоге" : "Время работы не подтверждено"}</span>
-              </div>
-              <div className="recommendation-reason"><span className="mini-label">Почему подходит</span><p>{recommendation.why}</p></div>
-              <div className="activity-idea"><span className="mini-label">Идея занятия</span><p>{recommendation.activity}</p></div>
-              <div className="recommendation-footer"><span><Clock3 aria-hidden="true" />{recommendation.visitMinutes.min}–{recommendation.visitMinutes.max} мин<span className="estimate-label">оценка посещения</span></span><Button asChild variant="outline"><a href={recommendation.navigation.twoGis ?? recommendation.navigation.googleMaps} target="_blank" rel="noreferrer">Маршрут<ArrowUpRight aria-hidden="true" /></a></Button></div>
-            </Card>)}
+            {response.recommendations.map((recommendation) => <PlaceCard key={recommendation.poi.id} recommendation={recommendation} saved={preferences.savedIds.includes(recommendation.poi.id)} onSave={() => applyPreferences(updateDemoPreference(preferences, { kind: "save", poiId: recommendation.poi.id, active: !preferences.savedIds.includes(recommendation.poi.id) }), "Сохранения обновлены.")} onDismiss={() => applyPreferences(updateDemoPreference(preferences, { kind: "dismiss", poiId: recommendation.poi.id, active: true }), "Место скрыто. Вернуть скрытые места можно сбросом демо-истории.")} onDetails={(trigger) => { detailTrigger.current = trigger; setSelected(recommendation); }} />)}
           </div>}
           {response?.warnings.length ? <ul className="response-warnings" aria-label="Ограничения данных">{response.warnings.map((warning, index) => <li key={index}>{warning}</li>)}</ul> : null}
           {response && <details className="snapshot-details" aria-label="Версия каталога"><summary>Версия данных: <code>{response.usedContext.dataSnapshot.slice(0, 12)}</code></summary><code className="snapshot-value">{response.usedContext.dataSnapshot}</code></details>}
@@ -109,6 +128,7 @@ export function SearchExperience({ dataset, aiMode }: { dataset: DatasetInfo; ai
           <div className="search-principles"><span><Search aria-hidden="true" />Ваш запрос важнее настроек по умолчанию</span><span>Сначала место. Затем маршрут.<ArrowUpRight aria-hidden="true" /></span></div>
         </section>
       </main>
+      <PlaceDetails recommendation={selected} synthetic={synthetic} onClose={() => setSelected(null)} triggerRef={detailTrigger} fallbackRef={resultsHeading} />
       <footer className="site-footer"><span>Куда в Астане</span><span>Город ближе, когда есть план.</span></footer>
     </div>
   );

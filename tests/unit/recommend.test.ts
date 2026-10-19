@@ -12,6 +12,7 @@ import type { ChatJson } from "@/lib/ai/openrouter";
 import * as openrouter from "@/lib/ai/openrouter";
 import * as transport from "@/lib/ai/transport";
 import { recommend } from "@/lib/recommend";
+import { buildNavigationLinks } from "@/lib/navigation";
 
 const now = new Date("2026-10-20T10:00:00Z");
 const origin = { lat: 51.09, lon: 71.418, source: "preset" as const };
@@ -130,6 +131,10 @@ describe("real catalogue offline behaviour with honest disclosure", () => {
     expect(RecommendResponseSchema.parse(result).status).toBe("degraded");
     expect(result.recommendations.length).toBeGreaterThan(0); expect(result.recommendations.length).toBeLessThanOrEqual(3);
     expect(result.recommendations.every((r) => real.places.some((p) => p.id === r.poi.id) && !r.poi.id.startsWith("fixture:"))).toBe(true);
+    for (const card of result.recommendations) {
+      const loaded = real.places.find((poi) => poi.id === card.poi.id)!;
+      expect(card.navigation).toEqual(buildNavigationLinks(loaded, "walking"));
+    }
     expect(result.usedContext.dataSnapshot).toBe(canonicalDatasetHash(real));
     expect(result.warnings.join(" ")).toMatch(/демо|ИИ|AI/i); expect(result.warnings.join(" ")).toMatch(/лексическ/i);
     expect(chatJson).not.toHaveBeenCalled(); expect(openrouter.createChatJson).not.toHaveBeenCalled(); expect(transport.createLiveTransport).not.toHaveBeenCalled(); expect(fetch).not.toHaveBeenCalled();
@@ -167,12 +172,60 @@ describe("real catalogue offline behaviour with honest disclosure", () => {
     expect(result.recommendations[0]).toMatchObject({ poi: catalog.places[0], distanceM: 0, distanceKind: "straight_line", visitMinutes: { min: 20, max: 30, isEstimate: true } });
     const destination = new URL(result.recommendations[0].navigation.googleMaps);
     expect(destination.protocol).toBe("https:"); expect(destination.hostname).toMatch(/(^|\.)google\.com$/);
-    // twoGis:null is valid until the separately owned M5 navigation integration.
+    expect(result.recommendations[0].navigation).toEqual(buildNavigationLinks(catalog.places[0], "walking"));
+    expect(destination.searchParams.get("destination")).toBe(`${catalog.places[0].location.lat},${catalog.places[0].location.lon}`);
+    expect(destination.searchParams.get("travelmode")).toBe("walking");
     expect(result.warnings.join(" ")).toMatch(/цен|час|расписан/i);
   });
 
   it("propagates typed catalogue failure for the HTTP layer to sanitize as503", async () => {
     await expect(recommend(request(), { ...deps(), loadCatalog: async () => { throw new CatalogLoadError("CATALOG_NOT_FOUND"); } })).rejects.toMatchObject({ code: "CATALOG_NOT_FOUND" });
+  });
+});
+
+describe("server-authored origin labels", () => {
+  it.each([
+    ["EXPO", 51.090, 71.418, "preset"],
+    ["Бәйтерек", 51.1282, 71.4304, "preset"],
+    ["Набережная", 51.1669, 71.4179, "preset"],
+    ["Ваша геолокация", 51.1282, 71.4304, "device"],
+    ["Выбранная точка", 51.12, 71.41, "preset"],
+    ["Выбранная точка", 51.090001, 71.418, "preset"],
+  ] as const)("reports %s from the trusted preset/source without exposing coordinates", async (label, lat, lon, source) => {
+    const result = await recommend(request({ query: "", location: { lat, lon, source } }), { ...deps(), mode: "disabled" });
+    expect(result.usedContext.locationLabel).toBe(label);
+    expect(result.usedContext.locationLabel).not.toMatch(/51\.|71\./);
+    expect(fetch).not.toHaveBeenCalled();
+  });
+});
+
+describe("server navigation uses the shared walking helper and loaded branch", () => {
+  it.each([
+    ["70000001018062580", "70000001018062580", true],
+    ["70000001018062581", "70000001018062581", true],
+    ["70000001018062580", "70000001018062581", false],
+    ["70000001018062580", null, false],
+  ] as const)("populates both API links for exact branch %s / listing %s", async (branchId, linkedId, matches) => {
+    const poi = unitPoi(`2gis:${branchId}`);
+    poi.name = "Один бренд — выбранный филиал";
+    poi.location = branchId.endsWith("81") ? { lat: 51.0922, lon: 71.4203 } : { lat: 51.0911, lon: 71.4192 };
+    poi.links.twoGis = linkedId === null ? null : `https://2gis.kz/astana/firm/${linkedId}`;
+    const local = CatalogSchema.parse({ schemaVersion: "1.0", synthetic: true, places: [poi] });
+    const retrieve: RetrievalStub = async () => ({ candidates: [{ ...ranked()[0], poi }], mode: "lexical", warnings: [], dataSnapshot: canonicalDatasetHash(local) });
+    const result = RecommendResponseSchema.parse(await recommend(request({ query: "" }), { ...deps(), mode: "disabled", loadCatalog: async () => local, retrieve }));
+    expect(result.recommendations).toHaveLength(1);
+    const card = result.recommendations[0];
+    expect(card.poi).toEqual(poi);
+    expect(card.navigation).toEqual(buildNavigationLinks(poi, "walking"));
+    const google = new URL(card.navigation.googleMaps);
+    expect(google.searchParams.get("destination")).toBe(`${poi.location.lat},${poi.location.lon}`);
+    expect(google.searchParams.get("travelmode")).toBe("walking");
+    expect(google.searchParams.has("destination_place_id")).toBe(false);
+    const twoGis = new URL(card.navigation.twoGis!);
+    expect(twoGis.protocol).toBe("https:"); expect(["2gis.kz", "2gis.ru"]).toContain(twoGis.hostname);
+    expect(decodeURIComponent(twoGis.pathname).split("/points/")[0]).toMatch(/\/directions\/tab\/pedestrian$/);
+    expect(decodeURIComponent(twoGis.pathname).split("/points/")[1]).toBe(`|${poi.location.lon},${poi.location.lat}${matches ? `;${branchId}` : ""}`);
+    expect(fetch).not.toHaveBeenCalled(); expect(transport.createLiveTransport).not.toHaveBeenCalled(); expect(openrouter.createChatJson).not.toHaveBeenCalled();
   });
 });
 

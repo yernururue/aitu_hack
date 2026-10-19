@@ -25,3 +25,10 @@ export const DEMO_RANKING_PROFILES: Readonly<Record<ProfileId, DemoRankingProfil
     preferredFacts: ["childFriendly", "indoor"],
   },
 };
+
+export const DEMO_PROFILE_LABELS: Readonly<Record<ProfileId, string>> = { student: "Студент", tourist: "Турист", family: "Семья" };
+export const DEMO_PROFILE_DESCRIPTIONS: Readonly<Record<ProfileId, string>> = {
+  student: "Учебный пример интересов: кофе, учёба и работа вне дома.",
+  tourist: "Учебный пример интересов: музеи, прогулки и культура города.",
+  family: "Учебный пример интересов: прогулки и занятия с детьми.",
+};

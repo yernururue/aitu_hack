@@ -14,6 +14,7 @@ import { filterCandidates } from "./search/filters";
 import { configuredAiMode, parseIntent, runBeforeDeadline, type AiMode } from "./search/intent";
 import { retrieveWithMetadata, type RetrievalResult } from "./search/retrieve";
 import type { RankedPoi } from "./search/rank";
+import { buildNavigationLinks } from "./navigation";
 
 export type RetrievalContext = { catalog: Catalog; mode: AiMode; deadlineAt: number; signal?: AbortSignal; purpose?: Purpose };
 export type RecommendDependencies = {
@@ -32,8 +33,12 @@ function deterministic(candidates: readonly RankedPoi[]): ExplanationItem[] {
 function locationLabel(request: RecommendRequest): string {
   if (request.location.source === "device") return "Ваша геолокация";
   const { lat, lon } = request.location;
-  if (Math.abs(lat - 51.090) < 0.00001 && Math.abs(lon - 71.418) < 0.00001) return "EXPO";
-  return "Выбранная точка";
+  const presets = [
+    { label: "EXPO", lat: 51.090, lon: 71.418 },
+    { label: "Бәйтерек", lat: 51.1282, lon: 71.4304 },
+    { label: "Набережная", lat: 51.1669, lon: 71.4179 },
+  ];
+  return presets.find((preset) => preset.lat === lat && preset.lon === lon)?.label ?? "Выбранная точка";
 }
 
 export async function recommend(input: RecommendRequest, dependencies: RecommendDependencies = {}): Promise<RecommendResponse> {
@@ -104,10 +109,7 @@ export async function recommend(input: RecommendRequest, dependencies: Recommend
     const byId = new Map(candidates.map((candidate) => [candidate.poi.id, candidate]));
     const recommendations = items.map((item) => {
       const { poi, distanceM, visitMinutes } = byId.get(item.poiId)!;
-      const google = new URL("https://www.google.com/maps/dir/");
-      google.searchParams.set("api", "1");
-      google.searchParams.set("destination", `${poi.location.lat},${poi.location.lon}`);
-      return { poi, distanceM, distanceKind: "straight_line" as const, why: item.why, activity: item.activity, evidenceIds: item.evidenceIds, visitMinutes, navigation: { twoGis: null, googleMaps: google.toString() } };
+      return { poi, distanceM, distanceKind: "straight_line" as const, why: item.why, activity: item.activity, evidenceIds: item.evidenceIds, visitMinutes, navigation: buildNavigationLinks(poi, "walking") };
     });
     return response(degraded ? "degraded" : "ok", degraded ? "Подходящие места из каталога. Часть ИИ-возможностей недоступна." : "Найдены подходящие места.", recommendations);
   } finally {

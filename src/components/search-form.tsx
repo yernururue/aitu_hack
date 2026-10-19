@@ -8,6 +8,7 @@ import {
   createDefaultFilters, DURATION_OPTIONS, FILTER_KEYS, RADIUS_OPTIONS, RecommendRequestSchema,
   type Filters, type RecommendRequest,
 } from "@/lib/contracts/request";
+import type { DemoPreferences } from "@/lib/preferences";
 import type { Poi } from "@/lib/contracts/poi";
 
 export const CATEGORY_LABELS: Record<Poi["category"], string> = {
@@ -33,9 +34,9 @@ const COMPANIES = [
 export type SearchMode = "disabled" | "stub" | "live";
 const DEMO_PHRASES = ["Кофе рядом", "Хочу погулять", "Музей на час", "Боулинг с друзьями", "Кафе с розеткой"] as const;
 
-type Props = { aiMode: SearchMode; synthetic: boolean; onSearch: (request: RecommendRequest, locationLabel: string) => void; loading: boolean };
+type Props = { preferences: DemoPreferences; profileControls: ReactNode; aiMode: SearchMode; synthetic: boolean; onSearch: (request: RecommendRequest, locationLabel: string) => void; loading: boolean };
 
-export function SearchForm({ onSearch, loading, aiMode, synthetic }: Props) {
+export function SearchForm({ onSearch, loading, aiMode, synthetic, preferences, profileControls }: Props) {
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState(createDefaultFilters);
   const [explicit, setExplicit] = useState<Set<keyof Filters>>(() => new Set());
@@ -110,7 +111,7 @@ export function SearchForm({ onSearch, loading, aiMode, synthetic }: Props) {
       query: query.trim(), locale: "ru", location,
       filters: { ...filters, maxSpendKzt },
       explicitFilterKeys: FILTER_KEYS.filter((key) => explicit.has(key)),
-      profileId: null, savedIds: [], dismissedIds: [],
+      profileId: preferences.profileId, savedIds: [...preferences.savedIds], dismissedIds: [...preferences.dismissedIds],
     });
     if (!parsed.success) {
       setErrorField(null);
@@ -194,6 +195,7 @@ export function SearchForm({ onSearch, loading, aiMode, synthetic }: Props) {
         </div>
         <label className="open-checkbox"><input type="checkbox" checked={filters.openNow} onChange={(event) => updateFilter("openNow", event.target.checked)} /><span>По расписанию открыто сейчас</span></label>
       </div>
+      {profileControls}
       <div className="form-action">
         {error && <p id="search-validation-error" role="alert" className="validation-error">{error}</p>}
         <Button type="submit" className="search-submit" size="lg"><Search aria-hidden="true" />Найти места<ArrowUpRight aria-hidden="true" /></Button>

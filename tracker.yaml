@@ -41,7 +41,7 @@ handoff:
       - "scripts/collect_astana.py"
       - "scripts/test_astana_data.py"
     notes: "M1.3 independently accepted298realPOI/591excerpts and reviewed36demo slice. Original collector code/snapshots preserved separately, no paid recollection. Collection C6 remains owned by collector integrator; publication rights not established."
-next_task_id: "M5.1"
+next_task_id: "M7.1"
 workflow:
   tracker_writer: "Single main integrator updates tracker after every finished task"
   completion_rule: "Mark done only after acceptance verification; record exact commands, exit codes and limitations here and in docs/progress.md"
@@ -356,6 +356,7 @@ stages:
           - "M4.1"
         acceptance: "pnpm eval:retrieval records top-3 success at least 10/12 and Recall@5 at least 90% over labelled relevant IDs; hard constraints hold."
         evidence:
+          - "Offline stage snapshot commit0a6b53a created/log verified; numerical result and unchanged semantic/live blockers documented in model-decision.md. Native RAGOps source/candidate artifacts+checksums retained privately under ignored output/evaluation; original collector work excluded/preserved."
           - "Offline numerical retrieval acceptance verified: root40target tests/full strict TS/ownedlint/diff exit0; frozen12RU top3=12/12, macroRecall5=.9722222222 (set ceiling), micro=.9375, negative4/4/hardPASS. Original eval:retrieval exit1 remains honestly semanticVerified=false/acceptancePassed=false; numerical qualityGatePassed=true only."
           - "Independent code/source review spec PASS/lexical quality PASS, no findings; numeric-brand/closed-dismissed-document/bounds probes PASS. Author478full unit PASS. Root separate4KK fixed-UI lexical supplement4/4top3/.9166666667/hardPASS, never merged into RU denominator; native/liveKK not validated."
           - "RAGOps exact12RU/.90 supplemental native compare exit0 PASS: baseline.8833333333→candidate.9722222222 (+8.89pp); no failed candidate/ancillary gates, source/reference hashes intact, measured offline latency21.99-39.61ms, provider/network/cost0. No citation or semantic quality claim."
@@ -383,67 +384,94 @@ stages:
           - "No live comparison means no correctness/latency/cost winner or model acceptance. Configured Luna remains provisional, actual model=null in stub mode. Independent offline profiles/details/navigation may continue under user instruction while this gate stays blocked."
   - id: "M5"
     title: "Profiles, detail views and navigation"
-    status: "todo"
+    status: "blocked"
     tasks:
       - id: "M5.1"
         title: "Write failing profile and navigation tests"
-        status: "todo"
+        status: "done"
+        owner: "ui_executor"
         depends_on:
           - "M4.4"
+        dependency_waivers:
+          - "M4.4"
+        waiver_reason: "User explicitly instructed continue with stubs while key is not updated. Offline profiles/details/preferences/navigation are independent of live model selection; M4.4 remains blocked and is not treated as done."
         acceptance: "Explicit bowling overrides coffee profile; corrupted preferences default empty; reset clears demo history; Google lat/lon and 2GIS lon/lat address correct branch."
-        evidence: []
+        evidence:
+          - "Root exact3path Vitest RED exit1: navigation/preferences modules absent,0assertions in2suites; existing10profile behaviors PASS. Tests copied byte-identical from draft. Independent spec/test-quality review PASS no findings (coordinates/large branchIDs/strictprefs100/reset/storagefailures/profilehardconstraints). No production implementation claimed."
+          - "Narrow dependency waiver records explicit user continue-stubs authorization; model-choice gate M4.4 stays blocked. Test-only draft ready; transfer navigation/preferences/profiles tests and reproduce actual RED before production helpers/UI writes. Internal preference API approved, fresh storage defaults profile=null; user-selected profile may persist and reset returnsnull."
       - id: "M5.2"
         title: "Implement profiles, details, local preferences and routes"
-        status: "todo"
+        status: "done"
+        owner: "ui_executor (UI/helpers); data_executor (core integration)"
         depends_on:
           - "M5.1"
         acceptance: "Show demo labels/used context, sources and available reviews/social links; uncertainty/time estimates honest; official HTTPS navigation with web fallback; saves and dismissals stay local."
-        evidence: []
+        evidence:
+          - "Unified independent review PASS after HTTP-provenance P2 ADDRESSED: same valid fixture RED2anchors→GREEN2/2viewports; independent actual-component probe0HTTP/2HTTPS/preservedtext/noinventedscheme. Root read report+diff+source and full62Playwright passed25.0s at390/1440 afterfix."
+          - "Profiles/localID-only preferences/details/literalmax2opinions/source dates/unknowns/destination-only HTTPS2GIS+Googlewalking/driving implemented. Root helper66/core+route63target tests PASS, integrated554unit/lint/types/build/NFTPASS; fresh final gate afterUI-onlyfix running. Collector/catalog/RU+KK labels unchanged; paid0."
+          - "Root integrated pnpm lint/typecheck/554unit/build/check-build-artifacts exit0 (6NFT traces/1568entries); phase1 core independent review PASS. Phase2 found P2 HTTP provenance rendered as source/review anchor despite HTTPS display contract; current real298 allHTTPS unaffected. Original UI author assigned regression/nonclickableHTTP fix before acceptance; full browser gate pending."
+          - "UI helper milestone: navigation/preferences + existingprofiles66target tests GREEN; pure buildNavigationLinks(poi,walking|driving) API frozen, data executor notified. Core preimplementation RED: recommend suite7assertion failures/31PASS for2presetlabels+4routecases+walking contract; author now imports shared helper, no duplicate URLbuilder. UI/details/browser work still in progress; no full acceptance or paid calls."
+          - "Tests accepted; UI owns navigation/preferences/profiles helpers, search/details/profile UI and recommendation-flow browser tests. Data executor separately owns recommend.ts +recommend tests for helper-based default routes/preset labels. No shared writers; actualAPI HTTP schemas remainunchanged. Offlineimplementation underexplicitM5.1 waiver; live/physical gate notclaimed."
       - id: "M5.3"
         title: "Verify complete UI, mobile and live smoke"
-        status: "todo"
+        status: "blocked"
+        owner: "root_integrator"
         depends_on:
           - "M5.2"
         acceptance: "Deterministic-stub Playwright covers details/external URL/profile changes/races/denied location/empty states/focus; pnpm test:e2e at 390/1440 and full quality gate pass; physical phone and one budgeted real-data live smoke recorded with limits; progress and stage commit."
-        evidence: []
+        evidence:
+          - "Offline acceptance complete: root fresh post-fix pnpm lint/typecheck/554unit/build/check-build-artifacts all exit0; full62Playwright25.0s at390/1440 exit0; independent unifiedM5.2spec/qualityPASS and HTTPfixADDRESSED. Root inspected4detail/source screenshots, source/core/helpers/diff/harnessPASS."
+          - "Remaining external gates: no physical-phone/native map handoff verification; no real paid live smoke because user confirmed key not updated after401. No auth retries or paidcalls; this task/stage not falsely done. Offline feature snapshot commit follows before release work."
+          - "Implementation accepted; root full62Playwright390/1440 exit0 after finalsourcefix. Fresh final lint/types/unit/build/NFT started; physical-phone/nativehandoff and realpaidlive smoke not yet verified. User key unchanged; no auth/paid retry."
   - id: "M6"
     title: "Optional voice"
-    status: "todo"
+    status: "skipped"
     optional: true
     timebox_minutes: 60
     tasks:
       - id: "M6.1"
         title: "Decide voice gate and verify endpoint"
-        status: "todo"
+        status: "skipped"
+        owner: "root_integrator"
         depends_on:
           - "M5.3"
         acceptance: "Only proceed if P0 stable and text path met cutoff; verify OpenRouter audio endpoint/price within remaining preparation cap; otherwise record skipped voice and feature flag off."
-        evidence: []
+        evidence:
+          - "P1 voice gate not met: semantic/live P0 and real key remain unverified; user prioritizes text and continue-stubs. Do not introduce another provider or unpriced audio call. Voice omitted from this release, no recording/transcribe UI or endpoint enabled; no claim that clock cutoff already elapsed."
       - id: "M6.2"
         title: "Implement tested recording and editable transcript"
-        status: "todo"
+        status: "skipped"
+        owner: "root_integrator"
         depends_on:
           - "M6.1"
         acceptance: "If enabled, failing then passing tests cover unsupported MIME, >5MB, >20s and denied permission; recording explicitly started; provider disclosed; no stored audio; transcript uses normal text path."
-        evidence: []
+        evidence:
+          - "Voice implementation intentionally omitted after M6.1 gate decision. No recording, audio upload/storage or audio provider calls. Working text path retained; not marked implemented/tested."
       - id: "M6.3"
         title: "Verify devices or disable voice by cutoff"
-        status: "todo"
+        status: "skipped"
+        owner: "root_integrator"
         depends_on:
           - "M6.2"
         acceptance: "Check iPhone Safari/Android Chrome where available and working text fallback; if not ready by 17:00 disable flag; document evidence/limitations or skip reason and stage commit."
-        evidence: []
+        evidence:
+          - "No voice feature to device-test; Safari/iPhone and Android/Chrome audio verification not run. Voice unavailable in release; physical text/navigation check also remains unverified in M5.3."
   - id: "M7"
     title: "Deployment and submission evidence"
-    status: "todo"
+    status: "in_progress"
     tasks:
       - id: "M7.1"
         title: "Freeze release manifest and feature scope"
-        status: "todo"
+        status: "in_progress"
+        owner: "root_integrator"
         depends_on:
           - "M5.3"
+        dependency_waivers:
+          - "M5.3"
+        waiver_reason: "User explicitly instructed continue with stubs while key is unchanged. Release materials and temporary preview can verify the completed offline text path; physical-device/live smoke remain blocked and full P0 semantic/model acceptance is not claimed."
         acceptance: "Record dataset hash, actual POI count, sources/collection time and model; minimum demo gate 30 reviewed real POI in 3 zones/categories; record M6 enabled/disabled/skipped decision and freeze new features."
-        evidence: []
+        evidence:
+          - "Narrow M5.3 waiver recorded for independent offline release work under user's continue-stubs instruction. Final app source frozen after reviewed M5fix; manifest will pin298catalog/hash/source times, actualAIstub/modelnull/indexabsent, voiceomitted and unverifiedphone/live limits."
       - id: "M7.2"
         title: "Run final gates and independent release review"
         status: "todo"

@@ -23,3 +23,5 @@ evals/results/
 *.tsbuildinfo
 output/playwright/
 output/evaluation/
+output/submission-build/
+.codex-finalizer/
