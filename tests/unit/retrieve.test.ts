@@ -99,6 +99,64 @@ describe("normalized hybrid ranking and bounded visit estimates", () => {
   });
 });
 
+describe("source-supported lexical content", () => {
+  function contentPlace(id: string, name: string, tags: string[], latitudeOffset: number, category: Poi["category"] = "other"): Poi {
+    return poi({ id, name, tags, category, description: { text: "", sourceIds }, location: { lat: origin.lat + latitudeOffset, lon: origin.lon } });
+  }
+
+  it("keeps the requested subtype first when the same request adds radius, duration and request grammar", () => {
+    const nearby = contentPlace("fixture:nearby", "Место рядом", [], 0.001);
+    const studio = contentPlace("fixture:studio", "Северная студия", ["фотостудия"], 0.015);
+    const queries = ["фотостудия", "Нужна фотостудия в пределах двух километров, зайду примерно на час."];
+    for (const query of queries) {
+      expect(rankCandidates([nearby, studio], context({ query }))[0].poi.id).toBe(studio.id);
+    }
+  });
+
+  it.each(["пекарню", "пекарня", "пекарне"])("matches the noun form %s against a source bakery tag", (query) => {
+    const nearby = contentPlace("fixture:nearby", "Кофе рядом", ["кофейни"], 0.001, "cafe");
+    const bakery = contentPlace("fixture:bakery", "Утренний хлеб", ["пекарни", "кофейни"], 0.002, "cafe");
+    expect(rankCandidates([nearby, bakery], context({ query }))[0].poi.id).toBe(bakery.id);
+  });
+
+  it("does not treat a request verb in a venue name as the requested subtype", () => {
+    const nearby = contentPlace("fixture:nearby", "Хочу", ["кафе"], 0.001, "cafe");
+    const workspace = contentPlace("fixture:workspace", "Тихое бюро", ["коворкинг"], 0.002, "cafe");
+    expect(rankCandidates([nearby, workspace], context({ query: "Хочу коворкинг" }))[0].poi.id).toBe(workspace.id);
+  });
+
+  it("preserves a quoted source name in a verbose request", () => {
+    const nearby = contentPlace("fixture:nearby", "Зелёный сквер", ["парки"], 0.001, "park");
+    const named = contentPlace("fixture:named", "Ай сәулесі", ["парки"], 0.015, "park");
+    const query = "Хочу сходить в парк «Ай сәулесі» недалеко от центра, в пределах двух километров.";
+    expect(rankCandidates([nearby, named], context({ query }))[0].poi.id).toBe(named.id);
+  });
+
+  it.each(["«Хочу»", '"Хочу"', "“Хочу”", "'Хочу'", "‘Хочу’"])("retains a meaningful quoted brand %s even when it is a request word", (name) => {
+    const nearby = contentPlace("fixture:nearby", "Кофе рядом", [], 0.001, "cafe");
+    const named = contentPlace("fixture:named", "Хочу", [], 0.002, "cafe");
+    expect(rankCandidates([nearby, named], context({ query: `Найди кафе ${name}` }))[0].poi.id).toBe(named.id);
+  });
+
+  it("does not equate unrelated words that only share a short prefix", () => {
+    const parking = contentPlace("fixture:parking", "Парковка", [], 0.001);
+    const park = contentPlace("fixture:park", "Лесной парк", [], 0.002);
+    expect(rankCandidates([parking, park], context({ query: "парк" }))[0].poi.id).toBe(park.id);
+  });
+
+  it("keeps content ranking independent of candidate order, with bounded hybrid scores and stronger semantic evidence", () => {
+    const studio = contentPlace("fixture:studio", "Студия", ["фотостудия"], 0.002);
+    const other = contentPlace("fixture:other", "Место рядом", [], 0.001);
+    const semanticScores = { [studio.id]: 0, [other.id]: 1 };
+    const settings = context({ query: "Нужна фотостудия примерно на час", semanticScores });
+    const forward = rankCandidates([studio, other], settings);
+    const reversed = rankCandidates([other, studio], settings);
+    expect(forward).toEqual(reversed);
+    expect(forward[0].poi.id).toBe(other.id);
+    expect(forward.every((item) => item.score >= 0 && item.score <= 1)).toBe(true);
+  });
+});
+
 describe("retrieval applies hard filters before any profile or scoring", () => {
   it("returns no matches instead of arbitrary first places for an impossible budget", async () => {
     const result = await retrieve(request(), intent({ categories: ["cafe"], maxSpendKzt: 100 }), now, { catalog: CatalogSchema.parse(fixtures) });

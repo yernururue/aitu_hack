@@ -75,7 +75,9 @@ entertainment30, other20 минут. Дорога отдельно; время �
 
 Только RU-08 называет точное POI. Казахские proper names «Бәйтерек», «Ғашықтар»,
 «Тәп-Тәтті» в evidence и русское «тренажёрный» сохраняют Unicode; все запросы RU.
-Четыре KK-запроса и финальная provenance review остаются M4.1.
+Четыре дополнительных KK-запроса проверены и зафиксированы отдельно:
+[evaluation-kk.md](evaluation-kk.md), [real-cases-kk.json](../evals/real-cases-kk.json).
+Они не входят в исходный12RU denominator; native-speaker/liveKK quality не проверены.
 
 В RU-11 now=`2026-10-20T19:00:00Z`, среда 00:00 местного времени. Strike проходит
 по вторничному overnight расписанию: до 01:00 осталось 60 минут, минимум45

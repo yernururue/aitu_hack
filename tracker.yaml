@@ -29,8 +29,8 @@ budget:
   dataset_volume: "298 accepted real POI /591 short sourced review excerpts; verified36 in3zones/3categories; original298/1953collector snapshot preserved"
 handoff:
   state: "ready"
-  application_state: "offline_api_accepted_ui_integration_in_progress"
-  current_scope: "M1 done; M2 offline search/cost guard and M3.1-M3.4 API/eval accepted; M3.5 text UI integration; live index/comparison blocked by401"
+  application_state: "offline_text_e2e_accepted_profiles_pending"
+  current_scope: "M3 offline text end-to-end accepted (465unit/46e2e); M4 source labels/retrieval quality next then M5; live index/comparison blocked by401"
   internal_deadline: "2026-10-20T20:00:00+05:00"
   submission_deadline: "2026-10-20T23:59:00+05:00"
   collector_work:
@@ -41,7 +41,7 @@ handoff:
       - "scripts/collect_astana.py"
       - "scripts/test_astana_data.py"
     notes: "M1.3 independently accepted298realPOI/591excerpts and reviewed36demo slice. Original collector code/snapshots preserved separately, no paid recollection. Collection C6 remains owned by collector integrator; publication rights not established."
-next_task_id: "M3.5"
+next_task_id: "M5.1"
 workflow:
   tracker_writer: "Single main integrator updates tracker after every finished task"
   completion_rule: "Mark done only after acceptance verification; record exact commands, exit codes and limitations here and in docs/progress.md"
@@ -268,7 +268,7 @@ stages:
           - "Offline continuation authorized by user instruction without key use stubs; M2.4 code/review accepted, only actualpaidindex gate unmet. Root integrated256tests/typecheck/lint/build/NFT exit0; actualcatalog298, indexmodelnone (configuredembeddingcandidate only). Vercelread-only /v2/user HTTP403; earlypreview unavailable, no deployment."
   - id: "M3"
     title: "Structured RAG and full text path"
-    status: "in_progress"
+    status: "done"
     tasks:
       - id: "M3.1"
         title: "Write failing upstream and grounding tests"
@@ -322,49 +322,65 @@ stages:
           - "RED before implementation: eval.test.ts exits1 missing scripts/eval-live.ts,0assertions. Declared disabled0network/sharedpreflight/frozencontext/oracleisolation/actualaccounting/unknownstop/report scenarios. Onlyrunner+evaltests owned; core separatelyowned. Noauth/network/paidcalls."
       - id: "M3.5"
         title: "Connect full text UI and verify path"
-        status: "in_progress"
+        status: "done"
         owner: "ui_executor"
         depends_on:
           - "M3.3"
           - "M3.4"
         acceptance: "Loading/empty/error states and stale-request cancellation work; intent/recommend/grounding tests and build pass; real-data search gives 0–3 valid cards; record source checks, trial usage/cost, progress and stage commit."
         evidence:
+          - "Root integrated lint/typecheck/465unit/46Playwright/build/check-build-artifacts/harness/diff-check all exit0. Real localAPI tests20 + original26shell preserved; real298 IDs/evidence/canonical hash0..3, strictbudget/outlets/unknownsuffix/conflicts verified at390/1440. Root inspected actual3park screenshots, no overflow."
+          - "Independent review spec PASS/quality PASS no findings. Request-time Next connection keeps safe UI mode consistent with actualAPI; production stub-build→disabled/stub smoke passed category3/text0or3. Stage commit fd37acb created and git log verified; collector originals preserved/untracked, paid calls0."
           - "Dependencies M3.3/M3.4 accepted; UI owned-file hookup begins with explicit stub banner/exact phrase chips and real localAPI Playwright at390/1440. Root current real-catalog handler smoke: park1degraded,outlets0,budget0,unsupportedquery clarification0,allcatalog/evidence/hash assertions PASS. UI acceptance pending."
   - id: "M4"
     title: "Model selection and retrieval quality"
-    status: "todo"
+    status: "blocked"
     tasks:
       - id: "M4.1"
         title: "Finish real evaluation labels"
-        status: "todo"
+        status: "done"
+        owner: "data_executor"
         depends_on:
           - "M1.4"
           - "M3.5"
         acceptance: "12 Russian real queries with all relevant IDs and sources; add 4 Kazakh cases if descriptions permit; keep synthetic results separate."
-        evidence: []
+        evidence:
+          - "Four supplemental KK source-first cases transferred byte-identically from independently reviewed draft (JSON SHAffc84b9320327c62e0b907c0ad74e5dd51599c77c12e896c922daf09c3a7c26f). Root cmp finalJSON/doc, strict schema/source/ref/production-hard-filter verification, harness,diff all exit0. Relevant sets1/6/3/6, hard1/6/4/6,16listing refs/17audit records."
+          - "Independent draft/source review spec PASS/quality PASS, no findings; root final byte identity links review to repo artifacts. Original12RU+4negative hash73947dd9...cee36 and real298 catalogc72d13a1...b873 unchanged. Agent-curated supplemental language set, native-speaker/liveKK comprehension unverified; never mixed into12RU metric."
+          - "M3.5 dependency accepted. Source-first4KK supplemental draft independently reviewed PASS; transfer to assigned repo artifacts and root byte/hash/schema checks next. Original12RU+4negative labels stay frozen and separate; native-language/liveKK validation unavailable."
       - id: "M4.2"
         title: "Measure retrieval acceptance"
-        status: "todo"
+        status: "done"
+        owner: "scaffold_executor"
         depends_on:
           - "M4.1"
         acceptance: "pnpm eval:retrieval records top-3 success at least 10/12 and Recall@5 at least 90% over labelled relevant IDs; hard constraints hold."
-        evidence: []
+        evidence:
+          - "Offline numerical retrieval acceptance verified: root40target tests/full strict TS/ownedlint/diff exit0; frozen12RU top3=12/12, macroRecall5=.9722222222 (set ceiling), micro=.9375, negative4/4/hardPASS. Original eval:retrieval exit1 remains honestly semanticVerified=false/acceptancePassed=false; numerical qualityGatePassed=true only."
+          - "Independent code/source review spec PASS/lexical quality PASS, no findings; numeric-brand/closed-dismissed-document/bounds probes PASS. Author478full unit PASS. Root separate4KK fixed-UI lexical supplement4/4top3/.9166666667/hardPASS, never merged into RU denominator; native/liveKK not validated."
+          - "RAGOps exact12RU/.90 supplemental native compare exit0 PASS: baseline.8833333333→candidate.9722222222 (+8.89pp); no failed candidate/ancillary gates, source/reference hashes intact, measured offline latency21.99-39.61ms, provider/network/cost0. No citation or semantic quality claim."
+          - "Owned preimplementation RED reported: retrieve.test.ts exit1,7assertion failures/31PASS before rank edits. Independent synthetic behaviors cover verbose subtype dilution,3bakery inflections, request-verb/name collision, quoted-name dilution and парк/парковка false-prefix; quote styles/semantic dominance/order/bounds guards PASS. General fix now underway; no paid/source-label changes."
+          - "M4.1 accepted; baseline numerical gate not met:12RU top3=11/12 macroRecall5=.8833333333, negative4/4/hardPASS. General diagnosis query-token dilution and RU noun inflection; four independent synthetic scratch RED probes reproduced before repo edits. Owned rank.ts + retrieve.test.ts only; no gold/queryID special cases or label changes."
       - id: "M4.3"
         title: "Run budgeted frozen-context model comparison"
-        status: "todo"
+        status: "blocked"
+        owner: "root_integrator"
         depends_on:
           - "M4.2"
           - "M3.4"
           - "M2.3"
         acceptance: "Verify opt-in and current capabilities/prices; compare Luna/Haiku/Qwen on same context and separate intent; pnpm eval:live stays within $0.50 subcap and remaining $2; record provider/schema/facts/abstention/latency/usage/cost."
-        evidence: []
+        evidence:
+          - "Actual three-model comparison not run: key remains unchanged after HTTP401; user explicitly said continue stubs/no auth retry. Pure local quotes confirmed Luna.358500001/Haiku1.32/Qwen.21160384 reserveUSD; Haiku exceeds nested.50 eval cap, shared runner declines before metadata/provider. Caps/reserved4demo unchanged; no paid calls."
       - id: "M4.4"
         title: "Select and document valid model"
-        status: "todo"
+        status: "blocked"
+        owner: "root_integrator"
         depends_on:
           - "M4.3"
         acceptance: "Choose correctness then latency then cost; if all fail grounding fix pipeline and reevaluate within cap; save decision/error examples, progress and stage commit."
-        evidence: []
+        evidence:
+          - "No live comparison means no correctness/latency/cost winner or model acceptance. Configured Luna remains provisional, actual model=null in stub mode. Independent offline profiles/details/navigation may continue under user instruction while this gate stays blocked."
   - id: "M5"
     title: "Profiles, detail views and navigation"
     status: "todo"

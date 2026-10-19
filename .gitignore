@@ -22,3 +22,4 @@ evals/results/
 *.webm
 *.tsbuildinfo
 output/playwright/
+output/evaluation/

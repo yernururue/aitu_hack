@@ -1,0 +1,567 @@
+{
+  "schemaVersion": "1.0",
+  "synthetic": false,
+  "metadata": {
+    "labelMethod": "source-first supplemental Kazakh labels; all catalogue matches independently enumerated without retrieval/ranking/model output; agent-curated after search implementation",
+    "labelledAt": "2026-10-19T20:06:13.602466+00:00",
+    "catalogPath": "data/catalog/places.json",
+    "catalogSha256": "c72d13a1d8df327edc22adce02743b0246aec157e86330c96c408bc44fabb873",
+    "normalizedSnapshotGeneratedAt": "2026-10-19T18:41:06.854110+00:00",
+    "sourceCollectionRange": {
+      "earliest": "2026-10-19T18:24:24Z",
+      "latest": "2026-10-19T18:35:43Z"
+    },
+    "source": "2GIS listings collected by existing Apify workflow; local demonstration; publication rights for reviews not established",
+    "timezone": "Asia/Almaty",
+    "distance": "haversine straight_line, Earth radius 6371000m, radius boundary inclusive",
+    "visitMinimumMinutes": {
+      "cafe": 20,
+      "restaurant": 30,
+      "park": 20,
+      "museum": 40,
+      "bowling": 45,
+      "entertainment": 30,
+      "other": 20
+    },
+    "relevanceRule": "Pass every explicit hard filter at case.now, then satisfy labelCriteria exactName and anyTags when supplied. requiredFacts means confirmed true. All matching catalogue IDs are relevant; ranking is not used.",
+    "limitations": [
+      "Source snapshot is incomplete for Astana; labels concern this exact frozen 298-POI catalogue only.",
+      "All prices and factual amenities are unknown; positive cases demand neither price bounds nor confirmed amenities.",
+      "Source hours are weekly schedules, not live guarantees; no holiday exceptions. Unknown hours allowed only when openNow=false, with warning.",
+      "Category/tag labels describe the source listing; they do not establish booking availability, current exhibition content, guest access, exact activity duration or entry price.",
+      "Preset locations are fixed UI points, not user device location or verified walking routes.",
+      "This is an agent-curated development set, not a blind independent human benchmark.",
+      "Kazakh queries are agent-authored supplemental development examples, not observed user queries or native-speaker-verified language.",
+      "Source listing descriptions/tags are mostly Russian. Kazakh task wording is curated; original Russian evidence is preserved verbatim. No review opinions are translated or quoted.",
+      "These four cases are separate from the frozen 12-RU positive denominator. Existing RU labels are unchanged.",
+      "The explicit runtime stub supports five Russian demo phrases only. Unknown Kazakh text clarifies; these artifacts do not claim runtime Kazakh intent or semantic retrieval acceptance."
+    ],
+    "frozenRuLabelsPath": "evals/real-cases.json",
+    "frozenRuLabelsSha256": "73947dd92e4b33641897321e6832ef0dad463dbe33baee4512e8be2efc5cee36",
+    "supplemental": true,
+    "nativeSpeakerVerified": false,
+    "blindHumanBenchmark": false
+  },
+  "presets": {
+    "expo": {
+      "label": "EXPO",
+      "lat": 51.09,
+      "lon": 71.418
+    },
+    "bayterek": {
+      "label": "Бәйтерек",
+      "lat": 51.1282,
+      "lon": 71.4304
+    },
+    "embankment": {
+      "label": "Набережная",
+      "lat": 51.1669,
+      "lon": 71.4179
+    }
+  },
+  "metrics": {
+    "k": 5,
+    "positiveCaseCount": 4,
+    "negativeCaseCount": 0,
+    "positiveCaseIds": [
+      "REAL-KK-01",
+      "REAL-KK-02",
+      "REAL-KK-03",
+      "REAL-KK-04"
+    ],
+    "excludedNegativeCaseIds": [],
+    "recallDefinition": "|top5 ∩ relevantIds| / |relevantIds|, macro-average only over these four supplemental KK cases; never merged with frozen RU denominator",
+    "macroRecallAt5Ceiling": 0.9166666666666667,
+    "negativePolicy": "Existing negative guards remain in frozen RU artifact; this supplemental set has no negative cases."
+  },
+  "cases": [
+    {
+      "id": "REAL-KK-01",
+      "kind": "retrieval_positive",
+      "countInPositiveMetrics": true,
+      "presetId": "expo",
+      "now": "2026-10-20T10:00:00Z",
+      "request": {
+        "query": "EXPO маңындағы саябақта жарты сағат серуендегім келеді. Екі шақырымнан аспайтын жер болсын.",
+        "locale": "kk",
+        "location": {
+          "lat": 51.09,
+          "lon": 71.418,
+          "source": "preset"
+        },
+        "filters": {
+          "categories": [
+            "park"
+          ],
+          "radiusM": 2000,
+          "durationMinutes": 30,
+          "company": "solo",
+          "maxSpendKzt": null,
+          "openNow": false
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "radiusM",
+          "durationMinutes",
+          "company",
+          "openNow"
+        ],
+        "profileId": null,
+        "savedIds": [],
+        "dismissedIds": []
+      },
+      "labelCriteria": {
+        "anyTags": [],
+        "exactName": null,
+        "requiredFacts": []
+      },
+      "expected": {
+        "status": [
+          "ok",
+          "degraded"
+        ],
+        "relevantIds": [
+          "2gis:70000001061880425"
+        ],
+        "hardEligibleIds": [
+          "2gis:70000001061880425"
+        ],
+        "relevantCount": 1,
+        "recallAt5Ceiling": 1,
+        "evidence": [
+          {
+            "poiId": "2gis:70000001061880425",
+            "name": "Ботанический сад",
+            "sourceIds": [
+              "2gis:70000001061880425:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001061880425"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:33:37Z",
+            "distanceM": 1828.7,
+            "scheduledRemainingMinutes": null,
+            "rationale": "Листинг: «Ботанический сад». Критерий: canonical category=park. Расстояние 1829 м по прямой. Часы неизвестны: разрешено только при openNow=false, требуется предупреждение."
+          }
+        ],
+        "rationale": "Полный набор совпадений по географии, времени, категории и исходным рубрикам. Рейтинг/бренд/позиция в выдаче не исключают POI."
+      }
+    },
+    {
+      "id": "REAL-KK-02",
+      "kind": "retrieval_positive",
+      "countInPositiveMetrics": true,
+      "presetId": "bayterek",
+      "now": "2026-10-20T10:00:00Z",
+      "request": {
+        "query": "Бәйтеректен бір шақырымнан аспайтын жерден кофехана іздеймін. Жалғыз өзіме жарты сағат уақыт бар.",
+        "locale": "kk",
+        "location": {
+          "lat": 51.1282,
+          "lon": 71.4304,
+          "source": "preset"
+        },
+        "filters": {
+          "categories": [
+            "cafe"
+          ],
+          "radiusM": 1000,
+          "durationMinutes": 30,
+          "company": "solo",
+          "maxSpendKzt": null,
+          "openNow": true
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "radiusM",
+          "durationMinutes",
+          "company",
+          "openNow"
+        ],
+        "profileId": null,
+        "savedIds": [],
+        "dismissedIds": []
+      },
+      "labelCriteria": {
+        "anyTags": [],
+        "exactName": null,
+        "requiredFacts": []
+      },
+      "expected": {
+        "status": [
+          "ok",
+          "degraded"
+        ],
+        "relevantIds": [
+          "2gis:70000001069516972",
+          "2gis:70000001089379407",
+          "2gis:70000001101055300",
+          "2gis:70000001112380119",
+          "2gis:70000001112414896",
+          "2gis:70000001115350951"
+        ],
+        "hardEligibleIds": [
+          "2gis:70000001069516972",
+          "2gis:70000001089379407",
+          "2gis:70000001101055300",
+          "2gis:70000001112380119",
+          "2gis:70000001112414896",
+          "2gis:70000001115350951"
+        ],
+        "relevantCount": 6,
+        "recallAt5Ceiling": 0.8333333333333334,
+        "evidence": [
+          {
+            "poiId": "2gis:70000001069516972",
+            "name": "Master Coffee",
+            "sourceIds": [
+              "2gis:70000001069516972:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001069516972"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:25:18Z",
+            "distanceM": 540.5,
+            "scheduledRemainingMinutes": 480.0,
+            "rationale": "Листинг: «Master Coffee, кофейня». Критерий: canonical category=cafe. Расстояние 540 м по прямой. По сохранённому расписанию остаётся 480 минут; минимум категории 20 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001089379407",
+            "name": "ONESHOTT COFFEE",
+            "sourceIds": [
+              "2gis:70000001089379407:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001089379407"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:25:17Z",
+            "distanceM": 354.8,
+            "scheduledRemainingMinutes": 420.0,
+            "rationale": "Листинг: «ONESHOTT COFFEE». Критерий: canonical category=cafe. Расстояние 355 м по прямой. По сохранённому расписанию остаётся 420 минут; минимум категории 20 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001101055300",
+            "name": "Espresso Day",
+            "sourceIds": [
+              "2gis:70000001101055300:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001101055300"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:24:35Z",
+            "distanceM": 305.9,
+            "scheduledRemainingMinutes": 480.0,
+            "rationale": "Листинг: «Espresso Day». Критерий: canonical category=cafe. Расстояние 306 м по прямой. По сохранённому расписанию остаётся 480 минут; минимум категории 20 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001112380119",
+            "name": "Expresso",
+            "sourceIds": [
+              "2gis:70000001112380119:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001112380119"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:25:18Z",
+            "distanceM": 549.7,
+            "scheduledRemainingMinutes": 420.0,
+            "rationale": "Листинг: «Expresso». Критерий: canonical category=cafe. Расстояние 550 м по прямой. По сохранённому расписанию остаётся 420 минут; минимум категории 20 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001112414896",
+            "name": "Master Coffee Express",
+            "sourceIds": [
+              "2gis:70000001112414896:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001112414896"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:25:34Z",
+            "distanceM": 678.6,
+            "scheduledRemainingMinutes": 540.0,
+            "rationale": "Листинг: «Master Coffee Express, кофейня». Критерий: canonical category=cafe. Расстояние 679 м по прямой. По сохранённому расписанию остаётся 540 минут; минимум категории 20 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001115350951",
+            "name": "Vanilla",
+            "sourceIds": [
+              "2gis:70000001115350951:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001115350951"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:25:26Z",
+            "distanceM": 456.7,
+            "scheduledRemainingMinutes": 360.0,
+            "rationale": "Листинг: «Vanilla». Критерий: canonical category=cafe. Расстояние 457 м по прямой. По сохранённому расписанию остаётся 360 минут; минимум категории 20 минут помещается."
+          }
+        ],
+        "rationale": "Полный набор совпадений по географии, времени, категории и исходным рубрикам. Рейтинг/бренд/позиция в выдаче не исключают POI."
+      }
+    },
+    {
+      "id": "REAL-KK-03",
+      "kind": "retrieval_positive",
+      "countInPositiveMetrics": true,
+      "presetId": "bayterek",
+      "now": "2026-10-20T10:00:00Z",
+      "request": {
+        "query": "Бәйтеректен бір шақырымнан аспайтын жердегі көркемөнер галереясын немесе көрме орнын іздеймін. Жалғыз баруға екі сағатқа дейін уақытым бар.",
+        "locale": "kk",
+        "location": {
+          "lat": 51.1282,
+          "lon": 71.4304,
+          "source": "preset"
+        },
+        "filters": {
+          "categories": [
+            "museum"
+          ],
+          "radiusM": 1000,
+          "durationMinutes": 120,
+          "company": "solo",
+          "maxSpendKzt": null,
+          "openNow": true
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "radiusM",
+          "durationMinutes",
+          "company",
+          "openNow"
+        ],
+        "profileId": null,
+        "savedIds": [],
+        "dismissedIds": []
+      },
+      "labelCriteria": {
+        "anyTags": [
+          "художественные выставки",
+          "художественные галереи",
+          "галереи"
+        ],
+        "exactName": null,
+        "requiredFacts": []
+      },
+      "expected": {
+        "status": [
+          "ok",
+          "degraded"
+        ],
+        "relevantIds": [
+          "2gis:70000001018125528",
+          "2gis:70000001028350126",
+          "2gis:70000001109538653"
+        ],
+        "hardEligibleIds": [
+          "2gis:70000001018125528",
+          "2gis:70000001028161260",
+          "2gis:70000001028350126",
+          "2gis:70000001109538653"
+        ],
+        "relevantCount": 3,
+        "recallAt5Ceiling": 1,
+        "evidence": [
+          {
+            "poiId": "2gis:70000001018125528",
+            "name": "Has Sanat",
+            "sourceIds": [
+              "2gis:70000001018125528:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001018125528"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:34:17Z",
+            "distanceM": 549.6,
+            "scheduledRemainingMinutes": 240.0,
+            "rationale": "Листинг: «Has Sanat, галерея искусств». Критерий: художественные выставки. Расстояние 550 м по прямой. По сохранённому расписанию остаётся 240 минут; минимум категории 40 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001028350126",
+            "name": "Forte Kulanshi Art Space",
+            "sourceIds": [
+              "2gis:70000001028350126:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001028350126"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:34:12Z",
+            "distanceM": 870.6,
+            "scheduledRemainingMinutes": 300.0,
+            "rationale": "Листинг: «Forte Kulanshi Art Space, галерея». Критерий: художественные выставки. Расстояние 871 м по прямой. По сохранённому расписанию остаётся 300 минут; минимум категории 40 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001109538653",
+            "name": "M.Art Gallery",
+            "sourceIds": [
+              "2gis:70000001109538653:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001109538653"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:34:11Z",
+            "distanceM": 687.5,
+            "scheduledRemainingMinutes": 270.0,
+            "rationale": "Листинг: «M.Art Gallery». Критерий: художественные выставки. Расстояние 688 м по прямой. По сохранённому расписанию остаётся 270 минут; минимум категории 40 минут помещается."
+          }
+        ],
+        "rationale": "Полный набор совпадений по географии, времени, категории и исходным рубрикам. Рейтинг/бренд/позиция в выдаче не исключают POI."
+      }
+    },
+    {
+      "id": "REAL-KK-04",
+      "kind": "retrieval_positive",
+      "countInPositiveMetrics": true,
+      "presetId": "embankment",
+      "now": "2026-10-20T10:00:00Z",
+      "request": {
+        "query": "Есіл жағалауынан бір шақырымнан аспайтын жердегі жаттығу залын іздеймін. Бір сағат жаттығуға уақытым бар, жалғыз барамын.",
+        "locale": "kk",
+        "location": {
+          "lat": 51.1669,
+          "lon": 71.4179,
+          "source": "preset"
+        },
+        "filters": {
+          "categories": [
+            "other",
+            "entertainment"
+          ],
+          "radiusM": 1000,
+          "durationMinutes": 60,
+          "company": "solo",
+          "maxSpendKzt": null,
+          "openNow": true
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "radiusM",
+          "durationMinutes",
+          "company",
+          "openNow"
+        ],
+        "profileId": null,
+        "savedIds": [],
+        "dismissedIds": []
+      },
+      "labelCriteria": {
+        "anyTags": [
+          "тренажерные залы"
+        ],
+        "exactName": null,
+        "requiredFacts": []
+      },
+      "expected": {
+        "status": [
+          "ok",
+          "degraded"
+        ],
+        "relevantIds": [
+          "2gis:70000001018074791",
+          "2gis:70000001018075540",
+          "2gis:70000001018082964",
+          "2gis:70000001068517437",
+          "2gis:70000001081688772",
+          "2gis:70000001090715970"
+        ],
+        "hardEligibleIds": [
+          "2gis:70000001018074791",
+          "2gis:70000001018075540",
+          "2gis:70000001018082964",
+          "2gis:70000001068517437",
+          "2gis:70000001081688772",
+          "2gis:70000001090715970"
+        ],
+        "relevantCount": 6,
+        "recallAt5Ceiling": 0.8333333333333334,
+        "evidence": [
+          {
+            "poiId": "2gis:70000001018074791",
+            "name": "Apex",
+            "sourceIds": [
+              "2gis:70000001018074791:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001018074791"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:35:43Z",
+            "distanceM": 882.1,
+            "scheduledRemainingMinutes": 480.0,
+            "rationale": "Листинг: «Apex, тренажерный зал». Критерий: тренажерные залы. Расстояние 882 м по прямой. По сохранённому расписанию остаётся 480 минут; минимум категории 30 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001018075540",
+            "name": "World Class",
+            "sourceIds": [
+              "2gis:70000001018075540:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001018075540"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:35:33Z",
+            "distanceM": 912.9,
+            "scheduledRemainingMinutes": 540.0,
+            "rationale": "Листинг: «World Class, фитнес-клуб». Критерий: тренажерные залы. Расстояние 913 м по прямой. По сохранённому расписанию остаётся 540 минут; минимум категории 30 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001018082964",
+            "name": "Abyroy",
+            "sourceIds": [
+              "2gis:70000001018082964:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001018082964"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:35:42Z",
+            "distanceM": 820.7,
+            "scheduledRemainingMinutes": 480.0,
+            "rationale": "Листинг: «Abyroy, спортивный комплекс». Критерий: тренажерные залы. Расстояние 821 м по прямой. По сохранённому расписанию остаётся 480 минут; минимум категории 30 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001068517437",
+            "name": "Iron Club",
+            "sourceIds": [
+              "2gis:70000001068517437:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001068517437"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:35:42Z",
+            "distanceM": 708.6,
+            "scheduledRemainingMinutes": 480.0,
+            "rationale": "Листинг: «Iron Club, фитнес-клуб». Критерий: тренажерные залы. Расстояние 709 м по прямой. По сохранённому расписанию остаётся 480 минут; минимум категории 20 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001081688772",
+            "name": "Champion Fitness",
+            "sourceIds": [
+              "2gis:70000001081688772:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001081688772"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:35:42Z",
+            "distanceM": 913.7,
+            "scheduledRemainingMinutes": 480.0,
+            "rationale": "Листинг: «Champion Fitness». Критерий: тренажерные залы. Расстояние 914 м по прямой. По сохранённому расписанию остаётся 480 минут; минимум категории 20 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001090715970",
+            "name": "Underground gym",
+            "sourceIds": [
+              "2gis:70000001090715970:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001090715970"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:35:42Z",
+            "distanceM": 907.4,
+            "scheduledRemainingMinutes": 480.0,
+            "rationale": "Листинг: «Underground gym, фитнес-клуб». Критерий: тренажерные залы. Расстояние 907 м по прямой. По сохранённому расписанию остаётся 480 минут; минимум категории 20 минут помещается."
+          }
+        ],
+        "rationale": "Полный набор совпадений по географии, времени, категории и исходным рубрикам. Рейтинг/бренд/позиция в выдаче не исключают POI."
+      }
+    }
+  ]
+}

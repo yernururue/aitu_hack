@@ -56,7 +56,8 @@ APP_AI_MODE=stub OPENROUTER_PAID_ENABLED=false LIVE_EVAL_ENABLED=false pnpm dev
 
 Каталог по умолчанию — `data/catalog/places.json`; исходные raw/normalized снимки
 остаются локальными и не включаются в серверную сборку. См. [приёмку данных](docs/collection-import.md)
-и [реальные retrieval labels](docs/evaluation-labels.md). Цены и amenities пока неизвестны:
+и [реальные retrieval labels](docs/evaluation-labels.md); [4 дополнительных KK-примера](docs/evaluation-kk.md)
+проверяются отдельно. Цены и amenities пока неизвестны:
 строгие требования по ним не ослабляются. Отзывы — короткие выдержки с источниками,
 подготовленные для локальной демонстрации; права публикации источника не установлены.
 

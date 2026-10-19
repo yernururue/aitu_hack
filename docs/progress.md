@@ -7,6 +7,14 @@ Stage: implementation
 
 ## Выполнение MVP
 
+- **M4.2 done (lexical numerical gate):** root40target/strictTS/lint PASS, independent review PASS, RU12/12top3/97.22%macro/negative4hardPASS. RAGOps supplementary comparison +8.89pp PASS; separateKK4/4/91.67%. `eval:retrieval` exit1 сохраняется из-за semanticVerified=false. **M4.3/M4.4/M4 blocked:** unchanged401 и Haiku reserve1.32>.50; реальной модели/победителя нет. Продолжаем независимый UI со stubs.
+
+- M4.2 RED зафиксирован исполнителем до rank edits:7 assertion failures/31PASS. Исправляются общие lexical token dilution, склонения и ложные совпадения префиксов; query/POI IDs и gold-criteria в код не добавляются.
+
+- **M4.1 done:**4KK supplemental sources независимо проверены и перенесены byte-identical; root схемы/16refs/17audit/фильтры/hashes/harness PASS. RU12+4 и каталог неизменны. **M4.2 in_progress:** общее улучшение лексического ранжирования с RED-регрессиями; текущий88.33% gate не пройден, семантика не заявляется.
+
+- **M3.5/M3 done (offline), commit fd37acb:** root465unit/46e2e/все app gates PASS, независимый UI review PASS. Реальный текстовый HTTP→каталог→адаптивный UI проверен. **M4.1 in_progress:** перенос отдельно проверенных4KK labels; исходные12RU и порог качества неизменны. Сборщик сохранён, paid0.
+
 - **M3 offline acceptance:** root `pnpm lint/typecheck/test/build/check:build-artifacts/test:e2e`, harness и diff-check — exit0;465unit/13files,46browser cases/390+1440,6NFT/1568entries. Независимые M3.1–M3.5 reviews PASS. Визуально просмотрены реальные3park screenshots. Production cross-mode smoke подтвердил runtime disabled/stub после stub-build, без захвата режима сборкой. Каталог298/источники/hash совпали; paid trial не выполнялся, OpenRouter0. Stage commit создаётся перед следующим этапом.
 
 - **M3.4 done:** stage-aware metric P2 исправлен (3 RED →22 eval GREEN), независимый re-review PASS, root full strict TS/lint PASS. **M3.5 in_progress:** подключение UI с честной пометкой stubs и браузерной проверкой настоящего API. Root real-catalog handler smoke уже подтвердил парк/строгие отказы/уточнение, все источники и ID из каталога.
