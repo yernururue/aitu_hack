@@ -1,0 +1,643 @@
+{
+  "schemaVersion": "1.0",
+  "synthetic": true,
+  "defaults": {
+    "now": "2026-10-20T07:00:00Z",
+    "request": {
+      "query": "",
+      "locale": "ru",
+      "location": {
+        "lat": 51.09,
+        "lon": 71.42,
+        "source": "preset"
+      },
+      "filters": {
+        "categories": [],
+        "radiusM": 2000,
+        "durationMinutes": 60,
+        "company": "solo",
+        "maxSpendKzt": null,
+        "openNow": false
+      },
+      "profileId": null,
+      "savedIds": [],
+      "dismissedIds": [],
+      "explicitFilterKeys": []
+    }
+  },
+  "cases": [
+    {
+      "id": "R01",
+      "kind": "retrieval",
+      "input": {
+        "query": "Тихое кафе с розеткой",
+        "filters": {
+          "categories": [
+            "cafe"
+          ]
+        },
+        "explicitFilterKeys": [
+          "categories"
+        ]
+      },
+      "expected": {
+        "status": [
+          "ok"
+        ],
+        "mustIncludeAny": [
+          "fixture:quiet-cafe"
+        ],
+        "mustExclude": [
+          "fixture:loud-cafe",
+          "fixture:unknown-cafe",
+          "fixture:far-cafe"
+        ],
+        "assertions": [
+          "outlets_confirmed",
+          "quiet_attributed_to_review"
+        ]
+      },
+      "priority": "P0"
+    },
+    {
+      "id": "R02",
+      "kind": "retrieval",
+      "input": {
+        "query": "Кафе рядом",
+        "filters": {
+          "categories": [
+            "cafe"
+          ],
+          "radiusM": 1000
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "radiusM"
+        ]
+      },
+      "expected": {
+        "status": [
+          "ok"
+        ],
+        "mustExclude": [
+          "fixture:far-cafe"
+        ],
+        "assertions": [
+          "all_within_radius",
+          "distance_straight_line"
+        ]
+      },
+      "priority": "P0"
+    },
+    {
+      "id": "R03",
+      "kind": "retrieval",
+      "input": {
+        "query": "Кафе до 2500 тенге",
+        "filters": {
+          "categories": [
+            "cafe"
+          ],
+          "maxSpendKzt": 2500
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "maxSpendKzt"
+        ]
+      },
+      "expected": {
+        "status": [
+          "ok"
+        ],
+        "mustIncludeAny": [
+          "fixture:quiet-cafe"
+        ],
+        "mustExclude": [
+          "fixture:unknown-cafe",
+          "fixture:loud-cafe",
+          "fixture:far-cafe"
+        ],
+        "assertions": [
+          "unknown_price_not_assumed"
+        ]
+      },
+      "priority": "P0"
+    },
+    {
+      "id": "R04",
+      "kind": "retrieval",
+      "input": {
+        "query": "Открытое кафе",
+        "filters": {
+          "categories": [
+            "cafe"
+          ],
+          "openNow": true
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "openNow"
+        ]
+      },
+      "expected": {
+        "status": [
+          "ok"
+        ],
+        "mustExclude": [
+          "fixture:unknown-cafe",
+          "fixture:far-cafe"
+        ],
+        "assertions": [
+          "hours_from_schedule_not_guaranteed"
+        ]
+      },
+      "priority": "P0"
+    },
+    {
+      "id": "R05",
+      "kind": "retrieval",
+      "now": "2026-10-20T19:30:00Z",
+      "input": {
+        "query": "Открытый боулинг",
+        "filters": {
+          "categories": [
+            "bowling"
+          ],
+          "openNow": true
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "openNow"
+        ]
+      },
+      "expected": {
+        "status": [
+          "ok"
+        ],
+        "mustIncludeAny": [
+          "fixture:bowling"
+        ],
+        "assertions": [
+          "overnight_previous_day_schedule",
+          "visit_fits_before_closing"
+        ]
+      },
+      "priority": "P0"
+    },
+    {
+      "id": "R06",
+      "kind": "retrieval",
+      "input": {
+        "query": "Боулинг",
+        "profileId": "student",
+        "filters": {
+          "categories": [
+            "bowling"
+          ]
+        },
+        "explicitFilterKeys": [
+          "categories"
+        ]
+      },
+      "expected": {
+        "status": [
+          "ok"
+        ],
+        "mustIncludeAny": [
+          "fixture:bowling"
+        ],
+        "mustExclude": [
+          "fixture:quiet-cafe"
+        ],
+        "assertions": [
+          "explicit_request_over_profile"
+        ]
+      },
+      "priority": "P0"
+    },
+    {
+      "id": "R07",
+      "kind": "retrieval",
+      "input": {
+        "query": "С ребёнком в помещение",
+        "filters": {
+          "company": "family",
+          "categories": [
+            "museum",
+            "park"
+          ]
+        },
+        "explicitFilterKeys": [
+          "company",
+          "categories"
+        ]
+      },
+      "expected": {
+        "status": [
+          "ok"
+        ],
+        "mustIncludeAny": [
+          "fixture:museum"
+        ],
+        "mustExclude": [
+          "fixture:park"
+        ],
+        "assertions": [
+          "indoor_and_child_friendly_confirmed"
+        ]
+      },
+      "priority": "P0"
+    },
+    {
+      "id": "R08",
+      "kind": "retrieval",
+      "input": {
+        "query": "Кафе до 100 тенге",
+        "filters": {
+          "categories": [
+            "cafe"
+          ],
+          "maxSpendKzt": 100
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "maxSpendKzt"
+        ]
+      },
+      "expected": {
+        "status": [
+          "no_results"
+        ],
+        "assertions": [
+          "no_arbitrary_first_places",
+          "suggest_change_without_applying"
+        ]
+      },
+      "priority": "P0"
+    },
+    {
+      "id": "R09",
+      "kind": "retrieval",
+      "input": {
+        "query": "Тыныш кафе және розетка керек",
+        "locale": "kk",
+        "filters": {
+          "categories": [
+            "cafe"
+          ]
+        },
+        "explicitFilterKeys": [
+          "categories"
+        ]
+      },
+      "expected": {
+        "status": [
+          "ok"
+        ],
+        "mustIncludeAny": [
+          "fixture:quiet-cafe"
+        ],
+        "mustExclude": [
+          "fixture:unknown-cafe"
+        ],
+        "assertions": [
+          "unicode_preserved"
+        ]
+      },
+      "priority": "P0"
+    },
+    {
+      "id": "R10",
+      "kind": "integration",
+      "input": {
+        "query": "Хочу боулинг",
+        "filters": {
+          "categories": [
+            "cafe"
+          ]
+        },
+        "explicitFilterKeys": [
+          "categories"
+        ]
+      },
+      "expected": {
+        "status": [
+          "needs_clarification"
+        ],
+        "assertions": [
+          "no_silent_filter_override"
+        ]
+      },
+      "priority": "P0"
+    },
+    {
+      "id": "G01",
+      "kind": "generation",
+      "input": {
+        "query": "Расскажи про это место",
+        "filters": {
+          "categories": [
+            "entertainment"
+          ]
+        },
+        "explicitFilterKeys": [
+          "categories"
+        ]
+      },
+      "expected": {
+        "status": [
+          "ok",
+          "degraded"
+        ],
+        "assertions": [
+          "source_text_is_not_instruction",
+          "no_invented_rating",
+          "no_unknown_ids"
+        ]
+      },
+      "priority": "P0"
+    },
+    {
+      "id": "G02",
+      "kind": "generation",
+      "setup": {
+        "upstream": "unknown_poi_id"
+      },
+      "input": {
+        "query": "Кофе"
+      },
+      "expected": {
+        "status": [
+          "degraded"
+        ],
+        "assertions": [
+          "reject_unknown_id",
+          "no_fabricated_ai_fallback"
+        ]
+      },
+      "priority": "P0"
+    },
+    {
+      "id": "G03",
+      "kind": "generation",
+      "setup": {
+        "upstream": "invalid_json"
+      },
+      "input": {
+        "query": "Кофе"
+      },
+      "expected": {
+        "status": [
+          "degraded"
+        ],
+        "assertions": [
+          "visible_degraded_label",
+          "valid_response_contract"
+        ]
+      },
+      "priority": "P0"
+    },
+    {
+      "id": "G04",
+      "kind": "integration",
+      "setup": {
+        "upstream": "explanation_timeout"
+      },
+      "input": {
+        "query": "Кофе"
+      },
+      "expected": {
+        "status": [
+          "degraded"
+        ],
+        "assertions": [
+          "bounded_timeout",
+          "retry_at_most_once",
+          "usable_catalog_fallback"
+        ]
+      },
+      "priority": "P0"
+    },
+    {
+      "id": "U01",
+      "kind": "ui",
+      "setup": {
+        "geolocation": "denied"
+      },
+      "input": {
+        "query": "Кофе"
+      },
+      "expected": {
+        "status": [
+          "ok",
+          "degraded"
+        ],
+        "assertions": [
+          "manual_preset_available",
+          "no_exact_coords_persisted"
+        ]
+      },
+      "priority": "P0"
+    },
+    {
+      "id": "U02",
+      "kind": "ui",
+      "setup": {
+        "mediaRecorder": "unsupported"
+      },
+      "input": {
+        "query": "Кофе"
+      },
+      "expected": {
+        "status": [
+          "ok",
+          "degraded"
+        ],
+        "assertions": [
+          "text_search_usable",
+          "voice_limitation_explained"
+        ]
+      },
+      "priority": "P1"
+    },
+    {
+      "id": "U03",
+      "kind": "ui",
+      "setup": {
+        "responseOrder": "second_then_first"
+      },
+      "input": {
+        "query": "Боулинг",
+        "filters": {
+          "categories": [
+            "bowling"
+          ]
+        },
+        "explicitFilterKeys": [
+          "categories"
+        ]
+      },
+      "expected": {
+        "status": [
+          "ok"
+        ],
+        "mustIncludeAny": [
+          "fixture:bowling"
+        ],
+        "assertions": [
+          "stale_response_discarded",
+          "demo_profile_visible"
+        ]
+      },
+      "priority": "P0"
+    },
+    {
+      "id": "D01",
+      "kind": "data",
+      "setup": {
+        "index": "wrong_model_or_dimensions"
+      },
+      "input": {
+        "query": "Кофе"
+      },
+      "expected": {
+        "status": [
+          "degraded"
+        ],
+        "assertions": [
+          "do_not_compare_incompatible_vectors",
+          "lexical_fallback_label"
+        ]
+      },
+      "priority": "P0"
+    },
+    {
+      "id": "D02",
+      "kind": "data",
+      "setup": {
+        "catalog": "duplicate_id_or_invalid_lat"
+      },
+      "input": {
+        "query": "Кофе"
+      },
+      "expected": {
+        "status": [
+          "rejected_import"
+        ],
+        "assertions": [
+          "row_reason_in_report",
+          "no_fake_center_coordinates"
+        ]
+      },
+      "priority": "P0"
+    },
+    {
+      "id": "U04",
+      "kind": "ui",
+      "setup": {
+        "localStorage": "corrupt"
+      },
+      "input": {
+        "query": "Кофе"
+      },
+      "expected": {
+        "status": [
+          "ok",
+          "degraded"
+        ],
+        "assertions": [
+          "safe_preferences_default",
+          "reset_works",
+          "no_horizontal_scroll"
+        ]
+      },
+      "priority": "P0"
+    },
+    {
+      "id": "I01",
+      "kind": "integration",
+      "priority": "P0",
+      "input": {
+        "query": "С семьёй на 30 минут"
+      },
+      "expected": {
+        "status": [
+          "ok",
+          "no_results"
+        ],
+        "assertions": [
+          "text_can_refine_default_filters",
+          "company_family_duration_30"
+        ]
+      }
+    },
+    {
+      "id": "G05",
+      "kind": "integration",
+      "priority": "P0",
+      "setup": {
+        "upstream": "intent_timeout"
+      },
+      "input": {
+        "query": "Кафе с розеткой до 2000 тенге"
+      },
+      "expected": {
+        "status": [
+          "needs_clarification"
+        ],
+        "assertions": [
+          "empty_recommendations",
+          "do_not_drop_unparsed_constraints"
+        ]
+      }
+    },
+    {
+      "id": "R11",
+      "kind": "retrieval",
+      "priority": "P0",
+      "now": "2026-10-20T20:45:00Z",
+      "input": {
+        "query": "Открытый боулинг",
+        "filters": {
+          "categories": [
+            "bowling"
+          ],
+          "openNow": true
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "openNow"
+        ]
+      },
+      "expected": {
+        "status": [
+          "no_results"
+        ],
+        "assertions": [
+          "insufficient_time_before_closing"
+        ]
+      }
+    },
+    {
+      "id": "G06",
+      "kind": "generation",
+      "priority": "P1",
+      "input": {
+        "query": "Тыныш кафе ұсын",
+        "locale": "kk"
+      },
+      "expected": {
+        "status": [
+          "ok"
+        ],
+        "mustIncludeAny": [
+          "fixture:quiet-cafe"
+        ],
+        "assertions": [
+          "answer_in_kk",
+          "facts_grounded"
+        ]
+      }
+    }
+  ]
+}
