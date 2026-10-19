@@ -274,4 +274,14 @@ describe("guarded endpoint transport (injected, no network)", () => {
     expect(network).not.toHaveBeenCalled();
     expect((await new BudgetGuard({ path }).snapshot()).inFlight).toBe(0);
   });
+  it.each(["aborted", "expired"])("rejects %s transport calls before reserving or dispatching", async (condition) => {
+    const controller = new AbortController();
+    if (condition === "aborted") controller.abort();
+    const guard = new BudgetGuard({ path });
+    const send = vi.fn(async () => ({ status: 200, body: { usage: { cost: 0 } } }));
+    const transport = new GuardedTransport({ guard, send });
+    await expect(transport.execute({ purpose: "prep", quote: plan(), body: { input: ["x"] }, signal: controller.signal, deadlineAt: Date.now() + (condition === "expired" ? -1 : 25000) })).rejects.toThrow(condition === "aborted" ? "REQUEST_ABORTED" : "DEADLINE_EXCEEDED");
+    expect(send).not.toHaveBeenCalled();
+    expect((await guard.snapshot()).inFlight).toBe(0);
+  });
 });

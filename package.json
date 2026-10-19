@@ -21,7 +21,8 @@
     "import:collector": "tsx scripts/import-collector.ts",
     "check:build-artifacts": "node scripts/check-build-trace.mjs",
     "build:index": "tsx scripts/build-index.ts",
-    "eval:retrieval": "tsx scripts/eval-retrieval.ts"
+    "eval:retrieval": "tsx scripts/eval-retrieval.ts",
+    "eval:live": "tsx scripts/eval-live.ts"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "1.3.1",

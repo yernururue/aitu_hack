@@ -9,7 +9,10 @@ M1 завершён (commit `10f4981`): scaffold/contracts/298реальныхPO
 M2.1–M2.3 проверены: deterministic filters/ranking + persistent single-host budget guard.
 M2.4 implementation принят после3P2fix/re-review:256tests/types/lint/build/NFT PASS.
 M2.4 task blocked: настоящий индекс отсутствует из-за401. Lexical top3=11/12,
-Recall5macro88.33%, semantic/quality gate не пройден. API ещё отсутствует; далее M3.
+Recall5macro88.33%, semantic/quality gate не пройден. M3.1–M3.4 проверены:
+серверный POST/intent/grounding/ограниченный adapter и disabled-by-default eval runner.
+M3.5 UI/настоящий API проверены на390/1440:465unit/46e2e/types/lint/build/NFT PASS.
+Далее M4 source labels/качество и M5 профили/подробности/обе карты; статус брать из трекера.
 M2.5 допускает offline продолжение по явному разрешению пользователя со stubs;
 зависимость от live части M2.4 записана как waiver, не как ложный done.
 Ближайший шаг всегда брать из tracker, а не из исторического текста этапа.
@@ -24,7 +27,9 @@ Runtime Node24.21.0/pnpm11.0.8. Отчёты исполнителей/review и 
 
 OpenRouter$0 paid calls; $2prep incl$0.50eval/$4demo reserve.
 Ключ в `.env.local` присутствует, но read-only auth401; не выводить секреты,
-не просить ключ в чате. Offline/stub продолжать. Persistent guard M2.3 проверен, paid mode выключен;
+не просить ключ в чате. Пользователь подтвердил, что ключ ещё не обновлён: auth повторно не проверять,
+продолжать со stubs. APP_AI_MODE=stub выбирается явно; disabled работает по категориям,
+неизвестный непустой текст уточняется. Persistent guard M2.3 проверен, paid mode выключен;
 перед paid calls всё равно нужны действующий ключ, долговечное хранилище ledger
 и явная серверная настройка. Serverless paid запрещён текущей реализацией. Публикация данных/physical phone/live/deployment ещё не проверены.
 

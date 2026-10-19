@@ -30,9 +30,12 @@ const COMPANIES = [
   { value: "friends", label: "С друзьями" }, { value: "family", label: "С семьёй" },
 ] as const;
 
-type Props = { onSearch: (request: RecommendRequest, locationLabel: string) => void; loading: boolean };
+export type SearchMode = "disabled" | "stub" | "live";
+const DEMO_PHRASES = ["Кофе рядом", "Хочу погулять", "Музей на час", "Боулинг с друзьями", "Кафе с розеткой"] as const;
 
-export function SearchForm({ onSearch, loading }: Props) {
+type Props = { aiMode: SearchMode; synthetic: boolean; onSearch: (request: RecommendRequest, locationLabel: string) => void; loading: boolean };
+
+export function SearchForm({ onSearch, loading, aiMode, synthetic }: Props) {
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState(createDefaultFilters);
   const [explicit, setExplicit] = useState<Set<keyof Filters>>(() => new Set());
@@ -123,13 +126,22 @@ export function SearchForm({ onSearch, loading }: Props) {
       <div className="form-heading"><span className="eyebrow">Ваш план</span><span className="form-heading-note">На сегодня</span></div>
       <div className="form-section query-section">
         <label className="field-label" htmlFor="search-query">Чем хочется заняться?</label>
+        {aiMode !== "live" && <div className="search-mode-notice" role="note" aria-label="Режим текстового поиска">
+          <strong>{aiMode === "stub" ? "Демо-разбор текста" : "ИИ-разбор отключён"}</strong>
+          <p>{aiMode === "stub" ? "Распознаём только пять готовых фраз ниже. ИИ-объяснения недоступны." : "Выберите категории и фильтры без текста. Для текстового запроса потребуется уточнение; ИИ-объяснения недоступны."}</p>
+          <span>{synthetic ? "Места из синтетического тестового каталога." : "Места из реального каталога; данные могут быть неполными."}</span>
+        </div>}
         <textarea
           ref={queryRef} id="search-query" name="query" rows={3} maxLength={1000}
-          placeholder="Например, выпить кофе в тихом месте или прогуляться у воды"
+          placeholder={aiMode === "stub" ? "Например, «Хочу погулять»" : aiMode === "disabled" ? "Выберите категорию ниже, оставив текст пустым" : "Например, выпить кофе в тихом месте или прогуляться у воды"}
           value={query} onChange={(event) => { setQuery(event.target.value); setError(""); }}
           aria-describedby={error && errorField === "query" ? "search-validation-error" : "query-hint"} aria-invalid={Boolean(error) && errorField === "query"}
         />
-        <p id="query-hint" className="field-hint">Напишите желание или выберите категорию. Можно вместе.</p>
+        <p id="query-hint" className="field-hint">{aiMode === "stub" ? "Готовую фразу можно сочетать с фильтрами. При конфликте попросим уточнение." : aiMode === "disabled" ? "Категории работают без ИИ. Фильтры сохранят выбранные ограничения." : "Напишите желание или выберите категорию. Можно вместе."}</p>
+        {aiMode === "stub" && <div className="demo-phrase-options" aria-label="Готовые фразы демо-разбора">
+          <span className="demo-phrase-label">Попробуйте точную фразу</span>
+          {DEMO_PHRASES.map((phrase) => <Button key={phrase} variant="ghost" className="demo-phrase-button" onClick={() => { setQuery(phrase); setError(""); queryRef.current?.focus(); }}>{phrase}</Button>)}
+        </div>}
         <fieldset className="categories-fieldset">
           <legend className="sr-only">Категории мест</legend>
           <div className="category-options">

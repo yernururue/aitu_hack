@@ -22,7 +22,9 @@ export default defineConfig({
   webServer: {
     command: "pnpm dev --hostname 127.0.0.1 --port 3100",
     url: baseURL,
-    reuseExistingServer: !process.env.CI,
+    // Never attach offline tests to an existing server with unknown paid settings.
+    reuseExistingServer: false,
+    env: { APP_AI_MODE: "stub", OPENROUTER_PAID_ENABLED: "false", LIVE_EVAL_ENABLED: "false" },
     timeout: 120_000,
   },
 });

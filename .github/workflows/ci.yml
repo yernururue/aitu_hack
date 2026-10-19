@@ -13,6 +13,9 @@ jobs:
     timeout-minutes: 15
     env:
       NEXT_TELEMETRY_DISABLED: "1"
+      APP_AI_MODE: "stub"
+      OPENROUTER_PAID_ENABLED: "false"
+      LIVE_EVAL_ENABLED: "false"
     steps:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4

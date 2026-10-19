@@ -201,3 +201,39 @@ datasetHash:canonicalCatalogSHA256, queries:Record<queryHash,number[]>}`.
 проверки полного индекса и конфигурации бюджета. Успешный батч сохраняется атомарно
 с fsync до следующего вызова; финальный POI-index публикуется только после полной
 валидации. См. [indexing.md](indexing.md). HTTP v1 не принимает эти параметры.
+
+
+## Серверный structured adapter
+
+`ChatJson({stage, messages, jsonSchema:{name,schema}, deadlineAt, signal?, purpose?})`
+возвращает parsed unknown только после учёта фактической стоимости. `stage` —
+intent/explanation, output limit — 400/1000; strict schema, все поля object обязательны,
+additionalProperties=false, удалённые refs и unsupported dynamic/recursive refs запрещены.
+Локальная Zod/grounding проверка core остаётся обязательной.
+
+`deadlineAt` — исходный серверный epoch-ms, общий для intent/embedding/explanation,
+не более25s от входа; попытка не более15s. Браузер не задаёт эти поля. Разрешён максимум
+один отдельно учтённый повтор при известной durable стоимости и recoverable protocol/HTTP
+ошибке. Unknown cost, abort, budget/IO failure, auth/refusal не повторяются.
+`ChatJsonError` содержит только sanitized code/stage/costKnown/dispatched.
+
+Необязательный server-only `createChatJson({onAttempt})` получает metadata после
+учёта стоимости: model/responseModel/provider, latency, usage/cost, outcome/attempt/status.
+Нет sink по умолчанию и production logging; callback не влияет на оплату/повторы/ответ.
+Eval собирает события синхронно и сам сохраняет отчёт. Protocol ok ещё не означает
+grounding PASS. Source: `src/lib/ai/openrouter.ts`; HTTP v1 не расширяется.
+
+
+## Raw envelope и проверенные элементы
+
+Сетевой ответ модели остаётся `{items:[{poiId,why,activity,evidenceIds}]}`.
+Внутренний `ExplanationSchema` валидирует envelope, а `validateExplanation`
+возвращает проверенный item array: derived `GeneratedItems = ExplanationItem[]`.
+`explain` также возвращает этот массив. Это согласовано с core и eval consumers;
+HTTP response не меняется. Фактические поля добавляет recommend из каталога.
+
+Утверждения о amenities в сгенерированных why/activity отклоняются консервативно,
+включая противоположные и атрибутированные через один найденный substring.
+Подтверждённые факты и доступные тексты отзывов показываются отдельно из POI,
+с источниками и пометкой мнения. Обязательное quiet нельзя молча ослаблять до
+предпочтения: при неуверенности требуется уточнение без карточек.

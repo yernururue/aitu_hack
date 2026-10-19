@@ -281,3 +281,31 @@
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition-duration: 0s !important; }
 }
+
+.search-mode-notice { padding: 12px; border: 1px solid #cfddf4; border-radius: 9px; background: #f0f5ff; margin-bottom: 13px; color: #385778; }
+.search-mode-notice strong { display: block; color: #264b91; font-size: 11px; font-weight: 650; line-height: 1.5; }
+.search-mode-notice p { font-size: 10px; line-height: 1.65; margin-top: 5px; }
+.search-mode-notice > span { display: block; color: #5f748c; font-size: 9px; line-height: 1.6; margin-top: 6px; }
+.demo-phrase-options { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.demo-phrase-label { display: block; width: 100%; color: #5c718d; font-size: 9px; margin-bottom: 2px; }
+.demo-phrase-button { white-space: normal; text-align: left; height: auto; min-height: 33px; font-size: 10px; padding: 6px 8px; border: 1px dashed #cbd9ed; border-radius: 7px; color: #345c9d; background: #fbfdff; }
+.catalog-description { margin-top: 17px; }
+.catalog-description .mini-label { color: #647b96; }
+.catalog-description .place-description { margin-top: 5px; }
+.place-data-labels { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 13px; }
+.place-data-labels span { color: #60758e; font-size: 10px; line-height: 1.6; padding: 4px 7px; background: #f2f5f9; border-radius: 5px; }
+.snapshot-details { margin-top: 18px; color: #5c728d; font-size: 10px; line-height: 1.8; }
+.snapshot-details summary { cursor: pointer; width: fit-content; max-width: 100%; }
+.snapshot-details summary code { color: #48658a; font-size: 9px; padding: 3px 5px; border-radius: 4px; background: #e3ecf8; }
+.snapshot-value { display: block; padding: 9px 11px; margin-top: 8px; background: #e5edf8; border-radius: 7px; overflow-wrap: anywhere; font-size: 10px; }
+@media (max-width: 760px) {
+  .search-mode-notice { padding: 12px; }
+  .search-mode-notice strong { font-size: 12px; }
+  .search-mode-notice p { font-size: 11px; }
+  .search-mode-notice > span { font-size: 10px; }
+  .demo-phrase-label { font-size: 10px; }
+  .demo-phrase-options { gap: 7px; }
+  .demo-phrase-button { font-size: 11px; min-height: 38px; padding: 7px 10px; }
+  .snapshot-details { margin: -9px 0 -8px; }
+  .place-data-labels span { font-size: 10px; }
+}

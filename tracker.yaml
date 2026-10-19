@@ -29,8 +29,8 @@ budget:
   dataset_volume: "298 accepted real POI /591 short sourced review excerpts; verified36 in3zones/3categories; original298/1953collector snapshot preserved"
 handoff:
   state: "ready"
-  application_state: "search_and_budget_implemented_api_pending"
-  current_scope: "M1 done; M2 search and cost guard accepted; continue versioned index then text API/UI; live blocked by401"
+  application_state: "offline_api_accepted_ui_integration_in_progress"
+  current_scope: "M1 done; M2 offline search/cost guard and M3.1-M3.4 API/eval accepted; M3.5 text UI integration; live index/comparison blocked by401"
   internal_deadline: "2026-10-20T20:00:00+05:00"
   submission_deadline: "2026-10-20T23:59:00+05:00"
   collector_work:
@@ -41,7 +41,7 @@ handoff:
       - "scripts/collect_astana.py"
       - "scripts/test_astana_data.py"
     notes: "M1.3 independently accepted298realPOI/591excerpts and reviewed36demo slice. Original collector code/snapshots preserved separately, no paid recollection. Collection C6 remains owned by collector integrator; publication rights not established."
-next_task_id: "M2.5"
+next_task_id: "M3.5"
 workflow:
   tracker_writer: "Single main integrator updates tracker after every finished task"
   completion_rule: "Mark done only after acceptance verification; record exact commands, exit codes and limitations here and in docs/progress.md"
@@ -254,7 +254,7 @@ stages:
           - "RED targeted index.test.ts exit1 before executableIndex API/evalrunner implementation. Tests cover canonicalhash/model/dims/IDs/finite/zero/cosine/cache/guardedbatches/nofetchfallback/dryrunno realvectors/oracleisolation/macro-micro metrics. No productionindex or paidcalls created."
       - id: "M2.5"
         title: "Verify retrieval and early preview"
-        status: "in_progress"
+        status: "done"
         owner: "root_integrator"
         depends_on:
           - "M2.4"
@@ -263,48 +263,73 @@ stages:
         waiver_reason: "User explicitly authorized continuing without a key using stubs. M2.4 implementation is verified/reviewed; only real paid-index artifact is blocked by HTTP401. Offline stage acceptance must not claim live semantic quality."
         acceptance: "Unit tests and pnpm build pass; record actual POI count/index model; deploy early preview when hosting access permits and verify snapshot; progress and stage commit recorded."
         evidence:
+          - "Root integrated Node24 gates:256unit/7suites,typecheck,lint,productionbuild,check-build-artifacts,harness,diff-check exit0. Dryindex298docs/45770bytes noartifacts. Real lexicaleval exit1 explicitlyrecorded belowRecall/semantic gates; actualindexmodelnone. ScopedindependentreviewPASS forindex/cache/pathfixes."
+          - "Stage commit57ce0f2 verified gitlog; originalcollectoruntrackedfiles preserved andnotstaged. Earlypreviewunavailable: Vercel GET/v2/user403, no localprojectlink/CLI; no deploymentclaimed. M2.4 remainsblocked onlyrealindex/key401, offlinecontinuation dependencywaiver documents directuserstubauthorization."
           - "Offline continuation authorized by user instruction without key use stubs; M2.4 code/review accepted, only actualpaidindex gate unmet. Root integrated256tests/typecheck/lint/build/NFT exit0; actualcatalog298, indexmodelnone (configuredembeddingcandidate only). Vercelread-only /v2/user HTTP403; earlypreview unavailable, no deployment."
   - id: "M3"
     title: "Structured RAG and full text path"
-    status: "todo"
+    status: "in_progress"
     tasks:
       - id: "M3.1"
         title: "Write failing upstream and grounding tests"
-        status: "todo"
+        status: "done"
+        owner: "data_executor"
         depends_on:
           - "M2.5"
         acceptance: "Cover unknown POI/evidence IDs, malformed/truncated JSON, 429, stage timeouts, explicit-filter conflicts/default refinements and review prompt injection; record expected failure."
-        evidence: []
+        evidence:
+          - "Root actualtargetedREDexit1:4missingproductionmodules,0assertionsexecuted. Independentreview specPASS/testqualityPASS; handchecked110declaredbehaviorcases fixtures/deadlines/mocks/expectations againstcontracts. Productionimplementation stillabsent; passingbehavior notclaimed. Executor ownedESLint/syntax/diff exit0."
+          - "Root targeted Vitest intent/grounding/recommend/route exit1:4suitecollectionfailures forabsentproductionmodules;0assertionsexecuted, expectedpreimplementationRED. Executor110plannedbehaviorcases/ownedESLint/syntax/diffPASS. Independenttestsreviewpending; no productionAPIcodewritten orpaidcalls."
       - id: "M3.2"
         title: "Implement bounded server OpenRouter adapter"
-        status: "todo"
+        status: "done"
+        owner: "ai_executor"
         depends_on:
           - "M3.1"
           - "M2.3"
         acceptance: "Strict JSON Schema/require_parameters; 15s per call and 25s request deadline; at most one bounded retry; context 8, cards 3, intent 400 and explanation 1000 output tokens; secrets remain server-side."
-        evidence: []
+        evidence:
+          - "Bounded strictJSON adapter/compatibletransport accepted. IndependentP2remote dynamic/recursive schema refs fixed8RED→GREEN, scopedre-reviewADDRESSED/specPASS/qualityPASS. Rootchangedadapter50tests/scopedstrictTS/ownedlint/diff exit0; beforefixroot153adapter+budget+indexPASS, transportunchangedinfix; executorfinal162targetedPASS."
+          - "Fixed400intent/1000explanation,15sperattempt/shared25s, pre/postdispatchabortaccounting/no latesend, ≤1separatelysettledknown-costretry, unknownfreeze, serveronlysanitizedtypes/optionalmetrics. Existing60budget/P1barrier retained. Pricingcaps unchanged; noauth/network/paid/realledger. FullAPItests/build deferredM3.3/M3.5, coremodulesstillmissing."
+          - "Independentreview CHANGES REQUIRED1P2: schema gate checks $refonly, remote $dynamicRef/$recursiveRef canreachtransport contraryto no-remote-ref contract. Isolatedsynthetic/no-network probe sends1. Originalauthorfixassigned with RED→GREEN regressions andlegalkeyword-likefield preservation. Money/deadline/retry review otherwise noactionablefinding."
+          - "Implementationready; Root153targetedtests(adapter41+budget62+index50), scopedstrictTSwithexplicitrepoNode typeRoots, lint,diff-check exit0. Existing60budgettests/P1durablefaultbarrier preserved. Independentadapterreviewpending. Fullprojecttests/types/build intentionallydeferred untilmissingM3.3coremodulesexist; notclaimedpassing. Noauth/network/paidcalls."
+          - "AdapterRED beforeproductionedits: openrouter suite missingmodule; two assertion-level transport regressions fail because pre-aborted/expired-deadline calls stilldispatch. Original60budgetcases retained. Newtests cover strictschema400/1000,15s/25s, chargedretry/unknownfreeze, abortcleanup and sanitizedtelemetry. Noauth/network/paid."
+          - "User explicitly confirmed key notupdated: continuewithstubs. No credentialretry/paidcalls; $0 recorded/$4demo preserved. Adapter implementation remains injectedprovider-only untilreview; actualindex/modelcomparison gates stayblocked."
       - id: "M3.3"
         title: "Implement intent, grounding and safe fallback"
-        status: "todo"
+        status: "done"
+        owner: "data_executor"
         depends_on:
           - "M3.2"
         acceptance: "Validate whitelisted POI/evidence and enrich only from catalog; code computes duration; failed nonempty intent returns clarification/no cards; embedding or explanation fallbacks preserve extracted constraints and clear labels."
-        evidence: []
+        evidence:
+          - "Fix1 accepted: required quiet always clarifies with0cards; positive/negative amenity prose rejected independently of source polarity; GeneratedItems derives validated item array while raw envelope stays {items}. Assertion-level17RED regressions,135core tests GREEN; independent scoped re-review all ADDRESSED/spec PASS/quality PASS (22selected regressions)."
+          - "Root current combined core/adapter/budget/eval:266tests/7files exit0; full typecheck/lint/default eval:live exit0. Default runner disabled/0rows/no network; catalog unchanged, no paid calls. Build integration in progress; UI hookup remains M3.5."
+          - "Independentreview CHANGES REQUIRED: mandatoryquiet phrasing canbesoftened into preference; prose guard permits contradictory amenity/quiet claims withvalidsourceIDs. Syntheticprobes confirmed. Originalauthor fix1assigned RED→GREEN; conservative rootdecision bansamenityprose ratherthan newNLP, POIfacts remainserverinserted."
+          - "Rootexplicitinternal contract alignment: raw LLM envelope remains {items}, validated GeneratedItems is derived ExplanationItem[] matching previouslyapprovedpreflight/core/tests/eval API. Addmissingtypealias andsyncdocs, noHTTPchange. Root116ownedtests/scopedTS/lintPASS beforethese findings, acceptancepending."
+          - "Core/POST implementation ready; executor116ownedtests/scopedTS/ownedlint/diff exit0. Existing110+2contractclarifications+4directqueryembedding regressions cover same25sdeadline/linkedabort/15s and constraint-preserving429/timeoutfallback. Realcatalog/hash unchanged; independentreview pending. Broadgate deferred untilparallelM3.4stopswriting, no paid/auth/network."
       - id: "M3.4"
         title: "Prepare guarded live evaluation runner"
-        status: "todo"
+        status: "done"
+        owner: "ai_executor"
         depends_on:
           - "M3.2"
         acceptance: "Tests prove disabled live mode makes no network calls and cap is checked before each batch; freeze candidate context and measure intent separately."
-        evidence: []
+        evidence:
+          - "Guarded frozen-context runner accepted after stage-aware abstention P2 fixed3assertion RED→GREEN22eval tests; independent scoped re-review ADDRESSED/spec PASS/quality PASS (3selected regressions). Intent scored only with explicit intent labels, missing metadata/nulls preserved, expected IDs never enter ranking/prompts."
+          - "Root changed22eval tests/full strict TS/ownedlint/diff exit0; previous combined266/fulltypes/lint/build/NFT/default disabled eval exit0. Default0network; whole3model quote preflight blocks Haiku1.32>.50 before provider. Actual M4.3 still blocked401/cap; no live comparison/winner/paid calls."
+          - "Implementation root266 combined tests/full types/lint/build/NFT/default disabled eval exit0; independent review found P2: downstream no_results incorrectly requires intent-stage abstention. Original author assigned stage-aware expectation fix with assertion RED; missing exact intent labels must stay null. No paid/network/auth; acceptance pending re-review."
+          - "RED before implementation: eval.test.ts exits1 missing scripts/eval-live.ts,0assertions. Declared disabled0network/sharedpreflight/frozencontext/oracleisolation/actualaccounting/unknownstop/report scenarios. Onlyrunner+evaltests owned; core separatelyowned. Noauth/network/paidcalls."
       - id: "M3.5"
         title: "Connect full text UI and verify path"
-        status: "todo"
+        status: "in_progress"
+        owner: "ui_executor"
         depends_on:
           - "M3.3"
           - "M3.4"
         acceptance: "Loading/empty/error states and stale-request cancellation work; intent/recommend/grounding tests and build pass; real-data search gives 0–3 valid cards; record source checks, trial usage/cost, progress and stage commit."
-        evidence: []
+        evidence:
+          - "Dependencies M3.3/M3.4 accepted; UI owned-file hookup begins with explicit stub banner/exact phrase chips and real localAPI Playwright at390/1440. Root current real-catalog handler smoke: park1degraded,outlets0,budget0,unsupportedquery clarification0,allcatalog/evidence/hash assertions PASS. UI acceptance pending."
   - id: "M4"
     title: "Model selection and retrieval quality"
     status: "todo"

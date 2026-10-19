@@ -163,7 +163,8 @@ server-only dependencies (catalog/provider) для детерминирован�
   Продолжение offline со stubs разрешено пользователем; M2.4 остаётся blocked.
 - [ ] Развернуть ранний preview при доступе к хостингу, проверить загрузку snapshot.
   Read-only Vercel auth вернул403; preview не развёрнут.
-- [ ] Зафиксировать проверенный этап отдельным коммитом.
+- [x] Зафиксировать проверенный offline этап отдельным коммитом: `57ce0f2`.
+  Actual live-index task остаётся blocked, а не done.
 
 ## Этап 3. Структурированный RAG и полный текстовый путь
 
@@ -173,30 +174,36 @@ tests/unit/{intent,recommend,grounding}.test.ts.
 Также подготовить scripts/eval-live.ts и tests/unit/eval.test.ts для запуска этапа 4.
 
 **Consumes:** retrieve(), схемы, RankedPoi[].
-**Produces:** `parseIntent(query: string, filters: Filters): Promise<Intent>`;
-`explain(candidates: RankedPoi[], request: RecommendRequest): Promise<GeneratedItems>`;
-`recommend(request: RecommendRequest, now: Date): Promise<RecommendResponse>`.
-`GeneratedItems` — ровно LLM-объект из data-contract; factual enrich выполняет recommend.
+**Produces:** `parseIntent(query, filters, explicitFilterKeys, serverDeps): Promise<Intent>`;
+`explain(candidates: RankedPoi[], intent: Intent, serverContext): Promise<GeneratedItems>`;
+`recommend(request: RecommendRequest, serverDeps): Promise<RecommendResponse>`.
+`serverDeps` включает clock/deadline/provider injection только на сервере; HTTPv1 неизменён.
+Raw LLM-ответ — envelope `{items:[...]}` из data-contract. `GeneratedItems` —
+проверенный массив элементов этого envelope; factual enrich выполняет recommend.
 
-- [ ] Написать failing tests с поддельным upstream: unknown poiId/evidenceId,
+- [x] Написать failing tests с поддельным upstream: unknown poiId/evidenceId,
   повреждённый JSON, обрыв ответа, 429, отдельные intent/embedding/explanation timeout,
   конфликт явных фильтров, уточнение defaults текстом, prompt injection в отзыве.
-- [ ] Убедиться, что тесты FAIL до реализации.
-- [ ] Реализовать один серверный OpenRouter adapter через fetch; JSON Schema,
+- [x] Убедиться, что тесты FAIL до реализации.
+  M3.1:110declared cases; root4missing-module suites RED,0assertions; independenttestsreview PASS.
+- [x] Реализовать один серверный OpenRouter adapter через fetch; JSON Schema,
   require_parameters, timeout 15 s на вызов, общий deadline 25 s на запрос.
   Не более одной повторной попытки в оставшемся deadline. Не раскрывать ключ.
-- [ ] Ограничить контекст 8 кандидатами, результат 3 карточками, intent output
+- [x] Ограничить контекст 8 кандидатами, результат 3 карточками, intent output
   400 токенов, explanation output 1000 токенов. Reasoning none/минимум по поддержке.
-- [ ] Реализовать whitelist ID, схему и обогащение фактами из каталога;
+- [x] Реализовать whitelist ID, схему и обогащение фактами из каталога;
   для unavailable AI вернуть помеченный каталоговый fallback, не фиктивный AI-текст.
   Это допустимо только после успешного intent: при его отказе непустой запрос
   получает needs_clarification без карточек. visitMinutes вычисляет код.
-- [ ] Подготовить live runner: без opt-in он не вызывает сеть, лимит проверяется
+- [x] Подготовить live runner: без opt-in он не вызывает сеть, лимит проверяется
   до батча; фиксированный candidate context и отдельная проверка intent.
-- [ ] Подключить форму и loading/empty/error; отменять устаревший запрос.
-- [ ] `pnpm test -- tests/unit/intent.test.ts tests/unit/recommend.test.ts tests/unit/grounding.test.ts`
+- [x] Подключить форму и loading/empty/error; отменять устаревший запрос.
+- [x] `pnpm test -- tests/unit/intent.test.ts tests/unit/recommend.test.ts tests/unit/grounding.test.ts`
   и полный `pnpm build` проходят. В браузере поиск → 1–3 карточки на реальных данных.
-- [ ] Записать стоимость пробного вызова и проверенные источники; коммит этапа.
+- [x] Записать стоимость и проверенные источники; коммит offline этапа.
+  M3: root465unit/46e2e/types/lint/build/NFT/harness PASS, task reviews PASS.
+  API и UI используют реальный каталог298, явные stubs; OpenRouter paid0.
+  Платная проба не выполнена: пользователь подтвердил отсутствие обновлённого ключа.
 
 ## Этап 4. Выбор модели и проверка качества
 

@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, Clock3, MapPin, Navigation, Search, ShieldCheck, Star, SlidersHorizontal } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { SearchForm, CATEGORY_LABELS } from "@/components/search-form";
+import { SearchForm, CATEGORY_LABELS, type SearchMode } from "@/components/search-form";
 import { RecommendResponseSchema, type RecommendResponse } from "@/lib/contracts/response";
 import type { RecommendRequest } from "@/lib/contracts/request";
 
@@ -16,7 +16,7 @@ function formatDistance(meters: number) {
   return meters < 1000 ? `${Math.round(meters)} м` : `${(meters / 1000).toLocaleString("ru-RU", { maximumFractionDigits: 1 })} км`;
 }
 
-export function SearchExperience({ dataset }: { dataset: DatasetInfo }) {
+export function SearchExperience({ dataset, aiMode }: { dataset: DatasetInfo; aiMode: SearchMode }) {
   const [state, setState] = useState<SearchState>({ status: "idle" });
   const [submitted, setSubmitted] = useState<{ request: RecommendRequest; locationLabel: string } | null>(null);
   const sequence = useRef(0);
@@ -63,7 +63,7 @@ export function SearchExperience({ dataset }: { dataset: DatasetInfo }) {
         <div className="city-label"><span className="city-dot" />Астана<span className="city-country">, Казахстан</span></div>
       </header>
       <main className="workspace">
-        <aside className="search-sidebar" aria-label="Условия поиска"><SearchForm onSearch={search} loading={state.status === "loading"} /></aside>
+        <aside className="search-sidebar" aria-label="Условия поиска"><SearchForm aiMode={aiMode} synthetic={synthetic} onSearch={search} loading={state.status === "loading"} /></aside>
         <section className="results-area" aria-labelledby="page-title">
           <div className="results-intro"><span className="eyebrow">Рядом есть куда</span><h1 id="page-title">Куда сегодня<span>?</span></h1><p>На кофе, на прогулку или за новым впечатлением.<br className="desktop-break" /> Найдите место под ваше время и настроение.</p></div>
           {synthetic && <p className="synthetic-warning" role="note">Синтетические тестовые данные — не реальные места</p>}
@@ -77,6 +77,7 @@ export function SearchExperience({ dataset }: { dataset: DatasetInfo }) {
             {contextFilters.categories.map((category) => <span key={category}>{CATEGORY_LABELS[category]}</span>)}
             {contextFilters.maxSpendKzt !== null && <span>До {contextFilters.maxSpendKzt.toLocaleString("ru-RU")} ₸ / чел.</span>}
             {contextFilters.openNow && <span>По расписанию открыто</span>}
+            {response?.usedContext.filters.requiredFacts.map((fact) => <span key={fact}>Требуется: {{ quiet: "подтверждённая тишина", outlets: "розетки", wifi: "Wi-Fi", childFriendly: "подходит детям", indoor: "в помещении" }[fact]}</span>)}
             <span>{response?.usedContext.isDemoProfile ? `Демо-профиль: ${response.usedContext.profileId ? profileLabels[response.usedContext.profileId] : "демонстрационная история"}` : "Без демо-профиля"}</span>
           </div>}
           <div className="result-announcement" aria-live="polite" aria-atomic="true"><h3 className={response?.recommendations.length ? "result-heading" : "sr-only"}>{title}</h3></div>
@@ -88,17 +89,22 @@ export function SearchExperience({ dataset }: { dataset: DatasetInfo }) {
           </Card>}
           {response && response.recommendations.length > 0 && <div className="recommendation-list">
             <p className={response.status === "degraded" ? "degraded-notice" : "response-message"}>{response.message}</p>
-            {response.recommendations.map((recommendation) => <Card className="recommendation-card" key={recommendation.poi.id}>
+            {response.recommendations.map((recommendation) => <Card role="article" aria-label={recommendation.poi.name} data-poi-id={recommendation.poi.id} className="recommendation-card" key={recommendation.poi.id}>
               <div className="recommendation-meta"><span>{CATEGORY_LABELS[recommendation.poi.category]}</span><span><Navigation aria-hidden="true" />{formatDistance(recommendation.distanceM)} по прямой</span></div>
               <h3>{recommendation.poi.name}</h3>
               {recommendation.poi.rating && <p className="rating"><Star aria-hidden="true" />{recommendation.poi.rating.value.toLocaleString("ru-RU")}<span>· {recommendation.poi.rating.count.toLocaleString("ru-RU")} оценок</span></p>}
-              {recommendation.poi.description.text && <p className="place-description">{recommendation.poi.description.text}</p>}
+              {recommendation.poi.description.text && <div className="catalog-description"><span className="mini-label">Из каталога</span><p className="place-description">{recommendation.poi.description.text}</p></div>}
+              <div className="place-data-labels">
+                <span>{recommendation.poi.price ? `${recommendation.poi.price.min.toLocaleString("ru-RU")}–${recommendation.poi.price.max.toLocaleString("ru-RU")} ₸ / чел.` : "Цена не подтверждена"}</span>
+                <span>{recommendation.poi.hours ? "Есть расписание в каталоге" : "Время работы не подтверждено"}</span>
+              </div>
               <div className="recommendation-reason"><span className="mini-label">Почему подходит</span><p>{recommendation.why}</p></div>
               <div className="activity-idea"><span className="mini-label">Идея занятия</span><p>{recommendation.activity}</p></div>
               <div className="recommendation-footer"><span><Clock3 aria-hidden="true" />{recommendation.visitMinutes.min}–{recommendation.visitMinutes.max} мин<span className="estimate-label">оценка посещения</span></span><Button asChild variant="outline"><a href={recommendation.navigation.twoGis ?? recommendation.navigation.googleMaps} target="_blank" rel="noreferrer">Маршрут<ArrowUpRight aria-hidden="true" /></a></Button></div>
             </Card>)}
           </div>}
           {response?.warnings.length ? <ul className="response-warnings" aria-label="Ограничения данных">{response.warnings.map((warning, index) => <li key={index}>{warning}</li>)}</ul> : null}
+          {response && <details className="snapshot-details" aria-label="Версия каталога"><summary>Версия данных: <code>{response.usedContext.dataSnapshot.slice(0, 12)}</code></summary><code className="snapshot-value">{response.usedContext.dataSnapshot}</code></details>}
           <div className="dataset-note"><ShieldCheck aria-hidden="true" /><p>{dataset.available ? <>В каталоге <strong>{dataset.count.toLocaleString("ru-RU")}</strong> мест{dataset.synthetic ? " для тестирования" : " Астаны"}. Подбираем только из этого набора.</> : <>Каталог мест сейчас недоступен. Поиск покажет понятное сообщение, если данные ещё не подключены.</>}<span>Неизвестные цены и часы остаются неизвестными.</span></p></div>
           <div className="search-principles"><span><Search aria-hidden="true" />Ваш запрос важнее настроек по умолчанию</span><span>Сначала место. Затем маршрут.<ArrowUpRight aria-hidden="true" /></span></div>
         </section>
