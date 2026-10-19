@@ -1,0 +1,35 @@
+name: Quality checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: python3 scripts/check_harness.py
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+      - run: pnpm check:build-artifacts
+      - name: Install Chromium when browser tests exist
+        if: ${{ hashFiles('tests/e2e/**/*.spec.ts') != '' }}
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Browser tests
+        if: ${{ hashFiles('tests/e2e/**/*.spec.ts') != '' }}
+        run: pnpm test:e2e

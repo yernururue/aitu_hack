@@ -11,9 +11,9 @@ from urllib.parse import unquote, urlsplit
 
 
 REQUIRED = (
-    "AGENTS.md", "README.md", ".gitignore", ".env.example", "Makefile",
+    "AGENTS.md", "README.md", ".gitignore", ".env.example", "Makefile", "tracker.yaml",
     "docs/product-spec.md", "docs/implementation-plan.md", "docs/data-contract.md",
-    "docs/harness.md", "docs/research.md", "docs/progress.md",
+    "docs/harness.md", "docs/research.md", "docs/progress.md", "docs/handoff.md",
     "evals/cases.json", "evals/fixtures/places.json",
 )
 CATEGORIES = {"cafe", "restaurant", "park", "museum", "bowling", "entertainment", "other"}

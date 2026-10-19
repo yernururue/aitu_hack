@@ -1,0 +1,1692 @@
+{
+  "schemaVersion": "1.0",
+  "sourceSnapshot": "2026-10-19T18:41:06.854110+00:00",
+  "selection": "full",
+  "synthetic": false,
+  "fetched": 298,
+  "accepted": 298,
+  "rejected": 0,
+  "rejections": [],
+  "inputCounts": {
+    "normalizedPlaces": 298,
+    "normalizedReviews": 1953,
+    "rawReviews": 2208,
+    "upstream": {
+      "fetchedItems": 2558,
+      "duplicatePlaces": 14,
+      "duplicateReviews": 70,
+      "acceptedPlaces": 298,
+      "acceptedReviews": 1953,
+      "quarantined": 223
+    }
+  },
+  "provenance": {
+    "runs": [
+      {
+        "runId": "vjyIqJw5qfydrod8y",
+        "datasetId": "r0eRgjwTBSn6sW50Y",
+        "status": "SUCCEEDED",
+        "buildNumber": "0.1.13"
+      },
+      {
+        "runId": "iDvWFS88Oh3s4BZD2",
+        "datasetId": "qgXnXq4FO3cWvw5gs",
+        "status": "SUCCEEDED",
+        "buildNumber": "0.1.13"
+      },
+      {
+        "runId": "7theIPQDlF9t5ruRl",
+        "datasetId": "ez4RYsc3DflVuwN3f",
+        "status": "SUCCEEDED",
+        "buildNumber": "0.1.13"
+      },
+      {
+        "runId": "CDVuwJKmcV9NEztbS",
+        "datasetId": "TsTU1U41tbIxJLsNb",
+        "status": "SUCCEEDED",
+        "buildNumber": "0.1.13"
+      },
+      {
+        "runId": "0Z3PeFgUUho0zpUrp",
+        "datasetId": "feGffkTYzsRkAEVEb",
+        "status": "SUCCEEDED",
+        "buildNumber": "0.1.13"
+      }
+    ],
+    "rawSnapshots": [
+      {
+        "file": "data/raw/apify/coffee-items.json",
+        "sha256": "148854b1f326a0b6593eb1ff9da7e7d5bd722dd4e1d1f6cd0428fa9a97573853",
+        "records": 1086
+      },
+      {
+        "file": "data/raw/apify/diversity-items.json",
+        "sha256": "621cd4ef7ece4df64b9177caeaab4eca1f37cd8864ecd0218b8e461a8be3c7bd",
+        "records": 1041
+      },
+      {
+        "file": "data/raw/apify/last-items.json",
+        "sha256": "7da55802f9ffa1d654b86b3a44af10d2166f092b03e35ab4cfc6423679652eff",
+        "records": 108
+      },
+      {
+        "file": "data/raw/apify/probe-items.json",
+        "sha256": "abc8e79b3e94dcfe787aa247ca7108ecb464484b1e01ef29f552815cdd9942ce",
+        "records": 30
+      },
+      {
+        "file": "data/raw/apify/rare-items.json",
+        "sha256": "4a4d43ac2305eaba7ac94604f32fb240938c89635c7cdd63b2ce7443ecefd3f2",
+        "records": 293
+      }
+    ]
+  },
+  "verification": {
+    "rawHashesChecked": true,
+    "rawCountsChecked": true,
+    "collectorRunsChecked": true
+  },
+  "catalogSha256": "c72d13a1d8df327edc22adce02743b0246aec157e86330c96c408bc44fabb873",
+  "suspectedDuplicates": [
+    {
+      "ids": [
+        "2gis:70000001018099461",
+        "2gis:70000001022686048"
+      ],
+      "reason": "same_name_nearby",
+      "distanceM": 48.6
+    },
+    {
+      "ids": [
+        "2gis:70000001051880845",
+        "2gis:70000001077758960"
+      ],
+      "reason": "same_name_nearby",
+      "distanceM": 15
+    },
+    {
+      "ids": [
+        "2gis:70000001086913828",
+        "2gis:70000001100848208"
+      ],
+      "reason": "same_name_nearby",
+      "distanceM": 0
+    }
+  ],
+  "missingFields": {
+    "price": 298,
+    "links.website": 298,
+    "facts.quiet": 298,
+    "facts.outlets": 298,
+    "facts.wifi": 298,
+    "facts.childFriendly": 298,
+    "facts.indoor": 298,
+    "address": 10,
+    "hours": 6,
+    "links.social": 20,
+    "rating": 3,
+    "reviews": 2
+  },
+  "bySource": {
+    "listing": 298,
+    "review": 296
+  },
+  "byCategory": {
+    "entertainment": 46,
+    "restaurant": 33,
+    "other": 48,
+    "museum": 21,
+    "park": 11,
+    "cafe": 135,
+    "bowling": 4
+  },
+  "byZone": {
+    "Нура район": 111,
+    "Байконыр район": 6,
+    "Есиль район": 89,
+    "Сарыарка район": 25,
+    "Сарайшык район": 30,
+    "Алматы район": 37
+  },
+  "categoryMappings": [
+    {
+      "id": "2gis:70000001018069131",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001018069607",
+      "category": "entertainment",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001018123817",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001018125528",
+      "category": "museum",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001019586912",
+      "category": "park",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001019594023",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001022034235",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001022996764",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001025116418",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001025895405",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001027048493",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001028161260",
+      "category": "museum",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001028350126",
+      "category": "museum",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001030378369",
+      "category": "entertainment",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001030459588",
+      "category": "restaurant",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001033158649",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001033786474",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001033835901",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001036647175",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001036820740",
+      "category": "other",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001041825562",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001041927377",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001045449144",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001045845865",
+      "category": "museum",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001046465109",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001046697568",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001051323152",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001052485674",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001053405771",
+      "category": "restaurant",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001053516024",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001055366996",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001057889453",
+      "category": "entertainment",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001060665571",
+      "category": "restaurant",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001061880425",
+      "category": "park",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001063852077",
+      "category": "restaurant",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001066189574",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001066947775",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001067180779",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001068267909",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001069294638",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001069489489",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001069516972",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001075874042",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001080559483",
+      "category": "museum",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001081872847",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001082734463",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001083260493",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001086913828",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001088132171",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001088831575",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001089002559",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001089379407",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001090714341",
+      "category": "museum",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001091786660",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001091828086",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001092745409",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001093106778",
+      "category": "park",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001094393018",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001094439177",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001094498045",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001095170419",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001097382279",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001099159895",
+      "category": "museum",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001100133309",
+      "category": "other",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001100848208",
+      "category": "bowling",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001101055300",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001101115627",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001102783750",
+      "category": "restaurant",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001102862327",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001103456026",
+      "category": "park",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001104653792",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001104916890",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001105683613",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001109538653",
+      "category": "museum",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001109595395",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001109799390",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001110629027",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001110774068",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001111002051",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001112380119",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001112414896",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001112472952",
+      "category": "restaurant",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001112713095",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001115033416",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001115188858",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001115350951",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001115602925",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001116732233",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001118555759",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001018062580",
+      "category": "entertainment",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001018066728",
+      "category": "entertainment",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001018069135",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001018079516",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001018081407",
+      "category": "entertainment",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001018081724",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001018099461",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001018102444",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001018115978",
+      "category": "park",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001019586971",
+      "category": "park",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001022686048",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001026978247",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001029310655",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001034935544",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001035171048",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001036558298",
+      "category": "entertainment",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001039251565",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001043919053",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001044480178",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001045188750",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001051880845",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001054626285",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001054626458",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001054947968",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001055356854",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001056928934",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001061275462",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001064298797",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001065289868",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001065953514",
+      "category": "museum",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001066154559",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001066228964",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001067047985",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001067593428",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001067929760",
+      "category": "entertainment",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001068517514",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001069160884",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001072104678",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001074607736",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001075928358",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001076284614",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001076562542",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001077237212",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001077394397",
+      "category": "restaurant",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001077726144",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001077758960",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001078776156",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001080306137",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001080364976",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001080574946",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001081114336",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001082380718",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001082540460",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001082541624",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001082645461",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001082736917",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001083040835",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001083486714",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001085683258",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001089272884",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001090532665",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001092837417",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001092838884",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001093531397",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001094540849",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001095205402",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001095527974",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001095647648",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001096869002",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001097343252",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001097343289",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001097343335",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001097635276",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001098166348",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001100051929",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001100581149",
+      "category": "entertainment",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001100582836",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001100876739",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001100876741",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001101686055",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001101957970",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001102751358",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001103033631",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001103335287",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001103986796",
+      "category": "other",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001105008919",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001105298857",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001105373239",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001105673460",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001105809728",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001110279163",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001110459952",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001110593680",
+      "category": "museum",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001110643477",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001112642760",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001113188899",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001115375807",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001115456568",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001115510421",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001115594003",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001115621006",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001115631328",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001115930997",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001116311780",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001116393936",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001116716942",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001116864210",
+      "category": "bowling",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001117714705",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001117820307",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001117857005",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001118241957",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001018067856",
+      "category": "restaurant",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001018074791",
+      "category": "entertainment",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001018075540",
+      "category": "entertainment",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001018082964",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001018106112",
+      "category": "museum",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001018131535",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001018608940",
+      "category": "museum",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001019557490",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001019583996",
+      "category": "park",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001019586228",
+      "category": "park",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001019586873",
+      "category": "park",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001019587108",
+      "category": "park",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001021779631",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001022229717",
+      "category": "museum",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001023053170",
+      "category": "park",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001027453186",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001028256423",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001030595899",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001031437952",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001032066906",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001032873695",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001033324366",
+      "category": "entertainment",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001034875499",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001035365688",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001036758802",
+      "category": "bowling",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001038234970",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001039162559",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001040234401",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001041329707",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001041476855",
+      "category": "museum",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001043825510",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001050534482",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001053977781",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001057281856",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001059670176",
+      "category": "bowling",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001060684766",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001062421587",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001067738185",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001068517437",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001069411402",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001074558805",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001075239699",
+      "category": "entertainment",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001075322780",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001077394652",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001078956852",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001079583945",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001080119937",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001080351248",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001080955913",
+      "category": "museum",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001081688772",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001082620923",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001082687474",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001082695411",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001083483977",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001083532054",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001084025319",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001088138400",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001089147040",
+      "category": "entertainment",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001089303208",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001089412653",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001089435179",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001089659878",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001090144444",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001090472672",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001090715970",
+      "category": "other",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001092024186",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001093504455",
+      "category": "museum",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001093655980",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001094541418",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001096414640",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001096797927",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001097463527",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001097666581",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001099443193",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001103026988",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001104276158",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001104425615",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001104576620",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001104872669",
+      "category": "museum",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001105342843",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001110242736",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001110382562",
+      "category": "museum",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001110997872",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001111237434",
+      "category": "museum",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001112120314",
+      "category": "museum",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001112605652",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001114186304",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001114229593",
+      "category": "museum",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001114274463",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001114431658",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001114503471",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001114703186",
+      "category": "entertainment",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001114723616",
+      "category": "cafe",
+      "primaryMatched": false
+    },
+    {
+      "id": "2gis:70000001116284705",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001116286483",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001116746358",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001117372880",
+      "category": "cafe",
+      "primaryMatched": true
+    },
+    {
+      "id": "2gis:70000001117666258",
+      "category": "cafe",
+      "primaryMatched": true
+    }
+  ],
+  "links": {
+    "fetched": 791,
+    "acceptedWebsites": 0,
+    "acceptedSocial": 354,
+    "rejected": 437,
+    "omittedAdditionalWebsites": 0,
+    "reasons": {
+      "unsupported_protocol": 167,
+      "contact_channel": 264,
+      "unsupported_social_host_or_contact": 6
+    }
+  },
+  "reviews": {
+    "fetched": 1953,
+    "accepted": 1953,
+    "rejected": 0,
+    "matchedRaw": 1953,
+    "exported": 591,
+    "omittedByLimit": 1362,
+    "omittedBySlice": 0,
+    "rejections": []
+  },
+  "reviewedSlice": {
+    "requested": 36,
+    "accepted": 36,
+    "missingIds": [],
+    "byCategory": {
+      "park": 7,
+      "museum": 10,
+      "cafe": 19
+    },
+    "byZone": {
+      "Нура район": 12,
+      "Есиль район": 12,
+      "Сарайшык район": 12
+    }
+  },
+  "demoGate": {
+    "atLeast30": true,
+    "atLeast3Zones": true,
+    "atLeast3Categories": true,
+    "reviewed36Complete": true
+  },
+  "limitations": [
+    "Local demonstration; publication rights for source reviews are not established.",
+    "Reviews are literal excerpts of a relevance sample, with branch-page source URLs; no review permalink was verified.",
+    "Price and factual amenities remain unknown; unknown hours remain null.",
+    "Source districts are not an independently verified administrative polygon."
+  ]
+}

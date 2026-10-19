@@ -1,0 +1,1531 @@
+{
+  "schemaVersion": "1.0",
+  "synthetic": false,
+  "metadata": {
+    "labelMethod": "source-first curated labels fixed before retrieval implementation; relevant sets enumerate all matches to documented source criteria, never ranked output",
+    "labelledAt": "2026-10-19T19:03:42.865207+00:00",
+    "catalogPath": "data/catalog/places.json",
+    "catalogSha256": "c72d13a1d8df327edc22adce02743b0246aec157e86330c96c408bc44fabb873",
+    "normalizedSnapshotGeneratedAt": "2026-10-19T18:41:06.854110+00:00",
+    "sourceCollectionRange": {
+      "earliest": "2026-10-19T18:24:24Z",
+      "latest": "2026-10-19T18:35:43Z"
+    },
+    "source": "2GIS listings collected by existing Apify workflow; local demonstration; publication rights for reviews not established",
+    "timezone": "Asia/Almaty",
+    "distance": "haversine straight_line, Earth radius 6371000m, radius boundary inclusive",
+    "visitMinimumMinutes": {
+      "cafe": 20,
+      "restaurant": 30,
+      "park": 20,
+      "museum": 40,
+      "bowling": 45,
+      "entertainment": 30,
+      "other": 20
+    },
+    "relevanceRule": "Pass every explicit hard filter at case.now, then satisfy labelCriteria exactName and anyTags when supplied. requiredFacts means confirmed true. All matching catalogue IDs are relevant; ranking is not used.",
+    "limitations": [
+      "Source snapshot is incomplete for Astana; labels concern this exact frozen 298-POI catalogue only.",
+      "All prices and factual amenities are unknown; positive cases demand neither price bounds nor confirmed amenities.",
+      "Source hours are weekly schedules, not live guarantees; no holiday exceptions. Unknown hours allowed only when openNow=false, with warning.",
+      "Category/tag labels describe the source listing; they do not establish booking availability, current exhibition content, guest access, exact activity duration or entry price.",
+      "Preset locations are fixed UI points, not user device location or verified walking routes.",
+      "RU initial labels only; four KK queries and final provenance review remain for M4.1.",
+      "This is an agent-curated development set, not a blind independent human benchmark."
+    ]
+  },
+  "presets": {
+    "expo": {
+      "label": "EXPO",
+      "lat": 51.09,
+      "lon": 71.418
+    },
+    "bayterek": {
+      "label": "Бәйтерек",
+      "lat": 51.1282,
+      "lon": 71.4304
+    },
+    "embankment": {
+      "label": "Набережная",
+      "lat": 51.1669,
+      "lon": 71.4179
+    }
+  },
+  "metrics": {
+    "k": 5,
+    "positiveCaseCount": 12,
+    "negativeCaseCount": 4,
+    "positiveCaseIds": [
+      "REAL-RU-01",
+      "REAL-RU-02",
+      "REAL-RU-03",
+      "REAL-RU-04",
+      "REAL-RU-05",
+      "REAL-RU-06",
+      "REAL-RU-07",
+      "REAL-RU-08",
+      "REAL-RU-09",
+      "REAL-RU-10",
+      "REAL-RU-11",
+      "REAL-RU-12"
+    ],
+    "excludedNegativeCaseIds": [
+      "REAL-NEG-01",
+      "REAL-NEG-02",
+      "REAL-NEG-03",
+      "REAL-NEG-04"
+    ],
+    "recallDefinition": "|top5 ∩ relevantIds| / |relevantIds|, macro-average only over the 12 retrieval_positive cases",
+    "macroRecallAt5Ceiling": 0.9722222222222222,
+    "negativePolicy": "Negative cases are correctness guards; no-results is required and never counted as a successful positive retrieval."
+  },
+  "cases": [
+    {
+      "id": "REAL-RU-01",
+      "kind": "retrieval_positive",
+      "countInPositiveMetrics": true,
+      "presetId": "expo",
+      "now": "2026-10-20T10:00:00Z",
+      "request": {
+        "query": "Кофейня в пределах километра от EXPO: зайду один на полчаса.",
+        "locale": "ru",
+        "location": {
+          "lat": 51.09,
+          "lon": 71.418,
+          "source": "preset"
+        },
+        "filters": {
+          "categories": [
+            "cafe"
+          ],
+          "radiusM": 1000,
+          "durationMinutes": 30,
+          "company": "solo",
+          "maxSpendKzt": null,
+          "openNow": true
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "radiusM",
+          "durationMinutes",
+          "company",
+          "openNow"
+        ],
+        "profileId": null,
+        "savedIds": [],
+        "dismissedIds": []
+      },
+      "labelCriteria": {
+        "anyTags": [],
+        "exactName": null,
+        "requiredFacts": []
+      },
+      "expected": {
+        "status": [
+          "ok",
+          "degraded"
+        ],
+        "relevantIds": [
+          "2gis:70000001022996764",
+          "2gis:70000001104916890",
+          "2gis:70000001110774068"
+        ],
+        "hardEligibleIds": [
+          "2gis:70000001022996764",
+          "2gis:70000001104916890",
+          "2gis:70000001110774068"
+        ],
+        "relevantCount": 3,
+        "recallAt5Ceiling": 1.0,
+        "evidence": [
+          {
+            "poiId": "2gis:70000001022996764",
+            "name": "La Creme",
+            "sourceIds": [
+              "2gis:70000001022996764:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001022996764"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:24:35Z",
+            "distanceM": 660.7,
+            "scheduledRemainingMinutes": 540.0,
+            "rationale": "Листинг подтверждает категорию cafe; 661 м по прямой в заданном радиусе. По расписанию остаётся 540 минут, минимум категории 20 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001104916890",
+            "name": "Arnau",
+            "sourceIds": [
+              "2gis:70000001104916890:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001104916890"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:28:12Z",
+            "distanceM": 672.3,
+            "scheduledRemainingMinutes": 540.0,
+            "rationale": "Листинг подтверждает категорию cafe; 672 м по прямой в заданном радиусе. По расписанию остаётся 540 минут, минимум категории 20 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001110774068",
+            "name": "Tetria",
+            "sourceIds": [
+              "2gis:70000001110774068:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001110774068"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:24:35Z",
+            "distanceM": 454.2,
+            "scheduledRemainingMinutes": 540.0,
+            "rationale": "Листинг подтверждает категорию cafe; 454 м по прямой в заданном радиусе. По расписанию остаётся 540 минут, минимум категории 20 минут помещается."
+          }
+        ],
+        "rationale": "Все три доступные по расписанию кафе внутри 1 км релевантны; не выбирается только ближайшее или наиболее известное."
+      }
+    },
+    {
+      "id": "REAL-RU-02",
+      "kind": "retrieval_positive",
+      "countInPositiveMetrics": true,
+      "presetId": "expo",
+      "now": "2026-10-20T10:00:00Z",
+      "request": {
+        "query": "Хочется коротко прогуляться в парке недалеко от EXPO, максимум два километра и полчаса.",
+        "locale": "ru",
+        "location": {
+          "lat": 51.09,
+          "lon": 71.418,
+          "source": "preset"
+        },
+        "filters": {
+          "categories": [
+            "park"
+          ],
+          "radiusM": 2000,
+          "durationMinutes": 30,
+          "company": "couple",
+          "maxSpendKzt": null,
+          "openNow": false
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "radiusM",
+          "durationMinutes",
+          "company",
+          "openNow"
+        ],
+        "profileId": null,
+        "savedIds": [],
+        "dismissedIds": []
+      },
+      "labelCriteria": {
+        "anyTags": [],
+        "exactName": null,
+        "requiredFacts": []
+      },
+      "expected": {
+        "status": [
+          "ok",
+          "degraded"
+        ],
+        "relevantIds": [
+          "2gis:70000001061880425"
+        ],
+        "hardEligibleIds": [
+          "2gis:70000001061880425"
+        ],
+        "relevantCount": 1,
+        "recallAt5Ceiling": 1.0,
+        "evidence": [
+          {
+            "poiId": "2gis:70000001061880425",
+            "name": "Ботанический сад",
+            "sourceIds": [
+              "2gis:70000001061880425:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001061880425"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:33:37Z",
+            "distanceM": 1828.7,
+            "scheduledRemainingMinutes": null,
+            "rationale": "Листинг подтверждает категорию park; 1829 м по прямой в заданном радиусе. Часы неизвестны: допустимо только при openNow=false, требуется предупреждение."
+          }
+        ],
+        "rationale": "Ботанический сад — единственный park в радиусе. Расписание неизвестно и не подменено круглосуточностью; цена также неизвестна."
+      }
+    },
+    {
+      "id": "REAL-RU-03",
+      "kind": "retrieval_positive",
+      "countInPositiveMetrics": true,
+      "presetId": "expo",
+      "now": "2026-10-20T10:00:00Z",
+      "request": {
+        "query": "Найди кинотеатр не дальше километра от EXPO, пойдём с друзьями, времени до двух часов.",
+        "locale": "ru",
+        "location": {
+          "lat": 51.09,
+          "lon": 71.418,
+          "source": "preset"
+        },
+        "filters": {
+          "categories": [
+            "entertainment"
+          ],
+          "radiusM": 1000,
+          "durationMinutes": 120,
+          "company": "friends",
+          "maxSpendKzt": null,
+          "openNow": true
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "radiusM",
+          "durationMinutes",
+          "company",
+          "openNow"
+        ],
+        "profileId": null,
+        "savedIds": [],
+        "dismissedIds": []
+      },
+      "labelCriteria": {
+        "anyTags": [
+          "кинотеатры"
+        ],
+        "exactName": null,
+        "requiredFacts": []
+      },
+      "expected": {
+        "status": [
+          "ok",
+          "degraded"
+        ],
+        "relevantIds": [
+          "2gis:70000001027048493"
+        ],
+        "hardEligibleIds": [
+          "2gis:70000001027048493"
+        ],
+        "relevantCount": 1,
+        "recallAt5Ceiling": 1.0,
+        "evidence": [
+          {
+            "poiId": "2gis:70000001027048493",
+            "name": "Chaplin cinemas",
+            "sourceIds": [
+              "2gis:70000001027048493:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001027048493"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:33:59Z",
+            "distanceM": 653.5,
+            "scheduledRemainingMinutes": 540.0,
+            "rationale": "Листинг подтверждает категорию entertainment и рубрику кинотеатры; 653 м по прямой в заданном радиусе. По расписанию остаётся 540 минут, минимум категории 30 минут помещается."
+          }
+        ],
+        "rationale": "Ищется площадка кинотеатра, а не конкретный фильм или подтверждённый сеанс; длительность посещения остаётся оценкой."
+      }
+    },
+    {
+      "id": "REAL-RU-04",
+      "kind": "retrieval_positive",
+      "countInPositiveMetrics": true,
+      "presetId": "expo",
+      "now": "2026-10-20T10:00:00Z",
+      "request": {
+        "query": "Нужен коворкинг в двух километрах от EXPO, хочу поработать около часа.",
+        "locale": "ru",
+        "location": {
+          "lat": 51.09,
+          "lon": 71.418,
+          "source": "preset"
+        },
+        "filters": {
+          "categories": [
+            "cafe",
+            "other"
+          ],
+          "radiusM": 2000,
+          "durationMinutes": 60,
+          "company": "solo",
+          "maxSpendKzt": null,
+          "openNow": true
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "radiusM",
+          "durationMinutes",
+          "company",
+          "openNow"
+        ],
+        "profileId": null,
+        "savedIds": [],
+        "dismissedIds": []
+      },
+      "labelCriteria": {
+        "anyTags": [
+          "коворкинг"
+        ],
+        "exactName": null,
+        "requiredFacts": []
+      },
+      "expected": {
+        "status": [
+          "ok",
+          "degraded"
+        ],
+        "relevantIds": [
+          "2gis:70000001088831575",
+          "2gis:70000001094498045",
+          "2gis:70000001095170419",
+          "2gis:70000001104916890",
+          "2gis:70000001115510421"
+        ],
+        "hardEligibleIds": [
+          "2gis:70000001018079516",
+          "2gis:70000001022996764",
+          "2gis:70000001045449144",
+          "2gis:70000001046465109",
+          "2gis:70000001051323152",
+          "2gis:70000001055356854",
+          "2gis:70000001066189574",
+          "2gis:70000001069160884",
+          "2gis:70000001074607736",
+          "2gis:70000001076284614",
+          "2gis:70000001076562542",
+          "2gis:70000001077237212",
+          "2gis:70000001083260493",
+          "2gis:70000001088831575",
+          "2gis:70000001091786660",
+          "2gis:70000001091828086",
+          "2gis:70000001092837417",
+          "2gis:70000001092838884",
+          "2gis:70000001094393018",
+          "2gis:70000001094498045",
+          "2gis:70000001095170419",
+          "2gis:70000001098166348",
+          "2gis:70000001102862327",
+          "2gis:70000001103335287",
+          "2gis:70000001104916890",
+          "2gis:70000001110629027",
+          "2gis:70000001110643477",
+          "2gis:70000001110774068",
+          "2gis:70000001115033416",
+          "2gis:70000001115188858",
+          "2gis:70000001115510421",
+          "2gis:70000001116311780"
+        ],
+        "relevantCount": 5,
+        "recallAt5Ceiling": 1.0,
+        "evidence": [
+          {
+            "poiId": "2gis:70000001088831575",
+            "name": "Токио",
+            "sourceIds": [
+              "2gis:70000001088831575:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001088831575"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:28:01Z",
+            "distanceM": 1295.8,
+            "scheduledRemainingMinutes": 420.0,
+            "rationale": "Листинг подтверждает категорию other и рубрику коворкинг; 1296 м по прямой в заданном радиусе. По расписанию остаётся 420 минут, минимум категории 20 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001094498045",
+            "name": "Amideli Hub",
+            "sourceIds": [
+              "2gis:70000001094498045:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001094498045"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:28:12Z",
+            "distanceM": 750.9,
+            "scheduledRemainingMinutes": 420.0,
+            "rationale": "Листинг подтверждает категорию other и рубрику коворкинг; 751 м по прямой в заданном радиусе. По расписанию остаётся 420 минут, минимум категории 20 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001095170419",
+            "name": "Yourt Nexpo Classic",
+            "sourceIds": [
+              "2gis:70000001095170419:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001095170419"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:24:53Z",
+            "distanceM": 1001.6,
+            "scheduledRemainingMinutes": 360.0,
+            "rationale": "Листинг подтверждает категорию cafe и рубрику коворкинг; 1002 м по прямой в заданном радиусе. По расписанию остаётся 360 минут, минимум категории 20 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001104916890",
+            "name": "Arnau",
+            "sourceIds": [
+              "2gis:70000001104916890:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001104916890"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:28:12Z",
+            "distanceM": 672.3,
+            "scheduledRemainingMinutes": 540.0,
+            "rationale": "Листинг подтверждает категорию cafe и рубрику коворкинг; 672 м по прямой в заданном радиусе. По расписанию остаётся 540 минут, минимум категории 20 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001115510421",
+            "name": "Yourt Qasteev",
+            "sourceIds": [
+              "2gis:70000001115510421:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001115510421"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:27:57Z",
+            "distanceM": 1971.0,
+            "scheduledRemainingMinutes": 360.0,
+            "rationale": "Листинг подтверждает категорию other и рубрику коворкинг; 1971 м по прямой в заданном радиусе. По расписанию остаётся 360 минут, минимум категории 20 минут помещается."
+          }
+        ],
+        "rationale": "Все пять source-tag коворкингов допустимы, включая два с canonical category=cafe. Запрос не требует подтверждённых Wi-Fi/розеток, свободных мест или разового тарифа."
+      }
+    },
+    {
+      "id": "REAL-RU-05",
+      "kind": "retrieval_positive",
+      "countInPositiveMetrics": true,
+      "presetId": "bayterek",
+      "now": "2026-10-20T10:00:00Z",
+      "request": {
+        "query": "От Бәйтерек хочу сходить на художественную выставку или в галерею: до километра, до двух часов.",
+        "locale": "ru",
+        "location": {
+          "lat": 51.1282,
+          "lon": 71.4304,
+          "source": "preset"
+        },
+        "filters": {
+          "categories": [
+            "museum"
+          ],
+          "radiusM": 1000,
+          "durationMinutes": 120,
+          "company": "solo",
+          "maxSpendKzt": null,
+          "openNow": true
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "radiusM",
+          "durationMinutes",
+          "company",
+          "openNow"
+        ],
+        "profileId": null,
+        "savedIds": [],
+        "dismissedIds": []
+      },
+      "labelCriteria": {
+        "anyTags": [
+          "художественные выставки",
+          "художественные галереи",
+          "галереи"
+        ],
+        "exactName": null,
+        "requiredFacts": []
+      },
+      "expected": {
+        "status": [
+          "ok",
+          "degraded"
+        ],
+        "relevantIds": [
+          "2gis:70000001018125528",
+          "2gis:70000001028350126",
+          "2gis:70000001109538653"
+        ],
+        "hardEligibleIds": [
+          "2gis:70000001018125528",
+          "2gis:70000001028161260",
+          "2gis:70000001028350126",
+          "2gis:70000001109538653"
+        ],
+        "relevantCount": 3,
+        "recallAt5Ceiling": 1.0,
+        "evidence": [
+          {
+            "poiId": "2gis:70000001018125528",
+            "name": "Has Sanat",
+            "sourceIds": [
+              "2gis:70000001018125528:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001018125528"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:34:17Z",
+            "distanceM": 549.6,
+            "scheduledRemainingMinutes": 240.0,
+            "rationale": "Листинг подтверждает категорию museum и рубрику художественные выставки; 550 м по прямой в заданном радиусе. По расписанию остаётся 240 минут, минимум категории 40 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001028350126",
+            "name": "Forte Kulanshi Art Space",
+            "sourceIds": [
+              "2gis:70000001028350126:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001028350126"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:34:12Z",
+            "distanceM": 870.6,
+            "scheduledRemainingMinutes": 300.0,
+            "rationale": "Листинг подтверждает категорию museum и рубрику художественные выставки; 871 м по прямой в заданном радиусе. По расписанию остаётся 300 минут, минимум категории 40 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001109538653",
+            "name": "M.Art Gallery",
+            "sourceIds": [
+              "2gis:70000001109538653:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001109538653"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:34:11Z",
+            "distanceM": 687.5,
+            "scheduledRemainingMinutes": 270.0,
+            "rationale": "Листинг подтверждает категорию museum и рубрику художественные выставки; 688 м по прямой в заданном радиусе. По расписанию остаётся 270 минут, минимум категории 40 минут помещается."
+          }
+        ],
+        "rationale": "Все три художественные выставки в 1 км релевантны. Центр рукописей проходит hard filters, но не имеет подтверждённой художественной рубрики."
+      }
+    },
+    {
+      "id": "REAL-RU-06",
+      "kind": "retrieval_positive",
+      "countInPositiveMetrics": true,
+      "presetId": "bayterek",
+      "now": "2026-10-20T10:00:00Z",
+      "request": {
+        "query": "Ищем ресторан в километре от Бәйтерек, поесть вдвоём, на посещение есть час.",
+        "locale": "ru",
+        "location": {
+          "lat": 51.1282,
+          "lon": 71.4304,
+          "source": "preset"
+        },
+        "filters": {
+          "categories": [
+            "restaurant"
+          ],
+          "radiusM": 1000,
+          "durationMinutes": 60,
+          "company": "couple",
+          "maxSpendKzt": null,
+          "openNow": true
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "radiusM",
+          "durationMinutes",
+          "company",
+          "openNow"
+        ],
+        "profileId": null,
+        "savedIds": [],
+        "dismissedIds": []
+      },
+      "labelCriteria": {
+        "anyTags": [],
+        "exactName": null,
+        "requiredFacts": []
+      },
+      "expected": {
+        "status": [
+          "ok",
+          "degraded"
+        ],
+        "relevantIds": [
+          "2gis:70000001033158649"
+        ],
+        "hardEligibleIds": [
+          "2gis:70000001033158649"
+        ],
+        "relevantCount": 1,
+        "recallAt5Ceiling": 1.0,
+        "evidence": [
+          {
+            "poiId": "2gis:70000001033158649",
+            "name": "Aq Anyz",
+            "sourceIds": [
+              "2gis:70000001033158649:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001033158649"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:24:53Z",
+            "distanceM": 563.5,
+            "scheduledRemainingMinutes": 540.0,
+            "rationale": "Листинг подтверждает категорию restaurant; 564 м по прямой в заданном радиусе. По расписанию остаётся 540 минут, минимум категории 30 минут помещается."
+          }
+        ],
+        "rationale": "Единственный canonical restaurant внутри 1 км. Бюджета и кухни в запросе нет; source price неизвестна."
+      }
+    },
+    {
+      "id": "REAL-RU-07",
+      "kind": "retrieval_positive",
+      "countInPositiveMetrics": true,
+      "presetId": "bayterek",
+      "now": "2026-10-20T10:00:00Z",
+      "request": {
+        "query": "Где выпить кофе одному возле Бәйтерек? Не дальше километра и не дольше получаса.",
+        "locale": "ru",
+        "location": {
+          "lat": 51.1282,
+          "lon": 71.4304,
+          "source": "preset"
+        },
+        "filters": {
+          "categories": [
+            "cafe"
+          ],
+          "radiusM": 1000,
+          "durationMinutes": 30,
+          "company": "solo",
+          "maxSpendKzt": null,
+          "openNow": true
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "radiusM",
+          "durationMinutes",
+          "company",
+          "openNow"
+        ],
+        "profileId": null,
+        "savedIds": [],
+        "dismissedIds": []
+      },
+      "labelCriteria": {
+        "anyTags": [],
+        "exactName": null,
+        "requiredFacts": []
+      },
+      "expected": {
+        "status": [
+          "ok",
+          "degraded"
+        ],
+        "relevantIds": [
+          "2gis:70000001069516972",
+          "2gis:70000001089379407",
+          "2gis:70000001101055300",
+          "2gis:70000001112380119",
+          "2gis:70000001112414896",
+          "2gis:70000001115350951"
+        ],
+        "hardEligibleIds": [
+          "2gis:70000001069516972",
+          "2gis:70000001089379407",
+          "2gis:70000001101055300",
+          "2gis:70000001112380119",
+          "2gis:70000001112414896",
+          "2gis:70000001115350951"
+        ],
+        "relevantCount": 6,
+        "recallAt5Ceiling": 0.8333333333333334,
+        "evidence": [
+          {
+            "poiId": "2gis:70000001069516972",
+            "name": "Master Coffee",
+            "sourceIds": [
+              "2gis:70000001069516972:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001069516972"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:25:18Z",
+            "distanceM": 540.5,
+            "scheduledRemainingMinutes": 480.0,
+            "rationale": "Листинг подтверждает категорию cafe; 540 м по прямой в заданном радиусе. По расписанию остаётся 480 минут, минимум категории 20 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001089379407",
+            "name": "ONESHOTT COFFEE",
+            "sourceIds": [
+              "2gis:70000001089379407:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001089379407"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:25:17Z",
+            "distanceM": 354.8,
+            "scheduledRemainingMinutes": 420.0,
+            "rationale": "Листинг подтверждает категорию cafe; 355 м по прямой в заданном радиусе. По расписанию остаётся 420 минут, минимум категории 20 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001101055300",
+            "name": "Espresso Day",
+            "sourceIds": [
+              "2gis:70000001101055300:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001101055300"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:24:35Z",
+            "distanceM": 305.9,
+            "scheduledRemainingMinutes": 480.0,
+            "rationale": "Листинг подтверждает категорию cafe; 306 м по прямой в заданном радиусе. По расписанию остаётся 480 минут, минимум категории 20 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001112380119",
+            "name": "Expresso",
+            "sourceIds": [
+              "2gis:70000001112380119:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001112380119"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:25:18Z",
+            "distanceM": 549.7,
+            "scheduledRemainingMinutes": 420.0,
+            "rationale": "Листинг подтверждает категорию cafe; 550 м по прямой в заданном радиусе. По расписанию остаётся 420 минут, минимум категории 20 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001112414896",
+            "name": "Master Coffee Express",
+            "sourceIds": [
+              "2gis:70000001112414896:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001112414896"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:25:34Z",
+            "distanceM": 678.6,
+            "scheduledRemainingMinutes": 540.0,
+            "rationale": "Листинг подтверждает категорию cafe; 679 м по прямой в заданном радиусе. По расписанию остаётся 540 минут, минимум категории 20 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001115350951",
+            "name": "Vanilla",
+            "sourceIds": [
+              "2gis:70000001115350951:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001115350951"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:25:26Z",
+            "distanceM": 456.7,
+            "scheduledRemainingMinutes": 360.0,
+            "rationale": "Листинг подтверждает категорию cafe; 457 м по прямой в заданном радиусе. По расписанию остаётся 360 минут, минимум категории 20 минут помещается."
+          }
+        ],
+        "rationale": "Шесть кафе одинаково релевантны этому широкому запросу. Все шесть включены: достижимый Recall@5 не выше 5/6, set не уменьшен ради метрики."
+      }
+    },
+    {
+      "id": "REAL-RU-08",
+      "kind": "retrieval_positive",
+      "countInPositiveMetrics": true,
+      "presetId": "bayterek",
+      "now": "2026-10-20T10:00:00Z",
+      "request": {
+        "query": "Хочу прогуляться в парке «Ғашықтар», стартую от Бәйтерек: до двух километров, примерно час.",
+        "locale": "ru",
+        "location": {
+          "lat": 51.1282,
+          "lon": 71.4304,
+          "source": "preset"
+        },
+        "filters": {
+          "categories": [
+            "park"
+          ],
+          "radiusM": 2000,
+          "durationMinutes": 60,
+          "company": "family",
+          "maxSpendKzt": null,
+          "openNow": false
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "radiusM",
+          "durationMinutes",
+          "company",
+          "openNow"
+        ],
+        "profileId": null,
+        "savedIds": [],
+        "dismissedIds": []
+      },
+      "labelCriteria": {
+        "anyTags": [],
+        "exactName": "Ғашықтар",
+        "requiredFacts": []
+      },
+      "expected": {
+        "status": [
+          "ok",
+          "degraded"
+        ],
+        "relevantIds": [
+          "2gis:70000001019586971"
+        ],
+        "hardEligibleIds": [
+          "2gis:70000001019586228",
+          "2gis:70000001019586912",
+          "2gis:70000001019586971",
+          "2gis:70000001093106778"
+        ],
+        "relevantCount": 1,
+        "recallAt5Ceiling": 1.0,
+        "evidence": [
+          {
+            "poiId": "2gis:70000001019586971",
+            "name": "Ғашықтар",
+            "sourceIds": [
+              "2gis:70000001019586971:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001019586971"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:33:38Z",
+            "distanceM": 1563.6,
+            "scheduledRemainingMinutes": null,
+            "rationale": "Листинг подтверждает категорию park и точное название Ғашықтар; 1564 м по прямой в заданном радиусе. Часы неизвестны: допустимо только при openNow=false, требуется предупреждение."
+          }
+        ],
+        "rationale": "Единственный exact-place-name positive. Казахские буквы сохранены в русском запросе; family — формат компании, childFriendly не подтверждается и не требуется. Unknown hours должны быть видны."
+      }
+    },
+    {
+      "id": "REAL-RU-09",
+      "kind": "retrieval_positive",
+      "countInPositiveMetrics": true,
+      "presetId": "embankment",
+      "now": "2026-10-20T10:00:00Z",
+      "request": {
+        "query": "От набережной хочу на художественную выставку в музее, не дальше километра, на час.",
+        "locale": "ru",
+        "location": {
+          "lat": 51.1669,
+          "lon": 71.4179,
+          "source": "preset"
+        },
+        "filters": {
+          "categories": [
+            "museum"
+          ],
+          "radiusM": 1000,
+          "durationMinutes": 60,
+          "company": "solo",
+          "maxSpendKzt": null,
+          "openNow": true
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "radiusM",
+          "durationMinutes",
+          "company",
+          "openNow"
+        ],
+        "profileId": null,
+        "savedIds": [],
+        "dismissedIds": []
+      },
+      "labelCriteria": {
+        "anyTags": [
+          "художественные выставки"
+        ],
+        "exactName": null,
+        "requiredFacts": []
+      },
+      "expected": {
+        "status": [
+          "ok",
+          "degraded"
+        ],
+        "relevantIds": [
+          "2gis:70000001110382562"
+        ],
+        "hardEligibleIds": [
+          "2gis:70000001018106112",
+          "2gis:70000001110382562"
+        ],
+        "relevantCount": 1,
+        "recallAt5Ceiling": 1.0,
+        "evidence": [
+          {
+            "poiId": "2gis:70000001110382562",
+            "name": "Lumiere-hall",
+            "sourceIds": [
+              "2gis:70000001110382562:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001110382562"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:34:11Z",
+            "distanceM": 897.2,
+            "scheduledRemainingMinutes": 360.0,
+            "rationale": "Листинг подтверждает категорию museum и рубрику художественные выставки; 897 м по прямой в заданном радиусе. По расписанию остаётся 360 минут, минимум категории 40 минут помещается."
+          }
+        ],
+        "rationale": "В радиусе два museum, но только Lumiere-hall имеет source tag художественные выставки. Музей Сейфуллина не размечается как art exhibition без такого источника."
+      }
+    },
+    {
+      "id": "REAL-RU-10",
+      "kind": "retrieval_positive",
+      "countInPositiveMetrics": true,
+      "presetId": "embankment",
+      "now": "2026-10-20T10:00:00Z",
+      "request": {
+        "query": "Хочу кофе с выпечкой у набережной: именно кофейню-пекарню в двух километрах, зайду на полчаса.",
+        "locale": "ru",
+        "location": {
+          "lat": 51.1669,
+          "lon": 71.4179,
+          "source": "preset"
+        },
+        "filters": {
+          "categories": [
+            "cafe"
+          ],
+          "radiusM": 2000,
+          "durationMinutes": 30,
+          "company": "solo",
+          "maxSpendKzt": null,
+          "openNow": true
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "radiusM",
+          "durationMinutes",
+          "company",
+          "openNow"
+        ],
+        "profileId": null,
+        "savedIds": [],
+        "dismissedIds": []
+      },
+      "labelCriteria": {
+        "anyTags": [
+          "пекарни"
+        ],
+        "exactName": null,
+        "requiredFacts": []
+      },
+      "expected": {
+        "status": [
+          "ok",
+          "degraded"
+        ],
+        "relevantIds": [
+          "2gis:70000001082687474",
+          "2gis:70000001096414640",
+          "2gis:70000001103026988"
+        ],
+        "hardEligibleIds": [
+          "2gis:70000001030595899",
+          "2gis:70000001075322780",
+          "2gis:70000001082687474",
+          "2gis:70000001096414640",
+          "2gis:70000001097666581",
+          "2gis:70000001103026988",
+          "2gis:70000001114274463"
+        ],
+        "relevantCount": 3,
+        "recallAt5Ceiling": 1.0,
+        "evidence": [
+          {
+            "poiId": "2gis:70000001082687474",
+            "name": "Тәп-Тәтті",
+            "sourceIds": [
+              "2gis:70000001082687474:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001082687474"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:24:25Z",
+            "distanceM": 732.9,
+            "scheduledRemainingMinutes": 360.0,
+            "rationale": "Листинг подтверждает категорию cafe и рубрику пекарни; 733 м по прямой в заданном радиусе. По расписанию остаётся 360 минут, минимум категории 20 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001096414640",
+            "name": "Taba Nan",
+            "sourceIds": [
+              "2gis:70000001096414640:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001096414640"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:24:26Z",
+            "distanceM": 1385.3,
+            "scheduledRemainingMinutes": 300.0,
+            "rationale": "Листинг подтверждает категорию cafe и рубрику пекарни; 1385 м по прямой в заданном радиусе. По расписанию остаётся 300 минут, минимум категории 20 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001103026988",
+            "name": "Бриошь",
+            "sourceIds": [
+              "2gis:70000001103026988:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001103026988"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:25:02Z",
+            "distanceM": 1455.8,
+            "scheduledRemainingMinutes": 480.0,
+            "rationale": "Листинг подтверждает категорию cafe и рубрику пекарни; 1456 м по прямой в заданном радиусе. По расписанию остаётся 480 минут, минимум категории 20 минут помещается."
+          }
+        ],
+        "rationale": "Все три кафе с явной рубрикой пекарни включены; кондитерская без bakery category не приравнивается к пекарне."
+      }
+    },
+    {
+      "id": "REAL-RU-11",
+      "kind": "retrieval_positive",
+      "countInPositiveMetrics": true,
+      "presetId": "embankment",
+      "now": "2026-10-20T19:00:00Z",
+      "request": {
+        "query": "Нужен открытый боулинг с друзьями, от набережной в пределах пяти километров, времени до двух часов.",
+        "locale": "ru",
+        "location": {
+          "lat": 51.1669,
+          "lon": 71.4179,
+          "source": "preset"
+        },
+        "filters": {
+          "categories": [
+            "bowling"
+          ],
+          "radiusM": 5000,
+          "durationMinutes": 120,
+          "company": "friends",
+          "maxSpendKzt": null,
+          "openNow": true
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "radiusM",
+          "durationMinutes",
+          "company",
+          "openNow"
+        ],
+        "profileId": null,
+        "savedIds": [],
+        "dismissedIds": []
+      },
+      "labelCriteria": {
+        "anyTags": [],
+        "exactName": null,
+        "requiredFacts": []
+      },
+      "expected": {
+        "status": [
+          "ok",
+          "degraded"
+        ],
+        "relevantIds": [
+          "2gis:70000001059670176"
+        ],
+        "hardEligibleIds": [
+          "2gis:70000001059670176"
+        ],
+        "relevantCount": 1,
+        "recallAt5Ceiling": 1.0,
+        "evidence": [
+          {
+            "poiId": "2gis:70000001059670176",
+            "name": "Strike",
+            "sourceIds": [
+              "2gis:70000001059670176:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001059670176"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:33:49Z",
+            "distanceM": 4449.4,
+            "scheduledRemainingMinutes": 60.0,
+            "rationale": "Листинг подтверждает категорию bowling; 4449 м по прямой в заданном радиусе. По расписанию остаётся 60 минут, минимум категории 45 минут помещается."
+          }
+        ],
+        "rationale": "Локально уже среда 00:00. Strike открыт по вторничному overnight расписанию до 01:00; остаётся 60 минут, что покрывает minimum 45. Два часа — верхний лимит, не обещание двухчасовой игры."
+      }
+    },
+    {
+      "id": "REAL-RU-12",
+      "kind": "retrieval_positive",
+      "countInPositiveMetrics": true,
+      "presetId": "embankment",
+      "now": "2026-10-20T10:00:00Z",
+      "request": {
+        "query": "Найди тренажёрный зал в километре от набережной, хочу позаниматься один около часа.",
+        "locale": "ru",
+        "location": {
+          "lat": 51.1669,
+          "lon": 71.4179,
+          "source": "preset"
+        },
+        "filters": {
+          "categories": [
+            "other",
+            "entertainment"
+          ],
+          "radiusM": 1000,
+          "durationMinutes": 60,
+          "company": "solo",
+          "maxSpendKzt": null,
+          "openNow": true
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "radiusM",
+          "durationMinutes",
+          "company",
+          "openNow"
+        ],
+        "profileId": null,
+        "savedIds": [],
+        "dismissedIds": []
+      },
+      "labelCriteria": {
+        "anyTags": [
+          "тренажерные залы"
+        ],
+        "exactName": null,
+        "requiredFacts": []
+      },
+      "expected": {
+        "status": [
+          "ok",
+          "degraded"
+        ],
+        "relevantIds": [
+          "2gis:70000001018074791",
+          "2gis:70000001018075540",
+          "2gis:70000001018082964",
+          "2gis:70000001068517437",
+          "2gis:70000001081688772",
+          "2gis:70000001090715970"
+        ],
+        "hardEligibleIds": [
+          "2gis:70000001018074791",
+          "2gis:70000001018075540",
+          "2gis:70000001018082964",
+          "2gis:70000001068517437",
+          "2gis:70000001081688772",
+          "2gis:70000001090715970"
+        ],
+        "relevantCount": 6,
+        "recallAt5Ceiling": 0.8333333333333334,
+        "evidence": [
+          {
+            "poiId": "2gis:70000001018074791",
+            "name": "Apex",
+            "sourceIds": [
+              "2gis:70000001018074791:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001018074791"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:35:43Z",
+            "distanceM": 882.1,
+            "scheduledRemainingMinutes": 480.0,
+            "rationale": "Листинг подтверждает категорию entertainment и рубрику тренажерные залы; 882 м по прямой в заданном радиусе. По расписанию остаётся 480 минут, минимум категории 30 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001018075540",
+            "name": "World Class",
+            "sourceIds": [
+              "2gis:70000001018075540:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001018075540"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:35:33Z",
+            "distanceM": 912.9,
+            "scheduledRemainingMinutes": 540.0,
+            "rationale": "Листинг подтверждает категорию entertainment и рубрику тренажерные залы; 913 м по прямой в заданном радиусе. По расписанию остаётся 540 минут, минимум категории 30 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001018082964",
+            "name": "Abyroy",
+            "sourceIds": [
+              "2gis:70000001018082964:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001018082964"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:35:42Z",
+            "distanceM": 820.7,
+            "scheduledRemainingMinutes": 480.0,
+            "rationale": "Листинг подтверждает категорию entertainment и рубрику тренажерные залы; 821 м по прямой в заданном радиусе. По расписанию остаётся 480 минут, минимум категории 30 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001068517437",
+            "name": "Iron Club",
+            "sourceIds": [
+              "2gis:70000001068517437:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001068517437"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:35:42Z",
+            "distanceM": 708.6,
+            "scheduledRemainingMinutes": 480.0,
+            "rationale": "Листинг подтверждает категорию other и рубрику тренажерные залы; 709 м по прямой в заданном радиусе. По расписанию остаётся 480 минут, минимум категории 20 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001081688772",
+            "name": "Champion Fitness",
+            "sourceIds": [
+              "2gis:70000001081688772:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001081688772"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:35:42Z",
+            "distanceM": 913.7,
+            "scheduledRemainingMinutes": 480.0,
+            "rationale": "Листинг подтверждает категорию other и рубрику тренажерные залы; 914 м по прямой в заданном радиусе. По расписанию остаётся 480 минут, минимум категории 20 минут помещается."
+          },
+          {
+            "poiId": "2gis:70000001090715970",
+            "name": "Underground gym",
+            "sourceIds": [
+              "2gis:70000001090715970:listing"
+            ],
+            "sourceUrls": [
+              "https://2gis.kz/astana/firm/70000001090715970"
+            ],
+            "sourceCollectedAt": "2026-10-19T18:35:42Z",
+            "distanceM": 907.4,
+            "scheduledRemainingMinutes": 480.0,
+            "rationale": "Листинг подтверждает категорию other и рубрику тренажерные залы; 907 м по прямой в заданном радиусе. По расписанию остаётся 480 минут, минимум категории 20 минут помещается."
+          }
+        ],
+        "rationale": "Шесть залов с подтверждённой source category релевантны; source multi-role fitness-площадки могут иметь canonical entertainment. Все шесть оставлены, Recall@5 ceiling=5/6. Гостевой доступ/цена неизвестны."
+      }
+    },
+    {
+      "id": "REAL-NEG-01",
+      "kind": "negative_guard",
+      "countInPositiveMetrics": false,
+      "presetId": "bayterek",
+      "now": "2026-10-20T10:00:00Z",
+      "request": {
+        "query": "Кафе в километре от Бәйтерек, строго до 3000 тенге на человека за посещение.",
+        "locale": "ru",
+        "location": {
+          "lat": 51.1282,
+          "lon": 71.4304,
+          "source": "preset"
+        },
+        "filters": {
+          "categories": [
+            "cafe"
+          ],
+          "radiusM": 1000,
+          "durationMinutes": 60,
+          "company": "solo",
+          "maxSpendKzt": 3000,
+          "openNow": false
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "radiusM",
+          "durationMinutes",
+          "company",
+          "openNow",
+          "maxSpendKzt"
+        ],
+        "profileId": null,
+        "savedIds": [],
+        "dismissedIds": []
+      },
+      "labelCriteria": {
+        "anyTags": [],
+        "exactName": null,
+        "requiredFacts": []
+      },
+      "expected": {
+        "status": [
+          "no_results"
+        ],
+        "relevantIds": [],
+        "hardEligibleIds": [],
+        "relevantCount": 0,
+        "recallAt5Ceiling": null,
+        "evidence": [],
+        "rationale": "У всех 298 price=null; средний чек/слово кафе не дают известного price.max. Не включать в знаменатель положительного retrieval success."
+      }
+    },
+    {
+      "id": "REAL-NEG-02",
+      "kind": "negative_guard",
+      "countInPositiveMetrics": false,
+      "presetId": "expo",
+      "now": "2026-10-20T10:00:00Z",
+      "request": {
+        "query": "Нужен именно открытый сейчас парк в двух километрах от EXPO, на полчаса.",
+        "locale": "ru",
+        "location": {
+          "lat": 51.09,
+          "lon": 71.418,
+          "source": "preset"
+        },
+        "filters": {
+          "categories": [
+            "park"
+          ],
+          "radiusM": 2000,
+          "durationMinutes": 30,
+          "company": "solo",
+          "maxSpendKzt": null,
+          "openNow": true
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "radiusM",
+          "durationMinutes",
+          "company",
+          "openNow"
+        ],
+        "profileId": null,
+        "savedIds": [],
+        "dismissedIds": []
+      },
+      "labelCriteria": {
+        "anyTags": [],
+        "exactName": null,
+        "requiredFacts": []
+      },
+      "expected": {
+        "status": [
+          "no_results"
+        ],
+        "relevantIds": [],
+        "hardEligibleIds": [],
+        "relevantCount": 0,
+        "recallAt5Ceiling": null,
+        "evidence": [],
+        "rationale": "В географическом наборе только Ботанический сад с hours=null: openNow=true требует исключения, а не guessed 24/7."
+      }
+    },
+    {
+      "id": "REAL-NEG-03",
+      "kind": "negative_guard",
+      "countInPositiveMetrics": false,
+      "presetId": "embankment",
+      "now": "2026-10-20T19:30:00Z",
+      "request": {
+        "query": "Есть час на открытый боулинг в пяти километрах от набережной.",
+        "locale": "ru",
+        "location": {
+          "lat": 51.1669,
+          "lon": 71.4179,
+          "source": "preset"
+        },
+        "filters": {
+          "categories": [
+            "bowling"
+          ],
+          "radiusM": 5000,
+          "durationMinutes": 60,
+          "company": "friends",
+          "maxSpendKzt": null,
+          "openNow": true
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "radiusM",
+          "durationMinutes",
+          "company",
+          "openNow"
+        ],
+        "profileId": null,
+        "savedIds": [],
+        "dismissedIds": []
+      },
+      "labelCriteria": {
+        "anyTags": [],
+        "exactName": null,
+        "requiredFacts": []
+      },
+      "expected": {
+        "status": [
+          "no_results"
+        ],
+        "relevantIds": [],
+        "hardEligibleIds": [],
+        "relevantCount": 0,
+        "recallAt5Ceiling": null,
+        "evidence": [],
+        "rationale": "Среда 00:30: у Strike остаётся 30 минут до 01:00, меньше minimum bowling45. Strike Zone уже закрыт; остальные bowling вне 5 км."
+      }
+    },
+    {
+      "id": "REAL-NEG-04",
+      "kind": "negative_guard",
+      "countInPositiveMetrics": false,
+      "presetId": "bayterek",
+      "now": "2026-10-20T10:00:00Z",
+      "request": {
+        "query": "Нужно кафе в километре от Бәйтерек, обязательно с розеткой для ноутбука.",
+        "locale": "ru",
+        "location": {
+          "lat": 51.1282,
+          "lon": 71.4304,
+          "source": "preset"
+        },
+        "filters": {
+          "categories": [
+            "cafe"
+          ],
+          "radiusM": 1000,
+          "durationMinutes": 60,
+          "company": "solo",
+          "maxSpendKzt": null,
+          "openNow": true
+        },
+        "explicitFilterKeys": [
+          "categories",
+          "radiusM",
+          "durationMinutes",
+          "company",
+          "openNow"
+        ],
+        "profileId": null,
+        "savedIds": [],
+        "dismissedIds": []
+      },
+      "labelCriteria": {
+        "anyTags": [],
+        "exactName": null,
+        "requiredFacts": [
+          "outlets"
+        ]
+      },
+      "expected": {
+        "status": [
+          "no_results"
+        ],
+        "relevantIds": [],
+        "hardEligibleIds": [],
+        "relevantCount": 0,
+        "recallAt5Ceiling": null,
+        "evidence": [],
+        "rationale": "Ни один Poi не содержит confirmed outlets=true. Уверенное обещание розетки по категории/названию/профилю запрещено; requiredFacts должен быть извлечён из слова обязательно."
+      }
+    }
+  ]
+}

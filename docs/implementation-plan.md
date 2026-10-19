@@ -1,6 +1,6 @@
 # Куда в Астане — Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development or superpowers:executing-plans to implement this plan task-by-task. Current task status lives in [tracker.yaml](../tracker.yaml); update it after every finished subtask. Checkboxes below are the detailed checklist and must stay consistent with the tracker.
 
 **Goal:** К 20.10.2026 20:00 Asia/Almaty подготовить проверенный RAG MVP,
 развёрнутое демо и комплект сдачи; крайний срок 23:59.
@@ -21,8 +21,10 @@ OpenRouter, JSON + embeddings, Vitest, Playwright, pnpm, Vercel.
 - Synthetic fixtures предназначены только для тестов. Не выдавать их за собранные POI.
 - Основной язык — русский; точные координаты и аудио не сохраняются в логах.
 - Размеры QA: 390 и 1440 px. Навигация — внешние 2ГИС/Google Maps.
-- Бюджет OpenRouter $6; live-сравнение максимум $0.50.
-- До начала реализации пользователь утверждает этот план. Harness уже разрешён.
+- Бюджет OpenRouter: $2 на всю подготовку/индексацию/разработку/тесты/повторы,
+  $4 только на демо; live-сравнение максимум $0.50 внутри подготовительных $2.
+- План утверждён пользователем 19.10.2026. Реализация разрешена без повторного
+  согласования; следующий чат начинает этап 1 по tracker.yaml.
 
 ## Review Focus
 
@@ -76,7 +78,10 @@ OpenRouter, JSON + embeddings, Vitest, Playwright, pnpm, Vercel.
 | `tests/unit/`, `tests/e2e/` | Проверки поведения |
 | `docs/submission/` | Сценарии, ограничения, презентация/ссылки |
 
-Ни один из этих product-файлов пока не создан. Существующий harness — отдельная подготовка.
+Scaffold Next.js и runtime-схемы созданы и проверены (M1.1/M1.2). Сборщик оставил scripts/astana_data.py,
+scripts/collect_astana.py, scripts/test_astana_data.py и локальную выгрузку
+data/normalized/astana/. Сначала проверить совместимость; не перетирать и
+не перемещать файлы сборщика без необходимости. Harness — отдельная подготовка.
 
 Типы экспортируются из одного места: poi.ts → Poi/Catalog/Coordinates/FactKey;
 request.ts → RecommendRequest/Filters/ProfileId/Intent; response.ts →
@@ -94,24 +99,25 @@ tests/e2e/search-shell.spec.ts, workflow CI.
 `RecommendRequestSchema`, `PoiSchema`, `RecommendResponseSchema` по контракту.
 Производит валидный каталог и UI, готовый подключиться к API.
 
-- [ ] Проверить Node LTS, совместимость Next/React и pnpm; зафиксировать runtime
+- [x] Проверить Node LTS, совместимость Next/React и pnpm; зафиксировать runtime
   и lockfile. Локально сейчас Node 26.5.0; не считать его обязательным runtime.
-- [ ] Создать Next/TS strict проект в существующей папке, сохранив harness.
-- [ ] Добавить отдельные shadcn Button/Input/Card/Sheet и Zod; записать лицензии.
-- [ ] Написать failing import test: null часы/рейтинг остаются null, source IDs
+- [x] Создать Next/TS strict проект в существующей папке, сохранив harness.
+- [x] Добавить отдельные shadcn Button/Input/Card/Sheet и Zod; записать лицензии.
+- [x] Написать failing import test: null часы/рейтинг остаются null, source IDs
   разрешаются, неверная широта и дубли ID отклоняются.
-- [ ] Запустить `pnpm test -- tests/unit/import.test.ts`: ожидается FAIL до реализации.
-- [ ] Реализовать схемы/импорт, отчёт rejected и loadCatalog; получить 20–30 реальных POI.
-- [ ] Получить и проверить комплект автоматизированного сбора; сохранить в
+- [x] Запустить `pnpm test -- tests/unit/import.test.ts`: ожидается FAIL до реализации.
+- [x] Реализовать схемы/импорт, отчёт rejected и loadCatalog; получить 20–30 реальных POI.
+- [x] Получить и проверить комплект автоматизированного сбора; сохранить в
   scripts/collect/ после удаления секретов и проверки права использования.
   Инструкция должна воспроизводить хотя бы маленькую выборку из источника.
-- [ ] Вместе с первым срезом начать разметку 12 реальных запросов и подходящих ID
+- [x] Вместе с первым срезом начать разметку 12 реальных запросов и подходящих ID
   для этапа 4; бюджет трактовать на человека, неприводимые цены — unknown.
-- [ ] Реализовать shell с пресетами локации и вводом; при отказе geolocation
+- [x] Реализовать shell с пресетами локации и вводом; при отказе geolocation
   показать ручной выбор. Synthetic fixture всегда имеет видимый demo watermark.
+- [x] M1.2a: ограничить filesystem tracing каталогом; проверить отсутствие raw/private/env и исходников сборщика в production NFT.
 - [ ] `pnpm lint && pnpm typecheck && pnpm test && pnpm build`: все exit 0.
   Создать scripts для этих имён команд; tests:e2e пока может проверять только shell.
-- [ ] Проверить 390/1440 px и отказ разрешения в браузере; сохранить evidence.
+- [x] Проверить 390/1440 px и отказ разрешения в браузере; сохранить evidence.
 - [ ] Обновить прогресс; создать отдельный коммит этапа после проверки.
 
 ## Этап 2. Поиск, расстояния и жёсткие ограничения
@@ -137,6 +143,11 @@ savedIds: string[], dismissedIds: string[], queryVector: number[]|null, index: I
 - [ ] Реализовать кодовую оценку посещения и отсечение по закрытию из контракта;
   тестировать открытый overnight и недостаток времени до закрытия отдельно.
 - [ ] Подготовить retrieval runner для размеченных случаев; JSONL с expected/actual IDs.
+- [ ] До первого платного вызова реализовать единый spend guard и журнал usage
+  для embeddings/LLM/аудио/повторов: лимит подготовки $2, live-eval $0.50 внутри него,
+  резерв демо $4. Проверять прогноз до вызова и usage после; ограничить concurrency,
+  резервировать стоимость in-flight вызовов, запретить новые вызовы при неизвестном
+  расходе. Тестировать отказ при превышении с provider stubs. .env не является guard.
 - [ ] Сформировать документы и индекс через OpenRouter embeddings после настройки
   ключа; не отправлять сырые выгрузки целиком и не повторять индексацию без смены hash.
 - [ ] Проверить отказ от смешанных dimensions/model/hash; lexical fallback явно помечен.

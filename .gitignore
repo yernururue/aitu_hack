@@ -20,3 +20,5 @@ evals/results/
 *.wav
 *.mp3
 *.webm
+*.tsbuildinfo
+output/playwright/

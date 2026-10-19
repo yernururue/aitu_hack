@@ -1,0 +1,458 @@
+# Global MVP task tracker. Main integrator owns status/evidence updates.
+schema_version: "1.0"
+status_values:
+  - "todo"
+  - "in_progress"
+  - "blocked"
+  - "done"
+  - "skipped"
+approval:
+  plan: "approved"
+  source: "User approval reported in current handoff instruction"
+  requires_reapproval: false
+  scope: "MVP implementation approved; handoff preparation complete; next chat starts implementation"
+budget:
+  currency: "USD"
+  total_authorized: 6.0
+  preparation_testing_cap: 2.0
+  demo_reserved: 4.0
+  live_eval_subcap: 0.5
+  live_eval_included_in: "preparation_testing_cap"
+  recorded_openrouter_spend_usd: 0.0
+  spend_basis: "No paid OpenRouter project calls recorded; not an account balance verification; separate collector/Apify billing is excluded"
+  account_balance_verified: false
+  enforcement: "Not implemented; env values are configuration, not enforced caps"
+  before_first_paid_call:
+    - "Configure server-only OpenRouter credentials without exposing secrets"
+    - "Implement and test cost guard, preflight estimates, usage ledger and bounded retries"
+    - "Check remaining preparation budget and live-eval subcap before every paid batch; reserve demo funds"
+  dataset_volume: "Collection ongoing; received unreviewed normalized files report 99 place records and 976 reviews. Accepted/imported POI count remains unknown."
+handoff:
+  state: "ready"
+  application_state: "not_implemented"
+  current_scope: "Continue approved MVP from next_task_id; handoff session stopped before scaffold as requested"
+  internal_deadline: "2026-10-20T20:00:00+05:00"
+  submission_deadline: "2026-10-20T23:59:00+05:00"
+  collector_work:
+    state: "received_unreviewed"
+    paths:
+      - "data/"
+      - "scripts/astana_data.py"
+      - "scripts/collect_astana.py"
+      - "scripts/test_astana_data.py"
+    notes: "Root inspected data/normalized/astana/places.json (99 records), reviews.json (976 records) and report.json. Existing untracked collector files are unreviewed; preserve them. These counts do not establish accepted ingestion, provenance or contract compatibility; review in M1.3."
+next_task_id: "M1.6"
+workflow:
+  tracker_writer: "Single main integrator updates tracker after every finished task"
+  completion_rule: "Mark done only after acceptance verification; record exact commands, exit codes and limitations here and in docs/progress.md"
+  review: "Independent reviewer checks finished paths; executor claims do not replace integrator verification"
+  ownership: "Assign explicit file ownership before delegation; no concurrent writers to the same file; only integrator changes contracts"
+  dependencies: "depends_on IDs are prerequisites; todo tasks have no completion evidence; skipped requires a reason and decision evidence"
+  stage_finish: "After verified implementation stages update progress and create stage commit within current user authorization; handoff files were saved locally without a new commit"
+  scope_cuts:
+    - "If text end-to-end is absent at 13:30, skip voice with reason"
+    - "If P0 is unstable at 16:00, stop animations, categories and profile expansion"
+    - "Freeze new features at 17:30; reserve after 20:00 for submission and fixes"
+stages:
+  - id: "H0"
+    title: "Harness, approval and handoff"
+    status: "done"
+    tasks:
+      - id: "H0.1"
+        title: "Prepare spec, contracts, plan and synthetic acceptance cases"
+        status: "done"
+        depends_on: []
+        acceptance: "Documents and fixtures exist; fixtures are explicitly synthetic."
+        evidence:
+          - "docs/progress.md records completed preparation, 24 scenarios and 8 synthetic POI; no app result claimed"
+      - id: "H0.2"
+        title: "Research model candidates, reuse and licenses"
+        status: "done"
+        depends_on:
+          - "H0.1"
+        acceptance: "Preserve pinned sources, reproducible audit outcomes and limitations."
+        evidence:
+          - "docs/research.md records source/license audits and model candidates; no paid project calls"
+      - id: "H0.3"
+        title: "Record user plan approval"
+        status: "done"
+        depends_on:
+          - "H0.1"
+        acceptance: "Plan approved; implementation needs no repeated plan approval."
+        evidence:
+          - "Current user approval supplied by main integrator in handoff task"
+      - id: "H0.4"
+        title: "Align global rules and budget documentation"
+        status: "done"
+        depends_on:
+          - "H0.3"
+        acceptance: "AGENTS, spec, plan, harness and environment example agree on $2 preparation/testing and $4 demo, with $0.50 eval inside $2."
+        evidence:
+          - "Read back ~/.codex/AGENTS.md, repository AGENTS.md, plan/spec/harness and .env.example; old $3 demo allocation removed. User instruction reload confirms global rules available."
+          - "python3 scripts/check_harness.py and git diff --check: exit 0; live eval disabled and API example key empty. Spend guard remains planned, not claimed implemented."
+      - id: "H0.5"
+        title: "Create global task tracker"
+        status: "done"
+        depends_on:
+          - "H0.3"
+        acceptance: "H0 and M1–M7 have stable task IDs, dependencies, acceptance and evidence; no app tasks marked done."
+        evidence:
+          - "Ruby YAML.safe_load + task integrity assertions: exit 0; 8 stages, 38 unique tasks, valid dependencies/statuses/evidence, M1.1 next and $2/$4 budget."
+      - id: "H0.6"
+        title: "Prepare continuation handoff and collector boundary"
+        status: "done"
+        depends_on:
+          - "H0.4"
+          - "H0.5"
+        acceptance: "Progress names M1.1 next, approval, unknown data volume and unreviewed collector files."
+        evidence:
+          - "docs/handoff.md has continuation prompt; docs/progress.md records approved plan, M1.1 first MVP task, collector file counts and pending acceptance. check_harness verifies local document links: exit 0."
+      - id: "H0.7"
+        title: "Verify preparation and independent review"
+        status: "done"
+        depends_on:
+          - "H0.4"
+          - "H0.5"
+          - "H0.6"
+        acceptance: "Run python3 scripts/check_harness.py and make check-harness; verify tracker structure and cross-document consistency; record evidence."
+        evidence:
+          - "python3 scripts/check_harness.py; make check-harness; git diff --check: exit 0. Application checks and paid evals not run."
+          - "Ruby YAML.safe_load + assertions: exit 0; 8 stages, 38 unique tasks, acyclic/resolved dependencies, valid statuses/evidence and $2/$4 env-budget consistency."
+          - "Independent handoff_review subagent: no actionable findings; repeated offline checks exit 0. No collector files changed."
+  - id: "M1"
+    title: "Runnable app and validated input data"
+    status: "todo"
+    tasks:
+      - id: "M1.1"
+        title: "Pin compatible runtime and scaffold project"
+        status: "todo"
+        depends_on:
+          - "H0.7"
+        acceptance: "Verify Node LTS/Next/React/pnpm compatibility; preserve harness; add TS strict, lockfile, CI and lint/typecheck/test/build scripts."
+        evidence: []
+      - id: "M1.2"
+        title: "Implement contracts and import with behavioral tests"
+        status: "done"
+        depends_on:
+          - "M1.1"
+        acceptance: "Record failing import tests, then pass null preservation, source references, invalid coordinates and duplicate IDs; add selective shadcn/Zod and license notices."
+        evidence:
+          - "Fix1: four RED regressions reproduced duplicate facts.key; unique-key validation now rejects true/false and identical duplicates without dropping valid rows. Root targeted59 import/contract tests exit0; executor full61 tests/typecheck/lint exit0."
+          - "Independent scoped re-review: finding ADDRESSED, spec PASS / quality PASS, no new breakage. Strict contracts, import CLI, safe catalog load and selective accessible UI primitives implemented; MIT notices docs/licenses.md."
+          - "Initial GREEN: root 57 tests/typecheck/lint exit 0. Independent review CHANGES REQUIRED: P2 duplicate facts.key can hold contradictory true/false and pass import. Fix round 1 assigned original executor with regression test; not done."
+      - id: "M1.2a"
+        title: "Bound catalog filesystem tracing before deployment"
+        status: "done"
+        owner: "scaffold_executor"
+        depends_on:
+          - "M1.2"
+        acceptance: "Production NFT includes required catalog only, excludes raw/private/normalized/env/collector files; real build-artifact regression fails before fix and passes after; catalog loading tests preserved."
+        evidence:
+          - "Artifact RED exit1 detected114 forbidden/unexpected paths in actual production NFT before fix. Static defaults/runtime override and explicit tracing exclusions implemented; build exit0 without dynamic-filesystem warning."
+          - "Root check-build-trace exit0; actual page NFT254→139files, only catalog+explicitfixture project assets, raw/private/normalized/collection/scripts/env absent. Executor88unit/typecheck/lint/build exit0; independent reviewer spec PASS / quality PASS. Added package/CI build-artifact gate."
+          - "Root production build warned whole-project tracing; page NFT254files includes raw/normalized/collect_astana.py, no env. Existing build/e2e otherwise pass. Added concrete integration fix before stage acceptance."
+      - id: "M1.3"
+        title: "Review collector delivery and accept first real slice"
+        status: "done"
+        owner: "data_executor"
+        depends_on:
+          - "M1.2"
+        acceptance: "Review existing collector files without overwriting work; check rights/secrets, reproduce small collection, normalize 20–30 real POI with rejection/dedup/missing-field report and provenance; retain reproducible collection package."
+        evidence:
+          - "Root CatalogSchema validation: synthetic=false, 298 unique POI, 591 short review excerpts, 7 categories, all298 prices unknown; SHA256 c72d13a1d8df327edc22adce02743b0246aec157e86330c96c408bc44fabb873. Root27 collector-import tests exit0."
+          - "Independent reviewer spec PASS / quality PASS: checked source field mapping, reviewed36 in3zones/3categories, five raw hashes/counts, no actionable findings. Executor replay twice identical catalog/report, full88tests/typecheck/ownedESLint exit0. Collector originals preserved; publication rights not established, local use only."
+          - "Adapter RED before implementation: collector-import suite 26 expected failures (missing adapter/CLI); existing checks pass. Original snapshot/collector source untouched; implementing separate whitelist adapter and catalog artifacts."
+      - id: "M1.4"
+        title: "Begin real retrieval labels"
+        status: "done"
+        owner: "data_executor"
+        depends_on:
+          - "M1.3"
+        acceptance: "Start 12 real Russian queries with relevant IDs; price means per-person visit and nonconvertible tariffs remain unknown."
+        evidence:
+          - "Source-first real-cases.json:12RU positives /4negative guards,32 evidence references across3presets/7categories. Root documented Node24 validator exit0: all16requests/schema/hash/IDs/sourceURLs/dates valid."
+          - "Independent reviewer spec PASS /quality PASS; recomputed all16hard/relevant sets and32evidence exactly, broad6-IDsets retained and macroRecall@5 ceiling0.9722222222 documented. No retrieval output/LLM used to create labels; current catalog hash preserved."
+      - id: "M1.5"
+        title: "Build responsive search shell and location fallback"
+        status: "done"
+        owner: "ui_executor"
+        depends_on:
+          - "M1.2"
+        acceptance: "Presets/input work; device location is opt-in; denied geolocation leaves manual choice; synthetic fixtures have visible watermark."
+        evidence:
+          - "Root Node24 lint/typecheck/88unit/build/26Playwright shell tests exit0. Root visually inspected1440/390 screenshots: no horizontal overflow, real298catalog visible; opt-in/denied/lategeo, explicitfilters, invalid budgets, stale responses, synthetic watermark tested."
+          - "Independent reviewer spec PASS / quality PASS, no findings. Build exposed separate dynamic filesystem tracing issue (raw/normalized/collector files in NFT manifest); tracked as M1.2a before stage acceptance. Backend still not implemented at shell task."
+      - id: "M1.6"
+        title: "Verify stage and record evidence"
+        status: "in_progress"
+        owner: "root_integrator"
+        depends_on:
+          - "M1.2a"
+          - "M1.3"
+          - "M1.4"
+          - "M1.5"
+        acceptance: "pnpm lint/typecheck/test/build exit 0; browser shell at 390/1440 px and denied location checked; progress/evidence and stage commit recorded."
+        evidence: []
+  - id: "M2"
+    title: "Retrieval, distance and hard constraints"
+    status: "todo"
+    tasks:
+      - id: "M2.1"
+        title: "Write failing filter and retrieval behavior tests"
+        status: "todo"
+        depends_on:
+          - "M1.6"
+        acceptance: "Cover radius, unknown price, confirmed/reported facts, unknown/overnight hours, closing time, no match and RU/KK Unicode; record expected failure."
+        evidence: []
+      - id: "M2.2"
+        title: "Implement deterministic filters, ranking and duration"
+        status: "todo"
+        depends_on:
+          - "M2.1"
+        acceptance: "Hard constraints run before weighted ranking; tested distance is straight_line; visit duration and previous-day overnight/closing checks follow contract."
+        evidence: []
+      - id: "M2.3"
+        title: "Implement paid-call cost guard and credential setup"
+        status: "todo"
+        depends_on:
+          - "M1.6"
+        acceptance: "Server-only OpenRouter configuration; tested preflight cap, actual usage accounting and bounded retries; $2 preparation ceiling and $0.50 eval subcap preserve $4 demo reserve; env values alone do not satisfy gate."
+        evidence:
+          - "Credential preflight (GET /api/v1/key and /credits, read-only/no generation) returned HTTP 401. Key value never printed. Public model metadata verified and saved in /tmp/aituhack-mvp/model-preflight.json. Offline/stub development continues; live calls blocked until credential works and guard verified."
+      - id: "M2.4"
+        title: "Build versioned embeddings index and retrieval runner"
+        status: "todo"
+        depends_on:
+          - "M2.2"
+          - "M2.3"
+        acceptance: "Check remaining budget before paid indexing; index only prepared documents; preserve model/dimensions/hash; avoid unchanged reindexing; runner emits expected/actual JSONL; incompatible index uses labelled lexical fallback."
+        evidence: []
+      - id: "M2.5"
+        title: "Verify retrieval and early preview"
+        status: "todo"
+        depends_on:
+          - "M2.4"
+        acceptance: "Unit tests and pnpm build pass; record actual POI count/index model; deploy early preview when hosting access permits and verify snapshot; progress and stage commit recorded."
+        evidence: []
+  - id: "M3"
+    title: "Structured RAG and full text path"
+    status: "todo"
+    tasks:
+      - id: "M3.1"
+        title: "Write failing upstream and grounding tests"
+        status: "todo"
+        depends_on:
+          - "M2.5"
+        acceptance: "Cover unknown POI/evidence IDs, malformed/truncated JSON, 429, stage timeouts, explicit-filter conflicts/default refinements and review prompt injection; record expected failure."
+        evidence: []
+      - id: "M3.2"
+        title: "Implement bounded server OpenRouter adapter"
+        status: "todo"
+        depends_on:
+          - "M3.1"
+          - "M2.3"
+        acceptance: "Strict JSON Schema/require_parameters; 15s per call and 25s request deadline; at most one bounded retry; context 8, cards 3, intent 400 and explanation 1000 output tokens; secrets remain server-side."
+        evidence: []
+      - id: "M3.3"
+        title: "Implement intent, grounding and safe fallback"
+        status: "todo"
+        depends_on:
+          - "M3.2"
+        acceptance: "Validate whitelisted POI/evidence and enrich only from catalog; code computes duration; failed nonempty intent returns clarification/no cards; embedding or explanation fallbacks preserve extracted constraints and clear labels."
+        evidence: []
+      - id: "M3.4"
+        title: "Prepare guarded live evaluation runner"
+        status: "todo"
+        depends_on:
+          - "M3.2"
+        acceptance: "Tests prove disabled live mode makes no network calls and cap is checked before each batch; freeze candidate context and measure intent separately."
+        evidence: []
+      - id: "M3.5"
+        title: "Connect full text UI and verify path"
+        status: "todo"
+        depends_on:
+          - "M3.3"
+          - "M3.4"
+        acceptance: "Loading/empty/error states and stale-request cancellation work; intent/recommend/grounding tests and build pass; real-data search gives 0–3 valid cards; record source checks, trial usage/cost, progress and stage commit."
+        evidence: []
+  - id: "M4"
+    title: "Model selection and retrieval quality"
+    status: "todo"
+    tasks:
+      - id: "M4.1"
+        title: "Finish real evaluation labels"
+        status: "todo"
+        depends_on:
+          - "M1.4"
+          - "M3.5"
+        acceptance: "12 Russian real queries with all relevant IDs and sources; add 4 Kazakh cases if descriptions permit; keep synthetic results separate."
+        evidence: []
+      - id: "M4.2"
+        title: "Measure retrieval acceptance"
+        status: "todo"
+        depends_on:
+          - "M4.1"
+        acceptance: "pnpm eval:retrieval records top-3 success at least 10/12 and Recall@5 at least 90% over labelled relevant IDs; hard constraints hold."
+        evidence: []
+      - id: "M4.3"
+        title: "Run budgeted frozen-context model comparison"
+        status: "todo"
+        depends_on:
+          - "M4.2"
+          - "M3.4"
+          - "M2.3"
+        acceptance: "Verify opt-in and current capabilities/prices; compare Luna/Haiku/Qwen on same context and separate intent; pnpm eval:live stays within $0.50 subcap and remaining $2; record provider/schema/facts/abstention/latency/usage/cost."
+        evidence: []
+      - id: "M4.4"
+        title: "Select and document valid model"
+        status: "todo"
+        depends_on:
+          - "M4.3"
+        acceptance: "Choose correctness then latency then cost; if all fail grounding fix pipeline and reevaluate within cap; save decision/error examples, progress and stage commit."
+        evidence: []
+  - id: "M5"
+    title: "Profiles, detail views and navigation"
+    status: "todo"
+    tasks:
+      - id: "M5.1"
+        title: "Write failing profile and navigation tests"
+        status: "todo"
+        depends_on:
+          - "M4.4"
+        acceptance: "Explicit bowling overrides coffee profile; corrupted preferences default empty; reset clears demo history; Google lat/lon and 2GIS lon/lat address correct branch."
+        evidence: []
+      - id: "M5.2"
+        title: "Implement profiles, details, local preferences and routes"
+        status: "todo"
+        depends_on:
+          - "M5.1"
+        acceptance: "Show demo labels/used context, sources and available reviews/social links; uncertainty/time estimates honest; official HTTPS navigation with web fallback; saves and dismissals stay local."
+        evidence: []
+      - id: "M5.3"
+        title: "Verify complete UI, mobile and live smoke"
+        status: "todo"
+        depends_on:
+          - "M5.2"
+        acceptance: "Deterministic-stub Playwright covers details/external URL/profile changes/races/denied location/empty states/focus; pnpm test:e2e at 390/1440 and full quality gate pass; physical phone and one budgeted real-data live smoke recorded with limits; progress and stage commit."
+        evidence: []
+  - id: "M6"
+    title: "Optional voice"
+    status: "todo"
+    optional: true
+    timebox_minutes: 60
+    tasks:
+      - id: "M6.1"
+        title: "Decide voice gate and verify endpoint"
+        status: "todo"
+        depends_on:
+          - "M5.3"
+        acceptance: "Only proceed if P0 stable and text path met cutoff; verify OpenRouter audio endpoint/price within remaining preparation cap; otherwise record skipped voice and feature flag off."
+        evidence: []
+      - id: "M6.2"
+        title: "Implement tested recording and editable transcript"
+        status: "todo"
+        depends_on:
+          - "M6.1"
+        acceptance: "If enabled, failing then passing tests cover unsupported MIME, >5MB, >20s and denied permission; recording explicitly started; provider disclosed; no stored audio; transcript uses normal text path."
+        evidence: []
+      - id: "M6.3"
+        title: "Verify devices or disable voice by cutoff"
+        status: "todo"
+        depends_on:
+          - "M6.2"
+        acceptance: "Check iPhone Safari/Android Chrome where available and working text fallback; if not ready by 17:00 disable flag; document evidence/limitations or skip reason and stage commit."
+        evidence: []
+  - id: "M7"
+    title: "Deployment and submission evidence"
+    status: "todo"
+    tasks:
+      - id: "M7.1"
+        title: "Freeze release manifest and feature scope"
+        status: "todo"
+        depends_on:
+          - "M5.3"
+        acceptance: "Record dataset hash, actual POI count, sources/collection time and model; minimum demo gate 30 reviewed real POI in 3 zones/categories; record M6 enabled/disabled/skipped decision and freeze new features."
+        evidence: []
+      - id: "M7.2"
+        title: "Run final gates and independent release review"
+        status: "todo"
+        depends_on:
+          - "M7.1"
+        acceptance: "Record exact check-harness, lint, typecheck, test, build, test:e2e and eval:retrieval outcomes; independently review primary path, facts, failures and mobile; resolve blockers."
+        evidence: []
+      - id: "M7.3"
+        title: "Deploy and inspect public demo"
+        status: "todo"
+        depends_on:
+          - "M7.2"
+        acceptance: "Verify public URL, snapshot, server-only key, request/cost controls and no exact coordinates/query/audio in production logs; UI discloses location/data; preserve demo reserve."
+        evidence: []
+      - id: "M7.4"
+        title: "Prepare presentation, scenarios and video"
+        status: "todo"
+        depends_on:
+          - "M7.3"
+        acceptance: "Prepare 5–7 minute presentation, limitations and links; record 3 scenarios on real POI and reproducible collection; video preparation does not authorize YouTube publication."
+        evidence: []
+      - id: "M7.5"
+        title: "Verify links and deliver within authorization"
+        status: "todo"
+        depends_on:
+          - "M7.4"
+        acceptance: "Check demo/material links in private window on phone/laptop; finalize progress and stage commit; upload YouTube only on publication request; push/public submission only under current user authorization; distinguish local delivery from submission."
+        evidence: []
+
+# Data collector section. Updated only by this chat's main collector integrator.
+# This does not mark application ingestion task M1.3 as complete.
+data_collection:
+  provider: "Apify"
+  authorized_cap_usd: 2.0
+  billing_source: "Existing FREE credits; user approved first run and continuation within USD 2"
+  app_changes_authorized: false
+  tasks:
+    - id: "C1"
+      title: "Inspect Actor schema, real pricing, FREE balance and probe"
+      status: "done"
+      evidence:
+        - "Read apify.com/agents.md and Actor 0.1.13 OpenAPI; API pricing includes USD 0.00005 start fee"
+        - "FREE, isPaying=false; initial monthly spend USD 0.0229459585 of USD 5"
+        - "Probe CDVuwJKmcV9NEztbS dataset read: 5 places / 25 reviews, Actor USD 0.02255"
+    - id: "C2"
+      title: "Collect and inspect up to 100 coffee branches"
+      status: "done"
+      evidence:
+        - "User spend approval received; vjyIqJw5qfydrod8y SUCCEEDED, server cap USD 0.66"
+        - "Dataset read: 100 places / 986 reviews, USD 0.64345; 99 Astana branches / 976 reviews after geography checks"
+        - "One non-Astana branch and 10 related reviews quarantined; no block responses"
+    - id: "C3"
+      title: "Collect other categories in Esil/Nura central search window"
+      status: "done"
+      evidence:
+        - "iDvWFS88Oh3s4BZD2 SUCCEEDED, server cap USD 0.90; dataset read: 178 places / 863 reviews, USD 0.78925"
+        - "SUMMARY: no blocked/error/timeout requests or failed queries; parks query has clothing false positives, cleanup required"
+        - "Raw collection success is not category acceptance; 274 preliminary unique records still need category review"
+    - id: "C4"
+      title: "Validate category relevance, budget ledger and exports"
+      status: "in_progress"
+      evidence:
+        - "Category executor /root/category_cleanup completed exact source-category validation; integrator read changes and reran all 16 category/normalization tests: PASS, exit 0"
+        - "In-memory acceptance after category checks: 238 places / 1654 reviews; 35 out-of-scope places and one missing-category place quarantined"
+        - "Budget executor /root/collector_budget released code; integrator reran 30 offline tests: PASS, exit 0, and read guards/schema/accounting changes"
+        - "Lag case lower bound USD 1.4556459585 vs measured account USD 1.4513609718; independent review remains C6, application ingestion not claimed"
+        - "Both P2 fixes implemented by original executors; integrator ran full 35-test suite PASS exit 0, check_harness PASS exit 0, git diff --check exit 0"
+    - id: "C5"
+      title: "Fill useful category gaps within remaining credit and USD 2"
+      status: "done"
+      evidence:
+        - "Prepared rare-plan.json: at most 77 raw places including two verified new direct URLs, five reviews, event estimate USD 0.34655, separate run cap USD 0.36"
+        - "Rare run 0Z3PeFgUUho0zpUrp SUCCEEDED; read 49 places / 244 reviews, USD 0.19615; no failed/blocked requests"
+        - "Four-run in-memory validation: 281 accepted places / 1868 reviews; 11 parks and 21 museums/galleries; 197 records in Esil/Nura"
+        - "Preparing last disjoint search-window top-up: at most 19 gyms, USD 0.08555 estimated / USD 0.09 run cap, no prior gym branches in that window"
+        - "Last run 7theIPQDlF9t5ruRl SUCCEEDED; actual dataset18places/90reviews read, USD0.08105, zero blocked/errors/timeouts; all planned paid collection finished"
+        - "Final Actor total inclprobe USD1.73245; final accepted volume pending remote-record adjudication and export audit"
+    - id: "C6"
+      title: "Independent review, final checks and data handoff"
+      status: "in_progress"
+      evidence:
+        - "Independent /root/data_review reproduced 238 places / 1654 reviews, passed 16 normalizer + 14 collector tests; confirmed lag-safe budget for cap USD 0.36"
+        - "Two P2 boundary findings assigned back to original executors: contradictory administrative fields and explicit non-Astana placeUrls; current real data/rare plan unaffected"
