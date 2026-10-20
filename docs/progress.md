@@ -8,6 +8,23 @@ Stage: implementation
 
 ## Выполнение MVP
 
+20.10 около16:18 выполняется разрешённый полный live P0. Исходники изолированы
+в managed worktree `/Users/macbook/.codex/worktrees/live-p0/aituhack`, ветка `codex/live-p0`
+от `12d5ffe`; прежний origin/stub сохранён, временный URL требует замены при выпуске.
+Frozen install и свежий baseline554/554 PASS. Alias8996b05 принят отдельным ревьюером;
+реальная индексация CLIexit0:298uniquePOI/1536finite-nonzero/hash4677,
+274короткихдокумента+24дедупликации. IndexSHA568c855ff30dc866c8de4f0eed3038df4406898bd45fe25472f5afa318934d45.
+Проверенный ledger24settled: prep$0.000480181, включаяeval$0.00025514; demo0,
+unknown/inFlight/reserved0. Query-cache12vectors и semantic numerical gate приняты: root `pnpm eval:retrieval` exit0,
+12/12semantic/top3hit,macroRecall5=97.22%,micro93.75%,negative4/4/allhardPASS.
+Cache replay298reuse/0execute/0POST; исходные labels неизменны. M2.4/M2 done.
+Conservative endpoint-cache pricing6d02803 принято независимым review; отдельный
+fixed low-price Haiku route ещё проходит реализацию/ревью, новых chatPOST не было.
+Runtimepurpose/NFT sourceprepdc9e1d9 получил P2: обязательный ignored-index ломает
+clean stub CI; оригинальный исполнитель добавляет отдельный strict release gate.
+Трекер/docs пишет только root в основной папке; soleledger прежний absolutepath.
+Полный P0 пока не принят. Ниже сохраняется история ранее завершённых подзадач.
+
 M2.6 done: новый серверный ключ authHTTP200. Реальная кампания3POST: embedding endpoint200
 ($0.00000018/9tokens) остановлен на native-model alias mismatch до1536 validation;
 отдельные intent/explanation GPT‑6 Luna/OpenAI HTTP200, strict schema/evidence PASS

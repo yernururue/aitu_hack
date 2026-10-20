@@ -18,8 +18,8 @@ budget:
   demo_reserved: 4.0
   live_eval_subcap: 0.5
   live_eval_included_in: "preparation_testing_cap"
-  recorded_openrouter_spend_usd: 0.00024488
-  spend_basis: "Canonical durable ledger:3guarded diagnostic POSTs, knownactualtotal0.00024488USD/live_evalwithinprep, no uncertainty; not accountbalanceverification; separate Apifybilling excluded."
+  recorded_openrouter_spend_usd: 0.000480181
+  spend_basis: "Canonical durable ledger24settled:3diagnostics+9indexbatches+12queryembeddings; actualprep0.000480181USD incllive_eval0.00025514; demo0/uncertainty0. Not accountbalanceverification; Apifybilling excluded."
   account_balance_verified: false
   enforcement: "Persistent single-host guard independently reviewed/fresh62testsPASS and real3POSTcostsettlementverified; publicpaidmodeoff. Updatedkey auth200, chatdiagnosticsPASS, productionembeddingaliasblocker beforeindex. Serverlesspaid prohibited."
   before_first_paid_call:
@@ -29,8 +29,8 @@ budget:
   dataset_volume: "298 accepted real POI /591 short sourced review excerpts; verified36 in3zones/3categories; original298/1953collector snapshot preserved"
 handoff:
   state: "ready"
-  application_state: "public_stub_diagnostics_verified_index_adapter_blocked"
-  current_scope: "M2.6 done TEST+PLAN: updatedkey auth200, campaign3knownsettledPOST/0.00024488USD, GPT6Luna intent+explanationlocalchecksPASS; embeddingnativealiasSTOP before1536validation. IndependentreviewPASS; nofullindex/modelwinner/P0claim, publicstub unchanged. NextM2.4 reviewedaliasfix thenrealindex; useexistingcanonicalledger, remainingprep1.99975512/eval.49975512/demo4. No morediagnosticcalls underconsumed3slot authorization."
+  application_state: "semantic_index_accepted_model_eval_source_in_progress"
+  current_scope: "FullP0 execution authorized. M2done:reviewedalias+real298/1536index/querycache12/semantic12of12top3/macro.972222/negative4hardPASS; canonicalledgerprep.000480181/eval.00025514/demo0. Isolatedcodex/live-p0 source, serverpurpose/NFTprepacceptedafterCIcompatfix. FixedlowcapHaikuroute/schemaadapter+full3modelsemanticcomparison source/reviewsinprogress, no newchatPOSTyet. Primaryorigin/collector preserved; temporarypublicDNSneedsnewlinkatcutover. Rootsoletrackerwriter; fullP0notyetaccepted."
   internal_deadline: "2026-10-20T20:00:00+05:00"
   submission_deadline: "2026-10-20T23:59:00+05:00"
   collector_work:
@@ -41,7 +41,7 @@ handoff:
       - "scripts/collect_astana.py"
       - "scripts/test_astana_data.py"
     notes: "M1.3 independently accepted298realPOI/591excerpts and reviewed36demo slice. Original collector code/snapshots preserved separately, no paid recollection. Collection C6 remains owned by collector integrator; publication rights not established."
-next_task_id: "M2.4"
+next_task_id: "M4.3"
 workflow:
   tracker_writer: "Single main integrator updates tracker after every finished task"
   completion_rule: "Mark done only after acceptance verification; record exact commands, exit codes and limitations here and in docs/progress.md"
@@ -200,7 +200,7 @@ stages:
           - "Stage commit created and git log verified: 10f4981 feat: add validated real catalog and responsive search shell. Collector data/README, data/collection and original Python collector files remain untracked/preserved, not auto-committed with app."
   - id: "M2"
     title: "Retrieval, distance and hard constraints"
-    status: "in_progress"
+    status: "done"
     tasks:
       - id: "M2.1"
         title: "Write failing filter and retrieval behavior tests"
@@ -238,13 +238,19 @@ stages:
           - "Credential preflight (GET /api/v1/key and /credits, read-only/no generation) returned HTTP 401. Key value never printed. Public model metadata verified and saved in /tmp/aituhack-mvp/model-preflight.json. Offline/stub development continues; live calls blocked until credential works and guard verified."
       - id: "M2.4"
         title: "Build versioned embeddings index and retrieval runner"
-        status: "blocked"
-        owner: "scaffold_executor"
+        status: "done"
+        owner: "root_integrator"
         depends_on:
           - "M2.2"
           - "M2.3"
         acceptance: "Check remaining budget before paid indexing; index only prepared documents; preserve model/dimensions/hash; avoid unchanged reindexing; runner emits expected/actual JSONL; incompatible index uses labelled lexical fallback."
         evidence:
+          - "Rootfreshworktree envkeyunset/paidfalse/live_evalfalse pnpm eval:retrieval exit0:12/12semanticpositive+top3hit,macroRecall5=.9722222222222222,micro=.9375,negative4/4/allhardPASS,acceptancePassed=true; originalRUlabels73947hash. Accepted3index/cache/queryartifacts copied byteequalPRIMARY→worktree; injectedexistingCLIreuse1factory/0execute/0POST,298reused/0embedded/index+cache+ledgerbyteunchanged. Alias8996b05 independentSPEC/QUALITYPASS plusreal1536/canonical/durablecostvalidated; totalprep.000480181USD/eval.00025514/demo0. Actualmodel+comparison/liveUI remainseparatefuturegates."
+          - "Querycache/SEMANTICsubtaskPASS:12durableraw-queryvectors,12/12RUpositive semantic+top3hit,macroRecall5.9722222222/micro.9375;4negativeempty/all16hardPASS,acceptancePassedtrue/offlineCLIexit0,unchangedlabels. Querycost.00001026USDlive_eval withinprep;canonicalledger totalprep.000480181/eval.00025514/demo0,uncertain/inflight/reserved0. QuerycacheSHA2788286068ef9d7d45e00ead9cf30c18de7ca6258acd939cc07c89e6b0cc38eb. Artifactcopyand0dispatchreuseproof pendingbeforeparentacceptance."
+          - "REALINDEX subtaskPASS2026-10-20T11:18:08Z pinnedreviewed8996b05: CLIexit0,298uniquePOI/1536finite-nonzero/canonical4677a7a004ef;274shortdocembeddings+24dedupreuse. IndexSHA568c855ff30dc866c8de4f0eed3038df4406898bd45fe25472f5afa318934d45 rootbyteverified. Canonicalledger12settled, newprep.000225041USD,totalprep.000469921/eval.00024488/demo0,unknown/inflight/reserved0;preflightknownsecretpayloadscan0. Querycache/semanticnumericalgateNEXT,publicstubunchanged."
+          - "Aliassubtask accepted8996b055 after independentSPEC/QUALITYPASS(task-2-alias-review.md), scoped21PASS/50skipped; exactowned2filesverified. Strictknownslug/nativepair only, optionalmissingmodel intentionallyfailclosed; vectorintegrityunchanged. Nextpinnedpaidindex+querycache+semanticgate; publicstubunchanged."
+          - "2026-10-20 native isolatedworktree codex/live-p0 starts12d5ffe; frozeninstall PASS; freshbaseline pnpm test554/554 PASS14.76s beforechanges. Alias implementer8996b05: RED7/71→GREEN71/71,575/575combinedbaseline,ownedlint/diff0; independentreviewpending beforepaidindex. Publicstub/collector and solecanonicalledger preserved."
+          - "User explicitly authorized executing approvedliveplan throughfullP0/realpublicAI withinbudget. Nativeisolatedworktree /Users/macbook/.codex/worktrees/live-p0/aituhack branchcodex/live-p0 base12d5ffe; primaryserving.next/source/collector preserved. Rootcanonicaltracker/docs remainprimary; codeowners disjoint, independentreview beforepaid. Baselinefrozeninstall/tests underway; aliasRED/fix first. Existingcanonicalprimaryledger3settled/.00024488USD remainssolebudget, no diagnosticreruns/newledger; futurestagesauthorizedthroughguard2/.50nested/4demo."
           - "Updatedkey auth200 removes historical401hold. Realpaidprobe now exposes concrete indexadapter blocker: provider returns native modeltext-embedding-3-small vs requestedslugopenai/text-embedding-3-small; production createGuardedEmbedder index.ts138 uses same exactcomparison. Plan RED forverifiedslug/nativealiaspair with strictothermodel/dimension rejection, minimalfix+review BEFOREfullindex. Index/vector1536 notvalidated bythisprobe, realindexstillabsent; no sourcefix/fullindexexecuted in TEST+PLAN scope."
           - "Implementation ACCEPTED after3P2fix RED→GREEN, independent scoped re-review allADDRESSED/specPASS/qualityPASS. Root256tests/typecheck/lint/build/check-build-artifacts exit0. Semanticrunner reachable in syntheticofflinecache/injected tests; canonicalpathprotection and durableperbatch checkpoints verified."
           - "Remaining external acceptance BLOCKED: no realembeddingindex/querycache because keyHTTP401/paidoff. Rootdryrun298docs/45770bytes exit0 noartifacts; real lexicaleval exit1 (top3=11/12, macroRecall5=.8833333333, micro=.8125, negative4/4, hardPASS), no semanticqualityclaim orpaidcalls."
@@ -354,7 +360,7 @@ stages:
           - "Dependencies M3.3/M3.4 accepted; UI owned-file hookup begins with explicit stub banner/exact phrase chips and real localAPI Playwright at390/1440. Root current real-catalog handler smoke: park1degraded,outlets0,budget0,unsupportedquery clarification0,allcatalog/evidence/hash assertions PASS. UI acceptance pending."
   - id: "M4"
     title: "Model selection and retrieval quality"
-    status: "blocked"
+    status: "in_progress"
     tasks:
       - id: "M4.1"
         title: "Finish real evaluation labels"
@@ -384,7 +390,7 @@ stages:
           - "M4.1 accepted; baseline numerical gate not met:12RU top3=11/12 macroRecall5=.8833333333, negative4/4/hardPASS. General diagnosis query-token dilution and RU noun inflection; four independent synthetic scratch RED probes reproduced before repo edits. Owned rank.ts + retrieve.test.ts only; no gold/queryID special cases or label changes."
       - id: "M4.3"
         title: "Run budgeted frozen-context model comparison"
-        status: "blocked"
+        status: "in_progress"
         owner: "root_integrator"
         depends_on:
           - "M4.2"
@@ -392,6 +398,8 @@ stages:
           - "M2.3"
         acceptance: "Verify opt-in and current capabilities/prices; compare Luna/Haiku/Qwen on same context and separate intent; pnpm eval:live stays within $0.50 subcap and remaining $2; record provider/schema/facts/abstention/latency/usage/cost."
         evidence:
+          - "Pricingmaxima subtask6d02803 accepted independentSPEC/QUALITYPASS(task-3-review.md), targeted5PASS/62skipped +implementer117/117/ownedlintstrictTS0. Freshpublic/endpoints revealed regional/conditionalcachewrite maxima absentmodel-levelmetadata: Luna.275/M,Haiku1.10/M,Qwen.20/M; broadquotes conservativelyraised .384750001/1.420000001/.26160384. Haiku broadroute remainsblocked. Separatefixedlowpriceendpointcontractproof/implementationunderreview; no capsraised/modelsubsetwaiver/paidchatcalls."
+          - "Independent preparatory costquote proof/fix mayrun alongsideembeddingalias task withdisjointownedfiles, no providerPOST untilreviewedboundedquote proof andbudgetpreflight. Three-modelcomparisonstillNOTdone; no caps/modelsubsetwaiver. Userauthorizedplanexecution; fullP0false untilallrequiredgates."
           - "Actual three-model comparison not run: key remains unchanged after HTTP401; user explicitly said continue stubs/no auth retry. Pure local quotes confirmed Luna.358500001/Haiku1.32/Qwen.21160384 reserveUSD; Haiku exceeds nested.50 eval cap, shared runner declines before metadata/provider. Caps/reserved4demo unchanged; no paid calls."
       - id: "M4.4"
         title: "Select and document valid model"
@@ -434,12 +442,14 @@ stages:
           - "Tests accepted; UI owns navigation/preferences/profiles helpers, search/details/profile UI and recommendation-flow browser tests. Data executor separately owns recommend.ts +recommend tests for helper-based default routes/preset labels. No shared writers; actualAPI HTTP schemas remainunchanged. Offlineimplementation underexplicitM5.1 waiver; live/physical gate notclaimed."
       - id: "M5.3"
         title: "Verify complete UI, mobile and live smoke"
-        status: "blocked"
+        status: "in_progress"
         owner: "root_integrator"
         depends_on:
           - "M5.2"
         acceptance: "Deterministic-stub Playwright covers details/external URL/profile changes/races/denied location/empty states/focus; pnpm test:e2e at 390/1440 and full quality gate pass; physical phone and one budgeted real-data live smoke recorded with limits; progress and stage commit."
         evidence:
+          - "Task6SOURCEprep accepted afterFIX1c192f8a independentP2ADDRESSED/SPECQUALITYPASS; rootverifiedcleanCIregressionbasis,reviewer24NFTfocusedPASS,implementer45scopedPASS. Defaultofflinecheckindexoptional, explicit --require-index mandatesactualfile+exactAPItrace whileprivatecache/queryassetsforbiddenalways; serverpurposeprep|democlean. Actualbuild/NFT/runtime/live/public/mobile gatesstillpending."
+          - "LiveSOURCEprepdc9e1d9 implementer36/36scoped/lint/syntaxPASS. IndependentreviewfoundP2: unconditionalignoredindexrequirementbreaksexistingcleanstubCI (ci.ymlbuild→checkhasnoindex). RootverifiedCI; originalexecutorwillseparateexplicitstrictrelease-indexgatefromdefaultofflinecheck, addREDregression/re-review. Server-onlyruntimepurposeprep|demo implemented; productionbuild/live/index/runtime/mobile gatesstillpending."
           - "New direct user answer to exactphonequestion confirms BOTH2GIS and GoogleMaps opened chosen Ботанический сад in native applications. Physical site/search/3cards and both clicked destination handoffs VERIFIEDbyuser. Only realpaidlive smoke remains unmet forM5.3; index/live/model remainseparateblocked gates, keyunchanged/noauthretry."
           - "User physical-phone retry CONFIRMS real search/cards after blank budget: EXPO/5km/60min/solo/profileNone; 3of3 Ботанический сад, Samal Park, Ғашықтар; snapshot4677a7a004ef. Evidence is user-supplied page text, not emulation. Both map buttons visible but clicking/native handoff not confirmed; remaining maps and paidlive gate stillblocked, noauth/paidretry."
           - "Physicalphone siteaccessconfirmedbyuser; initialno_results matchedstrictbudget0. M5.4clarity/recovery nowverified+deployed with554unit/64e2e/publicprivate3901440 PASS. Actualphonecards/nativehandoff afterbudgetclear and realpaidlive smoke remainunverified; keyunchanged/noauthretry."

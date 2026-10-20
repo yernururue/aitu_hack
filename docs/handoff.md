@@ -5,6 +5,13 @@
 [progress.md](progress.md) содержит текущие проверки и ограничения.
 
 Рабочая папка `/Users/macbook/Yernur/projects/aituhack`, ветка `main`; локальная `codex/p0-mvp` сохранена.
+20.10 пользователь разрешил полный live P0. Исходники и scoped tests сейчас в managed
+worktree `/Users/macbook/.codex/worktrees/live-p0/aituhack`, ветка `codex/live-p0` от12d5ffe.
+Root пишет tracker/docs в основной папке; исполнители эти файлы не меняют. Обычный merge
+после приёмки объединит исходники с документацией без перезаписи данных сборщика.
+Alias8996b05 принят независимым review; pinnedреальный индекс298/1536/hash4677 построен.
+Query-cache12vectors/semantic gate приняты:12/12top3hit/macro97.22%/negative4/4/hardPASS. Новые chat-вызовы ждут route/budget/source review.
+Перед каждым paid batch сверять headroom в единственном прежнем absolute ledger.
 Runtime Node24.21.0/pnpm11.0.8. Исполнители/review и briefs: `/tmp/aituhack-mvp/`;
 root — единственный writer tracker. Всегда implementer и другой независимый reviewer,
 непересекающиеся owned files; после каждой принятой подзадачи сразу status/evidence/next.
@@ -18,7 +25,8 @@ RU12/12top3, macroRecall5 97.22%, negative4/4/hardPASS; KK отдельно4/4/9
 Это agent-curated dev set и lexical, не blind benchmark и не semantic/live acceptance.
 `eval:retrieval` exit1: semanticVerified=false/acceptancePassed=false при numericalPASS.
 
-M2.4 настоящий индекс blocked на native-model alias validation; M4.3–M4.4
+M2.4/M2 done: alias исправлен/принят, реальный индекс298/1536 +querycache12vectors;
+rootsemantic acceptance=true/12of12top3/macro97.22%/negative4of4. M4.3–M4.4
 сравнение/выбор модели blocked на безопасном reserve и дальнейшей приёмке.
 M2.6 done: обновлённый ключ auth200,3paid diagnostics/$0.00024488, два chat schema/evidencePASS.
 Embedding HTTP200 остановлен до1536 validation: text-embedding-3-small != openai/text-embedding-3-small.
@@ -32,12 +40,12 @@ M6 голос skipped: P1 gate не выполнен, UI/endpoint записи �
 waivers записаны явно и не превращают внешние gates в done. Следующий шаг брать
 из tracker, а не из исторического текста этапа.
 
-OpenRouter: $0.00024488 записанных расходов, баланс аккаунта не проверен.
+OpenRouter: $0.000480181 записанных prep-расходов, включаяeval$0.00025514; баланс аккаунта не проверен.
 $2prep incl$0.50eval/$4demo reserve. Пользователь подтвердил обновление ключа;
 auth200 и два GPT‑6 Luna chat diagnostics прошли. Ключ только в `.env.local`0600,
 не выводить его/сырые provider responses. Канонический ledger уже существует:
 `/Users/macbook/Yernur/projects/aituhack/data/private/openrouter-budget.json`,0600,
-3settled entries, unknown/inFlight/reserved0. Остаток prep1.99975512/eval.49975512/demo4.
+24settled entries после индексации/queryprep, unknown/inFlight/reserved0. Остаток prep1.999519819/eval.49974486/demo4.
 Никогда не менять путь/не инициализировать второй ledger ради нового лимита.
 Публичные APP_AI_MODE=stub/paidfalse сохранены; actual production model=null,
 Luna provisional, Haiku reserve1.32>.50. Реальные будущие вызовы — только через guard

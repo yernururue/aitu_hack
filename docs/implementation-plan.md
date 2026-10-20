@@ -154,17 +154,19 @@ server-only dependencies (catalog/provider) для детерминирован�
   резерв демо $4. Проверять прогноз до вызова и usage после; ограничить concurrency,
   резервировать стоимость in-flight вызовов, запретить новые вызовы при неизвестном
   расходе. Тестировать отказ при превышении с provider stubs. .env не является guard.
-- [ ] Сформировать документы и индекс через OpenRouter embeddings после настройки
+- [x] Сформировать документы и индекс через OpenRouter embeddings после настройки
   ключа; не отправлять сырые выгрузки целиком и не повторять индексацию без смены hash.
 - [x] Проверить отказ от смешанных dimensions/model/hash; lexical fallback явно помечен.
 - [x] Запустить unit tests и `pnpm build`, записать фактическое число POI и модель индекса.
-  M2.4 code принят: 256tests/build/NFT PASS. Каталог298; настоящего индекса нет (401),
-  кандидат text-embedding-3-small/1536. Lexical Recall@5 88,33%, gate не пройден.
-  Продолжение offline со stubs разрешено пользователем; M2.4 остаётся blocked.
-- [ ] Развернуть ранний preview при доступе к хостингу, проверить загрузку snapshot.
-  Read-only Vercel auth вернул403; preview не развёрнут.
-- [x] Зафиксировать проверенный offline этап отдельным коммитом: `57ce0f2`.
-  Actual live-index task остаётся blocked, а не done.
+  M2.4 done20.10: alias8996b05 принят отдельным review; реальный индекс298/1536,
+  canonical4677,274shortdocembeddings+24dedupreuse. Cache replay298reuse/0dispatch.
+  Root `pnpm eval:retrieval` exit0:12/12semantic/top3hit,macroRecall5=97.22%,
+  micro93.75%,negative4/4,allhardPASS; исходные RU labels не менялись.
+  Baseline554/554 и alias575/575 unitPASS; свежая productionbuild/NFT — отдельный Task6 gate.
+- [x] Ранний временный preview выдан в M7.8 и проверен на телефоне; сейчас hostname
+  требует замены при live-выпуске. Постоянный hosting не развёрнут (Vercel403).
+- [x] Offline этап зафиксирован57ce0f2, alias8996b05. Реальный M2.4 теперь done,
+  modelcomparison/publicliveP0 остаются отдельными незавершёнными gates.
 
 ## Этап 3. Структурированный RAG и полный текстовый путь
 
