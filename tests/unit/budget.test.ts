@@ -26,6 +26,7 @@ beforeEach(async () => {
 afterEach(async () => { vi.useRealTimers(); vi.unstubAllEnvs(); vi.unstubAllGlobals(); await rm(directory, { recursive: true, force: true }); });
 const args = (estimatedUsd: number, purpose: "prep" | "live_eval" | "demo" = "prep") => ({ estimatedUsd, purpose, operation: "intent" as const });
 const historicalGuard = () => new BudgetGuard({ path, caps: { prep: 2, live_eval: 0.8, demo: 4 } });
+const secondGuard = () => new BudgetGuard({ path, caps: { prep: 2, live_eval: 1, demo: 4 } });
 const approvedTarget = "ff7460a9-cf70-4248-8cd7-def9fcc5770e";
 const approval = () => ({ reservationId: approvedTarget, authorizationId: "c8e3d04e-7df9-4482-aabc-2338c4895b49", grantRef: "call_2264d3b0b17b408d989be52c79fb4640", approvedAt: "2026-10-20T13:45:40.669476+00:00", auditId: "7be80f0f-b8ca-4ba1-b15c-e951fb7d7529" });
 async function authorize(guard: BudgetGuard, input: unknown = approval()) {
@@ -45,7 +46,7 @@ async function legacyUnknown() {
 
 describe("single authorized historical upper-bound policy", () => {
   it("accepts only the approved configuration maximum without implicitly raising or migrating a v1 ledger", async () => {
-    expect(readAiConfig({}).caps).toEqual({ prep: 2, live_eval: 1, demo: 4 });
+    expect(readAiConfig({}).caps).toEqual({ prep: 2, live_eval: 1.5, demo: 4 });
     expect(readAiConfig({ LIVE_EVAL_MAX_USD: "0.8" }).caps.live_eval).toBe(0.8);
     const guard = new BudgetGuard({ path, caps: { live_eval: 0.8 } });
     expect((await guard.snapshot()).caps.live_eval).toBe(0.5);
@@ -350,9 +351,9 @@ describe("server config and conservative prices", () => {
   it.each(["2.01", "Infinity", "-1", ""])('rejects invalid/raised prep cap "%s"', (value) => {
     expect(() => readAiConfig({ OPENROUTER_PREP_MAX_USD: value })).toThrow("INVALID_BUDGET_CONFIGURATION");
   });
-  it.each([{}, { LIVE_EVAL_MAX_USD: "1.01" }, { OPENROUTER_DEMO_RESERVE_USD: "4.01" }])("never raises authorized nested/demo limits", (env) => {
+  it.each([{}, { LIVE_EVAL_MAX_USD: "1.51" }, { OPENROUTER_DEMO_RESERVE_USD: "4.01" }])("never raises authorized nested/demo limits", (env) => {
     if (Object.keys(env).length) expect(() => readAiConfig(env)).toThrow("INVALID_BUDGET_CONFIGURATION");
-    else expect(readAiConfig(env).caps).toEqual({ prep: 2, live_eval: 1, demo: 4 });
+    else expect(readAiConfig(env).caps).toEqual({ prep: 2, live_eval: 1.5, demo: 4 });
   });
   it.each([undefined, null, "", "NaN", "Infinity", "-0.1", -1, "1e-8", "9".repeat(400)])("refuses unknown price %s", (price) => {
     expect(() => parseTokenPrice(price)).toThrow("UNKNOWN_PRICE");
@@ -556,19 +557,19 @@ async function v2SecondUnknown() {
 describe("second explicitly authorized historical upper bound /v3", () => {
   it("accepts config1 while constructors/env cannot upgrade either v1 or v2 canonical caps", async () => {
     expect(readAiConfig({ LIVE_EVAL_MAX_USD: "1" }).caps).toEqual({ prep: 2, live_eval: 1, demo: 4 });
-    expect((await new BudgetGuard({ path }).snapshot()).caps.live_eval).toBe(.5);
+    expect((await secondGuard().snapshot()).caps.live_eval).toBe(.5);
     await v2SecondUnknown(); const before = await readFile(path, "utf8");
     expect((await new BudgetGuard({ path, caps: readAiConfig({ LIVE_EVAL_MAX_USD: "1" }).caps }).snapshot()).caps.live_eval).toBe(.8);
     expect(await readFile(path, "utf8")).toBe(before);
   });
-  it("requires the pinned .8 historical guard and does not let default1 alter first-migration semantics", async () => {
+  it("requires the pinned .8 historical guard and does not let a guard1 alter first-migration semantics", async () => {
     await legacyUnknown(); const before = await readFile(path, "utf8");
-    await expect(authorize(new BudgetGuard({ path }))).rejects.toThrow("UPPER_BOUND_CAP_MISMATCH");
+    await expect(authorize(secondGuard())).rejects.toThrow("UPPER_BOUND_CAP_MISMATCH");
     expect(await readFile(path, "utf8")).toBe(before);
     await authorize(historicalGuard()); expect(JSON.parse(await readFile(path, "utf8")).caps.live_eval).toBe(800000000);
   });
   it("atomically preserves first grant, actuals and audits; charges both upper bounds once with actualnull", async () => {
-    const before = await v2SecondUnknown(); const guard = new BudgetGuard({ path }); await authorizeSecond(guard);
+    const before = await v2SecondUnknown(); const guard = secondGuard(); await authorizeSecond(guard);
     const after = JSON.parse(await readFile(path, "utf8"));
     expect(after).toMatchObject({ version: 3, uncertain: true, caps: { prep: 2000000000, live_eval: 1000000000, demo: 4000000000 } });
     expect(after.entries.slice(0, -1)).toEqual(before.entries.slice(0, -1)); expect(after.reconciliations).toEqual(before.reconciliations);
@@ -579,15 +580,15 @@ describe("second explicitly authorized historical upper bound /v3", () => {
     await guard.reserve(args(.47, "live_eval")); await expect(guard.reserve(args(.01, "live_eval"))).rejects.toThrow("BUDGET_EXCEEDED");
   });
   it("is idempotent concurrently/restarted; neither first nor second grant restores later-lowered v3 caps", async () => {
-    await v2SecondUnknown(); await Promise.all(Array.from({ length: 4 }, () => authorizeSecond(new BudgetGuard({ path }))));
-    const before = await readFile(path, "utf8"); await authorizeSecond(new BudgetGuard({ path })); await authorize(historicalGuard()); expect(await readFile(path, "utf8")).toBe(before);
+    await v2SecondUnknown(); await Promise.all(Array.from({ length: 4 }, () => authorizeSecond(secondGuard())));
+    const before = await readFile(path, "utf8"); await authorizeSecond(secondGuard()); await authorize(historicalGuard()); expect(await readFile(path, "utf8")).toBe(before);
     await new BudgetGuard({ path, caps: { live_eval: .6 } }).snapshot(); const lowered = await readFile(path, "utf8");
-    await authorizeSecond(new BudgetGuard({ path })); await authorize(historicalGuard()); expect(await readFile(path, "utf8")).toBe(lowered);
-    expect((await new BudgetGuard({ path }).snapshot()).authorizedUpperBoundCharged.live_eval).toBe(.528);
+    await authorizeSecond(secondGuard()); await authorize(historicalGuard()); expect(await readFile(path, "utf8")).toBe(lowered);
+    expect((await secondGuard().snapshot()).authorizedUpperBoundCharged.live_eval).toBe(.528);
   });
   it("serializes second migration across independent processes", async () => {
     await v2SecondUnknown(); const moduleUrl = new URL(`file://${resolve("src/lib/ai/budget.ts")}`).href;
-    const script = `import { BudgetGuard } from ${JSON.stringify(moduleUrl)}; await new BudgetGuard({path:process.argv[1]}).authorizeSecondHistoricalUpperBound(JSON.parse(process.argv[2]));process.stdout.write('applied');`;
+    const script = `import { BudgetGuard } from ${JSON.stringify(moduleUrl)}; await new BudgetGuard({path:process.argv[1],caps:{live_eval:1}}).authorizeSecondHistoricalUpperBound(JSON.parse(process.argv[2]));process.stdout.write('applied');`;
     const run = () => promisify(execFile)(process.execPath, ["--import", "tsx", "--input-type=module", "-e", script, path, JSON.stringify(secondApproval())]);
     expect((await Promise.all([run(), run()])).map(result => result.stdout)).toEqual(["applied", "applied"]);
     expect(JSON.parse(await readFile(path, "utf8")).policyGrants).toHaveLength(2);
@@ -597,37 +598,37 @@ describe("second explicitly authorized historical upper bound /v3", () => {
     { approvedAt: "2026-10-20T14:19:34.396Z" }, { auditId: undefined }, { auditId: "private text" }, { amount: .264 }, { liveEvalCap: 1 },
   ])("rejects second grant tampering with no partial migration: %j", async delta => {
     await v2SecondUnknown(); const before = await readFile(path, "utf8");
-    await expect(authorizeSecond(new BudgetGuard({ path }), { ...secondApproval(), ...delta })).rejects.toThrow("UPPER_BOUND_GRANT_INVALID"); expect(await readFile(path, "utf8")).toBe(before);
+    await expect(authorizeSecond(secondGuard(), { ...secondApproval(), ...delta })).rejects.toThrow("UPPER_BOUND_GRANT_INVALID"); expect(await readFile(path, "utf8")).toBe(before);
   });
   it.each(["v1", "missing", "purpose", "operation", "reserved", "state", "actual", "overshoot", "prep-cap", "eval-cap", "demo-cap"])("rejects unsafe second target/order %s without mutation", async kind => {
     const ledger = kind === "v1" ? await legacyUnknown() : await v2SecondUnknown(); const target = ledger.entries.at(-1);
     if(kind === "missing") ledger.entries.pop(); if(kind === "purpose") target.purpose="prep"; if(kind === "operation") target.operation="intent";
     if(kind === "reserved") target.reserved++; if(kind === "state") target.state="dispatched"; if(kind === "actual") target.actual=0;
     if(kind === "overshoot") ledger.entries[0].actual++; if(kind === "prep-cap") ledger.caps.prep--; if(kind === "eval-cap") ledger.caps.live_eval--; if(kind === "demo-cap") ledger.caps.demo--;
-    await writeFile(path,JSON.stringify(ledger)); const before=await readFile(path,"utf8"); await expect(authorizeSecond(new BudgetGuard({path}))).rejects.toThrow(); expect(await readFile(path,"utf8")).toBe(before);
+    await writeFile(path,JSON.stringify(ledger)); const before=await readFile(path,"utf8"); await expect(authorizeSecond(secondGuard())).rejects.toThrow(); expect(await readFile(path,"utf8")).toBe(before);
   });
   it.each(["reserved","dispatched","unknown"])("refuses second migration with another %s entry",async state=>{
-    const ledger=await v2SecondUnknown();ledger.entries.push({...ledger.entries.at(-1),id:randomUUID(),state});await writeFile(path,JSON.stringify(ledger));const before=await readFile(path,"utf8");await expect(authorizeSecond(new BudgetGuard({path}))).rejects.toThrow("UNSETTLED_RESERVATIONS");expect(await readFile(path,"utf8")).toBe(before);
+    const ledger=await v2SecondUnknown();ledger.entries.push({...ledger.entries.at(-1),id:randomUUID(),state});await writeFile(path,JSON.stringify(ledger));const before=await readFile(path,"utf8");await expect(authorizeSecond(secondGuard())).rejects.toThrow("UNSETTLED_RESERVATIONS");expect(await readFile(path,"utf8")).toBe(before);
   });
   it.each([.8,.5])("requires exactly the approved1 cap for the second migration (got%s)",async live_eval=>{
     await v2SecondUnknown();const before=await readFile(path,"utf8");await expect(authorizeSecond(new BudgetGuard({path,caps:{live_eval}}))).rejects.toThrow("UPPER_BOUND_CAP_MISMATCH");expect(await readFile(path,"utf8")).toBe(before);
   });
   it.each(["first-grant-audit","reconciliation-audit","new-audit-on-v3"])("rejects conflicting audit identity %s",async kind=>{
-    const ledger=await v2SecondUnknown();if(kind==="new-audit-on-v3")await authorizeSecond(new BudgetGuard({path}));const before=await readFile(path,"utf8");
+    const ledger=await v2SecondUnknown();if(kind==="new-audit-on-v3")await authorizeSecond(secondGuard());const before=await readFile(path,"utf8");
     const auditId=kind==="first-grant-audit"?approval().auditId:kind==="reconciliation-audit"?ledger.reconciliations[0].id:randomUUID();
-    await expect(authorizeSecond(new BudgetGuard({path}),{...secondApproval(),auditId})).rejects.toThrow("UPPER_BOUND_POLICY_CONFLICT");expect(await readFile(path,"utf8")).toBe(before);
+    await expect(authorizeSecond(secondGuard(),{...secondApproval(),auditId})).rejects.toThrow("UPPER_BOUND_POLICY_CONFLICT");expect(await readFile(path,"utf8")).toBe(before);
   });
   it.each(["actual","charge","audit","first-grant","duplicate-grant","grant-order","duplicate-audit","applied-at","version","cap","missing-first","duplicate-entry"])("rejects tampered v3 %s on restart",async kind=>{
-    await v2SecondUnknown();await authorizeSecond(new BudgetGuard({path}));const ledger=JSON.parse(await readFile(path,"utf8"));const target=ledger.entries.at(-1);
+    await v2SecondUnknown();await authorizeSecond(secondGuard());const ledger=JSON.parse(await readFile(path,"utf8"));const target=ledger.entries.at(-1);
     if(kind==="actual")target.actual=0;if(kind==="charge")target.budgetCharge--;if(kind==="audit")target.authorizationAuditId=randomUUID();
     if(kind==="first-grant")ledger.policyGrants[0].grantRef="call_other";if(kind==="duplicate-grant")ledger.policyGrants.push(ledger.policyGrants[1]);if(kind==="grant-order")ledger.policyGrants.reverse();
     if(kind==="duplicate-audit"){ledger.policyGrants[1].auditId=ledger.policyGrants[0].auditId;target.authorizationAuditId=ledger.policyGrants[0].auditId;}
     if(kind==="applied-at")ledger.policyGrants[1].appliedAt=0;if(kind==="version")ledger.version=2;if(kind==="cap")ledger.caps.live_eval=1000000001;
     if(kind==="missing-first")ledger.entries=ledger.entries.filter((entry:{id:string})=>entry.id!==approvedTarget);if(kind==="duplicate-entry")ledger.entries.push({...target});
-    await writeFile(path,JSON.stringify(ledger));const before=await readFile(path,"utf8");await expect(new BudgetGuard({path}).snapshot()).rejects.toThrow("LEDGER_INVALID");expect(await readFile(path,"utf8")).toBe(before);
+    await writeFile(path,JSON.stringify(ledger));const before=await readFile(path,"utf8");await expect(secondGuard().snapshot()).rejects.toThrow("LEDGER_INVALID");expect(await readFile(path,"utf8")).toBe(before);
   });
   it("does not convert/release either bound as actual; a third unknown globally freezes every bucket",async()=>{
-    await v2SecondUnknown();const guard=new BudgetGuard({path});await authorizeSecond(guard);
+    await v2SecondUnknown();const guard=secondGuard();await authorizeSecond(guard);
     for(const id of [approvedTarget,secondTarget]){for(const actual of [null,0,.264])await expect(guard.settle({id},actual)).rejects.toThrow("AUTHORIZED_UPPER_BOUND_FINAL");await expect(guard.releaseBeforeDispatch({id})).rejects.toThrow("ALREADY_DISPATCHED");}
     await guard.confirmReconciliation(randomUUID());const later=await guard.reserve(args(.01,"live_eval"));await expect(guard.settle(later,null)).rejects.toThrow("COST_UNKNOWN");
     await expect(authorizeSecond(guard)).rejects.toThrow("UNSETTLED_RESERVATIONS");await expect(authorize(historicalGuard())).rejects.toThrow("UNSETTLED_RESERVATIONS");await expect(guard.confirmReconciliation(randomUUID())).rejects.toThrow("UNSETTLED_RESERVATIONS");
@@ -637,7 +638,112 @@ describe("second explicitly authorized historical upper bound /v3", () => {
   it.each(["before-rename","after-rename"])("retains durable global barrier on second migration IO failure %s",async kind=>{
     await v2SecondUnknown();const before=await readFile(path,"utf8");const realRename=vi.mocked(rename).getMockImplementation()!;
     vi.mocked(rename).mockImplementationOnce(async(...values)=>{if(kind==="after-rename")await realRename(...values);throw new Error("SECOND_MIGRATION_IO_FAILURE");});
-    await expect(authorizeSecond(new BudgetGuard({path}))).rejects.toThrow("SECOND_MIGRATION_IO_FAILURE");if(kind==="before-rename")expect(await readFile(path,"utf8")).toBe(before);else expect(JSON.parse(await readFile(path,"utf8"))).toMatchObject({version:3,uncertain:true});
-    expect((await stat(`${path}.lock`)).isDirectory()).toBe(true);await expect(new BudgetGuard({path}).reserve(args(.001))).rejects.toThrow("LEDGER_LOCK_TIMEOUT");
+    await expect(authorizeSecond(secondGuard())).rejects.toThrow("SECOND_MIGRATION_IO_FAILURE");if(kind==="before-rename")expect(await readFile(path,"utf8")).toBe(before);else expect(JSON.parse(await readFile(path,"utf8"))).toMatchObject({version:3,uncertain:true});
+    expect((await stat(`${path}.lock`)).isDirectory()).toBe(true);await expect(secondGuard().reserve(args(.001))).rejects.toThrow("LEDGER_LOCK_TIMEOUT");
+  });
+});
+
+const thirdTarget = "3943a5d8-151c-42e4-980c-a50a869dfb8e";
+const thirdApproval = () => ({ reservationId: thirdTarget, authorizationId: "00d1c10d-26b9-4daf-8107-964a5375bb67", grantRef: "call_dd3ce7d726fb4aebb4d0fe1b10a88e9e", approvedAt: "2026-10-20T14:49:53.969679+00:00", auditId: "e811956b-e4a9-4dd0-aede-43a9561f2494" });
+async function authorizeThird(guard: BudgetGuard, input: unknown = thirdApproval()) {
+  const method = Reflect.get(guard, "authorizeThirdHistoricalUpperBound");
+  expect(method, "third exact approval requires its own migration").toBeTypeOf("function");
+  return method.call(guard, input);
+}
+async function v3ThirdUnknown() {
+  await v2SecondUnknown(); await authorizeSecond(secondGuard()); await secondGuard().confirmReconciliation(randomUUID());
+  const ledger = JSON.parse(await readFile(path, "utf8")); ledger.uncertain = true;
+  ledger.entries.push({ id: thirdTarget, purpose: "live_eval", operation: "intent", reserved: 384750001, actual: null, state: "unknown", ownerPid: process.pid, expiresAt: 1 });
+  await writeFile(path, JSON.stringify(ledger)); return ledger;
+}
+
+describe("third exact historical bound /v4", () => {
+  it("accepts1.5 config without raising any previous persisted version or changing the pinned second API", async () => {
+    expect(readAiConfig({ LIVE_EVAL_MAX_USD: "1.5" }).caps).toEqual({ prep: 2, live_eval: 1.5, demo: 4 });
+    expect((await new BudgetGuard({ path }).snapshot()).caps.live_eval).toBe(.5);
+    await v2SecondUnknown(); const before = await readFile(path, "utf8");
+    await expect(authorizeSecond(new BudgetGuard({ path }))).rejects.toThrow("UPPER_BOUND_CAP_MISMATCH");
+    expect(await readFile(path, "utf8")).toBe(before);
+    expect((await new BudgetGuard({ path }).snapshot()).caps.live_eval).toBe(.8);
+    await authorizeSecond(secondGuard()); const v3 = await readFile(path, "utf8");
+    expect((await new BudgetGuard({ path }).snapshot()).caps.live_eval).toBe(1);
+    expect(await readFile(path, "utf8")).toBe(v3);
+  });
+  it("preserves all32 entries/two grants/history and charges384750001 once with actualnull, still requiring explicit clear", async () => {
+    const before = await v3ThirdUnknown(); const guard = new BudgetGuard({ path }); await authorizeThird(guard);
+    const after = JSON.parse(await readFile(path, "utf8"));
+    expect(after).toMatchObject({ version: 4, uncertain: true, caps: { prep: 2000000000, live_eval: 1500000000, demo: 4000000000 } });
+    expect(after.entries.slice(0, -1)).toEqual(before.entries.slice(0, -1)); expect(after.reconciliations).toEqual(before.reconciliations);
+    expect(after.policyGrants).toHaveLength(3); expect(after.policyGrants.slice(0, 2)).toEqual(before.policyGrants); expect(after.policyGrants[2]).toMatchObject(thirdApproval());
+    expect(after.entries.at(-1)).toEqual({ ...before.entries.at(-1), state: "authorized_upper_bound", accountingBasis: "authorized_upper_bound", budgetCharge: 384750001, authorizationAuditId: thirdApproval().auditId });
+    expect(await guard.snapshot()).toMatchObject({ uncertain: true, caps: { prep: 2, live_eval: 1.5, demo: 4 }, actualKnownSpent: { prep: .000993725, live_eval: .000783725, demo: 0 }, authorizedUpperBoundCharged: { prep: .912750001, live_eval: .912750001, demo: 0 }, spent: { prep: .913743726, live_eval: .913533726, demo: 0 }, reserved: { prep: 0, live_eval: 0, demo: 0 } });
+    await expect(guard.reserve(args(.01, "demo"))).rejects.toThrow("LEDGER_UNCERTAIN");
+    await guard.confirmReconciliation(randomUUID()); await guard.reserve(args(.58, "live_eval"));
+    await expect(guard.reserve(args(.01, "live_eval"))).rejects.toThrow("BUDGET_EXCEEDED");
+  });
+  it("is idempotent across concurrency/restart; all three APIs preserve later lowered caps", async () => {
+    await v3ThirdUnknown(); await Promise.all(Array.from({ length: 4 }, () => authorizeThird(new BudgetGuard({ path }))));
+    const before = await readFile(path, "utf8"); await authorizeThird(new BudgetGuard({ path })); await authorizeSecond(secondGuard()); await authorize(historicalGuard());
+    expect(await readFile(path, "utf8")).toBe(before);
+    await new BudgetGuard({ path, caps: { live_eval: 1 } }).snapshot(); const lowered = await readFile(path, "utf8");
+    await authorizeThird(new BudgetGuard({ path })); await authorizeSecond(secondGuard()); await authorize(historicalGuard());
+    expect(await readFile(path, "utf8")).toBe(lowered);
+  });
+  it("serializes one third grant across independent processes", async () => {
+    await v3ThirdUnknown(); const moduleUrl = new URL(`file://${resolve("src/lib/ai/budget.ts")}`).href;
+    const script = `import { BudgetGuard } from ${JSON.stringify(moduleUrl)}; await new BudgetGuard({path:process.argv[1]}).authorizeThirdHistoricalUpperBound(JSON.parse(process.argv[2]));process.stdout.write('applied');`;
+    const run = () => promisify(execFile)(process.execPath, ["--import", "tsx", "--input-type=module", "-e", script, path, JSON.stringify(thirdApproval())]);
+    expect((await Promise.all([run(), run()])).map(result => result.stdout)).toEqual(["applied", "applied"]);
+    expect(JSON.parse(await readFile(path, "utf8")).policyGrants).toHaveLength(3);
+  });
+  it.each([{ reservationId: secondTarget }, { authorizationId: secondApproval().authorizationId }, { grantRef: "call_other" }, { approvedAt: "2026-10-20T14:49:53.970Z" }, { auditId: undefined }, { auditId: "unsafe" }, { amount: .384750001 }, { liveEvalCap: 1.5 }])("rejects third-grant tampering %j", async change => {
+    await v3ThirdUnknown(); const before = await readFile(path, "utf8");
+    await expect(authorizeThird(new BudgetGuard({ path }), { ...thirdApproval(), ...change })).rejects.toThrow("UPPER_BOUND_GRANT_INVALID"); expect(await readFile(path, "utf8")).toBe(before);
+  });
+  it.each(["v1", "v2", "missing", "purpose", "operation", "reserved", "state", "actual", "overshoot", "prep-cap", "eval-cap", "demo-cap"])("refuses unsafe third migration %s without partial changes", async kind => {
+    const ledger = kind === "v1" ? await legacyUnknown() : kind === "v2" ? await v2SecondUnknown() : await v3ThirdUnknown(); const target = ledger.entries.at(-1);
+    if (kind === "missing") ledger.entries.pop(); if (kind === "purpose") target.purpose = "prep"; if (kind === "operation") target.operation = "explanation";
+    if (kind === "reserved") target.reserved--; if (kind === "state") target.state = "dispatched"; if (kind === "actual") target.actual = 0;
+    if (kind === "overshoot") ledger.entries[0].actual++; if (kind === "prep-cap") ledger.caps.prep--; if (kind === "eval-cap") ledger.caps.live_eval--; if (kind === "demo-cap") ledger.caps.demo--;
+    await writeFile(path, JSON.stringify(ledger)); const before = await readFile(path, "utf8"); await expect(authorizeThird(new BudgetGuard({ path }))).rejects.toThrow(); expect(await readFile(path, "utf8")).toBe(before);
+  });
+  it.each(["reserved", "dispatched", "unknown"])("refuses another %s entry", async state => {
+    const ledger = await v3ThirdUnknown(); ledger.entries.push({ ...ledger.entries.at(-1), id: randomUUID(), state }); await writeFile(path, JSON.stringify(ledger)); const before = await readFile(path, "utf8");
+    await expect(authorizeThird(new BudgetGuard({ path }))).rejects.toThrow("UNSETTLED_RESERVATIONS"); expect(await readFile(path, "utf8")).toBe(before);
+  });
+  it.each([.8, 1])("requires the approved1.5 guard, not%s", async live_eval => {
+    await v3ThirdUnknown(); const before = await readFile(path, "utf8"); await expect(authorizeThird(new BudgetGuard({ path, caps: { live_eval } }))).rejects.toThrow("UPPER_BOUND_CAP_MISMATCH"); expect(await readFile(path, "utf8")).toBe(before);
+  });
+  it.each(["first", "second", "reconciliation", "different-after-v4"])("rejects audit collision %s", async kind => {
+    const ledger = await v3ThirdUnknown(); if (kind === "different-after-v4") await authorizeThird(new BudgetGuard({ path })); const before = await readFile(path, "utf8");
+    const auditId = kind === "first" ? approval().auditId : kind === "second" ? secondApproval().auditId : kind === "reconciliation" ? ledger.reconciliations[0].id : randomUUID();
+    await expect(authorizeThird(new BudgetGuard({ path }), { ...thirdApproval(), auditId })).rejects.toThrow("UPPER_BOUND_POLICY_CONFLICT"); expect(await readFile(path, "utf8")).toBe(before);
+  });
+  it.each(["actual", "charge", "audit", "operation", "old-grant", "duplicate-grant", "grant-order", "duplicate-audit", "applied-at", "version", "cap", "missing-first", "missing-second", "duplicate-entry"])("rejects persisted v4 tamper %s", async kind => {
+    await v3ThirdUnknown(); await authorizeThird(new BudgetGuard({ path })); const ledger = JSON.parse(await readFile(path, "utf8")); const target = ledger.entries.at(-1);
+    if (kind === "actual") target.actual = 0; if (kind === "charge") target.budgetCharge--; if (kind === "audit") target.authorizationAuditId = randomUUID(); if (kind === "operation") target.operation = "explanation";
+    if (kind === "old-grant") ledger.policyGrants[1].grantRef = "call_other"; if (kind === "duplicate-grant") ledger.policyGrants.push(ledger.policyGrants[2]); if (kind === "grant-order") ledger.policyGrants.reverse();
+    if (kind === "duplicate-audit") { ledger.policyGrants[2].auditId = ledger.policyGrants[0].auditId; target.authorizationAuditId = ledger.policyGrants[0].auditId; }
+    if (kind === "applied-at") ledger.policyGrants[2].appliedAt = 0; if (kind === "version") ledger.version = 3; if (kind === "cap") ledger.caps.live_eval = 1500000001;
+    if (kind === "missing-first") ledger.entries = ledger.entries.filter((item: { id: string }) => item.id !== approvedTarget); if (kind === "missing-second") ledger.entries = ledger.entries.filter((item: { id: string }) => item.id !== secondTarget); if (kind === "duplicate-entry") ledger.entries.push({ ...target });
+    await writeFile(path, JSON.stringify(ledger)); const before = await readFile(path, "utf8"); await expect(new BudgetGuard({ path }).snapshot()).rejects.toThrow("LEDGER_INVALID"); expect(await readFile(path, "utf8")).toBe(before);
+  });
+  it.each(["prep", "live_eval", "demo"] as const)("rejects existing %s spending that would exceed v4 cap", async purpose => {
+    const ledger = await v3ThirdUnknown(); const known = ledger.entries[0]; known.purpose = purpose; known.operation = "intent"; known.reserved = known.actual = purpose === "prep" ? 1900000000 : purpose === "live_eval" ? 900000000 : 4100000000;
+    await writeFile(path, JSON.stringify(ledger)); const before = await readFile(path, "utf8"); await expect(authorizeThird(new BudgetGuard({ path }))).rejects.toThrow("BUDGET_EXCEEDED"); expect(await readFile(path, "utf8")).toBe(before);
+  });
+  it("never settles/releases any authorized bound; fourth unknown freezes all buckets and all policy paths", async () => {
+    await v3ThirdUnknown(); const guard = new BudgetGuard({ path }); await authorizeThird(guard);
+    for (const id of [approvedTarget, secondTarget, thirdTarget]) { for (const actual of [null, 0, .384750001]) await expect(guard.settle({ id }, actual)).rejects.toThrow("AUTHORIZED_UPPER_BOUND_FINAL"); await expect(guard.releaseBeforeDispatch({ id })).rejects.toThrow("ALREADY_DISPATCHED"); }
+    await guard.confirmReconciliation(randomUUID()); const future = await guard.reserve(args(.001, "live_eval")); await expect(guard.settle(future, null)).rejects.toThrow("COST_UNKNOWN");
+    await expect(authorizeThird(guard)).rejects.toThrow("UNSETTLED_RESERVATIONS"); await expect(authorizeSecond(secondGuard())).rejects.toThrow("UNSETTLED_RESERVATIONS"); await expect(authorize(historicalGuard())).rejects.toThrow("UNSETTLED_RESERVATIONS"); await expect(guard.confirmReconciliation(randomUUID())).rejects.toThrow("UNSETTLED_RESERVATIONS");
+    for (const purpose of ["prep", "live_eval", "demo"] as const) await expect(guard.reserve(args(.001, purpose))).rejects.toThrow("LEDGER_UNCERTAIN");
+    expect((await guard.snapshot()).authorizedUpperBoundCharged).toEqual({ prep: .912750001, live_eval: .912750001, demo: 0 });
+  });
+  it.each(["before-rename", "after-rename"])("keeps durable global barrier on third migration IO failure %s", async kind => {
+    await v3ThirdUnknown(); const before = await readFile(path, "utf8"); const realRename = vi.mocked(rename).getMockImplementation()!;
+    vi.mocked(rename).mockImplementationOnce(async (...values) => { if (kind === "after-rename") await realRename(...values); throw new Error("THIRD_MIGRATION_IO_FAILURE"); });
+    await expect(authorizeThird(new BudgetGuard({ path }))).rejects.toThrow("THIRD_MIGRATION_IO_FAILURE"); if (kind === "before-rename") expect(await readFile(path, "utf8")).toBe(before); else expect(JSON.parse(await readFile(path, "utf8"))).toMatchObject({ version: 4, uncertain: true });
+    expect((await stat(`${path}.lock`)).isDirectory()).toBe(true); await expect(new BudgetGuard({ path }).reserve(args(.001))).rejects.toThrow("LEDGER_LOCK_TIMEOUT");
   });
 });
