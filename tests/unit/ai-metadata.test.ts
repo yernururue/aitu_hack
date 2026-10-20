@@ -13,7 +13,7 @@ function fixture(model = "anthropic/claude-haiku-5.5") {
       : { prompt: "0.00000015", completion: "0.00000047", input_cache_read: "0.000000016", input_cache_write: "0.0000002" };
   const params = [quote.outputParameter, "response_format", "structured_outputs", ...(haiku ? ["reasoning"] : [])];
   const modelData = { id: model, context_length: quote.contextLength, top_provider: { max_completion_tokens: quote.billing.maxOutputTokens }, supported_parameters: params, pricing, reasoning: haiku ? { mandatory: false, supported_efforts: ["low", "medium", "high", "none"] } : undefined };
-  const endpoint = { model_id: model, tag: haiku ? "azure/global" : luna ? "azure" : "alibaba", context_length: quote.contextLength, max_completion_tokens: quote.billing.maxOutputTokens, max_prompt_tokens: null as number | null, supported_parameters: params, pricing: { ...structuredClone(pricing), discount: 0 } };
+  const endpoint = { model_id: model, tag: haiku ? "azure/global" : luna ? "azure" : "alibaba/us-east-1", context_length: quote.contextLength, max_completion_tokens: quote.billing.maxOutputTokens, max_prompt_tokens: null as number | null, supported_parameters: params, pricing: { ...structuredClone(pricing), discount: 0 } };
   return { quote, input: { model: modelData, endpoints: { data: { id: model, endpoints: [endpoint] } } }, endpoint };
 }
 

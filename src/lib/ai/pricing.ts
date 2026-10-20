@@ -56,6 +56,9 @@ export function quoteRequest(args: { operation: Operation; model: string; inputC
   // parameters at these caps. Keep *full* context/output and allow the maximum
   // documented 2x cache-write price even without requesting prompt caching.
   const pinnedHaiku = args.model === "anthropic/claude-haiku-5.5";
+  // Deterministic Qwen route candidate, not a claim of separate quota or a429 fix.
+  // The regional endpoint keeps the same full cache/context/output reserve.
+  const pinnedProvider = pinnedHaiku ? "azure/global" : args.model === "qwen/qwen3.8-flash" ? "alibaba/us-east-1" : undefined;
   const promptPrice = pinnedHaiku ? "0.0000001" : model.prompt;
   const completionPrice = pinnedHaiku ? "0.0000005" : model.completion;
   const inputPrice = pinnedHaiku ? "0.0000002" : parseTokenPrice(model.cache) > parseTokenPrice(promptPrice) ? model.cache : promptPrice;
@@ -72,7 +75,7 @@ export function quoteRequest(args: { operation: Operation; model: string; inputC
     // fixed 400/1000 stage limits are available to visible structured output.
     ...(pinnedHaiku ? { reasoning: Object.freeze({ enabled: false as const }) } : {}),
     billing: Object.freeze({ inputUsdPerToken: inputPrice, completionUsdPerToken: completionPrice, maxOutputTokens: model.output, ...(pinnedHaiku ? { cacheWriteMaxMultiplier: 2 as const } : {}) }),
-    provider: Object.freeze({ ...(pinnedHaiku ? { only: Object.freeze(["azure/global"] as [string]) } : {}), allow_fallbacks: false, require_parameters: true, max_price: Object.freeze({ prompt: perMillion(promptPrice), completion: perMillion(completionPrice), request: "0", image: "0", audio: "0" }) }),
+    provider: Object.freeze({ ...(pinnedProvider ? { only: Object.freeze([pinnedProvider] as [string]) } : {}), allow_fallbacks: false, require_parameters: true, max_price: Object.freeze({ prompt: perMillion(promptPrice), completion: perMillion(completionPrice), request: "0", image: "0", audio: "0" }) }),
   });
   issuedQuotes.add(quote);
   return quote;
