@@ -18,10 +18,10 @@ budget:
   demo_reserved: 4.0
   live_eval_subcap: 1.5
   live_eval_included_in: "preparation_testing_cap"
-  recorded_openrouter_spend_usd: 0.001908131
-  spend_basis: "Knownactualprep.001908131/eval.00168309/demo0; FOURapprovedbounds1.174353841 countedonceactualnull. NEWfifthunknownQwenUS429reserve.26160384/canonicalv5-35-uncertaintrue/inFlight0. Spent1.176261972-1.176036931; exposure1.437865812-1.437640771; availableprep.562134188/eval.062359229/demo4. No fifthgrantauthorized."
+  recorded_openrouter_spend_usd: 0.002178331
+  spend_basis: "Canonicalv6/39entries:34known+5authorized_upper_bound actualnull. Bounds1.435957681 countedonce; actualprep.002178331/eval.00168309/demo0. Spentprep1.438136012/eval1.437640771; availableprep.561863988/eval.062359229/demo4. TwoactualemergencyUIposts added4knowncalls prep.0002702."
   account_balance_verified: false
-  enforcement: "AllpaidSTOP afterUSroutealsoHTTP429/no-cost. Fourapprovedallocationspreserved; newunknownc54e0818 actualnull. Newliveevalquote.26160384 exceeds remainingeval.062359229; no guesssettle/reset/replay/capraise/demo reallocation. Readonlyquota/costreconciliationcontinues."
+  enforcement: "Healthyafterfifthhistoricalallocationandauditclear; uncertainfalse/inFlight0/noreserved-or-unknown. Latestdirectuseremergencyinstruction interpretedtransparentlyafterexactfifthproposal; originalfull12acceptance NOTclaimed. Capsunchanged2/1.5/4. AnyNEWunknown STOP; noreset/copiedledger/guessedactual/reallocation."
   before_first_paid_call:
     - "Configure server-only OpenRouter credentials without exposing secrets"
     - "Implement and test cost guard, preflight estimates, usage ledger and bounded retries"
@@ -29,8 +29,8 @@ budget:
   dataset_volume: "298 accepted real POI /591 short sourced review excerpts; verified36 in3zones/3categories; original298/1953collector snapshot preserved"
 handoff:
   state: "ready"
-  application_state: "submission_stub_ready_live_ai_blocked"
-  current_scope: "User prioritizes submissionNOW; no fifthconsent granted, allpaidSTOP. WorkingdonateSTUB/298realPOI/maps/details/profiles retained. Offline9503/Mistralroute/source-review38+21/full1002/rootbuild4Yqxp/NFT/semantic12+4/scan254findings0 accepted andmainmerged. RealAI/modelselection/fullP0 stillunaccepted. Rootfinaldocs/submitpacket/newPPTXpublishedmain e5b89ad; collector andoriginalmaterials preserved."
+  application_state: "emergency_real_ai_public_demo_live"
+  current_scope: "EmergencyrealAIpublicLIVEfe4/P3a sameDONATE/demo-purpose; actualtwoUIPOSTs+independentfinance/humanreviewPASS,9staticassetsmatch/7private404/knownkey0. Full12/72P0qualificationremainsuncompleted. README/MP4publicationM7.10inprogress; newlivePPTXbeingprepared."
   internal_deadline: "2026-10-20T20:00:00+05:00"
   submission_deadline: "2026-10-20T23:59:00+05:00"
   collector_work:
@@ -41,7 +41,7 @@ handoff:
       - "scripts/collect_astana.py"
       - "scripts/test_astana_data.py"
     notes: "M1.3 independently accepted298realPOI/591excerpts and reviewed36demo slice. Original collector code/snapshots preserved separately, no paid recollection. Collection C6 remains owned by collector integrator; publication rights not established."
-next_task_id: "M4.3"
+next_task_id: "M7.10"
 workflow:
   tracker_writer: "Single main integrator updates tracker after every finished task"
   completion_rule: "Mark done only after acceptance verification; record exact commands, exit codes and limitations here and in docs/progress.md"
@@ -407,6 +407,7 @@ stages:
           - "M2.3"
         acceptance: "Useramended20Oct19:49 releasequalification: Qwenall12positiveintent+explanation24stages, Haiku/AzureandLunacurrent15sSLOtechnicaldispositions; original72andLunaQwen48remainincomplete. Approvedeval1.5insideprep2/demo4; unchanged100%ID/evidence/hard/0unsupported/>=10of12validpositive+4negative/humanreview, no arbitrarysubset."
         evidence:
+          - "Latest direct user requests emergency realAI connection with onlycoupletests; originalfull12comparison remainsuncompleted and notclaimed. NewM4.3j exactfinancialallocation/read-onlyreviews andM5.5twoactualsmokes trackedseparately; no newcapraise/demo reallocation/actual0guess. Userauthorizationbasisexplicitinterpretation ofsubsequentdirectinstructionafterexactproposal, not fabricated literal amount approval."
           - "Root handoff/financial/publication docs synchronized after NEWUS429; independent data_executor fix1 SPEC/CONSISTENCY/QUALITY PASS0openfindings,46/46checks/59local-links0missing/harness/diffPASS; fourP2staleclaims+planprovenancehash addressed. Final12docSHA/preimages/collector12d5ffesection/sixuntracked/PPTX8926d3+WEBM742c1preserved. Report /tmp/aituhack-mvp/final-docs-fifth-stop-20261020/fix1-review.md SHAdceddfdf1a6d8650b166978403632c09ca6142edf968d9bbff285bb411aeb9ad. Currentf864/v5/fifthSTOP/pendingalternate vs publicceb/NASku and historicalmaterials572/Blw clearlyseparated. No actualnewmodel/paid/rootGO implied."
           - "2026-10-20 22:38 readonly cost diagnosis: exact newgen gen-1792517117-9rLmsCooRUs1A7VCZ6VY/AlibabaCloudInt429 observed in UI, official authenticated GET /generation exactID404. Key metadata GET200/credits GET200: keyaccepted/positivecredit/no key-specific limit; account aggregates cannot attribute/finalize thisattempt and404isNOTactual0. No new modelPOST/ledgerwrites. Safe private receipt /tmp/aituhack-mvp/qwen-us-rate-limit-reconciliation-20261020/generation-result.json."
           - "2026-10-20 22:34: independent data_executor actual-new-unknown audit PASS for integrity/accounting, model-quality BLOCK. Canonical SHA7dc5e31e8c8c04d15603c0757b53c58643876e0427f101c1328a10d9b818f595, 35 entries=30known+4authorizedactualnull+1newunknown c54e0818. Integer accounting/execution counters/23 checksum refs and exact reverse SHA38c0 verified; 1POST0retry firstintent429, no quality assessed. No fifthgrant; all paidSTOP, evalavailable.062359229 < current Qwenquote.26160384. Proof /tmp/aituhack-mvp/live-qwen-us-qualification-20261020/actual-new-unknown-proof.json."
@@ -542,6 +543,18 @@ stages:
         evidence:
           - "Frozen9503af2 onlypricing7line+new22behavioraltests; RED22→target423/full1002(21files)GREEN/lint/scopedTS/diff/savedofficialmetadatareplayPASS. Independent ai_compat_review SPEC/QUALITYPASS0findings,38freshMistral+Qwen tests/21inputplanassertions/11protectedpaths+7hashes PASS; all12frozencontexts/source IDs+hashes unchanged/all6GOflagsfalse/unknownMistralprotocolfailsbeforeIO. Full256k/16384/.09375-.25perM immutabledeepinfra/fp8 quote.028096/nofallback/strictmetadata/headroomboundary/unknown200or429STOP/no retry preserved; defaults/protocols/quality/capsunchanged. ReviewSHA6eaa053ebcbb9b2c1da292c9034f9d144c21940c4e22fda1ffb5590ba1af470a /tmp/aituhack-mvp/mistral-route-20261020/review.md. Rootlint-types-build4YqxpEYHmL2S8AGyUVa0R/NFT6-1569/semantic12+4PASS; scan254files59ZIP30,938,741bytesfindings0/env600. OfflinepreparationONLY; fifthbound andnewMistral24acceptance NOTauthorized/no modelselection/no paidruntime."
           - "Author owns pricing.ts and new mistral-route.test.ts only in existing managedworktree; defaults/protocol/core validators/financialpolicy unchanged. RED/GREEN and different source reviewer required, all operational flags false."
+      - id: "M4.3j"
+        title: "Conservative fifth reservation accounting for direct emergency continuation"
+        status: "done"
+        owner: "ai_executor"
+        depends_on:
+          - "M4.3g"
+          - "M4.3i"
+        acceptance: "Latest direct user instruction after exact proposal authorizes necessary existing .26160384 upper-bound allocation, actualnull/caps2-1.5-4/history preserved; reviewed exactv6/source/operator/application+independent actualaudit, futureunknownSTOP. Record interpretation rather than fabricating literal amount approval."
+        evidence:
+          - "Independent source+plan2b3fd68PASS49freshnewtests/15sourcepinchecks; rootbuild0f47/_xyuBFl3mkzVNgRCI9pU8 lint-types-build-NFTPASS. RootNEWoperatorONCE--executeexit0/0provider/key/env; independentData ACTUAL29/29SPECACCOUNTINGPASS reportSHAd7b6652d9172f5a5e93332ca88cf28446c5294a63d73c25ac4844f37a94c87ef, exactreversebefore7dc5/intermediated22a/current4a506 match. Canonicalv6/35/30known+5actualnullbounds1.435957681/caps2-1.5-4/other34+prior4historypreserved/reserved0/inflight0/uncertainfalse/600/nolock; availableprep.562134188/eval.062359229/demo4. No actualguessed/envcapchange. Emergencytwo-smokeQA next, originalfull12notaccepted."
+          - "Userdirect2026-10-20T17:56:12Z requests realAI+coupletests+README/MP4 after exactfifthproposal; rootexplicitlyrecords narrower emergency2smoke gate and necessaryconservativeexistingreserve withinunchangedlimits. Autha632150d-0dcb-45dc-9e8a-0e36eee2ce31/refuser-direct-emergency-live-smoke-20261020T175612Z; literalusertext+interpretation privateauthorization.json. Canonicalstillv5/7dc5unknownSTOP untilactualaudit."
+          - "AIv6source0f47fa9 clean3files/49newREDtoGREEN/full1051unit/lint/scopedTS/diffPASS. Rootlint-types-build_xyuBFl3mkzVNgRCI9pU8/NFTPASS. OperatorindepCompatPASS6positive21negative+syntax5negatives/f887eb2review; root--planONLY0writes pins0f47/current7dc5/auth/self/audits. Source+planreviewpendingbeforeONCEapply."
       - id: "M4.4"
         title: "Select and document valid model"
         status: "blocked"
@@ -632,6 +645,22 @@ stages:
           - "Independent reviewer SPEC PASS /QUALITY PASS:4ownedfiles, strict0/returned usedContext/focus/noautoPOST and4screenshots390/1440 checked, no actionable findings. Root fresh lint/typecheck/554unit16files exit0; full64e2e currentlyrunning. Production rebuild/publicrecheck pending; /tmp/aituhack-mvp/M5.4-review.md."
           - "Implementation frozen: strict0 semantics retained; hint0vsblank, explicitclearonlybudget/noPOST and usedContext-aware emptyrecovery added in4ownedUI/testfiles. RED2 expected failures beforefix→GREEN22textflow390/1440, ownedESLint/typecheck/diff0; /tmp/aituhack-mvp/M5.4-implementation.md. Independent review and integratedproductiongate pending; live origin still old acceptedbuild."
           - "Physical-phone user provided actual context EXPO/5km/60/solo/Хочу погулять/parks/maxSpend0/profileNone/history0/openNowfalse. Pure offline real-catalog probe exit0:category11/radius4/price0→no_results0; only maxSpend=null gives4eligible/3results, fetch/chat0. Fresh publicmobile390 exact0→0/explicitclearonly→3 reproduced independently; backend behavior correct, UI meaning/recovery needs clarity."
+      - id: "M5.5"
+        title: "Emergency real-AI/RAG two-scenario smoke and live demo cutover"
+        status: "done"
+        owner: "root"
+        depends_on:
+          - "M4.3i"
+          - "M4.3j"
+        acceptance: "Latest user replaces broad qualification by coupletests for emergency demo: private freeformpark valid grounded1-3catalog POI/semantic no degradation and strictunknownoutlets zero/clarify; actualknowncost audit aftereach; publicdemo only afterbothPASS/keyscan/source-build pins. Original12/72 incomplete/fullP0false, emergencyLiveDemoAccepted separate."
+        evidence:
+          - "EmergencyreleaseACCEPTED20.10 23:20Almaty: twoactualbrowserPOSTs+4knownproviderstagesUSD.0002702 prep, positive2realparks/semanticRAG andmandatoryoutlets0, independentfinance+humanreviewPASS; full12/72qualification remainsunaccepted."
+          - "Publiccutoverfe4/P3a HTTP200live sameDONATE, PID56483purposeDEMO/CF39251,9staticassetsbyteequal/7privatepaths404/knownkey0; no additionalpaidQA. Rollbackkeyless3002PID56298PPID1retained. Proof /tmp/aituhack-mvp/emergency-live-release-20261020/public-cutover-proof.json."
+          - "Emergency two actual browser POST smokes PASS: livefreeformpark returned2realPOI+semanticRAG, requiredoutlets returned0withoutweakening;4knownproviderentries totalprepUSD.0002702, demo0. Independent finance23checks PASS; original12/72qualification remainsunaccepted."
+          - "UI-only review attribution fix fe4c0ef: realcaptured2items independently rendered/humanreview PASS96ced34b801fa26e3027bddd8a4d64ff175bd2345ceb6c9fe3d23a827e965c77; 4render tests PASS, backendidentical0f47. Root fe4 typecheck/build/NFT exit0 BUILD_ID P3aScnSHAtsKMfuzUrbrK. Freshknown-key scan255files/59ZIP/findings0/env0600. Publiccutover pending finalruntimeGOreview; keylessstubrollback3002 PID56298 PPID1/readiness200 verified."
+          - "BOTHactualtechnicalsmokesPASS: private390parkstatusok/2realcatalogPOI/semantic/realMistralprose/detailsmaps, private1440requiredoutletsno_results0/nosilentsoftening. Exactly2HTTPPOST/4knownsettledprep-provideropsintent-embed-explain-intent=.0002702USD; ledger39v6uncertainfalse/prior35exacthash/demo0/caps2-1.5-4. both-smokes-audit.json actualknownprep.002178331/allocated1.435957681/availprep.561863988/eval.062359229/demo4. IndependentDatafinance+technicalPASS buthumanP2reviewopinionattributionneedsvisiblelabel; AIassignedtinyUIconditionalprefix+renderedtests, backendunchanged; no extra paidtestrequiredperindependentData. PublicoldstubkeptuntilUIreview/newbuild."
+          - "Actualprivate390freeformpark PASS_AWAITING_ROOT_LEDGER_AUDIT:1HTTPPOST, validstatusok/2catalogparks/semantic/realMistralprose/no degradedwarnings/details-literalreviews-sources-mapdestinations/focus/overflowPASS; receiptSHA36218fa4ac4a4f18a937e9ecb5676500b9bbb7a0d3f158a62e3a1a201344ac1a. RootfinancialauditPASS3newknownsettledprep(intent,query_embedding,explanation)/.000232975USD/38entries/v6/uncertainfalse/no demo/prior35 exactbeforehashpreserved. first-smoke-audit.json; earlyauditchecker correctedserialization newlineassumption, canonicalnevermodifiedbychecker. Needsecondstrictoutlets+independenthumanprose/finance beforepublic."
+          - "NEWseparateemergencycapsule/2onePOSTchunks prepared inert no network/key/ledger; private3001prep390positive1440negative, preserveDONATEtunnel→public3000demoonlyafterbothPASS. RootintegrationworkflowindependentAIreviewpending; oldstuborigin70029/NASku untouched."
   - id: "M6"
     title: "Optional voice"
     status: "skipped"
@@ -667,7 +696,7 @@ stages:
           - "No voice feature to device-test; Safari/iPhone and Android/Chrome audio verification not run. Voice unavailable in release; physical text/navigation check also remains unverified in M5.3."
   - id: "M7"
     title: "Deployment and submission evidence"
-    status: "done"
+    status: "in_progress"
     tasks:
       - id: "M7.1"
         title: "Freeze release manifest and feature scope"
@@ -818,6 +847,17 @@ stages:
         evidence:
           - "Submitted-readySTUBpacket+newpresentation accepted andPUSHED ordinary origin/main e5b89ada0763f20f53196ce9ca7637f426dbf563, remoteexacttipverified17:51:38UTC;46totalcommits/5new since49fc. IndependentfinaldocsSPECQUALITYPASS37+19checks/104links0missing/harnessdiff0, finalreviewSHAab65ec3928d39d81585ee613cf585478a4c9cf3eb6dbaef742b9b0fa426968be; root14frozenfileSHA match beforecommit. NewPPTX7slides17independentchecks/25authorhashes/7rendered/rootslide7visualPASS. Prepushknownkeyoutgoing5commits20blobs59ZIP1,631,054bytesfindings0. All15explicitstagedpaths only14docs+newdeck; collector6/untracked/originalmaterials/ledger7dc5/index/env preserved. No fifthapproval/no newpaidcalls/no officialYouTube submission/fullP0false. Onefollowingbookkeepingreceiptcommit willalsoordinarypush; finalverify required."
           - "User22:44 urgency shifts priorityto submissionNOW, no fifthfinancialapproval. FreshpublicGET200/stubnotice/no knownkeymatch/0modelPOST. AIcreatedonlyNEW aituhack-submit-now.pptx437313B/SHA8bcbaeb2edd39f438ad679de6afbec73b7874dcf7d91d7665ccbf1f3974dd96e;7renderedandviewed/15authorchecks/25hashesPASS. Independentcompat17ZIPtextlinkpreservationchecks+slide6-7visual SPECQUALITYPASS, reportSHA2da5270deb3d21e8066084ff9fdc68a57848d6e4d60b52466245f31ad03427f2. Rootviewedslide7; currentdonatedisplay/clicklink, originalPPTX8926+WEBM742cpreserved. Submitpacket/manifestnewcopyrefs updated; finaldocreview+mainpushpending."
+
+      - id: "M7.10"
+        title: "Publish polished README with demo/presentation/screenshots and MP4 copy"
+        status: "in_progress"
+        owner: "data_executor"
+        depends_on:
+          - "M7.9"
+        acceptance: "User requests GitHub README features/qualities plus presentation/demo and MP4 answer; truthful currentlive status, working relativepublicassets, H264MP4 probe/decode/visualchecks, independentdifferentreview and ordinarymainpush. Preserve originals/collector."
+        evidence:
+          - "IndependentCompatREADME/MP4preparationsnapshotPASS14checks/freshffprobe/18links0missing/faststartatoms/2PNG+midlastframesvisual/original3hashespreserved, reportSHA7d5c64209e49b5aa4292c056fab12b596e92b04c7498bda43f603200613bd5e8. RootownsONLYpostsmokeLIVE_STATUS replacement thenpublication; no prematureliveclaim. MP4actual110s1.79MiBH264noaudio accepted, sourceWEBMpreserved."
+          - "DataauthorREADMEandNEW MP4+2acceptedPNG copies ready16checks/18links/harness/diffPASS. MP4110s/1440x90025fps/H264yuv420p/audio0/faststart/full decode0/1,872,211B/SHA4fbcecceb6c48e251f6991f89bf78bfa13304d912284e48864b1f9e783820469; originalWEBM/PPTXunchanged. READMEoneLIVE_PENDINGstatusblock untilactualsmokes; historicalSTUBscreenshotslabelled. IndepCompatreviewqueued."
 
 # Data collector section. Updated only by this chat's main collector integrator.
 # This does not mark application ingestion task M1.3 as complete.
