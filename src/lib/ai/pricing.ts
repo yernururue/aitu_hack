@@ -1,13 +1,15 @@
 import { nanoUsd } from "./config";
 import type { Operation } from "./budget";
 
-// Public OpenRouter metadata verified 2026-10-19. USD/token; maximum context-tier
-// and cache-write rates are reserved, never the cheapest advertised tier.
+// Public OpenRouter /models and per-model /endpoints verified 2026-10-20.
+// USD/token; reserve endpoint cache-write maxima, including regional/context
+// tiers absent from the model-level price. Never substitute advertised base
+// prices or a text-length estimate for the full context/output bounds below.
 const models = {
   "openai/text-embedding-3-small": { kind: "embedding", context: 8192, output: 0, prompt: "0.00000002", completion: "0", cache: "0", parameter: "max_completion_tokens" },
-  "openai/gpt-6-luna": { kind: "chat", context: 1050000, output: 128000, prompt: "0.0000002", completion: "0.00000075", cache: "0.00000025", parameter: "max_completion_tokens" },
-  "anthropic/claude-haiku-5.5": { kind: "chat", context: 1000000, output: 128000, prompt: "0.0000005", completion: "0.0000025", cache: "0.000001", parameter: "max_completion_tokens" },
-  "qwen/qwen3.8-flash": { kind: "chat", context: 1000000, output: 131072, prompt: "0.00000015", completion: "0.00000047", cache: "0.000000016", parameter: "max_tokens" },
+  "openai/gpt-6-luna": { kind: "chat", context: 1050000, output: 128000, prompt: "0.0000002", completion: "0.00000075", cache: "0.000000275", parameter: "max_completion_tokens" },
+  "anthropic/claude-haiku-5.5": { kind: "chat", context: 1000000, output: 128000, prompt: "0.0000005", completion: "0.0000025", cache: "0.0000011", parameter: "max_completion_tokens" },
+  "qwen/qwen3.8-flash": { kind: "chat", context: 1000000, output: 131072, prompt: "0.00000015", completion: "0.00000047", cache: "0.0000002", parameter: "max_tokens" },
 } as const;
 
 export function parseTokenPrice(value: unknown): number {
