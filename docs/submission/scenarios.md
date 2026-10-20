@@ -1,3 +1,9 @@
+# Текущий сценарий — режим без ИИ
+
+Заявка уже отправлена. [Демо](https://facing-workshops-quote-finding.trycloudflare.com): текст пустой → «Условия поиска» → Парки/EXPO/5км/60мин/бюджет пустой → поиск → сведения/источники → маршрут. Один настоящий live-запрос завершился needs_clarification и unknowncost; все paidSTOP, успешного новогоAIролика нет. Актуальные два MP4 — в README.
+
+<details><summary>Исторические сценарии до редизайна</summary>
+
 # Три сценария текстового демо
 
 Режим `stub`/lexical, настоящий каталог298 POI, без платных вызовов. Проверенный
@@ -43,7 +49,7 @@ code snapshot и границы — [release manifest](release-manifest.json) и
 
 Исходный автоматизированный collector сохранён в `scripts/collect_astana.py`,
 `scripts/astana_data.py`; инструкции — [сбор](../../scripts/collect/README.md),
-[поставка данных](../../data/README.md), [offline импорт](../collection-import.md).
+локальная `data/README.md` (не публикуется), [offline импорт](../collection-import.md).
 Apify и OpenRouter — разные бюджеты. Демо не запускает новый платный сбор.
 
 При наличии сохранённых локальных raw/normalized snapshots:
@@ -63,8 +69,8 @@ FileSHA и canonical runtime SHA различаются из-за сериали
 
 ## Проверка исполнения
 
-Все три пути покрыты принятыми unit/Playwright проверками и [непрерывной production
-видеозаписью](../../output/submission/aituhack-demo.webm)110с. Фактические park/profile/save/
+Все три пути покрыты принятыми unit/Playwright проверками и [исторической production
+видеозаписью MP4](../../output/submission/aituhack-demo.mp4)110с. Фактические park/profile/save/
 dismiss ответы200/degraded3, budget2500→no_results0, unknownsuffix→needs_clarification0;
 reload/reset и сохранение текущих полей проверены. Имена/ID берутся из настоящего
 каталога, fake clock/mocks не применяются. Инструкции сбора показаны отдельно и не запускались.
@@ -73,3 +79,5 @@ reload/reset и сохранение текущих полей проверен�
 артефакта не заявляли; failedraw сохранён приватно.
 Пользователь подтвердил сайт, 3 карточки и оба перехода: кнопки 2ГИС/Google Maps
 открыли выбранный Ботанический сад в приложениях. Paid live AI остаётся непроверенным gate.
+
+</details>

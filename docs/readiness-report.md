@@ -1,3 +1,14 @@
+# Текущий checkpoint — 21 октября 2026
+
+[Новый интерфейс](https://facing-workshops-quote-finding.trycloudflare.com) работает в явно обозначенном режиме **без ИИ / paid=false**. Категории, строгие фильтры, реальные места, источники и маршруты доступны. Редизайн и минимальный контент приняты отдельно от live-приёмки:1055unit,70offlinee2e, lint/types/build/strictNFT/harness прошли; source4aff3b4/build6OQ. Актуальные материалы и проверки — в [README](../README.md).
+
+Единственная новая реальная UI-попытка вернула HTTP200/needs_clarification/0мест и **неизвестную стоимость** demo intent. Canonicalv6/40entries/uncertaintrue/unknown1/inFlight0: reserve$0.028096/actualnull, новые paidSTOP. Caps$2подготовки/$1.50eval внутри/$4демо неизменны; новый grant не дан. Нет повторов, предположения о cost0 или успешного нового AI-видео. Две записи разделены: новый функциональный обзор безИИ и отдельная неудавшаяся live-попытка. Исторические успешные smokes не являются новым видео.
+
+Заявка уже отправлена пользователем. Повторная отправка не выполнялась. Физический телефон/полный модельный eval/голос/постоянный hosting остаются незавершёнными. Старые runtime/build/media/collector сохранены.
+
+<details>
+<summary>Исторические checkpoint и материалы до редизайна — не текущий статус</summary>
+
 # Готовность emergency-версии
 
 ## Текущий emergency checkpoint: 20.10, 23:16 Asia/Almaty
@@ -49,5 +60,8 @@ Canonical ledger v5/35 записей/0600: 30 known, четыре approved uppe
 Текущий donate URL прошёл actual browser390/1440: два stub POST, три реальных парка, подробности/источники/карты/focus/overflow PASS. Независимое review PASS. Физическим телефоном текущий URL не проверен; пользователь подтвердил прежние URL той же stub-сборки и обе нативные карты. Ссылка зависит от Mac/сети/сервера/туннеля.
 
 Голос skipped P1. Исторические PPTX7слайдов/6min notes и WEBM110s/source572/buildBlw сохранены; они не показывают новую AI-версию. Постоянный hosting, YouTube и официальная отправка не выполнены. Внутренняя цель20:00 пропущена, deadline23:59 Asia/Almaty. [Материалы и запуск](submission/links.md), [manifest](submission/release-manifest.json), [ограничения](submission/limitations.md).
+
+</details>
+
 
 </details>

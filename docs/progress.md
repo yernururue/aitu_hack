@@ -1,3 +1,19 @@
+# Final documentation acceptance — 21 October 2026
+
+Independent final docs SPEC/QUALITY PASS: no open findings;55references checked independently, root59localrefs0missing. Root17protected originals/2collector tracker blocks/6frozen assets/3historical manifest objects unchanged, source/build known-key scan280files177ZIP37.8MB0findings. R1.5 remains in_progress until ordinary main push and remote hash verification; R1.4 remains blocked and all paidSTOP. No resubmission.
+
+# Current checkpoint — 21 October 2026
+
+R1.4a accepted after independent media SPEC/QUALITY PASS. New public UI is explicitly disabled/paidfalse: https://facing-workshops-quote-finding.trycloudflare.com, origin72511/3004+tunnel70740, source4aff3b4/build6OQ. One actual category-only API request returns three real catalog parks with source/route binding; no provider calls and exact canonical3969…00f87 unchanged. New offline MP4 is81.52s/H264/yuv420p/faststart/noaudio/1440×814/SHA90bbd461…436250; full decode and actual playback pass, actual final frames show sources, redacted2GIS CAPTCHA and same-destination Google walking route. Original17protected files/collector tracker block preserved; oldorigin56483/tunnel39251 retained.
+
+R1.4 successful real-AI video remains blocked: one actual live request gave needs_clarification/0places and new unknowncost reservation$0.028096/actualnull. All paidSTOP, no retries or new grant. Separate failed-attempt MP449.52s remains honest evidence, not successfulAI. R1.5 now in progress: current README/screenshots/two new MP4/manifest/handoff, final independent docs review, known-key outgoing scan and ordinary main push. User already submitted the application; no resubmission.
+
+# Current redesign checkpoint — live recording blocked, offline continuation
+
+The single authorized real UI query failed: HTTP200/needs_clarification/0places; canonical ledger adds one demo intent unknown, reserve$0.028096/actualnull. Ledger40entries, uncertaintrue, unknown1, inFlight0; demo available$3.971904. Known demo actual0 is not proof of free service. All paid calls stopped immediately; no resubmit, new upper bound, ledger copy/reset or reconciliation. Upstream status/generationID were not retained, so actual cannot be independently recovered from this evidence.
+
+R1.4 is blocked: successful current AI result/source/map video was not achieved. The actual failed attempt recording is preserved separately. R1.4a continues offline: same accepted4aff3b4/build6OQ, explicit disabled/paidfalse public mode with functional categories/strictfilters/sources/maps and a separately labelled new UI video. Original public runtime/build/media and collector remain preserved. Root will finish truthful README/media/docs and ordinary main push without resubmission; submission was already sent by user.
+
 # UI redesign checkpoint — 20 October 2026
 
 User requested a substantial warm city-guide redesign, new actual-AI MP4, README and ordinary main push. Submission already sent by user; never resubmit. R1 acceptance and screenshot-grounded audit are in [ui-redesign-plan.md](ui-redesign-plan.md); current statuses in tracker. Managed city-guide-redesign checkout starts at main500274a; original public live-p0 buildP3a/origin56483 and tunnel39251 are preserved. Root is sole tracker writer; UI and runtime/media have disjoint ownership; separate reviewer follows.

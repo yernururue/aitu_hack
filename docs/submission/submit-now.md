@@ -1,3 +1,14 @@
+# Текущий checkpoint — 21 октября 2026
+
+[Новый интерфейс](https://facing-workshops-quote-finding.trycloudflare.com) работает в явно обозначенном режиме **без ИИ / paid=false**. Категории, строгие фильтры, реальные места, источники и маршруты доступны. Редизайн и минимальный контент приняты отдельно от live-приёмки:1055unit,70offlinee2e, lint/types/build/strictNFT/harness прошли; source4aff3b4/build6OQ. Актуальные материалы и проверки — в [README](../../README.md).
+
+Единственная новая реальная UI-попытка вернула HTTP200/needs_clarification/0мест и **неизвестную стоимость** demo intent. Canonicalv6/40entries/uncertaintrue/unknown1/inFlight0: reserve$0.028096/actualnull, новые paidSTOP. Caps$2подготовки/$1.50eval внутри/$4демо неизменны; новый grant не дан. Нет повторов, предположения о cost0 или успешного нового AI-видео. Две записи разделены: новый функциональный обзор безИИ и отдельная неудавшаяся live-попытка. Исторические успешные smokes не являются новым видео.
+
+Заявка уже отправлена пользователем. Повторная отправка не выполнялась. Физический телефон/полный модельный eval/голос/постоянный hosting остаются незавершёнными. Старые runtime/build/media/collector сохранены.
+
+<details>
+<summary>Исторические checkpoint и материалы до редизайна — не текущий статус</summary>
+
 # Пакет для сабмита
 
 **Live-демо:** https://donate-cooperation-quick-annual.trycloudflare.com
@@ -25,3 +36,6 @@
 ## Честная граница приёмки
 
 Два actual private smoke (390/1440),4known prep calls/$0.0002702 и независимый human review с UI-пометкой мнений приняты. Backend0f47/UIfe4; public buildP3a переключён вlive/demo и проверенGET без новых paid QA POST. Полный12/72/48 benchmark и старыеQwen24 не завершены; текущий телефон не проверен. Голоса, постоянногоhosting, YouTube и официальной отправки нет. Не выключать Mac/сеть/origin/tunnel до показа. Отправку формы выполняет пользователь.
+
+
+</details>

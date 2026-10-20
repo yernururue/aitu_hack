@@ -19,9 +19,9 @@ budget:
   live_eval_subcap: 1.5
   live_eval_included_in: "preparation_testing_cap"
   recorded_openrouter_spend_usd: 0.002178331
-  spend_basis: "Canonicalv6/39entries:34known+5authorized_upper_bound actualnull. Bounds1.435957681 countedonce; actualprep.002178331/eval.00168309/demo0. Spentprep1.438136012/eval1.437640771; availableprep.561863988/eval.062359229/demo4. TwoactualemergencyUIposts added4knowncalls prep.0002702."
+  spend_basis: "Current canonicalv6/40entries:34known+5authorizedupperbounds(actualnull)+1NEWdemo-intentunknown. Prepactual.002178331/eval.00168309; approvedbounds1.435957681; prepspent1.438136012/eval1.437640771 unchanged. Demo actualknown0 is NOT confirmedfree: unknownreserve.028096/available3.971904. AllpaidSTOP; no futuregrant inferred."
   account_balance_verified: false
-  enforcement: "Healthyafterfifthhistoricalallocationandauditclear; uncertainfalse/inFlight0/noreserved-or-unknown. Latestdirectuseremergencyinstruction interpretedtransparentlyafterexactfifthproposal; originalfull12acceptance NOTclaimed. Capsunchanged2/1.5/4. AnyNEWunknown STOP; noreset/copiedledger/guessedactual/reallocation."
+  enforcement: "STOP after new demo intent unknown87d82508-47ff-4ef5-9981-7aa1cfb196dc; uncertaintrue/inFlight0/reserved.028096/actualnull. Caps2/1.5/4 unchanged, no retries/reset/ledgercopy/guessedactual/newupperbound. OfflineUI/testing/publicationcontinues; successfulrealAIrecordingblocked."
   before_first_paid_call:
     - "Configure server-only OpenRouter credentials without exposing secrets"
     - "Implement and test cost guard, preflight estimates, usage ledger and bounded retries"
@@ -29,8 +29,8 @@ budget:
   dataset_volume: "298 accepted real POI /591 short sourced review excerpts; verified36 in3zones/3categories; original298/1953collector snapshot preserved"
 handoff:
   state: "ready"
-  application_state: "emergency_real_ai_public_demo_live"
-  current_scope: "EmergencyLIVEdemo+twoactualsmokes+independentreviewDONE; README/MP4/newlive7slidePPTX+acceptedsource/currentdocs publishedmain912ee9dverified18:21UTC. Originalfull12/72modelqualificationM4.3/M4.4 andcurrentphysicalphonegateM5.3 remainincomplete. No newpaidQA authorizedbypublication; keepMac/runtime/tunnelon."
+  application_state: "redesigned_minimal_ui_offline_public_ai_unknown_stop"
+  current_scope: "Warmminimalredesign4aff3b4/build6OQ accepted1055unit70e2e+independentreview; publicdisabled72511/70740/categorysourcesmaps works. OneactualDEMOintent newunknown.028096/actualnull => allpaidSTOP; successfulnewAIvideoR1.4blocked. Separateoffline81.52s andfailedattempt49.52s reviewed; README/media mainpublicationR1.5pending. Originalruntime/media/collector preserved; fullqualification/currentphysicalphone incomplete; useralready submitted/noresubmit."
   internal_deadline: "2026-10-20T20:00:00+05:00"
   submission_deadline: "2026-10-20T23:59:00+05:00"
   collector_work:
@@ -41,7 +41,7 @@ handoff:
       - "scripts/collect_astana.py"
       - "scripts/test_astana_data.py"
     notes: "M1.3 independently accepted298realPOI/591excerpts and reviewed36demo slice. Original collector code/snapshots preserved separately, no paid recollection. Collection C6 remains owned by collector integrator; publication rights not established."
-next_task_id: "R1.4"
+next_task_id: "R1.5"
 workflow:
   tracker_writer: "Single main integrator updates tracker after every finished task"
   completion_rule: "Mark done only after acceptance verification; record exact commands, exit codes and limitations here and in docs/progress.md"
@@ -866,7 +866,7 @@ stages:
 
   - id: "R1"
     title: "City guide redesign, real AI browser demo and main publication"
-    status: "in_progress"
+    status: "blocked"
     owner: "root_integrator"
     tasks:
       - id: "R1.1"
@@ -912,18 +912,28 @@ stages:
           - "Independent scopedSPEC/QUALITYPASS /tmp/aituhack-redesign-ui-review.md; currentdesktop/mobile/strictbudgetvisuals inspected. Rootfreshfull1055unit/22suites59.43s, executor70e2e34.0s/attribution4/lint/types all0; rootfinalbuild6OQMmPb1YJ3ddzPsvzGf9/NFT6-1569requiredindex/harness/diff0, sourcebuildknownkey268files177ZIP35.7MBfindings0. Hero1subtitle, core+activeconditions, no duplicatelabels/slogans, data disclosure; activeunknown/opinion/empty/error/degraded retained. No paidcalls."
       - id: "R1.4"
         title: "Record one real AI browser scenario and verify new MP4"
-        status: "in_progress"
+        status: "blocked"
         owner: "runtime_media_executor"
         depends_on: ["R1.3", "R1.2b"]
         acceptance: "Canonical guard healthy before one real query through browser; no mocked provider/response; video shows query/result/explanation/sources/map navigation; new H264/yuv420p/faststart MP4 decodes and plays, previous video preserved; new unknown stops paid."
-        evidence: []
+        evidence:
+          - "ExactlyONE authorizednewpublicUI POST returnedHTTP200/needs_clarification/0places; canonical40entries adds demo:intent:unknown reservation87d82508-47ff-4ef5-9981-7aa1cfb196dc, reserve.028096/actualnull/uncertaintrue/inflight0/availabledemo3.971904. AllpaidSTOP, noresubmit/upperbound/reconciliation; no generationID or upstreamstatus retained so actualcannotbeconfirmed. Failedactualattemptrecord preserved; successfulAIresult/source/mapvideo NOTachieved. Offlinepublicationcontinues perusercontingency; independentfailureaudit+finalmedia SPEC/QUALITYPASS in failed-live-review.md and offline-review.md. No subsequent provider attempt."
+      - id: "R1.4a"
+        title: "Publish explicit offline fallback and record current functional UI without paid calls"
+        status: "done"
+        owner: "runtime_media_executor"
+        depends_on: ["R1.2b"]
+        acceptance: "Same accepted build runs disabled/paidfalse with visible AI-off notice; preview checked before replacing only neworigin. Actual category-only path yields real catalog results/sources/maps and separate labelled offline MP4/screenshots. Failed live attempt preserved separately; no further provider/key/ledger mutation; old original runtime/collector/media retained."
+        evidence:
+          - "Independent finalMEDIA SPEC/QUALITYPASS /tmp/aituhack-redesign-runtime/offline-review.md: frozenMP4 SHA90bbd461669bf5bfac6addefcbec68b24912293d05dda51ed1c81941cf436250/1272713B/81.52s/1440x814/H26425/yuv420p/noaudio/faststart/decode0+actualplayback. ActualdisabledpublicONEcategoryPOST/degraded3catalog-equalparks/evidence/maps matched, provider0/canonical3969...00f87 unchanged. ActualMP4 samples65sIPredacted2GISCAPTCHA/80sfullyrenderedGooglewalkingroute sameBotanicaldestination; no mocks/AIclaim. Root viewednewhome/results/mobile+finalsources/mapframes andffprobe0. Preview3005acceptedbeforeonlynew70720replacedbydisabled72511;CF70740/public200/9assetsequal/8private404. Old56483/39251+17originalfiles/collectorblock retained. Separate49.52sfailedliveattempt hashd0eef2...f785a verified; R1.4stillBLOCKED."
       - id: "R1.5"
         title: "Publish verified replacement and current README/media to main"
-        status: "todo"
+        status: "in_progress"
         owner: "root_integrator"
-        depends_on: ["R1.4"]
+        depends_on: ["R1.4a"]
         acceptance: "Public replacement checked while rollback preserved; known-key scan source/build/outgoing commits clean; README current screenshots/MP4/demo and honest limits; handoff/tracker synced, independent final review; ordinary push main and remote commit verified. No resubmission."
-        evidence: []
+        evidence:
+          - "FinalindependentDOCS SPEC/QUALITYPASS/noopenfindings: currentREADME/handoff/budget/readiness/limitations/links/scenarios/submit-now/manifest/tracker truthfuldisabled40entries1unknown/.028096reserved/actualnull/paidSTOP, successfulAIvideoBLOCKED,1055unit70e2e/useralready submitted/noresubmit. Root59localrefs0missing/17originals+2collectorblocks+6frozenassets+3historicalmanifestobjects exact; freshknownkeysourcebuild280files177ZIP37.8MB0findings. FinalpublicGET200/9assetsequal/8private404/currentminimalhero+disablednotice/canonicalunchanged. Mainnormalpush pending; R1.5notdoneyet."
 
 # Data collector section. Updated only by this chat's main collector integrator.
 # This does not mark application ingestion task M1.3 as complete.

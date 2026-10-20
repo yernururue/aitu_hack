@@ -1,10 +1,10 @@
 {
   "schemaVersion": "1.0",
   "createdAt": "2026-10-19T20:35:11.360433+00:00",
-  "scope": "emergency_live_two_smokes",
+  "scope": "redesigned_offline_ui_after_single_live_unknown",
   "fullP0Accepted": false,
   "featuresFrozen": true,
-  "sourceCommit": "fe4c0ef8d04d35fe6d8b717b62dbf4f02915c968",
+  "sourceCommit": "4aff3b4763d689ea31ffdb76f540c03dc7b59987",
   "runtime": {
     "node": "24.21.0",
     "pnpm": "11.0.8",
@@ -42,9 +42,9 @@
     "unknownFactsCount": 298
   },
   "ai": {
-    "mode": "live",
-    "retrieval": "semantic_for_eligible_candidates; lexical_empty_branch_is_explicit",
-    "actualModel": "mistralai/mistral-small-3.2-24b-instruct",
+    "mode": "disabled",
+    "retrieval": "category/lexical without AI; accepted semantic index preserved",
+    "actualModel": null,
     "providerOnly": [
       "deepinfra/fp8"
     ],
@@ -62,15 +62,18 @@
       "negativePassed": 4,
       "hardConstraintsPassed": true
     },
-    "paidEnabled": true,
+    "paidEnabled": false,
     "liveEvalEnabled": false,
-    "runtimePurpose": "demo",
+    "runtimePurpose": "prep",
     "emergencyTwoSmokeAccepted": true,
     "full12QualificationComplete": false,
     "originalFullThreeModelComparisonComplete": false,
     "amendedComparisonComplete": false,
     "qwenQualificationComplete": false,
-    "comparisonWinner": null
+    "comparisonWinner": null,
+    "configuredLiveModel": "mistralai/mistral-small-3.2-24b-instruct",
+    "livePipelinePreserved": true,
+    "paidStopReason": "new_demo_intent_unknown_cost"
   },
   "budget": {
     "currency": "USD",
@@ -84,13 +87,13 @@
     "recordedLiveEvalSpend": 0.00168309,
     "remainingPreparation": 0.561863988,
     "remainingLiveEval": 0.062359229,
-    "demoSpent": 0,
-    "ledgerUncertain": false,
+    "demoSpent": 0.0,
+    "ledgerUncertain": true,
     "ledgerInFlight": 0,
-    "ledgerReserved": 0,
-    "unknownReservationCount": 0,
-    "paidCallsGloballyStopped": false,
-    "spendBasis": "Actual known prep.002178331/eval.00168309 plus5authorized actualnull bounds1.435957681; new2smokes4knownprep.0002702, caps2/1.5/4/demo0.",
+    "ledgerReserved": 0.028096,
+    "unknownReservationCount": 1,
+    "paidCallsGloballyStopped": true,
+    "spendBasis": "Known prep .002178331 includes eval .00168309; five prior approved actual-null budget bounds1.435957681. New demo intent actualnull/reserved.028096; known demo actual0 does not mean free. Caps2/1.5/4 unchanged; paidSTOP.",
     "proposedPolicyExceptionAuthorized": true,
     "policyAuthorizationId": "a632150d-0dcb-45dc-9e8a-0e36eee2ce31",
     "persistentLedgerLiveEvalCapBeforeMigration": 0.8,
@@ -101,7 +104,7 @@
     "secondUpperBoundApproved": 0.264,
     "secondUpperBoundApplied": true,
     "actualCostUnknownAuthorizedReservationCount": 5,
-    "newUnknownReservationId": null,
+    "newUnknownReservationId": "87d82508-47ff-4ef5-9981-7aa1cfb196dc",
     "newUpperBoundExceptionAuthorized": false,
     "thirdUpperBoundApproved": 0.384750001,
     "thirdUpperBoundApplied": true,
@@ -111,7 +114,7 @@
     "fourthUpperBoundApplied": true,
     "fourthPolicyAuthorizationId": "9cc3b06a-502e-4e52-810b-4f38f56f6854",
     "fifthUpperBoundExceptionAuthorized": true,
-    "ledgerEntryCount": 39,
+    "ledgerEntryCount": 40,
     "preparationExposure": 1.438136012,
     "liveEvalExposure": 1.437640771,
     "fifthUpperBoundApplied": true,
@@ -119,8 +122,10 @@
     "fifthPolicyAuthorizationId": "a632150d-0dcb-45dc-9e8a-0e36eee2ce31",
     "authorizationBasis": "Recorded root interpretation of latest direct user emergency instruction; amount not literally restated",
     "literalFifthAmountRestatedByUser": false,
-    "snapshotAt": "2026-10-20T18:10:38.798539+00:00",
-    "snapshotScope": "After2privateQA/before public user traffic; not a claim demo spend stays zero after public availability."
+    "snapshotAt": "2026-10-20T19:08:46.479622+00:00",
+    "snapshotScope": "After one failed new live UI request; offline cutover leaves exact canonical unchanged",
+    "demoReservedExposure": 0.028096,
+    "remainingDemoUnreserved": 3.971904
   },
   "voice": {
     "enabled": false,
@@ -128,11 +133,15 @@
     "audioCalls": 0
   },
   "verification": {
-    "lastFullUnitTestsPassed": 1051,
+    "lastFullUnitTestsPassed": 1055,
     "newRenderedAttributionTestsPassed": 4,
     "buildNftKnownKeyScanPassed": true,
     "emergencyActualRecommendationSmokesPassed": 2,
     "viewports": [
+      [
+        360,
+        800
+      ],
       [
         390,
         844
@@ -147,7 +156,11 @@
     "humanProseWithOpinionPrefixPassed": true,
     "full12QualificationComplete": false,
     "physicalPhoneVerified": false,
-    "publicCutoverGetOnlyVerified": true
+    "publicCutoverGetOnlyVerified": true,
+    "offlineBrowserTestsPassed": 70,
+    "successfulNewAiRecording": false,
+    "failedActualLiveAttempts": 1,
+    "offlineCategoryRecordingAccepted": true
   },
   "privacy": {
     "deviceLocationOptIn": true,
@@ -161,31 +174,34 @@
     "rawOrCollectorFilesInProductionNft": false
   },
   "hosting": {
-    "status": "temporary_public_https_live_emergency_verified",
+    "status": "temporary_public_https_offline_after_live_unknown_verified",
     "type": "cloudflare_quick_tunnel",
-    "url": "https://donate-cooperation-quick-annual.trycloudflare.com",
-    "origin": "http://127.0.0.1:3000",
-    "productionPid": 56483,
-    "tunnelPid": 39251,
+    "url": "https://facing-workshops-quote-finding.trycloudflare.com",
+    "origin": "http://127.0.0.1:3004",
+    "productionPid": 72511,
+    "tunnelPid": 70740,
     "detachedProcesses": true,
     "requiresLocalOriginAndTunnelAlive": true,
     "stableHosting": false,
-    "checkedAtUtc": "2026-10-20T18:16:03.223889+00:00",
+    "checkedAtUtc": "2026-10-20T18:59:20+00:00",
     "publicHttpStatus": 200,
     "assetsByteEqual": 9,
-    "privateLocations404": 7,
+    "privateLocations404": 8,
     "knownKeyFindings": 0,
-    "providerQaPosts": 0,
+    "providerQaPosts": 1,
     "physicalPhoneVerified": false,
-    "nativeMapAppsVerifiedForThisLiveRelease": false
+    "nativeMapAppsVerifiedForThisLiveRelease": false,
+    "mode": "disabled",
+    "paidEnabled": false,
+    "offlineCategoryUiPosts": 1
   },
   "outstandingGates": [
-    "Original12/72/48/Qwen24 qualification remains incomplete; no claim it passed and no implicit new eval approval",
-    "Physical phone/native-map validation for current live URL not performed",
-    "Publish reviewed new README/MP4/live-PPTX/docs and verify actual ordinary main push",
-    "YouTube upload, stable hosting and official submission not performed"
+    "Successful current live AI result/explanation/source/map recording BLOCKED by new unknown cost; no new grant or retry",
+    "Original full model qualification12/72/48/Qwen24 incomplete",
+    "Current physical phone/native Maps handoff unverified",
+    "Permanent hosting, voice and YouTube upload not completed"
   ],
-  "buildId": "P3aScnSHAtsKMfuzUrbrK",
+  "buildId": "6OQMmPb1YJ3ddzPsvzGf9",
   "materials": [
     {
       "path": "output/submission/aituhack-demo.pptx",
@@ -231,18 +247,56 @@
       },
       "snapshotUrlMayBeUnavailable": true,
       "currentDemoUrl": "https://donate-cooperation-quick-annual.trycloudflare.com"
+    },
+    {
+      "path": "output/submission/aituhack-redesign-offline.mp4",
+      "kind": "video",
+      "bytes": 1272713,
+      "sha256": "90bbd461669bf5bfac6addefcbec68b24912293d05dda51ed1c81941cf436250",
+      "durationSeconds": 81.52,
+      "width": 1440,
+      "height": 814,
+      "codec": "H264",
+      "pixelFormat": "yuv420p",
+      "frameRate": "25/1",
+      "audioStreams": 0,
+      "faststart": true,
+      "fullDecodeExitCode": 0,
+      "scope": "current_actual_category_api_without_ai",
+      "modelResponsesMocked": false,
+      "providerCalls": 0,
+      "mapTransition": "Actual2GIS CAPTCHA withIPredacted; GoogleMaps route pane via same catalog destination; no nativephone claim"
+    },
+    {
+      "path": "output/submission/aituhack-redesign-live-attempt.mp4",
+      "kind": "video",
+      "bytes": 535893,
+      "sha256": "d0eef2e077fc1d8c65c061e521306c59ec9e2e82bf56d0600a69c1439dcf785a",
+      "durationSeconds": 49.52,
+      "width": 1440,
+      "height": 900,
+      "codec": "H264",
+      "pixelFormat": "yuv420p",
+      "frameRate": "25/1",
+      "audioStreams": 0,
+      "faststart": true,
+      "fullDecodeExitCode": 0,
+      "scope": "failed_actual_live_attempt",
+      "recommendations": 0,
+      "responseStatus": "needs_clarification",
+      "successfulAiDemo": false
     }
   ],
   "delivery": {
-    "state": "emergency_live_runtime_and_artifacts_published",
+    "state": "reviewed_redesign_offline_media_ready_main_push_pending",
     "publicUploadPerformed": true,
     "youtubeUploadPerformed": false,
     "gitPushPerformed": true,
-    "officialSubmissionPerformed": false,
+    "officialSubmissionPerformed": true,
     "stageCommit": "da659ed52fd276ae3787f46a266d3730b96a42b2",
     "localMarkdownLinksChecked": 104,
-    "lastDeliveryCheckUtc": "2026-10-20T18:21:06+00:00",
-    "scope": "Emergency2live-smoke release and source/README/MP4/livePPTX/docs published main912ee9d; full12 benchmark not complete",
+    "lastDeliveryCheckUtc": "2026-10-20T19:08:46.479622+00:00",
+    "scope": "Reviewed warm minimal UI + explicitly offline current video; successful live video blocked; failed attempt preserved",
     "phoneEvidenceRecordedAtUtc": "2026-10-20T00:35:05.943338+00:00",
     "phoneEvidenceIndependentReview": "SPEC/CONSISTENCY PASS",
     "gitPublication": {
@@ -257,7 +311,7 @@
     },
     "readinessReport": "docs/readiness-report.md",
     "lastPublicUrlRestorationTask": "M7.8",
-    "currentDemoUrl": "https://donate-cooperation-quick-annual.trycloudflare.com",
+    "currentDemoUrl": "https://facing-workshops-quote-finding.trycloudflare.com",
     "liveP0Plan": "docs/live-p0-plan.md",
     "liveP0PlanSha256": "ee1d0772fe998984db50c591784f86161388ff114675b3e02f430141ed4e6a26",
     "submitNowPacket": "docs/submission/submit-now.md",
@@ -274,9 +328,12 @@
     "currentEmergencyArtifactsPublished": true,
     "sourceReadmeMp4VerifiedTip": "09c58f3d1d653a9249266db9a5f550a3d5001e9e",
     "newDocsAndLivePptxPendingPush": false,
-    "historicalStubPublicRestorationReview": "JointSPEC/QUALITYPASS19freshGET/12assetsequal/actual3901440twoSTUBPOST/4screenshots; old7982stoppedafterPASS/new39251+70029alive; no newphone/liveproof"
+    "historicalStubPublicRestorationReview": "JointSPEC/QUALITYPASS19freshGET/12assetsequal/actual3901440twoSTUBPOST/4screenshots; old7982stoppedafterPASS/new39251+70029alive; no newphone/liveproof",
+    "officialSubmissionBasis": "User explicitly says application already submitted; agent did not resubmit",
+    "resubmissionPerformed": false,
+    "redesignPublicationPending": true
   },
-  "updatedAt": "2026-10-20T18:19:50.070121+00:00",
+  "updatedAt": "2026-10-20T19:08:46.479622+00:00",
   "applicationUpdate": {
     "taskId": "M5.4",
     "change": "Clarify strict zero versus blank budget and offer explicit budget removal without automatic search or changing other fields",
@@ -364,35 +421,18 @@
     "currentSecurityEvidenceRef": "emergencyLiveRelease"
   },
   "submissionNow": {
-    "scope": "emergency_live_two_smokes",
+    "scope": "already_submitted_by_user_current_redesign_offline",
     "fullP0Accepted": false,
-    "demoUrl": "https://donate-cooperation-quick-annual.trycloudflare.com",
+    "demoUrl": "https://facing-workshops-quote-finding.trycloudflare.com",
     "packet": "docs/submission/submit-now.md",
-    "presentation": {
-      "path": "output/submission/aituhack-live-demo.pptx",
-      "bytes": 437944,
-      "sha256": "661e1f301ddc751a7e0881be7d2b98d9e3233732e6d294c6a4e05419ba7f4d51",
-      "slides": 7,
-      "independentReview": "PASS:14checks and6changedslides visually accepted by independent Compat/root",
-      "publication": "published_main_912ee9de2fe38093ce22ad594543ca4eb59a28c5",
-      "metadataPending": false
-    },
-    "mp4": {
-      "path": "output/submission/aituhack-demo.mp4",
-      "bytes": 1872211,
-      "sha256": "4fbcecceb6c48e251f6991f89bf78bfa13304d912284e48864b1f9e783820469",
-      "durationSeconds": 110,
-      "codec": "h264",
-      "audioStreams": 0,
-      "historicalStubRecording": true,
-      "publication": "published_main_09c58f3"
-    },
+    "presentation": "output/submission/aituhack-live-demo.pptx",
+    "mp4": "output/submission/aituhack-redesign-offline.mp4",
+    "failedLiveAttemptMp4": "output/submission/aituhack-redesign-live-attempt.mp4",
     "youtubeUploaded": false,
-    "officiallySubmitted": false,
-    "publishedToMain": true,
-    "latestEmergencyAuthorizationInterpreted": true,
-    "literalFifthAmountRestatedByUser": false,
-    "actualPrivateQaProviderEntries": 4
+    "officiallySubmitted": true,
+    "officialSubmissionBasis": "User confirmation",
+    "resubmissionPerformed": false,
+    "publishedToMain": false
   },
   "historicalOfflineStubManifest": {
     "schemaVersion": "1.0",
@@ -1165,5 +1205,150 @@
       "README": "README.md",
       "officiallySubmitted": false
     }
+  },
+  "historicalEmergencyDeliveryBeforeRedesign": {
+    "state": "emergency_live_runtime_and_artifacts_published",
+    "publicUploadPerformed": true,
+    "youtubeUploadPerformed": false,
+    "gitPushPerformed": true,
+    "officialSubmissionPerformed": false,
+    "stageCommit": "da659ed52fd276ae3787f46a266d3730b96a42b2",
+    "localMarkdownLinksChecked": 104,
+    "lastDeliveryCheckUtc": "2026-10-20T18:21:06+00:00",
+    "scope": "Emergency2live-smoke release and source/README/MP4/livePPTX/docs published main912ee9d; full12 benchmark not complete",
+    "phoneEvidenceRecordedAtUtc": "2026-10-20T00:35:05.943338+00:00",
+    "phoneEvidenceIndependentReview": "SPEC/CONSISTENCY PASS",
+    "gitPublication": {
+      "repositoryUrl": "https://github.com/yernururue/aitu_hack",
+      "branch": "main",
+      "defaultBranch": "main",
+      "verifiedHistoryTipBeforeReceipt": "912ee9de2fe38093ce22ad594543ca4eb59a28c5",
+      "verifiedCommitCountBeforeReceipt": 52,
+      "documentationReceiptAdditionalCommits": 1,
+      "forcePush": false,
+      "verifiedAtUtc": "2026-10-20T18:21:06+00:00"
+    },
+    "readinessReport": "docs/readiness-report.md",
+    "lastPublicUrlRestorationTask": "M7.8",
+    "currentDemoUrl": "https://donate-cooperation-quick-annual.trycloudflare.com",
+    "liveP0Plan": "docs/live-p0-plan.md",
+    "liveP0PlanSha256": "ee1d0772fe998984db50c591784f86161388ff114675b3e02f430141ed4e6a26",
+    "submitNowPacket": "docs/submission/submit-now.md",
+    "historicalInitialGitPublication": {
+      "repositoryUrl": "https://github.com/yernururue/aitu_hack",
+      "branch": "main",
+      "defaultBranch": "main",
+      "verifiedHistoryTipBeforeReceipt": "d6706da094efcdcfb7d0e35460ea9fcb22556895",
+      "verifiedCommitCountBeforeReceipt": 11,
+      "documentationReceiptAdditionalCommits": 1,
+      "forcePush": false,
+      "verifiedAtUtc": "2026-10-20T00:39:08.757704+00:00"
+    },
+    "currentEmergencyArtifactsPublished": true,
+    "sourceReadmeMp4VerifiedTip": "09c58f3d1d653a9249266db9a5f550a3d5001e9e",
+    "newDocsAndLivePptxPendingPush": false,
+    "historicalStubPublicRestorationReview": "JointSPEC/QUALITYPASS19freshGET/12assetsequal/actual3901440twoSTUBPOST/4screenshots; old7982stoppedafterPASS/new39251+70029alive; no newphone/liveproof"
+  },
+  "historicalSubmissionNowBeforeRedesign": {
+    "scope": "emergency_live_two_smokes",
+    "fullP0Accepted": false,
+    "demoUrl": "https://donate-cooperation-quick-annual.trycloudflare.com",
+    "packet": "docs/submission/submit-now.md",
+    "presentation": {
+      "path": "output/submission/aituhack-live-demo.pptx",
+      "bytes": 437944,
+      "sha256": "661e1f301ddc751a7e0881be7d2b98d9e3233732e6d294c6a4e05419ba7f4d51",
+      "slides": 7,
+      "independentReview": "PASS:14checks and6changedslides visually accepted by independent Compat/root",
+      "publication": "published_main_912ee9de2fe38093ce22ad594543ca4eb59a28c5",
+      "metadataPending": false
+    },
+    "mp4": {
+      "path": "output/submission/aituhack-demo.mp4",
+      "bytes": 1872211,
+      "sha256": "4fbcecceb6c48e251f6991f89bf78bfa13304d912284e48864b1f9e783820469",
+      "durationSeconds": 110,
+      "codec": "h264",
+      "audioStreams": 0,
+      "historicalStubRecording": true,
+      "publication": "published_main_09c58f3"
+    },
+    "youtubeUploaded": false,
+    "officiallySubmitted": false,
+    "publishedToMain": true,
+    "latestEmergencyAuthorizationInterpreted": true,
+    "literalFifthAmountRestatedByUser": false,
+    "actualPrivateQaProviderEntries": 4
+  },
+  "redesignRelease": {
+    "sourceCommit": "4aff3b4763d689ea31ffdb76f540c03dc7b59987",
+    "buildId": "6OQMmPb1YJ3ddzPsvzGf9",
+    "currentMode": "disabled",
+    "uiIndependentReview": "SPEC PASS / QUALITY PASS",
+    "unitTestsPassed": 1055,
+    "offlineBrowserTestsPassed": 70,
+    "successfulNewLiveVideo": "blocked",
+    "failedLiveAttempt": {
+      "uiPosts": 1,
+      "responseStatus": "needs_clarification",
+      "recommendations": 0,
+      "unknownCost": true,
+      "reservedUsd": 0.028096,
+      "actualUsd": null,
+      "manualRetries": 0
+    },
+    "offlineVideo": {
+      "path": "output/submission/aituhack-redesign-offline.mp4",
+      "kind": "video",
+      "bytes": 1272713,
+      "sha256": "90bbd461669bf5bfac6addefcbec68b24912293d05dda51ed1c81941cf436250",
+      "durationSeconds": 81.52,
+      "width": 1440,
+      "height": 814,
+      "codec": "H264",
+      "pixelFormat": "yuv420p",
+      "frameRate": "25/1",
+      "audioStreams": 0,
+      "faststart": true,
+      "fullDecodeExitCode": 0,
+      "scope": "current_actual_category_api_without_ai",
+      "modelResponsesMocked": false,
+      "providerCalls": 0,
+      "mapTransition": "Actual2GIS CAPTCHA withIPredacted; GoogleMaps route pane via same catalog destination; no nativephone claim"
+    },
+    "failedAttemptVideo": {
+      "path": "output/submission/aituhack-redesign-live-attempt.mp4",
+      "kind": "video",
+      "bytes": 535893,
+      "sha256": "d0eef2e077fc1d8c65c061e521306c59ec9e2e82bf56d0600a69c1439dcf785a",
+      "durationSeconds": 49.52,
+      "width": 1440,
+      "height": 900,
+      "codec": "H264",
+      "pixelFormat": "yuv420p",
+      "frameRate": "25/1",
+      "audioStreams": 0,
+      "faststart": true,
+      "fullDecodeExitCode": 0,
+      "scope": "failed_actual_live_attempt",
+      "recommendations": 0,
+      "responseStatus": "needs_clarification",
+      "successfulAiDemo": false
+    },
+    "rollbackPreserved": {
+      "originPid": 56483,
+      "tunnelPid": 39251,
+      "sourceCommit": "fe4c0ef8d04d35fe6d8b717b62dbf4f02915c968",
+      "buildId": "P3aScnSHAtsKMfuzUrbrK",
+      "sharedCanonicalPaidStop": true
+    },
+    "publication": {
+      "status": "pending",
+      "branch": "main",
+      "forcePush": false
+    },
+    "documentationIndependentReview": "SPEC PASS / QUALITY PASS; no open findings",
+    "mediaIndependentReview": "SPEC PASS / QUALITY PASS; final frozen hashes verified",
+    "localLinksChecked": 59
   }
 }
