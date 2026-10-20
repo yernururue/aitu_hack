@@ -30,7 +30,7 @@ budget:
 handoff:
   state: "ready"
   application_state: "offline_stub_demo_and_materials_verified_external_gates_pending"
-  current_scope: "M7.1–M7.4 offline release/demo/materials accepted (554unit/62e2e); local delivery and stage commit next; phone/native/semantic/live gates remain unverified or blocked"
+  current_scope: "Available offline/stub work and materials locally delivered in da659ed (554unit/62e2e); next M2.4 needs user-confirmed updated key; phone/native/semantic/live gates remain unverified or blocked"
   internal_deadline: "2026-10-20T20:00:00+05:00"
   submission_deadline: "2026-10-20T23:59:00+05:00"
   collector_work:
@@ -41,7 +41,7 @@ handoff:
       - "scripts/collect_astana.py"
       - "scripts/test_astana_data.py"
     notes: "M1.3 independently accepted298realPOI/591excerpts and reviewed36demo slice. Original collector code/snapshots preserved separately, no paid recollection. Collection C6 remains owned by collector integrator; publication rights not established."
-next_task_id: "M7.5"
+next_task_id: "M2.4"
 workflow:
   tracker_writer: "Single main integrator updates tracker after every finished task"
   completion_rule: "Mark done only after acceptance verification; record exact commands, exit codes and limitations here and in docs/progress.md"
@@ -459,7 +459,7 @@ stages:
           - "No voice feature to device-test; Safari/iPhone and Android/Chrome audio verification not run. Voice unavailable in release; physical text/navigation check also remains unverified in M5.3."
   - id: "M7"
     title: "Deployment and submission evidence"
-    status: "in_progress"
+    status: "blocked"
     tasks:
       - id: "M7.1"
         title: "Freeze release manifest and feature scope"
@@ -521,12 +521,15 @@ stages:
           - "Verified temporaryURL and acceptedcleanproduction4assets available; final7slide/6minute nativePPTX +continuous~110svideo/threeactualscenarios/sourceinstructions now being prepared. Root owns scenarios/limitations/links/manifest, DataonlyPPTX+outline, UIonlyignoredvideo/assets; independent artifactreview required beforedone. NoYouTube/push/submissionauthorizedbythispreparation."
       - id: "M7.5"
         title: "Verify links and deliver within authorization"
-        status: "in_progress"
+        status: "blocked"
         owner: "root_integrator"
         depends_on:
           - "M7.4"
         acceptance: "Check demo/material links in private window on phone/laptop; finalize progress and stage commit; upload YouTube only on publication request; push/public submission only under current user authorization; distinguish local delivery from submission."
         evidence:
+          - "Local delivery COMPLETE and stage commit verified:da659ed52fd276ae3787f46a266d3730b96a42b2 docs:save verifiedstubdemoandsubmissionmaterials. Only11explicitdocs/PPTXpaths staged; collector/raw/private/env/videoexcluded. Final-PPTX436736B+localvideo14034370B exactacceptedhashes/readability;57localmateriallinksPASS; actualHTTPS200/PIDs64525+64556alive/3logcanariesabsent at00:06:48UTC. Freshartifact-era lint/harness/diff0, no appsourcechanges."
+          - "Independent M7.5-handoff-review.md finalconsistencyPASS/noopenfindings after P3 trackerhandoffcurrent_scopeADDRESSED byreadonly32–33check. NativePPTX/video artifactspec+qualityPASS. Finalmaterialpaths/statistics/limits/permissions/local-onlyignoredvideo and currentnewURL consistent. YouTubeupload/push/officialsubmission NOTperformed."
+          - "BLOCKED remaining acceptance: physical-phone/private-device check and native map handoff not confirmed; two asyncphonequestions unanswered, elapsedtime/usercontinue notdeviceevidence. Laptopfreshprivate390/1440PASSdoesnotreplacephysicalphone. FullRAGlive/index/model gates remainseparatelyblockedM2.4/M4/M5.3; keyunchanged/noauthretry. Localavailableofflineworkdone; nextM2.4requiresuser-confirmedkeyupdatebeforeanypaidwork."
           - "M7.4 artifacts independently accepted. Finalize current links/materialmanifest/status/handoff/stagecommit and verifyalllocalfiles+actualURL/privatebrowser/permissions. Laptopprivatecontexts alreadyPASS; unansweredphysicalphonecheck remainsunverified and mustnotbe donebyemulation. NoYouTube/upload/push/officialsubmission actionauthorizedbylocaldelivery."
 
 # Data collector section. Updated only by this chat's main collector integrator.

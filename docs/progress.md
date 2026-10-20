@@ -15,8 +15,10 @@ PPTX7слайдов/6мин/43native text/2tables; video110с/1440×900/VP9/audi
 Независимое artifact SPEC/QUALITY PASS: hashes/XML/7renders/2750packet-prefix/10framepixels.
 Production64525 и tunnel64556 detached, проверены после выхода launchers; Mac/сеть нужны.
 Root fresh private contexts390/1440:3реальныхпарка/детали/HTTPSкарты/unknowntext PASS,
-overflow/errors0. Исходники/build неизменны. M7.5: финальная локальная передача/commit;
-физический телефон и native maps пока не подтверждены, unanswered check не считается PASS.
+overflow/errors0. Исходники/build неизменны. Локальная передача сохранена commit`da659ed`;
+M7.5/M7 blocked только на физическом телефоне/native maps: ответа нет, эмуляция не PASS.
+Независимый финальный docs review PASS/P3ADDRESSED. Следующий taskM2.4 blocked до
+подтверждённого обновления ключа; auth/paid retry пока запрещён указанием пользователя.
 
 Проверенный offline/stub текстовый путь работает на 298 реальных POI: фильтры,
 лексическое ранжирование, серверный API, адаптивный UI, подробности/источники,
@@ -95,5 +97,5 @@ $4demo reserve сохранён; serverless paid запрещён. Apify — о�
 ## Сохранённые этапы
 
 `10f4981` M1; `57ce0f2` M2 offline; `fd37acb` M3 offline;
-`0a6b53a` M4 labels/lexical. M5 offline feature snapshot — `572a813`.
+`0a6b53a` M4 labels/lexical. M5 offline feature snapshot — `572a813`; M7 материалы/демо — `da659ed`.
 Дедлайн20.10.2026 23:59, внутренняя цель20:00 Asia/Almaty.

@@ -182,10 +182,13 @@
     }
   ],
   "delivery": {
-    "state": "local_materials_accepted_phone_gate_pending",
+    "state": "local_delivery_complete_physical_phone_gate_blocked",
     "publicUploadPerformed": false,
     "youtubeUploadPerformed": false,
     "gitPushPerformed": false,
-    "officialSubmissionPerformed": false
+    "officialSubmissionPerformed": false,
+    "stageCommit": "da659ed52fd276ae3787f46a266d3730b96a42b2",
+    "localMarkdownLinksChecked": 57,
+    "lastDeliveryCheckUtc": "2026-10-20T00:06:48.717711+00:00"
   }
 }

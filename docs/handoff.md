@@ -58,3 +58,9 @@ PPTX7slides/6min и video110s приняты независимым reviewer; н
 Видео/privatebuild ignoredGit и доступны локально, не считать их публично загруженными.
 M7.5 phone/private-device часть остаётся непроверенной, как и M5.3 realpaid smoke.
 Пока пользователь не подтвердит обновление ключа, не выполнять auth/paid retry.
+
+Локальная передача/материалы сохранены stage commit`da659ed52fd276ae3787f46a266d3730b96a42b2`;
+M7.5/M7 blocked на неподтверждённом физическом устройстве/native maps, не на local files.
+`next_task_id=M2.4`: первый внешний P0 gate — реальный индекс, но key/auth нельзя
+повторять, пока пользователь не подтвердит обновление. Остальные доступные offline
+задачи выполнены. $0 OpenRouter, $2prep/$0.50nested/$4demo reserve без изменений.
