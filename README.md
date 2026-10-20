@@ -1,5 +1,7 @@
 # Куда в Астане — Build with AI
 
+[Демо](https://donate-cooperation-quick-annual.trycloudflare.com) · [Пакет для сабмита](docs/submission/submit-now.md)
+
 > 20.10 22:00 Asia/Almaty: после DNS-отказа stats hostname новый публичный
 > [адрес демо](https://donate-cooperation-quick-annual.trycloudflare.com) отвечает HTTPS200.
 > Fresh390/1440: два настоящих stub POST и три карточки; independent SPEC/QUALITY review PASS.
@@ -12,16 +14,9 @@
 источники, подробности, демо-профили, сохранения и обе карты. Произвольный текст
 и настоящие ИИ-объяснения на сайте ещё не включены.
 
-Реальный RAG принят локально: индекс 298×1536, 12/12 top3,
-Recall@5=97.22%, четыре отрицательных сценария PASS. Код3410a4a в main:923 unit автора/344 независимых targeted теста PASS,
-root lint/typecheck/build/strict NFT PASS. Аудит253 файлов и59 членов ZIP
-не нашёл утечки локальных ключей. Qwen закреплён за US endpoint; исправление429
-пока не доказано.
+Реальный RAG принят локально: индекс298×1536,12/12top3, Recall@5=97.22%, четыре отрицательных сценария PASS. Принятый offline source9503af2:1002unit автора/38независимых route tests и root lint/typecheck/build/strictNFT PASS. Known-key scan254файлов/59членовZIP: совпадений нет.
 
-**Полный P0 с ИИ пока не готов.** После таймаута Luna пользователь разрешил
-квалификацию Qwen на всех 12 запросах. Она остановилась на первом intent с HTTP429
-без стоимости: guard снова запретил платные вызовы. Qwen не квалифицирован,
-модель не выбрана, live UI не опубликован. Резерв $4 на демо сохранён.
+**Полный P0 с ИИ пока не готов.** После четвёртого отдельного бюджетного согласия новый Qwen US прогон снова остановился на первом intent:HTTP429 без стоимости,1POST/0повторов. Пятый unknown снова запретил все платные вызовы; модель не выбрана. Eval остаток$0.062359229, demo$4 сохранён. Offline подготовлен и прошёл независимое ревью один кандидат Mistral Small3.2/DeepInfra с полным резервом$0.028096; запуск и новая приёмка ещё не разрешены.
 [Готовность](docs/readiness-report.md), [план](docs/live-p0-plan.md),
 [трекер](tracker.yaml), [бюджет](docs/budget.md), [запуск](docs/submission/links.md).
 
@@ -101,7 +96,7 @@ details/literalopinions/sourcedates/mapdestinationswalk-drive/focus/overflowPASS
 Нового physicalphone/nativeapps подтверждения нет. Runtime/helper/browser evidence:
 `/tmp/aituhack-mvp/public-stub-restore-20261020T1658Z/` и
 `/tmp/aituhack-mvp/public-stub-browser-20261020T1700Z/`.
-Независимое review текущего восстановления пока идёт. Настоящий ИИ остаётся
+Независимое review текущего восстановления PASS. Настоящий ИИ остаётся
 не выбранным/paidSTOP; это восстановление прежнего stub, не liveP0.
 
 После независимого PASS root завершил только старый CF7982; origin70029 и новый

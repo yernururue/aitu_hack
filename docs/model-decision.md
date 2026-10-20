@@ -32,7 +32,7 @@ Full3model source/review принят: одинаковые frozen semantic cont
 | anthropic/claude-haiku-5.5 | .264 | только azure/global,hardmaxprice,no fallback;anthropic-bounds-v1/reasoningdisabled |
 | qwen/qwen3.8-flash | .26160384 | identity / provider-default reasoning |
 
-Это верхние оценки, не реальные списания. Caps позже менялись только по трём отдельным явным согласиям; текущие2/1.5/4. Native Haiku
+Это верхние оценки, не реальные списания. Caps менялись только по отдельным явным согласиям; текущие2/1.5/4. Native Haiku
 projection снимает неподдержанные bounds только на wire, исходная Zodvalidation
 сохраняется. Read-only проверка actualschemas не нашла точного документированного
 нарушения regex/refs/format/required/APfalse; историческую причину ошибки не угадали.
@@ -66,18 +66,14 @@ Named `approved-qwen-20261020` имеет отдельный `qwenQualificationC
 strict schemas/prompt v2 и trusted preset origin. Skipped не измерение.
 Winner автоматически null, human review обязателен.
 
-Qwen24 на bd8e3da остановился 20.10 21:42 на ПЕРВОМ intent: HTTP429,
-1 POST/0 retries, actual cost unknown, 0 explanations/accepted prose.
-Модель не квалифицирована. Новый .26160384 reserve блокирует все paid.
-Три предыдущих approved upper bounds .912750001 учтены с actual=null,
-canonicalv4/caps2/1.5/4, demo0. Четвёртого разрешения нет.
-[Сверка](handoff.md), [бюджет](budget.md).
+Первый Qwen24 на bd8e3da остановился21:42 на первом intentHTTP429. После четвёртого точного согласия canonicalv4→v5 сохранил все прежние записи, четыреactualnullupperbounds$1.174353841/caps2/1.5/4. Затем разрешённый новый USQwen24 sourcef864 также остановился22:25 на первом intentHTTP429/no cost:1POST/0retry, объяснений нет. Exactgeneration GET404 не доказываетactual0. Новый пятый unknown c54e0818…/резерв$0.26160384/uncertaintrue сноваSTOP; отдельного пятого согласия нет. Оба прогона технически не завершены; семантическое качество Qwen не оценено, winnernull.
 
-Принятый offline source3410a4a закрепляет `alibaba/us-east-1`, без снижения .26160384
-full-context/output/cache quote. Метаданные endpoint подтверждены;
-точный route старого429 неизвестен, отдельная квота и исправление не доказаны.
-Только после финансовой сверки/нового явного решения пользователя допустим
-новый reviewed Qwen24 прогон. Root и другой reviewer проверяют каждый валидный
-intent/why/activity по источникам:100%IDs/evidence/hard, 0 unsupported facts,
-минимум10/12 relevant positive и4negative guards. Затем private/public prep QA.
-Auth/schema/retrieval PASS сами не доказывают полный P0.
+Последний source9503/build4YqxpEYHmL2S8AGyUVa0R принят только offline:1002unit/38route tests/21inputplanchecks/rootlint-types-build-NFT/semantic12+4/scan0. Финансовая v5policy ранее отдельно принята на f864. Все releasecandidateGO false. [Финансовый статус](budget.md) и [трекер](../tracker.yaml) описывают текущее состояние.
+
+## Подготовка одного альтернативного маршрута
+
+После двух Qwen429 бесплатные официальные метаданные проверены для одного кандидата `mistralai/mistral-small-3.2-24b-instruct`, exact provider `deepinfra/fp8`, без fallback. Консервативный model-level envelope256000context/16384output при .09375/.25 за миллион даёт полный резерв$0.028096. Он помещается в оставшийся eval$0.062359229 для одного шага; сумма24 худших резервов$0.674304 не помещается, поэтому нельзя гарантировать завершение без per-attempt guard. Фактические цены сохраняются отдельно от резервов.
+
+Метаданные объявляют structured_outputs/response_format/max_tokens, но не доказывают русский язык, фактическую grammar correctness,15sдоступность или liveкачество. Offline adapter/tests и metadata/math/source прошли независимый review; исходные defaults/CLI протокол не менялись. Кандидат не выбран и не разрешён к оплате. Смена приёмки и новый финансовый exception потребуют отдельного решения пользователя после конкретной подготовки. Исходные72/48 и Qwen24 останутся невыполненными.
+
+Критерии новой приёмки не ослаблять: все12intent+explanation,100%IDs/evidence/hard filters,0 неподтверждённых фактов, минимум10/12 relevant positives,4negative guards и независимая ручная проверка каждого ответа. Затем private/public prep QA. Auth/schema/retrieval PASS отдельно не доказывают полныйP0.

@@ -122,3 +122,12 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Четвёртое отдельное согласие пользователя,20.10 22:09 Asia/Almaty
+
+- Разрешён exact historical Qwen429 target `bf021306-da2b-43ca-a54e-6a7cfe23ac48`
+  по верхней оценке $0.26160384 с actual=null и один НОВЫЙ QwenUS прогон всех12×2.
+- Authorization `9cc3b06a-502e-4e52-810b-4f38f56f6854`, ref
+  `call_74ed6bb11f2b4f529912ce83a8146e0e`; caps2/1.5/4 НЕ повышаются.
+- Применение требует reviewedv5/canonicaloperator/независимого actualaudit;
+  до этого paidSTOP. Предыдущие3grants/history сохраняются, будущий unknown сноваSTOP.

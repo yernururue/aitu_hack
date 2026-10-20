@@ -40,16 +40,17 @@ Mac, сеть, origin и tunnel должны оставаться включён
 этих процессов; постоянного hosting/autorestart/SLA нет. Историческую `.next`
 основного checkout не пересобирать, пока она обслуживает этот сайт.
 
-Новая offlineAI/RAG сборка находится отдельно:
-`/Users/macbook/.codex/worktrees/live-p0/aituhack`, source3410a4a,
-BUILD_IDfKShKXBBTO6GrZDupxTsU. Индекс298×1536/semantic12+4 принят.
-923authorunit/344independenttargeted/rootlint-types-build-strictNFT/knownkeyscan0
-PASS. QwenUSpin принят, но устранение429 не доказано. КвалификацияQwen24
-остановлена после первого intent429/no-cost; winnernull, public liveUI blocked.
-Canonicalv4 имеет три approved bounds.912750001(actualnull) и новый unknown
-reserve.26160384; caps2/1.5/4, demo0. Четвёртого разрешения нет, всеpaidSTOP.
-Не копировать/обнулять ledger, не повторять one-use operators и не тратить demo
-на разработку. [Бюджет](../budget.md), [передача](../handoff.md).
+Принятая offline AI/RAG сборка находится отдельно:
+`/Users/macbook/.codex/worktrees/live-p0/aituhack`, source9503af2,
+BUILD_ID4YqxpEYHmL2S8AGyUVa0R. Индекс298×1536/semantic12+4 принят.
+1002authorunit/38independentroute tests+21inputplanchecks/rootlint-types-build-strictNFT/keyscan0 PASS.
+После четвёртого точного согласия v5/four approved bounds и независимого actualaudit
+новый QwenUS24 снова остановился на первом intent429/no-cost:1POST/0retry, winnernull.
+Новый пятый unknown резервирует$0.26160384; всеpaidSTOP, отдельного пятого согласия нет.
+Остатки eval$0.062359229/prep$0.562134188/demo$4, caps2/1.5/4.
+Один MistralSmall3.2/DeepInfra кандидат с полным резервом$0.028096 подготовлен и принят offline;
+он не выбран, новый прогон не разрешён. Не reset/copy ledger, не повторять one-use
+операторов и не тратить demo на разработку. [Бюджет](../budget.md), [передача](../handoff.md).
 
 PPTX/WEBM сохраняют исторический source572/buildBlw snapshot со старым URL.
 Материалы не перезаписаны и не демонстрируют новый AI-кандидат.

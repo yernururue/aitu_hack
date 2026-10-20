@@ -42,10 +42,12 @@ Semantic retrieval принят локально; полный P0 с насто�
   Новый браузер начинает без профиля. При запрете storage изменения живут на экране.
 - Голос пропущен по P1 gate: записи, распознавания и аудио endpoint нет. Подготовленное
   видео — без звука. Никакие пользовательские аудиозаписи не сохранялись.
-- KnownroundedOpenRouterprep$0.001908131/eval$0.00168309, триявноразрешённых
-  budgetbounds$0.912750001(actualnull), NEWQwenunknownreserve$0.26160384/uncertaintrue.
-  ВсеpaidSTOP/publicpaidfalse/demo0/$4, canonicalv4caps2/$1.50eval/4. Четвёртогоgrantнет.
-  Ledger0600нельзяreset/copy/guesssettle; serverlesspaidзапрещён.
+- Known rounded OpenRouter prep$0.001908131/eval$0.00168309; четыре явно разрешённые
+  budget bounds$1.174353841(actualnull), новый пятый QwenUS unknown reserve$0.26160384.
+  Canonicalv5/35entries/uncertaintrue/inFlight0, allpaidSTOP/publicpaidfalse/demo0/$4,
+  caps2/$1.50eval/4. Отдельного пятогоgrant нет. Остатокeval$0.062359229.
+  Ledger0600 нельзяreset/copy/guesssettle; serverlesspaid запрещён. Metadata-кандидат
+  Mistral/DeepInfra ещё не квалифицирован и не разрешён к оплате.
 - Публичное демо проверено как временный QuickTunnel от локальной production-сборки.
   Оно зависит от работающих Mac, origin-процесса, туннеля и сети; это не постоянный
   hosting/SLA. Фактический URL и проверка доступа записаны в [links.md](links.md).

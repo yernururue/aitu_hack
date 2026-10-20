@@ -1,5 +1,36 @@
 # Состояние проекта
 
+## Текущий checkpoint: 20.10, 22:47 Asia/Almaty
+
+Полный P0 с настоящим ИИ **не принят**. [Публичное демо](https://donate-cooperation-quick-annual.trycloudflare.com) работает в stub-режиме с настоящим каталогом; произвольный текст и ИИ-объяснения ещё не опубликованы. Реальный сохранённый RAG принят локально: 298×1536, 12/12 top3, macro Recall@5 97.22%, micro 93.75%, четыре отрицательных сценария и hard filters PASS. Это development set, не слепой бенчмарк.
+
+Четвёртое отдельное согласие пользователя применено ровно один раз и независимо проверено. Затем разрешённый новый Qwen US12×2 прогон остановился на первом intent: HTTP429, 1 POST, 0 повторов, стоимость неизвестна. Объяснений и качественной оценки нет, winner=null; оригинальные сравнения72/48 и Qwen24 не завершены. Закрепление US endpoint не устранило отказ.
+
+Canonical ledger v5/35 записей/0600: 30 known, четыре approved upper bounds с actual=null и новый пятый unknown `c54e0818-1757-4752-a3cc-42299566784d`. uncertain=true, inFlight=0. Известный округлённый prep $0.001908131, включая eval $0.00168309; четыре бюджетные оценки $1.174353841 учтены по одному разу, они не являются восстановленной фактической стоимостью. Новый резерв $0.26160384; exposure prep $1.437865812/eval $1.437640771; доступно prep $0.562134188/eval $0.062359229/demo $4. Потолки $2/$1.50/$4 сохранены. Пятого согласия нет, все платные вызовы STOP. API принял ключ; отдельного лимита ключа не задано, кредит есть. Exact generation GET для `gen-1792517117-9rLmsCooRUs1A7VCZ6VY` вернул404; это не доказательство нулевой стоимости.
+
+Последняя принятая offline сборка: source `9503af2b353d66cec6ea82d9d0e77656f15f2b5f`, BUILD_ID `4YqxpEYHmL2S8AGyUVa0R`. Автор1002unit, независимый reviewer38 Mistral/Qwen tests и21 frozen-input/plan checks, root lint/typecheck/build/strict NFT6traces1569entries/semantic12+4 PASS. Fresh known-key scan254files59ZIP/findings0, `.env.local`0600. Mistral/DeepInfra адаптер и отдельный план приняты только offline; defaults и приёмочный протокол не изменены, live-модель не выбрана. Подробности финансовой v5-политики отдельно проверены на f864.
+
+Приоритет пользователя — сдача работающей версии сейчас. Нового финансового согласия не получено, платные попытки не продолжаем. Остаточный блокер M4.3: подготовлен ровно один альтернативный маршрут Mistral Small3.2/DeepInfra. Public metadata дают консервативный полный резерв $0.028096; metadata и offline adapter/tests прошли независимое ревью. Кандидат не выбран, финансового разрешения или разрешения нового приёмочного прогона нет. Повторы старых one-use операторов, guessedactual, reset/copy ledger, увеличение caps и расход demo на разработку запрещены.
+
+Принятые25commits до `49fc095` уже push main и проверены на remote. `f86420b` интегрирован локально merge `33b357c`; новые receipts/docs и 9503 интегрированы локально, ожидают финального push. Root единственный writer tracker; исполнение и независимый review разными субагентами обязательны.
+
+## История checkpoint до 22:38 — не текущий статус
+
+## Действующий checkpoint20.10,22:19 Asia/Almaty
+
+M4.3gDONE: sourcef86420b/980fullunit/57independentfourthpolicychecks PASS;
+rootlint/typecheck/buildHb7uhVoLGIcoOW1rb5mv0/strictNFT6-1569/
+semanticretrieval12+4/disabledlive0network PASS. Freshcurrentknownkeyscan:
+253files/59ZIP/30,925,893bytes/findings0/.env600, immutable source-f86420b-secret-scan.json.
+V5canonicalapplicationONCE17:17:55UTC, independent29actualchecksPASS;
+34entries/4actualnullallocations1.174353841/capsUNCHANGED2-1.5-4/knowncostunchanged/
+noreserve/inflight0/uncertainfalse/other33+prior3historypreserved. Availableprep
+.823738028/eval.323963069/demo4. Noenvcapchange/provider duringaccounting.
+NEXТM4.3: NEWQwenUS24operatorreview/ROOTGO/full12quality; no newmodelcallsyet.
+Main25commits through49fc095pushedandremotelyverified; newerf864locallymerged.
+CurrentdonatepublicSTUBjointreviewPASS, PIDs70029+39251, no newphone/liveP0proof.
+Ниже сохранён checkpoint до четвёртого согласия и v5; его pending/STOP исторические.
+
 > 20.10 22:00 Asia/Almaty: после DNS-отказа stats hostname новый публичный
 > [адрес демо](https://donate-cooperation-quick-annual.trycloudflare.com) отвечает HTTPS200.
 > Fresh390/1440: два настоящих stub POST и три карточки; independent SPEC/QUALITY review PASS.

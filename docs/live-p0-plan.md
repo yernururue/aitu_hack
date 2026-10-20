@@ -10,16 +10,22 @@
 
 **Spec:** [product-spec.md](product-spec.md), [data-contract.md](data-contract.md), [исходный план](implementation-plan.md) M2.4/M4.3/M4.4/M5.3, [budget.md](budget.md), [indexing.md](indexing.md). Статус: [tracker.yaml](../tracker.yaml); контекст: [handoff.md](handoff.md), [progress.md](progress.md).
 
-## Действующее уточнение 20.10, 19:49 Asia/Almaty
+## Действующее уточнение20.10,22:38 Asia/Almaty
 
-Пользователь разрешил третий exact budget bound $0.384750001 (actual=null),
-live-eval $1.50 внутри prep $2/demo $4 и Qwen на всех 12×2=24 этапах.
-Haiku/Azure и Luna не прошли текущие технические условия; их полная семантика
-не измерена. Исходные72 и48 incomplete, Qwen24 имеет отдельную qualificationflag.
-Три bounds применены/audited, v4. Новый Qwen429 без стоимости снова STOP;
-четвёртого разрешения нет. Критерии качества и независимое ревью сохраняются.
-Предыдущие утверждения и исходный план ниже — исторический журнал;
-действующий статус/остатки — [tracker](../tracker.yaml) и [handoff](handoff.md).
+Четвёртое точное согласие применено/audited, canonicalv5 с четырьмяactualnull
+bounds$1.174353841, caps2/1.5/4. Разрешённый новый QwenUS12×2 прогон также
+остановился на первом intentHTTP429/no-cost:1POST/0retry, новый пятыйunknown
+c54e0818… резервирует$0.26160384; allpaidSTOP, отдельного пятогоgrant нет.
+Известныеactualprep$0.001908131/eval$0.00168309; доступноprep$0.562134188/
+eval$0.062359229/demo$4. Exactgeneration GET404 не доказываетactual0.
+Последняя принятая offline сборка9503/4YqxpEYHmL2S8AGyUVa0R,1002unit/38independentroute tests/
+rootlint-types-build-NFT/semantic12+4/scan0 PASS. Модель не выбрана, original72/
+amended48/Qwen24 incomplete; оба Qwen429 — транспортный отказ, не оценкасемантики.
+Готовится один кандидат MistralSmall3.2/DeepInfra: fullquote$0.028096, metadatareviewPASS,
+source/testsreview PASS. Новый финансовый exception и all12×2 приёмка пока не разрешены;
+24worstreserves$0.674304 >evalостатка, обязательныйper-attemptguard сохраняется.
+Критерии качества не ослаблять; действующий статус — [tracker](../tracker.yaml),
+[handoff](handoff.md), [budget](budget.md). Исходный план/старые числа ниже — история.
 
 ## Предыдущее утверждённое изменение20.10, 19:19 Asia/Almaty
 
@@ -221,14 +227,11 @@ rootowns AGENTS/spec/harness/budget/envexample/tracker. Реальныйledgerн
 
 ## Текущий блокер20.10
 
-M2 и M4.3a/b/c/d/e приняты. Последняя offline сборка3410a4a/fKShKXBBTO6GrZDupxTsU:
-923authorunit/344independenttargeted/rootlint-types-build-strictNFT/keyscan0 PASS. Canonicalv4/caps2/1.5/4,
-три approved bounds .912750001/actualnull. Разрешён Qwen12×2=24 с отдельной
-qualification flag; исходные72/48 incomplete. Первый Qwen intent HTTP429/no-cost,
-1 POST/0 retries, новый unknown .26160384, allpaidSTOP/winnernull.
-Четвёртый grant пока не разрешён. US route3410a4a принят independent offline
-review без снижения reserve; устранение429/отдельная квота не доказаны.
-[Текущая передача](handoff.md) и [бюджет](budget.md) содержат точные остатки.
+M2/реальный RAG/offline AI приняты; fullP0 и модель не приняты. См. действующее
+уточнение выше: после двух разных Qwen маршрутов429 новый fifthunknownSTOP.
+Подготовка одного альтернативного маршрута продолжается без paidcalls;
+нужны отдельно разрешённая новая приёмка, reviewedфинансоваяполитика/actualaudit,
+24реальных ответа/независимыйqualityreview, затемprivate/publicprepQA и телефон.
 
 ## Передача
 
