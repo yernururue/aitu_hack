@@ -1,3 +1,9 @@
+# Verified main publication — 21 October 2026
+
+R1.5 DONE: normal `git push origin main` published redesigned source, README, four current screenshots and two honestly labelled new MP4. Remote `refs/heads/main` exactly `ec020c25587bd9bb05b4ce6ee2d1eb46b94ebfa1`, verified 2026-10-20T19:15:44.617016+00:00; no force push or resubmission. Outgoing known-key scan3commits/46blobs/3.17MB0findings; source/build280files177ZIP37.8MB0findings. Accepted source4aff3b4/build6OQ remains running without rebuilding live output; current public disabled/paidfalse, original rollback runtime/media/collector preserved.
+
+R1 parent and R1.4 remain BLOCKED: successful new AI video missing after one actual unknown-cost intent; paidSTOP and no retry/newgrant. Next task R1.4 needs confirmed cost/authorization and separately reviewed action; do not run provider calls merely because publication completed. This receipt adds no source/runtime/budget changes.
+
 # Final documentation acceptance — 21 October 2026
 
 Independent final docs SPEC/QUALITY PASS: no open findings;55references checked independently, root59localrefs0missing. Root17protected originals/2collector tracker blocks/6frozen assets/3historical manifest objects unchanged, source/build known-key scan280files177ZIP37.8MB0findings. R1.5 remains in_progress until ordinary main push and remote hash verification; R1.4 remains blocked and all paidSTOP. No resubmission.

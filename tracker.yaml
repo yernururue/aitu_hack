@@ -30,7 +30,7 @@ budget:
 handoff:
   state: "ready"
   application_state: "redesigned_minimal_ui_offline_public_ai_unknown_stop"
-  current_scope: "Warmminimalredesign4aff3b4/build6OQ accepted1055unit70e2e+independentreview; publicdisabled72511/70740/categorysourcesmaps works. OneactualDEMOintent newunknown.028096/actualnull => allpaidSTOP; successfulnewAIvideoR1.4blocked. Separateoffline81.52s andfailedattempt49.52s reviewed; README/media mainpublicationR1.5pending. Originalruntime/media/collector preserved; fullqualification/currentphysicalphone incomplete; useralready submitted/noresubmit."
+  current_scope: "Warmminimalredesign4aff3b4/build6OQ accepted1055unit70e2e+independentreview; publicdisabled72511/70740/categorysourcesmaps works. OneactualDEMOintent newunknown.028096/actualnull => allpaidSTOP; successfulnewAIvideoR1.4blocked. Separateoffline81.52s andfailedattempt49.52s reviewed; README/media publishedmainec020c2verified, R1.5done. Originalruntime/media/collector preserved; fullqualification/currentphysicalphone incomplete; useralready submitted/noresubmit."
   internal_deadline: "2026-10-20T20:00:00+05:00"
   submission_deadline: "2026-10-20T23:59:00+05:00"
   collector_work:
@@ -41,7 +41,7 @@ handoff:
       - "scripts/collect_astana.py"
       - "scripts/test_astana_data.py"
     notes: "M1.3 independently accepted298realPOI/591excerpts and reviewed36demo slice. Original collector code/snapshots preserved separately, no paid recollection. Collection C6 remains owned by collector integrator; publication rights not established."
-next_task_id: "R1.5"
+next_task_id: "R1.4"
 workflow:
   tracker_writer: "Single main integrator updates tracker after every finished task"
   completion_rule: "Mark done only after acceptance verification; record exact commands, exit codes and limitations here and in docs/progress.md"
@@ -928,11 +928,12 @@ stages:
           - "Independent finalMEDIA SPEC/QUALITYPASS /tmp/aituhack-redesign-runtime/offline-review.md: frozenMP4 SHA90bbd461669bf5bfac6addefcbec68b24912293d05dda51ed1c81941cf436250/1272713B/81.52s/1440x814/H26425/yuv420p/noaudio/faststart/decode0+actualplayback. ActualdisabledpublicONEcategoryPOST/degraded3catalog-equalparks/evidence/maps matched, provider0/canonical3969...00f87 unchanged. ActualMP4 samples65sIPredacted2GISCAPTCHA/80sfullyrenderedGooglewalkingroute sameBotanicaldestination; no mocks/AIclaim. Root viewednewhome/results/mobile+finalsources/mapframes andffprobe0. Preview3005acceptedbeforeonlynew70720replacedbydisabled72511;CF70740/public200/9assetsequal/8private404. Old56483/39251+17originalfiles/collectorblock retained. Separate49.52sfailedliveattempt hashd0eef2...f785a verified; R1.4stillBLOCKED."
       - id: "R1.5"
         title: "Publish verified replacement and current README/media to main"
-        status: "in_progress"
+        status: "done"
         owner: "root_integrator"
         depends_on: ["R1.4a"]
         acceptance: "Public replacement checked while rollback preserved; known-key scan source/build/outgoing commits clean; README current screenshots/MP4/demo and honest limits; handoff/tracker synced, independent final review; ordinary push main and remote commit verified. No resubmission."
         evidence:
+          - "PUBLISHED ordinarygitpushoriginmain500274a->ec020c25587bd9bb05b4ce6ee2d1eb46b94ebfa1, remote refs/heads/main EXACTverified at2026-10-20T19:15:44.617016+00:00. Rootoutgoingknownkeyscan3commits46blobs3.17MB0findings,33changedpaths exclude env/raw/normalized/private/index/collector. Primarymainffonly/6originalcollectoruntrackedpathsunchanged; runtimebuildNOTrebuilt. Currentpublic200/9assetsequal/8private404+disablednotice,17originalhashes preserved. Independentfinaldocs+publicationreceipt-only report /tmp/aituhack-redesign-runtime/final-docs-review.md SPEC/QUALITYPASS, no findings. R1.5done for acceptedofflineUI+honestmaterials; R1parent/R1.4remainBLOCKED for successfulnewAIvideo, allpaidSTOP/noresubmission."
           - "FinalindependentDOCS SPEC/QUALITYPASS/noopenfindings: currentREADME/handoff/budget/readiness/limitations/links/scenarios/submit-now/manifest/tracker truthfuldisabled40entries1unknown/.028096reserved/actualnull/paidSTOP, successfulAIvideoBLOCKED,1055unit70e2e/useralready submitted/noresubmit. Root59localrefs0missing/17originals+2collectorblocks+6frozenassets+3historicalmanifestobjects exact; freshknownkeysourcebuild280files177ZIP37.8MB0findings. FinalpublicGET200/9assetsequal/8private404/currentminimalhero+disablednotice/canonicalunchanged. Mainnormalpush pending; R1.5notdoneyet."
 
 # Data collector section. Updated only by this chat's main collector integrator.

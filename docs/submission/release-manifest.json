@@ -288,14 +288,14 @@
     }
   ],
   "delivery": {
-    "state": "reviewed_redesign_offline_media_ready_main_push_pending",
+    "state": "redesign_offline_ui_and_honest_media_published",
     "publicUploadPerformed": true,
     "youtubeUploadPerformed": false,
     "gitPushPerformed": true,
     "officialSubmissionPerformed": true,
     "stageCommit": "da659ed52fd276ae3787f46a266d3730b96a42b2",
     "localMarkdownLinksChecked": 104,
-    "lastDeliveryCheckUtc": "2026-10-20T19:08:46.479622+00:00",
+    "lastDeliveryCheckUtc": "2026-10-20T19:15:44.617016+00:00",
     "scope": "Reviewed warm minimal UI + explicitly offline current video; successful live video blocked; failed attempt preserved",
     "phoneEvidenceRecordedAtUtc": "2026-10-20T00:35:05.943338+00:00",
     "phoneEvidenceIndependentReview": "SPEC/CONSISTENCY PASS",
@@ -303,11 +303,10 @@
       "repositoryUrl": "https://github.com/yernururue/aitu_hack",
       "branch": "main",
       "defaultBranch": "main",
-      "verifiedHistoryTipBeforeReceipt": "912ee9de2fe38093ce22ad594543ca4eb59a28c5",
-      "verifiedCommitCountBeforeReceipt": 52,
+      "verifiedHistoryTipBeforeReceipt": "ec020c25587bd9bb05b4ce6ee2d1eb46b94ebfa1",
       "documentationReceiptAdditionalCommits": 1,
       "forcePush": false,
-      "verifiedAtUtc": "2026-10-20T18:21:06+00:00"
+      "verifiedAtUtc": "2026-10-20T19:15:44.617016+00:00"
     },
     "readinessReport": "docs/readiness-report.md",
     "lastPublicUrlRestorationTask": "M7.8",
@@ -331,9 +330,9 @@
     "historicalStubPublicRestorationReview": "JointSPEC/QUALITYPASS19freshGET/12assetsequal/actual3901440twoSTUBPOST/4screenshots; old7982stoppedafterPASS/new39251+70029alive; no newphone/liveproof",
     "officialSubmissionBasis": "User explicitly says application already submitted; agent did not resubmit",
     "resubmissionPerformed": false,
-    "redesignPublicationPending": true
+    "redesignPublicationPending": false
   },
-  "updatedAt": "2026-10-20T19:08:46.479622+00:00",
+  "updatedAt": "2026-10-20T19:15:44.617016+00:00",
   "applicationUpdate": {
     "taskId": "M5.4",
     "change": "Clarify strict zero versus blank budget and offer explicit budget removal without automatic search or changing other fields",
@@ -432,7 +431,8 @@
     "officiallySubmitted": true,
     "officialSubmissionBasis": "User confirmation",
     "resubmissionPerformed": false,
-    "publishedToMain": false
+    "publishedToMain": true,
+    "verifiedMainTipBeforeReceipt": "ec020c25587bd9bb05b4ce6ee2d1eb46b94ebfa1"
   },
   "historicalOfflineStubManifest": {
     "schemaVersion": "1.0",
@@ -1343,12 +1343,21 @@
       "sharedCanonicalPaidStop": true
     },
     "publication": {
-      "status": "pending",
+      "status": "published",
       "branch": "main",
-      "forcePush": false
+      "forcePush": false,
+      "verifiedMainTipBeforeReceipt": "ec020c25587bd9bb05b4ce6ee2d1eb46b94ebfa1",
+      "verifiedAtUtc": "2026-10-20T19:15:44.617016+00:00",
+      "scope": "accepted offline UI and labelled media; successful new live video remains blocked"
     },
     "documentationIndependentReview": "SPEC PASS / QUALITY PASS; no open findings",
     "mediaIndependentReview": "SPEC PASS / QUALITY PASS; final frozen hashes verified",
-    "localLinksChecked": 59
+    "localLinksChecked": 59,
+    "outgoingKnownKeyScan": {
+      "commits": 3,
+      "blobs": 46,
+      "findings": 0,
+      "head": "ec020c25587bd9bb05b4ce6ee2d1eb46b94ebfa1"
+    }
   }
 }
