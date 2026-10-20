@@ -3,10 +3,24 @@ import { dirname, isAbsolute } from "node:path";
 import { randomUUID } from "node:crypto";
 import { setTimeout as delay } from "node:timers/promises";
 import { z } from "zod";
-import { HARD_CAPS, nanoUsd } from "./config";
+import { LEGACY_CAPS, nanoUsd } from "./config";
 
 const units = z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER);
 const capsSchema = z.strictObject({ prep: units.max(2e9), live_eval: units.max(0.5e9), demo: units.max(4e9) });
+export const HISTORICAL_UPPER_BOUND_AUTHORIZATION = Object.freeze({
+  reservationId: "ff7460a9-cf70-4248-8cd7-def9fcc5770e",
+  authorizationId: "c8e3d04e-7df9-4482-aabc-2338c4895b49",
+  grantRef: "call_2264d3b0b17b408d989be52c79fb4640",
+  approvedAt: "2026-10-20T13:45:40.669476+00:00",
+  budgetCharge: 264000000,
+});
+const auditIdSchema = z.string().regex(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
+export const upperBoundGrantInputSchema = z.strictObject({
+  reservationId: z.literal(HISTORICAL_UPPER_BOUND_AUTHORIZATION.reservationId),
+  authorizationId: z.literal(HISTORICAL_UPPER_BOUND_AUTHORIZATION.authorizationId),
+  grantRef: z.literal(HISTORICAL_UPPER_BOUND_AUTHORIZATION.grantRef),
+  approvedAt: z.literal(HISTORICAL_UPPER_BOUND_AUTHORIZATION.approvedAt), auditId: auditIdSchema,
+});
 const entrySchema = z.strictObject({
   id: z.uuid(), purpose: z.enum(["prep", "live_eval", "demo"]),
   operation: z.enum(["index_embedding", "query_embedding", "intent", "explanation"]),
@@ -14,21 +28,37 @@ const entrySchema = z.strictObject({
   state: z.enum(["reserved", "dispatched", "settled", "released", "unknown"]),
   ownerPid: z.number().int().positive(), expiresAt: units,
 });
-const ledgerSchema = z.strictObject({
+const authorizedEntrySchema = entrySchema.extend({
+  id: z.literal(HISTORICAL_UPPER_BOUND_AUTHORIZATION.reservationId), purpose: z.literal("live_eval"), operation: z.literal("explanation"),
+  reserved: z.literal(264000000), actual: z.null(), state: z.literal("authorized_upper_bound"),
+  accountingBasis: z.literal("authorized_upper_bound"), budgetCharge: z.literal(264000000), authorizationAuditId: auditIdSchema,
+});
+const legacyLedgerSchema = z.strictObject({
   version: z.literal(1), caps: capsSchema, uncertain: z.boolean(), entries: z.array(entrySchema),
   reconciliations: z.array(z.strictObject({ id: z.uuid(), at: units })),
 });
+const v2LedgerSchema = legacyLedgerSchema.extend({
+  version: z.literal(2), caps: capsSchema.extend({ live_eval: units.max(0.8e9) }),
+  entries: z.array(z.union([entrySchema, authorizedEntrySchema])),
+  policyGrants: z.array(upperBoundGrantInputSchema.extend({ appliedAt: units })).length(1),
+});
+const ledgerSchema = z.discriminatedUnion("version", [legacyLedgerSchema, v2LedgerSchema]);
 export type Ledger = z.infer<typeof ledgerSchema>;
 export type LedgerEntry = Ledger["entries"][number];
 
 export function emptyLedger(): Ledger {
-  return { version: 1, caps: { prep: nanoUsd(HARD_CAPS.prep), live_eval: nanoUsd(HARD_CAPS.live_eval), demo: nanoUsd(HARD_CAPS.demo) }, uncertain: false, entries: [], reconciliations: [] };
+  return { version: 1, caps: { prep: nanoUsd(LEGACY_CAPS.prep), live_eval: nanoUsd(LEGACY_CAPS.live_eval), demo: nanoUsd(LEGACY_CAPS.demo) }, uncertain: false, entries: [], reconciliations: [] };
 }
 
 function checkLedger(data: unknown): Ledger {
   const result = ledgerSchema.safeParse(data);
   if (!result.success) throw new Error("LEDGER_INVALID");
   const ledger = result.data;
+  if (ledger.version === 2) {
+    const grant = ledger.policyGrants[0];
+    const authorized = ledger.entries.filter((entry) => entry.state === "authorized_upper_bound");
+    if (authorized.length !== 1 || authorized[0].state !== "authorized_upper_bound" || authorized[0].authorizationAuditId !== grant.auditId || grant.appliedAt < Date.parse(grant.approvedAt)) throw new Error("LEDGER_INVALID");
+  }
   const ids = new Set<string>();
   let total = 0;
   for (const entry of ledger.entries) {

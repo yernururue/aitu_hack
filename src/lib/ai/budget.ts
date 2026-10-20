@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
-import { budgetCaps, nanoUsd, type BudgetCaps, type Purpose } from "./config";
-import { ledgerTransaction, type Ledger, type LedgerEntry } from "./ledger";
+import { budgetCaps, HARD_CAPS, nanoUsd, type BudgetCaps, type Purpose } from "./config";
+import { HISTORICAL_UPPER_BOUND_AUTHORIZATION, ledgerTransaction, upperBoundGrantInputSchema, type Ledger, type LedgerEntry } from "./ledger";
 export { initializeLedger } from "./ledger";
 
 export type Operation = LedgerEntry["operation"] | "audio";
@@ -16,12 +16,22 @@ function alive(pid: number): boolean {
 function totals(ledger: Ledger) {
   const spent = { prep: 0, live_eval: 0, demo: 0 };
   const reserved = { prep: 0, live_eval: 0, demo: 0 };
+  const actualKnownSpent = { prep: 0, live_eval: 0, demo: 0 };
+  const authorizedUpperBoundCharged = { prep: 0, live_eval: 0, demo: 0 };
   let inFlight = 0;
   for (const entry of ledger.entries) {
     const bucket = entry.purpose === "demo" ? "demo" : "prep";
     if (entry.actual !== null) {
       spent[bucket] += entry.actual;
+      actualKnownSpent[bucket] += entry.actual;
       if (entry.purpose === "live_eval") spent.live_eval += entry.actual;
+      if (entry.purpose === "live_eval") actualKnownSpent.live_eval += entry.actual;
+    }
+    if (entry.state === "authorized_upper_bound") {
+      spent[bucket] += entry.budgetCharge;
+      authorizedUpperBoundCharged[bucket] += entry.budgetCharge;
+      spent.live_eval += entry.budgetCharge;
+      authorizedUpperBoundCharged.live_eval += entry.budgetCharge;
     }
     if (["reserved", "dispatched", "unknown"].includes(entry.state) && entry.actual === null) {
       reserved[bucket] += entry.reserved;
@@ -29,7 +39,7 @@ function totals(ledger: Ledger) {
     }
     if (entry.state === "reserved" || entry.state === "dispatched") inFlight++;
   }
-  return { spent, reserved, inFlight };
+  return { spent, reserved, inFlight, actualKnownSpent, authorizedUpperBoundCharged };
 }
 
 export class BudgetGuard {
@@ -93,6 +103,7 @@ export class BudgetGuard {
   async settle(reservation: Reservation, actualUsd: number | null): Promise<void> {
     return this.transact((ledger) => {
       const entry = this.entry(ledger, reservation);
+      if (entry.state === "authorized_upper_bound") throw new Error("AUTHORIZED_UPPER_BOUND_FINAL");
       let amount: number;
       try { amount = nanoUsd(actualUsd); }
       catch { entry.state = "unknown"; ledger.uncertain = true; throw new Error("COST_UNKNOWN"); }
@@ -114,8 +125,42 @@ export class BudgetGuard {
     return entry;
   }
 
-  // Operator-only, after verifying every charge externally and settling unknown
-  // entries. The UUID references the operator's audit record; no raw data is kept.
+  // This is the sole human-authorized historical exception, not a retry path or
+  // actual-cost reconciliation. Keep the global barrier until explicit audit.
+  async authorizeHistoricalUpperBound(input: unknown): Promise<void> {
+    const parsed = upperBoundGrantInputSchema.safeParse(input);
+    if (!parsed.success) throw new Error("UPPER_BOUND_GRANT_INVALID");
+    if (purposes.some((purpose) => this.caps[purpose] !== HARD_CAPS[purpose])) throw new Error("UPPER_BOUND_CAP_MISMATCH");
+    const grant = parsed.data;
+    return ledgerTransaction(this.options.path, (ledger) => {
+      const target = ledger.entries.find((entry) => entry.id === grant.reservationId);
+      if (ledger.entries.some((entry) => entry.id !== grant.reservationId && ["reserved", "dispatched", "unknown"].includes(entry.state))) throw new Error("UNSETTLED_RESERVATIONS");
+      if (ledger.entries.some((entry) => entry.actual !== null && entry.actual > entry.reserved)) throw new Error("RESERVATION_EXCEEDED");
+      if (ledger.version === 2) {
+        const existing = ledger.policyGrants[0];
+        if (Object.entries(grant).some(([key, value]) => existing[key as keyof typeof grant] !== value)) throw new Error("UPPER_BOUND_POLICY_CONFLICT");
+        return;
+      }
+      if (!ledger.uncertain || !target || target.state !== "unknown" || target.actual !== null || target.reserved !== HISTORICAL_UPPER_BOUND_AUTHORIZATION.budgetCharge || target.purpose !== "live_eval" || target.operation !== "explanation") throw new Error("UPPER_BOUND_TARGET_MISMATCH");
+      if (ledger.caps.prep !== 2e9 || ledger.caps.live_eval !== 0.5e9 || ledger.caps.demo !== 4e9) throw new Error("UPPER_BOUND_CAP_MISMATCH");
+      if (ledger.reconciliations.some((audit) => audit.id === grant.auditId)) throw new Error("UPPER_BOUND_POLICY_CONFLICT");
+      const state = totals(ledger);
+      if (state.spent.prep + target.reserved > 2e9 || state.spent.live_eval + target.reserved > 0.8e9 || state.spent.demo > 4e9) throw new Error("BUDGET_EXCEEDED");
+      const appliedAt = Date.now();
+      if (appliedAt < Date.parse(grant.approvedAt)) throw new Error("UPPER_BOUND_GRANT_INVALID");
+      // Build the replacement only after all preflight checks; failed business
+      // validation leaves every old entry/cap intact. One durable commit.
+      Object.assign(ledger, {
+        version: 2, caps: { ...ledger.caps, live_eval: 0.8e9 },
+        entries: ledger.entries.map((entry) => entry === target ? { ...entry, state: "authorized_upper_bound", accountingBasis: "authorized_upper_bound", budgetCharge: target.reserved, authorizationAuditId: grant.auditId } : entry),
+        policyGrants: [{ ...grant, appliedAt }],
+      });
+    }, true);
+  }
+
+  // Operator-only after auditing known actuals and the sole authorized budget
+  // allocation above (which keeps actual=null). Unresolved entries still block;
+  // the UUID references the operator's audit, not proof of exact billing.
   async confirmReconciliation(auditId: string): Promise<void> {
     if (typeof auditId !== "string" || !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(auditId)) throw new Error("INVALID_AUDIT_ID");
     return this.transact((ledger) => {
@@ -131,7 +176,9 @@ export class BudgetGuard {
     return this.transact((ledger) => {
       const state = totals(ledger);
       const usd = (values: Record<Purpose, number>) => Object.fromEntries(purposes.map((key) => [key, values[key] / 1e9])) as Record<Purpose, number>;
-      return { uncertain: ledger.uncertain, inFlight: state.inFlight, caps: usd(ledger.caps), spent: usd(state.spent), reserved: usd(state.reserved), available: usd(Object.fromEntries(purposes.map((key) => [key, Math.max(0, ledger.caps[key] - state.spent[key] - state.reserved[key])])) as Record<Purpose, number>) };
+      // spent is the budget charge: known actuals + the separately disclosed
+      // one authorized upper bound. It must not be reported as exact billing.
+      return { uncertain: ledger.uncertain, inFlight: state.inFlight, caps: usd(ledger.caps), spent: usd(state.spent), actualKnownSpent: usd(state.actualKnownSpent), authorizedUpperBoundCharged: usd(state.authorizedUpperBoundCharged), reserved: usd(state.reserved), available: usd(Object.fromEntries(purposes.map((key) => [key, Math.max(0, ledger.caps[key] - state.spent[key] - state.reserved[key])])) as Record<Purpose, number>) };
     });
   }
 }
