@@ -14,14 +14,21 @@ import { ExplanationSchema, type GeneratedItems } from "../src/lib/ai/validate";
 import { CatalogSchema, type Catalog } from "../src/lib/contracts/poi";
 import { IntentSchema, RecommendRequestSchema, type Intent } from "../src/lib/contracts/request";
 import { canonicalDatasetHash, DEFAULT_EMBEDDING_DIMENSIONS, DEFAULT_EMBEDDING_MODEL, rawQueryHash, validateIndex, validateQueryCache } from "../src/lib/search/index";
-import { parseIntent } from "../src/lib/search/intent";
+import { deriveOriginContext, parseIntent } from "../src/lib/search/intent";
 import { retrieveWithMetadata } from "../src/lib/search/retrieve";
 import type { RankedPoi } from "../src/lib/search/rank";
 import { protectArtifactPaths } from "./build-index";
 
 export const DEFAULT_EVAL_MODELS = Object.freeze(["openai/gpt-6-luna", "anthropic/claude-haiku-5.5", "qwen/qwen3.8-flash"]);
-export const LIVE_PROMPT_VERSION = "m3-core-strict-v1";
-const CONTEXT_POLICY = "fixed_UI_filters_only; raw_query_unchanged; no_gold_in_retrieval; explanation_independent_of_model_intent";
+export const AMENDED_EVAL_PROTOCOL = "approved-luna-qwen-20261020";
+export const AMENDED_EVAL_MODELS = Object.freeze(["openai/gpt-6-luna", "qwen/qwen3.8-flash"]);
+type EvalProtocol = "original-three-model" | typeof AMENDED_EVAL_PROTOCOL;
+const AMENDMENT_AUTHORIZATION = Object.freeze({ authorizationId: "87921423-9345-419a-bd47-c90f0e8b0c38",
+  grantRef: "call_082bf0991a884dbdab84f204cf7058ce", approvedAt: "2026-10-20T14:19:34.395565+00:00" });
+const QUALITY_REQUIREMENTS = Object.freeze({ positiveCasesPerModel: 12, minimumValidPositivesPerModel: 10,
+  idEvidenceHardFilterPassRate: 1, unsupportedFacts: 0, separateNegativeGuards: 4 });
+export const LIVE_PROMPT_VERSION = "m3-core-strict-origin-context-v2";
+const CONTEXT_POLICY = "fixed_UI_filters_and_trusted_selected_origin; raw_query_unchanged; no_gold_in_retrieval; explanation_independent_of_model_intent";
 export const INTENT_SCORING_POLICY = "hard-fields-v1; preferredTags-human-review";
 const CaseSchema = z.object({
   id: z.string().regex(/^[a-zA-Z0-9_-]{1,80}$/), now: z.iso.datetime({ offset: true }), request: RecommendRequestSchema,
@@ -47,16 +54,23 @@ export type LiveEvalRow = {
   usage: ChatAttemptEvent["usage"]; costUsd: number | null; attemptCount: number;
   attempts: ChatAttemptEvent[]; errorCode: string | null;
 };
+type ModelDisposition = { model: string; provider?: "Azure";
+  status: "measured" | "partially_measured" | "not_assessed" | "technically_disqualified";
+  remainingCases: "none" | "not_assessed"; qualityAssessment: null;
+  observations?: { status: number | null; costKnown: false }[] };
 export type LiveEvalResult = {
   type: "summary"; status: "disabled" | "blocked" | "complete"; reason: string | null;
-  comparisonComplete: boolean; winner: null; diagnostic: boolean; models: readonly string[];
+  comparisonComplete: boolean; originalFullThreeModelComparisonComplete: boolean; amendedComparisonComplete: boolean;
+  protocol: EvalProtocol; protocolAuthorization: typeof AMENDMENT_AUTHORIZATION | null;
+  modelDispositions: ModelDisposition[]; qualityRequirements: typeof QUALITY_REQUIREMENTS;
+  winner: null; diagnostic: boolean; models: readonly string[];
   synthetic: boolean | null; intentScoringPolicy: string; annotationHash: string | null;
   inputHashes: Readonly<Record<string, string>> | null; humanReviewRequired: true;
   schemaProjectionPolicy: string; reserveQuotes: readonly Quote[];
   promptVersion: string; contextPolicy: string; latencyMs: number; ttftMs: null; rows: LiveEvalRow[];
 };
 export type LiveEvalOptions = {
-  execute?: boolean; env?: Record<string, string | undefined>; models?: readonly string[];
+  execute?: boolean; env?: Record<string, string | undefined>; models?: readonly string[]; protocol?: EvalProtocol;
   input?: LiveInput; outputPath?: string;
 };
 type LiveInput = { catalog: Catalog; cases: readonly unknown[]; requireSemantic?: boolean;
@@ -93,7 +107,7 @@ export async function freezeLiveCases(catalog: Catalog, cases: readonly unknown[
     if (result.candidates.some((candidate) => !catalogIds.has(candidate.poi.id))) throw new Error("INVALID_FROZEN_CONTEXT");
     const candidates = immutable(result.candidates);
     rows.push(Object.freeze({ item, fixedIntent, candidates, datasetHash, retrievalMode: result.mode,
-      contextHash: hash({ datasetHash, candidates, fixedIntent, query: item.request.query, locale: item.request.locale, policy: CONTEXT_POLICY }) }));
+      contextHash: hash({ datasetHash, candidates, fixedIntent, query: item.request.query, locale: item.request.locale, originContext: deriveOriginContext(item.request.location), policy: CONTEXT_POLICY }) }));
   }
   if (!rows.length) throw new Error("INVALID_CASES");
   return rows;
@@ -212,6 +226,27 @@ export async function loadFrozenLiveInput(): Promise<LiveInput> {
   return { catalog, cases, requireSemantic: true, retrieve, annotationHash: sha(annotationText), inputHashes };
 }
 
+/** The amendment changes the measured models, never the frozen queries, labels or
+ * cached context inputs. Negative guards stay in the authoritative retrieval run. */
+async function assertAmendedInput(input: LiveInput, cases: readonly FrozenLiveCase[]): Promise<void> {
+  const [labelText, annotationText] = await Promise.all([
+    readFile("evals/real-cases.json", "utf8"), readFile("evals/live-intent-expectations.json", "utf8"),
+  ]);
+  const sha = (value: string) => createHash("sha256").update(value).digest("hex");
+  if (sha(labelText) !== FROZEN_HASHES.labelsSha256 || input.annotationHash !== sha(annotationText)
+    || input.catalog.synthetic || canonicalDatasetHash(input.catalog) !== FROZEN_HASHES.datasetHash
+    || !input.requireSemantic || !input.inputHashes
+    || ["catalogSha256", "labelsSha256", "indexSha256", "queryCacheSha256"].some((key) => input.inputHashes![key] !== FROZEN_HASHES[key as keyof typeof FROZEN_HASHES])) throw new Error("AMENDED_INPUT_MISMATCH");
+  const labels = z.object({ synthetic: z.literal(false), cases: z.array(z.object({
+    kind: z.enum(["retrieval_positive", "negative_guard"]), countInPositiveMetrics: z.boolean(),
+  }).passthrough()) }).parse(JSON.parse(labelText));
+  const positives = labels.cases.filter((item) => item.kind === "retrieval_positive" && item.countInPositiveMetrics);
+  const expected = attachIntentExpectations(positives, JSON.parse(annotationText));
+  if (expected.length !== 12 || labels.cases.filter((item) => item.kind === "negative_guard" && !item.countInPositiveMetrics).length !== 4
+    || cases.length !== 12 || hash(cases.map((item) => item.item)) !== hash(expected)
+    || cases.some((item) => item.retrievalMode !== "semantic" || !item.candidates.length)) throw new Error("AMENDED_INPUT_MISMATCH");
+}
+
 function totalUsage(attempts: readonly ChatAttemptEvent[]): ChatAttemptEvent["usage"] {
   const sum = (key: keyof ChatAttemptEvent["usage"]) => attempts.length && attempts.every((item) => item.usage[key] !== null)
     ? attempts.reduce((total, item) => total + item.usage[key]!, 0) : null;
@@ -237,18 +272,37 @@ function scoreIntent(actual: Intent, expected: Intent, item: EvalCase): { match:
 }
 
 export async function runLiveEvaluation(options: LiveEvalOptions = {}, dependencies: LiveEvalDependencies = {}): Promise<LiveEvalResult> {
-  const started = performance.now(); const models = [...(options.models ?? DEFAULT_EVAL_MODELS)];
-  const result: LiveEvalResult = { type: "summary", status: "disabled", reason: null, comparisonComplete: false, winner: null,
+  const started = performance.now(); const protocol = options.protocol ?? "original-three-model";
+  const amended = protocol === AMENDED_EVAL_PROTOCOL;
+  const models = [...(options.models ?? (amended ? AMENDED_EVAL_MODELS : DEFAULT_EVAL_MODELS))];
+  const result: LiveEvalResult = { type: "summary", status: "disabled", reason: null, comparisonComplete: false,
+    originalFullThreeModelComparisonComplete: false, amendedComparisonComplete: false, protocol,
+    protocolAuthorization: amended ? AMENDMENT_AUTHORIZATION : null, qualityRequirements: QUALITY_REQUIREMENTS,
+    modelDispositions: DEFAULT_EVAL_MODELS.map((model): ModelDisposition => amended && model === "anthropic/claude-haiku-5.5"
+      ? { model, provider: "Azure", status: "technically_disqualified", remainingCases: "not_assessed", qualityAssessment: null,
+        observations: [{ status: null, costKnown: false }, { status: 400, costKnown: false }] }
+      : { model, status: "not_assessed", remainingCases: "not_assessed", qualityAssessment: null }), winner: null,
     diagnostic: true, models, synthetic: null, intentScoringPolicy: "injected-exact-v1", annotationHash: null, inputHashes: null, humanReviewRequired: true,
     reserveQuotes: [], schemaProjectionPolicy: "original-core-schema-hash; Haiku anthropic-bounds-v1 wire only; strict local validation unchanged", promptVersion: LIVE_PROMPT_VERSION, contextPolicy: CONTEXT_POLICY, latencyMs: 0, ttftMs: null, rows: [] };
-  const finish = () => { result.latencyMs = Math.max(0, performance.now() - started); return result; };
+  const finish = () => {
+    for (const disposition of result.modelDispositions) {
+      if (disposition.status === "technically_disqualified") continue;
+      const measured = new Set(result.rows.filter((row) => row.model === disposition.model && !row.skipped)
+        .map((row) => `${row.caseId}:${row.stage}`)).size;
+      disposition.status = measured >= 24 ? "measured" : measured ? "partially_measured" : "not_assessed";
+      disposition.remainingCases = measured >= 24 ? "none" : "not_assessed";
+    }
+    result.latencyMs = Math.max(0, performance.now() - started); return result;
+  };
   const block = (reason: string) => { result.status = "blocked"; result.reason = reason; return finish(); };
+  if (protocol !== "original-three-model" && !amended) return block("INVALID_PROTOCOL");
   if (!options.execute) return finish();
   let config: ReturnType<typeof readAiConfig>;
   try { config = readAiConfig(options.env); } catch { return block("INVALID_AI_CONFIGURATION"); }
   if (!config.paidEnabled || !config.liveEvalEnabled) return block("LIVE_EVAL_DISABLED");
   if (!models.length || new Set(models).size !== models.length || models.some((model) => !DEFAULT_EVAL_MODELS.includes(model))) return block("INVALID_MODEL_SET");
-  result.diagnostic = models.length !== DEFAULT_EVAL_MODELS.length;
+  if (amended && hash(models) !== hash(AMENDED_EVAL_MODELS)) return block("INVALID_PROTOCOL_MODEL_SET");
+  result.diagnostic = amended ? false : models.length !== DEFAULT_EVAL_MODELS.length;
   result.reserveQuotes = Object.freeze(models.map((model) => quoteRequest({ operation: "explanation", model, maxCompletionTokens: 1000 })));
   const estimates = new Map(result.reserveQuotes.map((quote) => [quote.model, quote.estimatedUsd]));
   if ([...estimates.values()].some((cost) => cost > config.caps.live_eval || cost > config.caps.prep)) return block("MODEL_QUOTE_EXCEEDS_CAP");
@@ -263,7 +317,7 @@ export async function runLiveEvaluation(options: LiveEvalOptions = {}, dependenc
   };
   const batchFailure = await checkBudget(Math.max(...estimates.values()));
   if (batchFailure) return block(batchFailure);
-  const outputPath = options.outputPath ?? "evals/results/live-eval.jsonl";
+  const outputPath = options.outputPath ?? (amended ? "evals/results/live-eval-approved-luna-qwen-20261020.jsonl" : "evals/results/live-eval.jsonl");
   let cases: FrozenLiveCase[];
   try {
     await safeReportPath(outputPath);
@@ -271,6 +325,7 @@ export async function runLiveEvaluation(options: LiveEvalOptions = {}, dependenc
     await (dependencies.verifyModels ?? verifyCurrentModels)(models);
     const input = options.input ?? await loadFrozenLiveInput();
     cases = await freezeLiveCases(input.catalog, input.cases, dependencies.retrieve ?? input.retrieve);
+    if (amended) await assertAmendedInput(input, cases);
     if (input.requireSemantic && cases.some((item) => item.retrievalMode !== "semantic" || !item.item.expected.intent || !item.candidates.length)) throw new Error("SEMANTIC_PREFLIGHT_FAILED");
     result.synthetic = input.catalog.synthetic;
     result.annotationHash = input.annotationHash ?? null; result.inputHashes = input.inputHashes ?? null;
@@ -300,7 +355,7 @@ export async function runLiveEvaluation(options: LiveEvalOptions = {}, dependenc
             try { raw = await provider(request); return raw; } catch (error) { failure = error; throw error; }
           };
           if (stage === "intent") {
-            intentResult = await parseIntent(frozen.item.request.query, frozen.item.request.filters, frozen.item.request.explicitFilterKeys, { mode: "live", chatJson, deadlineAt, purpose: "live_eval" });
+            intentResult = await parseIntent(frozen.item.request.query, frozen.item.request.filters, frozen.item.request.explicitFilterKeys, { mode: "live", chatJson, deadlineAt, purpose: "live_eval", originContext: deriveOriginContext(frozen.item.request.location) });
             corePassed = IntentSchema.safeParse(raw).success;
           } else {
             validatedItems = await explain(frozen.candidates, frozen.fixedIntent, { query: frozen.item.request.query, locale: frozen.item.request.locale, chatJson, deadlineAt, purpose: "live_eval" });
@@ -344,21 +399,30 @@ export async function runLiveEvaluation(options: LiveEvalOptions = {}, dependenc
       }
     }
   }
-  result.comparisonComplete = result.status === "complete" && !result.diagnostic && result.rows.length === cases.length * models.length * 2 && result.rows.every((row) => !row.skipped && (row.stage !== "intent" || row.intentMatch !== null));
+  const measuredComplete = result.status === "complete" && !result.diagnostic && result.rows.length === cases.length * models.length * 2 && result.rows.every((row) => !row.skipped && (row.stage !== "intent" || row.intentMatch !== null));
+  // Completeness describes coverage only, never model quality or release approval.
+  result.originalFullThreeModelComparisonComplete = !amended && measuredComplete;
+  result.comparisonComplete = result.originalFullThreeModelComparisonComplete;
+  result.amendedComparisonComplete = amended && measuredComplete;
   finish();
   try {
     const { rows, ...metadata } = result;
     const records = [{ ...metadata, type: "metadata" }, ...rows];
     await (dependencies.writeReport ?? ((records, path) => writeLiveReport(path, records)))(records, outputPath);
-  } catch { block("REPORT_WRITE_FAILED"); result.comparisonComplete = false; }
+  } catch { block("REPORT_WRITE_FAILED"); result.comparisonComplete = false; result.originalFullThreeModelComparisonComplete = false; result.amendedComparisonComplete = false; }
   return finish();
 }
 
 export async function main(args: string[]): Promise<number> {
-  // CLI deliberately offers no subset/model/provider/HTTP override. A diagnostic
-  // subset is an explicit injected API operation, never a three-model winner.
-  if (args.some((arg) => arg !== "--execute") || args.length > 1) { console.info(JSON.stringify({ status: "blocked", reason: "INVALID_ARGUMENTS", comparisonComplete: false, winner: null })); return 1; }
-  const result = await runLiveEvaluation({ execute: args.includes("--execute") });
+  // Only the specifically approved amendment is selectable; arbitrary subsets
+  // stay injected diagnostics and cannot qualify for either comparison flag.
+  const protocolArg = `--protocol=${AMENDED_EVAL_PROTOCOL}`;
+  if (args.some((arg) => !["--execute", protocolArg].includes(arg)) || new Set(args).size !== args.length) {
+    console.info(JSON.stringify({ status: "blocked", reason: "INVALID_ARGUMENTS", comparisonComplete: false,
+      originalFullThreeModelComparisonComplete: false, amendedComparisonComplete: false, winner: null })); return 1;
+  }
+  const result = await runLiveEvaluation({ execute: args.includes("--execute"),
+    protocol: args.includes(protocolArg) ? AMENDED_EVAL_PROTOCOL : "original-three-model" });
   const { rows, ...summary } = result;
   console.info(JSON.stringify({ ...summary, rowCount: rows.length }));
   return result.status === "blocked" ? 1 : 0;

@@ -2,8 +2,8 @@
 import { cwd } from "node:process";
 import { isAbsolute, resolve } from "node:path";
 
-export const HARD_CAPS = Object.freeze({ prep: 2, live_eval: 0.8, demo: 4 });
-// Existing/newly initialized v1 ledgers cannot acquire the approved v2 cap
+export const HARD_CAPS = Object.freeze({ prep: 2, live_eval: 1, demo: 4 });
+// Existing/newly initialized ledgers cannot acquire an approved policy cap
 // through a constructor or environment override. Migration is operator-only.
 export const LEGACY_CAPS = Object.freeze({ prep: 2, live_eval: 0.5, demo: 4 });
 export type BudgetCaps = Readonly<{ prep: number; live_eval: number; demo: number }>;

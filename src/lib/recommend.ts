@@ -11,7 +11,7 @@ import { explain } from "./ai/explain";
 import type { ExplanationItem } from "./ai/validate";
 import { canonicalDatasetHash, createGuardedEmbedder } from "./search/index";
 import { filterCandidates } from "./search/filters";
-import { configuredAiMode, parseIntent, runBeforeDeadline, type AiMode } from "./search/intent";
+import { configuredAiMode, deriveOriginContext, parseIntent, runBeforeDeadline, type AiMode } from "./search/intent";
 import { retrieveWithMetadata, type RetrievalResult } from "./search/retrieve";
 import type { RankedPoi } from "./search/rank";
 import { buildNavigationLinks } from "./navigation";
@@ -29,16 +29,6 @@ const ideas: Readonly<Record<Poi["category"], string>> = {
 };
 function deterministic(candidates: readonly RankedPoi[]): ExplanationItem[] {
   return candidates.slice(0, 3).map(({ poi }) => ({ poiId: poi.id, why: "Место из каталога подходит по выбранной категории и заданным ограничениям.", activity: ideas[poi.category], evidenceIds: [...poi.description.sourceIds] }));
-}
-function locationLabel(request: RecommendRequest): string {
-  if (request.location.source === "device") return "Ваша геолокация";
-  const { lat, lon } = request.location;
-  const presets = [
-    { label: "EXPO", lat: 51.090, lon: 71.418 },
-    { label: "Бәйтерек", lat: 51.1282, lon: 71.4304 },
-    { label: "Набережная", lat: 51.1669, lon: 71.4179 },
-  ];
-  return presets.find((preset) => preset.lat === lat && preset.lon === lon)?.label ?? "Выбранная точка";
 }
 
 export async function recommend(input: RecommendRequest, dependencies: RecommendDependencies = {}): Promise<RecommendResponse> {
@@ -62,8 +52,9 @@ export async function recommend(input: RecommendRequest, dependencies: Recommend
   try {
     const catalog = await runBeforeDeadline(() => (dependencies.loadCatalog ?? loadCatalog)(), deadlineAt, signal);
     const dataSnapshot = canonicalDatasetHash(catalog);
-    const intent = await parseIntent(request.query, request.filters, request.explicitFilterKeys, { mode, chatJson, deadlineAt, signal, purpose: dependencies.purpose });
-    const usedContext = { locationLabel: locationLabel(request), filters: intent, profileId: request.profileId, isDemoProfile: request.profileId !== null, dataSnapshot };
+    const originContext = deriveOriginContext(request.location);
+    const intent = await parseIntent(request.query, request.filters, request.explicitFilterKeys, { mode, chatJson, deadlineAt, signal, purpose: dependencies.purpose, originContext });
+    const usedContext = { locationLabel: request.location.source === "device" ? "Ваша геолокация" : originContext ?? "Выбранная точка", filters: intent, profileId: request.profileId, isDemoProfile: request.profileId !== null, dataSnapshot };
     const warnings: string[] = [];
     if (request.profileId !== null) warnings.push("Использован демонстрационный профиль, а не история ваших посещений.");
     if (mode === "stub") warnings.push("Включён демо-разбор известных текстовых фраз; ИИ-объяснения недоступны.");

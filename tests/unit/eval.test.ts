@@ -388,3 +388,167 @@ describe("final semantic/metadata preflight boundaries", () => {
     expect(fetch).toHaveBeenCalledTimes(4);
   });
 });
+
+
+// This is an offline protocol/transport test with injected provider responses,
+// not evidence of model quality or of the accepted production semantic vectors.
+async function frozenProtocolFixture() {
+  const [catalogText, labelsText, annotationText] = await Promise.all([
+    readFile("data/catalog/places.json", "utf8"), readFile("evals/real-cases.json", "utf8"), readFile("evals/live-intent-expectations.json", "utf8"),
+  ]);
+  const source = CatalogSchema.parse(JSON.parse(catalogText));
+  const labels = JSON.parse(labelsText);
+  const positives = labels.cases.filter((item: { countInPositiveMetrics: boolean }) => item.countInPositiveMetrics);
+  const annotated = liveEval.attachIntentExpectations(positives, JSON.parse(annotationText));
+  const datasetHash = canonicalDatasetHash(source);
+  const model = DEFAULT_EMBEDDING_MODEL;
+  const retrieve = liveEval.createCachedSemanticRetriever(source,
+    { schemaVersion: "1.0", model, dimensions: 2, documentVersion: DOCUMENT_VERSION, datasetHash,
+      vectors: source.places.map((poi) => ({ poiId: poi.id, values: [1, 0] })) },
+    { schemaVersion: "1.0", model, dimensions: 2, datasetHash,
+      queries: Object.fromEntries(annotated.map((item) => [rawQueryHash(item.request.query), [1, 0]])) }, { model, dimensions: 2 });
+  const input = { catalog: source, cases: annotated, requireSemantic: true, retrieve,
+    annotationHash: createHash("sha256").update(annotationText).digest("hex"),
+    inputHashes: { catalogSha256: createHash("sha256").update(catalogText).digest("hex"),
+      labelsSha256: createHash("sha256").update(labelsText).digest("hex"),
+      indexSha256: "568c855ff30dc866c8de4f0eed3038df4406898bd45fe25472f5afa318934d45",
+      queryCacheSha256: "2788286068ef9d7d45e00ead9cf30c18de7ca6258acd939cc07c89e6b0cc38eb" } };
+  const wirePayloads: Record<string, unknown>[] = [];
+  const deps = dependencies(async (call) => {
+    const payload = JSON.parse((call.body.messages as { role: string; content: string }[]).find((message) => message.role === "user")!.content);
+    wirePayloads.push(payload);
+    const selected = annotated.find((item) => item.request.query === payload.query)!;
+    const name = (call.body.response_format as { json_schema: { name: string } }).json_schema.name;
+    const context = payload.candidates as { poiId: string; evidenceIds: string[] }[] | undefined;
+    const content = name === "place_intent" ? selected.expected.intent : { items: [{
+      poiId: context![0].poiId, why: "Подходит по категории", activity: "Можно отдохнуть", evidenceIds: [context![0].evidenceIds[0]],
+    }] };
+    return { status: 200, body: { provider: "OfflineTestProvider", model: call.model, usage: { cost: .00001 },
+      choices: [{ finish_reason: "stop", message: { content: JSON.stringify(content) } }] } };
+  });
+  deps.retrieve = retrieve;
+  return { input, deps, wirePayloads };
+}
+
+describe("approved Luna/Qwen amendment and shared origin context", () => {
+  const protocol = "approved-luna-qwen-20261020" as const;
+  it("forwards the same selected EXPO origin as recommend without coordinates in intent payload", async () => {
+    let payload: Record<string, unknown> = {};
+    const deps = dependencies(async (call) => {
+      const body = call.body.messages as { role: string; content: string }[];
+      if ((call.body.response_format as { json_schema: { name: string } }).json_schema.name === "place_intent") payload = JSON.parse(body.find((message) => message.role === "user")!.content);
+      return { status: 200, body: { usage: { cost: .00001 }, choices: [{ finish_reason: "stop", message: { content: JSON.stringify("candidates" in JSON.parse(body.find((message) => message.role === "user")!.content) ? explanation() : intent()) } }] } };
+    });
+    const selected = cases(); selected[0].request.location = { lat: 51.09, lon: 71.418, source: "preset" };
+    const result = await runLiveEvaluation({ ...options(), models: ["openai/gpt-6-luna"], input: { catalog, cases: selected } }, deps);
+    expect(payload).toHaveProperty("originContext", "EXPO");
+    expect(payload).not.toHaveProperty("location"); expect(JSON.stringify(payload)).not.toContain('"lat"');
+    expect(result.promptVersion).toBe("m3-core-strict-origin-context-v2");
+  });
+  it("keeps the default original protocol at all three models and 72 measured stages", async () => {
+    const { input, deps } = await frozenProtocolFixture();
+    const result = await runLiveEvaluation({ execute: true, env: env(), input }, deps);
+    expect(result).toMatchObject({ status: "complete", comparisonComplete: true,
+      originalFullThreeModelComparisonComplete: true, amendedComparisonComplete: false, winner: null });
+    expect(result.models).toEqual(["openai/gpt-6-luna", "anthropic/claude-haiku-5.5", "qwen/qwen3.8-flash"]);
+    expect(result.rows).toHaveLength(72);
+    expect(fetch).not.toHaveBeenCalled();
+  }, 20_000);
+  it("measures exactly 48 stages only under the named amendment with truthful Haiku disposition", async () => {
+    const { input, deps, wirePayloads } = await frozenProtocolFixture();
+    const result = await runLiveEvaluation({ execute: true, env: env(), input, protocol }, deps);
+    expect(result).toMatchObject({ status: "complete", comparisonComplete: false,
+      originalFullThreeModelComparisonComplete: false, amendedComparisonComplete: true,
+      diagnostic: false, winner: null, humanReviewRequired: true,
+      protocolAuthorization: { authorizationId: "87921423-9345-419a-bd47-c90f0e8b0c38" },
+      qualityRequirements: { positiveCasesPerModel: 12, minimumValidPositivesPerModel: 10,
+        idEvidenceHardFilterPassRate: 1, unsupportedFacts: 0, separateNegativeGuards: 4 } });
+    expect(result.models).toEqual(["openai/gpt-6-luna", "qwen/qwen3.8-flash"]);
+    expect(result.rows).toHaveLength(48);
+    for (const model of result.models) expect(result.modelDispositions.find((item) => item.model === model))
+      .toMatchObject({ status: "measured", remainingCases: "none" });
+    for (const model of result.models) expect(new Set(result.rows.filter((row) => row.model === model).map((row) => row.caseId)).size).toBe(12);
+    expect(result.modelDispositions).toContainEqual({ model: "anthropic/claude-haiku-5.5", provider: "Azure",
+      status: "technically_disqualified", remainingCases: "not_assessed", qualityAssessment: null,
+      observations: [{ status: null, costKnown: false }, { status: 400, costKnown: false }] });
+    expect(wirePayloads.find((payload) => payload.query === input.cases[0].request.query)).toHaveProperty("originContext", "EXPO");
+    expect(wirePayloads.filter((payload) => "filters" in payload).every((payload) => !JSON.stringify(payload).includes('"lat"') && !JSON.stringify(payload).includes('"lon"'))).toBe(true);
+    for (const item of input.cases) for (const stage of ["intent", "explanation"]) {
+      const rows = result.rows.filter((row) => row.caseId === item.id && row.stage === stage);
+      expect(new Set(rows.map((row) => row.promptHash)).size).toBe(1);
+      expect(new Set(rows.map((row) => row.contextHash)).size).toBe(1);
+    }
+    expect(fetch).not.toHaveBeenCalled();
+  }, 20_000);
+  it.each([0, 1, 23])("does not count skipped rows toward measured model coverage (%i actual Luna stages)", async (measuredLunaStages) => {
+    const { input, deps } = await frozenProtocolFixture();
+    const create = deps.createChat!;
+    let lunaStages = 0;
+    deps.createChat = (options) => {
+      if (options.model !== "openai/gpt-6-luna" || lunaStages++ >= measuredLunaStages) throw new Error("OFFLINE_BEFORE_DISPATCH");
+      return create(options);
+    };
+    const result = await runLiveEvaluation({ execute: true, env: env(), input, protocol }, deps);
+    expect(result.rows).toHaveLength(48);
+    expect(result.rows.filter((row) => !row.skipped)).toHaveLength(measuredLunaStages);
+    expect(result.amendedComparisonComplete).toBe(false);
+    expect(result.modelDispositions.find((item) => item.model === "openai/gpt-6-luna"))
+      .toMatchObject({ status: measuredLunaStages ? "partially_measured" : "not_assessed", remainingCases: "not_assessed" });
+    expect(result.modelDispositions.find((item) => item.model === "qwen/qwen3.8-flash"))
+      .toMatchObject({ status: "not_assessed", remainingCases: "not_assessed" });
+    expect(result.rows.filter((row) => row.skipped).every((row) => row.attemptCount === 0 && row.costUsd === 0)).toBe(true);
+    expect(fetch).not.toHaveBeenCalled();
+  });
+  it("does not promote an unapproved subset and rejects amended model overrides before any calls", async () => {
+    const { input, deps } = await frozenProtocolFixture();
+    const subset = await runLiveEvaluation({ execute: true, env: env(), input, models: ["openai/gpt-6-luna", "qwen/qwen3.8-flash"] }, deps);
+    expect(subset).toMatchObject({ diagnostic: true, comparisonComplete: false,
+      originalFullThreeModelComparisonComplete: false, amendedComparisonComplete: false, winner: null });
+    const factory = vi.fn(deps.createChat); deps.createChat = factory;
+    expect(await runLiveEvaluation({ execute: true, env: env(), input, protocol, models: ["openai/gpt-6-luna"] }, deps))
+      .toMatchObject({ status: "blocked", reason: "INVALID_PROTOCOL_MODEL_SET", rows: [], amendedComparisonComplete: false });
+    expect(factory).not.toHaveBeenCalled();
+  }, 20_000);
+  it.each(["missing", "changed_query", "changed_gold", "changed_annotation", "changed_hash", "unlabelled", "lexical", "synthetic"])("rejects %s frozen coverage before any amended provider calls", async (change) => {
+    const { input, deps } = await frozenProtocolFixture();
+    if (change === "missing") input.cases.pop();
+    if (change === "changed_query") input.cases[0].request.query += " ";
+    if (change === "changed_gold") input.cases[0].expected.relevantIds = [];
+    if (change === "changed_annotation") input.annotationHash = "0".repeat(64);
+    if (change === "changed_hash") input.inputHashes.indexSha256 = "0".repeat(64);
+    if (change === "unlabelled") delete input.cases[0].expected.intent;
+    if (change === "lexical") input.requireSemantic = false;
+    if (change === "synthetic") input.catalog.synthetic = true;
+    const factory = vi.fn(deps.createChat); deps.createChat = factory;
+    expect(await runLiveEvaluation({ execute: true, env: env(), input, protocol }, deps))
+      .toMatchObject({ status: "blocked", reason: "PREFLIGHT_FAILED", rows: [], amendedComparisonComplete: false });
+    expect(factory).not.toHaveBeenCalled();
+  });
+  it("retains unknown-cost STOP with both completion flags false in the amended protocol", async () => {
+    const { input, deps } = await frozenProtocolFixture();
+    const broken = dependencies(async () => ({ status: 400, body: { id: "gen-offline-fixture" } }));
+    deps.createChat = broken.createChat;
+    const result = await runLiveEvaluation({ execute: true, env: env(), input, protocol }, deps);
+    expect({ status: result.status, reason: result.reason, rows: result.rows.length,
+      original: result.originalFullThreeModelComparisonComplete, amended: result.amendedComparisonComplete, winner: result.winner })
+      .toEqual({ status: "blocked", reason: "COST_UNKNOWN", rows: 1, original: false, amended: false, winner: null });
+    expect(result.rows[0]).toMatchObject({ costUsd: null, attemptCount: 1, attempts: [{ status: 400, costKnown: false }] });
+    expect((await guard.snapshot()).uncertain).toBe(true);
+  });
+  it("does not mark amended coverage complete if atomic report persistence fails", async () => {
+    const { input, deps } = await frozenProtocolFixture();
+    deps.writeReport = async () => { throw new Error("OFFLINE_REPORT_FAILURE"); };
+    const result = await runLiveEvaluation({ execute: true, env: env(), input, protocol }, deps);
+    expect({ status: result.status, reason: result.reason, rows: result.rows.length,
+      original: result.originalFullThreeModelComparisonComplete, amended: result.amendedComparisonComplete, winner: result.winner })
+      .toEqual({ status: "blocked", reason: "REPORT_WRITE_FAILED", rows: 48, original: false, amended: false, winner: null });
+  }, 20_000);
+  it("offers the named CLI protocol without enabling calls in preview and rejects unknown protocols", async () => {
+    const output = vi.spyOn(console, "info").mockImplementation(() => {});
+    expect(await main(["--protocol=approved-luna-qwen-20261020"])).toBe(0);
+    expect(JSON.parse(output.mock.calls[0][0])).toMatchObject({ status: "disabled", protocol,
+      models: ["openai/gpt-6-luna", "qwen/qwen3.8-flash"], amendedComparisonComplete: false, rowCount: 0 });
+    expect(await main(["--protocol=arbitrary"])).toBe(1);
+    expect(fetch).not.toHaveBeenCalled();
+  });
+});

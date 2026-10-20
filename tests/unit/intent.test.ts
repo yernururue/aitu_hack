@@ -2,6 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createDefaultFilters, IntentSchema, type Filters, type Intent } from "@/lib/contracts/request";
 import { parseIntent } from "@/lib/search/intent";
+import * as intentModule from "@/lib/search/intent";
 import type { ChatJson } from "@/lib/ai/openrouter";
 
 const serverNow = new Date("2026-10-20T10:00:00Z");
@@ -21,6 +22,48 @@ beforeEach(() => {
   vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("NETWORK_FORBIDDEN"));
 });
 afterEach(() => { vi.clearAllTimers(); vi.useRealTimers(); vi.unstubAllEnvs(); vi.restoreAllMocks(); });
+
+describe("server-selected origin context (offline captured prompts only)", () => {
+  it.each([
+    ["EXPO", 51.09, 71.418, "preset"], ["Бәйтерек", 51.1282, 71.4304, "preset"], ["Набережная", 51.1669, 71.4179, "preset"],
+    [null, 51.09, 71.418, "device"], [null, 51.12, 71.41, "preset"], [null, 51.090001, 71.418, "preset"],
+  ] as const)("derives only the exact trusted preset label %s for CLI and server reuse", (expected, lat, lon, source) => {
+    const derive = Reflect.get(intentModule, "deriveOriginContext");
+    expect(derive).toBeTypeOf("function");
+    const location = { lat, lon, source, label: "untrusted client label" };
+    expect(derive(location)).toBe(expected);
+  });
+  it.each(["EXPO", "Бәйтерек", "Набережная"])("passes %s outside the strict Intent schema without forwarding coordinates", async (originContext) => {
+    const chatJson = vi.fn<ChatJson>(async () => parsedIntent());
+    await parseIntent(`Кафе от ${originContext}`, filters(), [], { ...live(chatJson), originContext } as Parameters<typeof parseIntent>[3]);
+    const call = chatJson.mock.calls[0][0];
+    expect(JSON.parse(call.messages.find((message) => message.role === "user")!.content)).toMatchObject({ originContext });
+    expect(call.jsonSchema.schema.properties).not.toHaveProperty("originContext");
+    expect(JSON.stringify(call)).not.toMatch(/"lat"|"lon"|51\.09|71\.418/);
+    const system = call.messages.find((message) => message.role === "system")!.content;
+    expect(system).toMatch(/originContext/);
+    expect(system).toMatch(/same selected origin/);
+  });
+  it.each([undefined, null, "untrusted client label 51.12 71.41"])("honestly forwards unavailable/unrecognized origin as null (%s)", async (originContext) => {
+    const chatJson = vi.fn<ChatJson>(async () => parsedIntent());
+    await parseIntent("Кафе рядом", filters(), [], { ...live(chatJson), originContext } as Parameters<typeof parseIntent>[3]);
+    const messages = chatJson.mock.calls[0][0].messages;
+    expect(JSON.parse(messages.find((message) => message.role === "user")!.content)).toHaveProperty("originContext", null);
+    expect(JSON.stringify(messages)).not.toContain("untrusted client label");
+  });
+  it.each([
+    ["EXPO", "Кафе от Бәйтерек", "Подтвердите другую выбранную точку."],
+    [null, "Кафе от неизвестной башни", "Выберите подтверждённую точку старта."],
+  ] as const)("keeps the model double's clarification for a different/unestablished named origin", async (originContext, query, conflict) => {
+    const chatJson = vi.fn<ChatJson>(async () => parsedIntent({ conflict }));
+    const result = await parseIntent(query, filters(), ["radiusM"], { ...live(chatJson), originContext } as Parameters<typeof parseIntent>[3]);
+    expect(result.conflict).toBe(conflict); expect(result.radiusM).toBe(filters().radiusM);
+    const system = chatJson.mock.calls[0][0].messages.find((message) => message.role === "system")!.content;
+    expect(system).toMatch(/different named origin/);
+    expect(system).toMatch(/set conflict/);
+    expect(system).toMatch(/coordinates/);
+  });
+});
 
 describe("local intent and an explicitly bounded demo grammar", () => {
   it("bypasses providers for an empty query and preserves UI constraints without mutation", async () => {
