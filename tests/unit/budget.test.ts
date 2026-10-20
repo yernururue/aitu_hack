@@ -302,6 +302,21 @@ describe("guarded endpoint transport (injected, no network)", () => {
     await expect(transport.execute({ purpose: "prep", quote: plan(), body: { input: ["test"] } })).rejects.toThrow("LEDGER_UNCERTAIN");
     expect(calls).toBe(1);
   });
+  it.each([400, 200])("retains HTTP%s and a safe generation id on missing cost while blocking all later sends", async (status) => {
+    const guard = new BudgetGuard({ path });
+    let calls = 0;
+    const transport = new GuardedTransport({ guard, send: async () => { calls++; return { status, body: { id: "gen-1792502351-safeReceipt", error: { message: "PRIVATE_PROVIDER_BODY" } } }; } });
+    const failure = await transport.execute({ purpose: "prep", quote: plan(), body: { input: ["private query"] } }).catch((error: unknown) => error);
+    expect(failure).toMatchObject({ code: "COST_UNKNOWN", reason: "unknown_cost", status, generationId: "gen-1792502351-safeReceipt", costKnown: false, dispatched: true, durablyRecorded: true });
+    expect(JSON.stringify(failure)).not.toContain("PRIVATE_PROVIDER_BODY");
+    await expect(transport.execute({ purpose: "prep", quote: plan(), body: { input: ["x"] } })).rejects.toThrow("LEDGER_UNCERTAIN");
+    expect(calls).toBe(1);
+    expect(await guard.snapshot()).toMatchObject({ uncertain: true, spent: { prep: 0, live_eval: 0, demo: 0 } });
+    const persisted = await readFile(path, "utf8");
+    expect(persisted).not.toContain("private query");
+    expect(persisted).not.toContain("PRIVATE_PROVIDER_BODY");
+    expect(persisted).not.toContain("gen-1792502351-safeReceipt");
+  });
   it("separately charges a deliberate retry after a known paid failure", async () => {
     const guard = new BudgetGuard({ path });
     let calls = 0;

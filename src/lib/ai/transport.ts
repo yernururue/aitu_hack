@@ -18,16 +18,24 @@ export class TransportError extends Error {
   readonly dispatched: boolean;
   readonly durablyRecorded: boolean;
   readonly status?: number;
+  readonly generationId?: string;
   readonly accounting?: Accounting;
-  constructor(readonly code: string, readonly reason: TransportReason, options: { costKnown?: boolean; dispatched?: boolean; durablyRecorded?: boolean; status?: number; accounting?: Accounting } = {}) {
+  constructor(readonly code: string, readonly reason: TransportReason, options: { costKnown?: boolean; dispatched?: boolean; durablyRecorded?: boolean; status?: number; generationId?: string; accounting?: Accounting } = {}) {
     super(code);
     this.name = "TransportError";
     this.costKnown = options.costKnown ?? false;
     this.dispatched = options.dispatched ?? false;
     this.durablyRecorded = options.durablyRecorded ?? false;
-    this.status = options.status;
+    this.status = Number.isInteger(options.status) && options.status! >= 100 && options.status! <= 599 ? options.status : undefined;
+    this.generationId = safeGenerationId(options.generationId);
     this.accounting = options.accounting;
   }
+}
+function safeGenerationId(value: unknown): string | undefined {
+  return typeof value === "string" && value.length >= 5 && value.length <= 128 && value.startsWith("gen-") && /[A-Za-z0-9]/.test(value.charAt(4)) && !/[^A-Za-z0-9_-]/.test(value) ? value : undefined;
+}
+function responseGenerationId(body: unknown): string | undefined {
+  return body && typeof body === "object" && "id" in body ? safeGenerationId(body.id) : undefined;
 }
 export type ExecuteRequest = {
   purpose: Purpose; quote: Quote; body: unknown;
@@ -146,13 +154,14 @@ export class GuardedTransport {
         throw new TransportError("COST_UNKNOWN", reason ?? "network", { dispatched: true, durablyRecorded: durable });
       }
       const accounting = responseAccounting(response?.body);
+      const diagnostics = { status: response?.status, generationId: responseGenerationId(response?.body) };
       try { await this.options.guard.settle(reservation, actualCost(response?.body)); }
       catch (error) {
-        if (error instanceof Error && error.message === "COST_UNKNOWN") throw new TransportError("COST_UNKNOWN", "unknown_cost", { dispatched: true, durablyRecorded: true });
-        if (error instanceof Error && error.message === "RESERVATION_EXCEEDED") throw new TransportError("RESERVATION_EXCEEDED", "budget", { dispatched: true, costKnown: true, durablyRecorded: true, accounting });
+        if (error instanceof Error && error.message === "COST_UNKNOWN") throw new TransportError("COST_UNKNOWN", "unknown_cost", { dispatched: true, durablyRecorded: true, ...diagnostics });
+        if (error instanceof Error && error.message === "RESERVATION_EXCEEDED") throw new TransportError("RESERVATION_EXCEEDED", "budget", { dispatched: true, costKnown: true, durablyRecorded: true, accounting, ...diagnostics });
         throw guardFailure(error, true);
       }
-      const metadata = { costKnown: true, dispatched: true, durablyRecorded: true, accounting };
+      const metadata = { costKnown: true, dispatched: true, durablyRecorded: true, accounting, ...diagnostics };
       const afterSettlement = cancellation();
       if (afterSettlement) throw new TransportError(afterSettlement.message, afterSettlement.reason, metadata);
       if (!Number.isInteger(response.status) || response.status < 200 || response.status >= 300) throw new TransportError("UPSTREAM_REJECTED", "http", { ...metadata, status: response.status });

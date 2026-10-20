@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { quoteRequest } from "./pricing";
-import { createLiveTransport, responseAccounting, TransportError, type Accounting, type GuardedTransport } from "./transport";
+import { createLiveTransport, responseAccounting, TransportError, type Accounting, type GuardedTransport, type TransportReason } from "./transport";
 import type { Purpose } from "./config";
 
 export type ChatMessage = Readonly<{ role: "system" | "user" | "assistant"; content: string }>;
@@ -23,6 +23,8 @@ export type ChatAttemptEvent = Readonly<{
   status: number | null;
   schemaProjectionVersion?: SchemaProjectionVersion;
   reasoningPolicy?: "disabled" | "provider-default";
+  transportReason?: TransportReason;
+  generationId?: string;
 }>;
 
 const messageSchema = z.strictObject({ role: z.enum(["system", "user", "assistant"]), content: z.string().min(1).max(64_000) });
@@ -184,7 +186,7 @@ export function createChatJson(options: {
       let quote;
       try { quote = quoteRequest({ operation: stage, model, maxCompletionTokens: stage === "intent" ? 400 : 1000 }); }
       catch { throw new ChatJsonError("INVALID_REQUEST", stage, true, false); }
-      const emit = (outcome: ChatAttemptEvent["outcome"], accounting?: Accounting, status: number | null = null) => notify({ stage, attempt, model, responseModel: accounting?.responseModel ?? null, provider: accounting?.provider ?? null, latencyMs: Math.max(0, Date.now() - attemptStart), costKnown: accounting !== undefined, costUsd: accounting?.costUsd ?? null, usage: accounting?.usage ?? { promptTokens: null, completionTokens: null, totalTokens: null }, outcome, status, schemaProjectionVersion, reasoningPolicy: quote.reasoning ? "disabled" : "provider-default" });
+      const emit = (outcome: ChatAttemptEvent["outcome"], accounting?: Accounting, status: number | null = null, transportReason?: TransportReason, generationId?: string) => notify({ stage, attempt, model, responseModel: accounting?.responseModel ?? null, provider: accounting?.provider ?? null, latencyMs: Math.max(0, Date.now() - attemptStart), costKnown: accounting !== undefined, costUsd: accounting?.costUsd ?? null, usage: accounting?.usage ?? { promptTokens: null, completionTokens: null, totalTokens: null }, outcome, status, schemaProjectionVersion, reasoningPolicy: quote.reasoning ? "disabled" : "provider-default", ...(transportReason ? { transportReason } : {}), ...(generationId ? { generationId } : {}) });
       try {
         const body = await transport.execute({ purpose: request.purpose ?? "prep", quote, body: payload, signal: request.signal, deadlineAt, timeoutMs: 15_000 });
         const accounting = responseAccounting(body);
@@ -200,7 +202,7 @@ export function createChatJson(options: {
         if (error instanceof ChatJsonError) throw error;
         failure = mapped(error, stage);
         if (error instanceof TransportError) {
-          if (error.durablyRecorded) emit(error.reason === "http" ? "http_error" : "error", error.accounting, Number.isInteger(error.status) ? error.status! : null);
+          if (error.durablyRecorded) emit(error.reason === "http" ? "http_error" : "error", error.accounting, error.status ?? null, error.reason, error.generationId);
           retry = error.costKnown && error.durablyRecorded && error.reason === "http" && [429, 502, 503, 504].includes(error.status ?? 0);
         }
       }

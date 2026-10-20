@@ -215,6 +215,38 @@ describe("structured server chat", () => {
     expect(calls).toBe(1);
     expect((await guard.snapshot()).uncertain).toBe(true);
   });
+  it.each([400, 200])("retains HTTP%s missing-cost diagnostics only after durable unknown settlement without retry", async (status) => {
+    const events: ChatAttemptEvent[] = [];
+    let calls = 0;
+    const chat = client(async () => { calls++; return { status, body: { id: "gen-1792502351-safeReceipt", error: { message: "PRIVATE_PROVIDER_BODY" } } }; }, (event) => { events.push(event); });
+    await expect(chat(request())).rejects.toMatchObject({ code: "COST_UNKNOWN", costKnown: false, dispatched: true });
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({ status, generationId: "gen-1792502351-safeReceipt", transportReason: "unknown_cost", outcome: "error", costKnown: false, costUsd: null });
+    expect(calls).toBe(1);
+    expect((await guard.snapshot()).uncertain).toBe(true);
+    expect(JSON.stringify(events)).not.toMatch(/PRIVATE_PROVIDER_BODY|private text/);
+    await expect(chat(request())).rejects.toMatchObject({ code: "BUDGET_BLOCKED" });
+    expect(calls).toBe(1);
+    expect(events).toHaveLength(1);
+  });
+  it.each(["sk-or-v1-fixture-not-a-real-key", "gen-unsafe?query=private", "gen-unsafe\n", `gen-${"a".repeat(125)}`, "gen-", { id: "gen-nested" }])("drops unsafe generation identifiers on unknown responses (%j)", async (id) => {
+    const events: ChatAttemptEvent[] = [];
+    await expect(client(async () => ({ status: 400, body: { id } }), (event) => { events.push(event); })(request())).rejects.toMatchObject({ code: "COST_UNKNOWN" });
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({ status: 400, transportReason: "unknown_cost" });
+    expect(events[0]).not.toHaveProperty("generationId");
+  });
+  it.each(["network", "json-parse"])("keeps %s send rejection unknown without inventing response identifiers or status", async (kind) => {
+    const events: ChatAttemptEvent[] = [];
+    let calls = 0;
+    const chat = client(async () => { calls++; throw kind === "json-parse" ? new SyntaxError("PRIVATE_PARSE_BODY") : new Error("PRIVATE_NETWORK_BODY"); }, (event) => { events.push(event); });
+    await expect(chat(request())).rejects.toMatchObject({ code: "COST_UNKNOWN", costKnown: false });
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({ status: null, transportReason: "network", costKnown: false });
+    expect(events[0]).not.toHaveProperty("generationId");
+    expect(calls).toBe(1);
+    expect(JSON.stringify(events)).not.toMatch(/PRIVATE_PARSE_BODY|PRIVATE_NETWORK_BODY/);
+  });
   it("does not trust a generic error claiming known cost to authorize retry", async () => {
     let calls = 0;
     const chat = createChatJson({ transport: { execute: async () => { calls++; throw Object.assign(new Error("PRIVATE"), { costKnown: true, status: 429 }); } } });
