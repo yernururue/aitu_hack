@@ -184,6 +184,29 @@ describe("real catalogue offline behaviour with honest disclosure", () => {
 });
 
 describe("server-authored origin labels", () => {
+  it.each(["Кафе от Бәйтерек", "Кафе от неизвестной башни"])("keeps the model double's origin clarification and never moves the selected point: %s", async (query) => {
+    const input = request({ query }); const before = structuredClone(input);
+    const retrieve = vi.fn<RetrievalStub>(retrieval());
+    const chatJson = vi.fn<ChatJson>(async () => intent({ conflict: "Подтвердите точку старта в выбранных условиях." }));
+    const result = await recommend(input, { ...deps(), retrieve, chatJson });
+    expect(result).toMatchObject({ status: "needs_clarification", recommendations: [], usedContext: { locationLabel: "EXPO", filters: { radiusM: before.filters.radiusM, conflict: "Подтвердите точку старта в выбранных условиях." } } });
+    expect(input).toEqual(before);
+    expect(retrieve).not.toHaveBeenCalled(); expect(chatJson).toHaveBeenCalledOnce();
+    expect(fetch).not.toHaveBeenCalled();
+  });
+  it.each([
+    ["EXPO", 51.09, 71.418, "preset"], ["Бәйтерек", 51.1282, 71.4304, "preset"], ["Набережная", 51.1669, 71.4179, "preset"],
+    [null, 51.09, 71.418, "device"], [null, 51.12, 71.41, "preset"], [null, 51.090001, 71.418, "preset"],
+  ] as const)("forwards only safe server origin %s into the captured intent prompt", async (originContext, lat, lon, source) => {
+    const chatJson = vi.fn<ChatJson>(chat());
+    await recommend(request({ location: { lat, lon, source } }), { ...deps(), chatJson });
+    const call = chatJson.mock.calls.find(([call]) => call.stage === "intent")![0];
+    const payload = JSON.parse(call.messages.find((message) => message.role === "user")!.content);
+    expect(payload).toHaveProperty("originContext", originContext);
+    expect(payload).not.toHaveProperty("location");
+    expect(JSON.stringify(call)).not.toMatch(/"lat"|"lon"|51\.09|71\.418|51\.1282|71\.4304|51\.1669|71\.4179/);
+    expect(fetch).not.toHaveBeenCalled();
+  });
   it.each([
     ["EXPO", 51.090, 71.418, "preset"],
     ["Бәйтерек", 51.1282, 71.4304, "preset"],
