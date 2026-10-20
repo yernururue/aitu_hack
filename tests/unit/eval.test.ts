@@ -7,8 +7,11 @@ import { CatalogSchema } from "../../src/lib/contracts/poi";
 import { createDefaultFilters, type Intent, type RecommendRequest } from "../../src/lib/contracts/request";
 import { BudgetGuard, initializeLedger } from "../../src/lib/ai/budget";
 import { createChatJson, type ChatJson } from "../../src/lib/ai/openrouter";
+import { quoteRequest } from "../../src/lib/ai/pricing";
 import { GuardedTransport, type ProviderSend } from "../../src/lib/ai/transport";
-import { canonicalDatasetHash } from "../../src/lib/search/index";
+import { createHash } from "node:crypto";
+import * as liveEval from "../../scripts/eval-live";
+import { canonicalDatasetHash, DEFAULT_EMBEDDING_MODEL, DOCUMENT_VERSION, rawQueryHash } from "../../src/lib/search/index";
 import type { RankedPoi } from "../../src/lib/search/rank";
 import { DEFAULT_EVAL_MODELS, freezeLiveCases, main, runLiveEvaluation, writeLiveReport, type LiveEvalDependencies } from "../../scripts/eval-live";
 
@@ -57,9 +60,9 @@ describe("live evaluation gates", () => {
     expect(result.status).toBe("blocked"); expect(factory).not.toHaveBeenCalled();
     expect(deps.verifyModels).not.toHaveBeenCalled(); expect(fetch).not.toHaveBeenCalled();
   });
-  it("declines the entire default comparison before calls because Haiku exceeds eval cap", async () => {
+  it("retains the immutable cap refusal before providers even with a verified low-rate Haiku route", async () => {
     const deps = dependencies(); const factory = vi.fn(deps.createChat); deps.createChat = factory;
-    const result = await runLiveEvaluation({ ...options(), models: [...DEFAULT_EVAL_MODELS] }, deps);
+    const result = await runLiveEvaluation({ ...options(), models: [...DEFAULT_EVAL_MODELS], env: { ...env(), LIVE_EVAL_MAX_USD: "0.1" } }, deps);
     expect(result).toMatchObject({ status: "blocked", reason: "MODEL_QUOTE_EXCEEDS_CAP", comparisonComplete: false, winner: null, rows: [] });
     expect(factory).not.toHaveBeenCalled(); expect(deps.verifyModels).not.toHaveBeenCalled(); expect(deps.retrieve).not.toHaveBeenCalled();
     expect((await guard.snapshot()).spent).toEqual({ prep: 0, live_eval: 0, demo: 0 });
@@ -234,5 +237,153 @@ describe("report and CLI boundaries", () => {
     expect(await main([])).toBe(0);
     expect(JSON.parse(output.mock.calls[0][0] as string)).toMatchObject({ status: "disabled", comparisonComplete: false, winner: null });
     expect(fetch).not.toHaveBeenCalled();
+  });
+});
+
+
+describe("accepted semantic inputs and source-first intent labels", () => {
+  function semanticInputs() {
+    return { index: { schemaVersion: "1.0", model: DEFAULT_EMBEDDING_MODEL, dimensions: 2, documentVersion: DOCUMENT_VERSION,
+      datasetHash: canonicalDatasetHash(catalog), vectors: catalog.places.map((poi) => ({ poiId: poi.id, values: [1, 0] })) },
+    cache: { schemaVersion: "1.0", model: DEFAULT_EMBEDDING_MODEL, dimensions: 2, datasetHash: canonicalDatasetHash(catalog), queries: { [rawQueryHash(request().query)]: [1, 0] } } };
+  }
+  it("uses the unchanged raw-query cache with the accepted index, never gold criteria or a live embedding", async () => {
+    const { index, cache } = semanticInputs();
+    const retrieve = liveEval.createCachedSemanticRetriever(catalog, index, cache, { model: DEFAULT_EMBEDDING_MODEL, dimensions: 2 });
+    const frozen = await freezeLiveCases(catalog, cases(), retrieve);
+    expect(frozen[0].retrievalMode).toBe("semantic");
+    const changed = cases(); changed[0].expected.intent.requiredFacts = ["outlets"]; changed[0].expected.intent.preferredTags = ["GOLD"];
+    changed[0].labelCriteria.anyTags = ["OTHER_GOLD"];
+    expect((await freezeLiveCases(catalog, changed, retrieve))[0].contextHash).toBe(frozen[0].contextHash);
+    expect(fetch).not.toHaveBeenCalled();
+    await expect(retrieve({ ...request(), query: request().query + " " }, intent(), new Date(), { catalog })).rejects.toThrow("QUERY_CACHE_MISS");
+  });
+  it.each(["model", "dimensions", "datasetHash"])("rejects incompatible cached %s before a provider", (key) => {
+    const { index, cache } = semanticInputs();
+    expect(() => liveEval.createCachedSemanticRetriever(catalog, index, { ...cache, [key]: key === "dimensions" ? 3 : "wrong" }, { model: DEFAULT_EMBEDDING_MODEL, dimensions: 2 })).toThrow();
+  });
+  it("preflights EVERY case for actual semantic mode before constructing any chat provider", async () => {
+    const deps = dependencies(); const factory = vi.fn(deps.createChat); deps.createChat = factory;
+    const result = await runLiveEvaluation({ ...options(), input: { ...options().input, requireSemantic: true } }, deps);
+    expect(result).toMatchObject({ status: "blocked", reason: "PREFLIGHT_FAILED", rows: [], comparisonComplete: false });
+    expect(factory).not.toHaveBeenCalled();
+  });
+  it("pins all twelve source-first labels to unchanged RU bytes/queries and leaves semantic prose explicitly unscored", async () => {
+    const labelText = await readFile("evals/real-cases.json", "utf8");
+    const labels = JSON.parse(labelText);
+    const text = await readFile("evals/live-intent-expectations.json", "utf8");
+    const annotations = JSON.parse(text);
+    expect(annotations.labelsSha256).toBe(createHash("sha256").update(labelText).digest("hex"));
+    const positives = labels.cases.filter((item: { countInPositiveMetrics: boolean }) => item.countInPositiveMetrics);
+    const merged = liveEval.attachIntentExpectations(positives, annotations);
+    expect(merged).toHaveLength(12);
+    merged.forEach((item) => {
+      expect(item.expected.intent).toMatchObject({ ...item.request.filters, requiredFacts: [], conflict: null });
+      expect(item.intentScoringPolicy).toBe("hard-fields-v1; preferredTags-human-review");
+    });
+    const missing = { ...annotations, cases: annotations.cases.slice(1) };
+    expect(() => liveEval.attachIntentExpectations(positives, missing)).toThrow("INTENT_LABELS_INCOMPLETE");
+    const drifted = structuredClone(positives); drifted[0].request.query += " ";
+    expect(() => liveEval.attachIntentExpectations(drifted, annotations)).toThrow("INTENT_QUERY_MISMATCH");
+  });
+  it("scores all hard fields and required facts independently while freeform tags require human review", async () => {
+    const deps = dependencies(async (call) => {
+      const name = (call.body.response_format as { json_schema: { name: string } }).json_schema.name;
+      const value = name === "place_intent" ? { ...intent(), preferredTags: ["смысл, не точная строка"] } : explanation();
+      return { status: 200, body: { usage: { cost: .00001 }, choices: [{ finish_reason: "stop", message: { content: JSON.stringify(value) } }] } };
+    });
+    const annotated = [{ ...cases()[0], intentScoringPolicy: "hard-fields-v1; preferredTags-human-review", unscoredSemanticRequirements: ["кофе"] }];
+    const result = await runLiveEvaluation({ ...options(), input: { catalog, cases: annotated } }, deps);
+    expect(result.rows[0]).toMatchObject({ intentMatch: true, validatedIntent: { preferredTags: ["смысл, не точная строка"] },
+      intentScore: { hardFieldsPass: true, requiredFactsPass: true, conflictPass: true, preferredTags: "human-review", unscoredSemanticRequirements: ["кофе"] } });
+    const exact = await runLiveEvaluation(options(), deps);
+    expect(exact.rows[0].intentMatch).toBe(false);
+  });
+  it("keeps validated why/activity/evidence from the core return and no raw rejected prose", async () => {
+    const valid = await runLiveEvaluation(options(), dependencies());
+    expect(valid.rows[1]).toMatchObject({ validatedItems: explanation().items, evidenceSources: [{ poiId: candidate.poi.id, sources: [candidate.poi.sources[0]] }] });
+    const deps = dependencies(async (call) => {
+      const name = (call.body.response_format as { json_schema: { name: string } }).json_schema.name;
+      return { status: 200, body: { usage: { cost: .00001 }, choices: [{ finish_reason: "stop", message: { content: JSON.stringify(name === "place_intent" ? intent() : { items: [{ ...explanation().items[0], why: "Тихое место" }] }) } }] } };
+    });
+    const invalid = await runLiveEvaluation(options(), deps);
+    expect(invalid.rows[1]).toMatchObject({ schemaPass: true, groundingPass: false, validatedItems: null, evidenceSources: [] });
+    expect(JSON.stringify(invalid)).not.toContain("Тихое место");
+  });
+  it("verifies all three full endpoint envelopes with issued quotes before chat creation", async () => {
+    const deps = dependencies(); deps.verifyModels = undefined;
+    const factory = vi.fn(deps.createChat); deps.createChat = factory;
+    // A malformed endpoint envelope must not be silently replaced by /models base pricing.
+    vi.mocked(fetch).mockImplementation(async (url) => new Response(JSON.stringify(String(url).endsWith("/endpoints") ? { data: { id: "wrong", endpoints: [] } } : { data: DEFAULT_EVAL_MODELS.map((id) => ({ id })) }), { status: 200 }));
+    const result = await runLiveEvaluation({ ...options(), models: DEFAULT_EVAL_MODELS }, deps);
+    expect(result).toMatchObject({ status: "blocked", reason: "PREFLIGHT_FAILED", rows: [] });
+    expect(factory).not.toHaveBeenCalled();
+    for (const model of DEFAULT_EVAL_MODELS) expect(vi.mocked(fetch).mock.calls.some(([url]) => String(url).includes(model + "/endpoints"))).toBe(true);
+  });
+});
+
+
+describe("hard-intent coverage and full comparison honesty", () => {
+  it.each([
+    { categories: ["park"] }, { radiusM: 5000 }, { durationMinutes: 120 }, { company: "friends" },
+    { maxSpendKzt: 0 }, { openNow: true }, { requiredFacts: ["outlets"] }, { conflict: "Уточните" },
+  ])("fails an independently mismatched hard intent condition %j", async (delta) => {
+    const deps = dependencies(async (call) => {
+      const name = (call.body.response_format as { json_schema: { name: string } }).json_schema.name;
+      return { status: 200, body: { usage: { cost: .00001 }, choices: [{ finish_reason: "stop", message: { content: JSON.stringify(name === "place_intent" ? { ...intent(), ...delta } : explanation()) } }] } };
+    });
+    const annotated = [{ ...cases()[0], intentScoringPolicy: "hard-fields-v1; preferredTags-human-review" }];
+    const result = await runLiveEvaluation({ ...options(), models: ["openai/gpt-6-luna"], input: { catalog, cases: annotated } }, deps);
+    expect(result.rows[0].intentMatch).toBe(false);
+    expect(result.rows[1].groundingPass).toBe(true);
+  });
+  it("never calls a synthetic/single-case all-three run a complete frozen comparison", async () => {
+    const result = await runLiveEvaluation({ ...options(), models: DEFAULT_EVAL_MODELS }, dependencies());
+    expect(result).toMatchObject({ status: "complete", diagnostic: true, comparisonComplete: false, winner: null });
+    expect(result.rows).toHaveLength(6);
+    expect(result.rows.filter((row) => row.model.includes("haiku")).every((row) => row.attempts[0].schemaProjectionVersion === "anthropic-bounds-v1")).toBe(true);
+  });
+});
+
+
+describe("final semantic/metadata preflight boundaries", () => {
+  it("stops on a later raw cache miss before ANY model stage even after an earlier semantic case", async () => {
+    const model = DEFAULT_EMBEDDING_MODEL;
+    const index = { schemaVersion: "1.0", model, dimensions: 2, documentVersion: DOCUMENT_VERSION,
+      datasetHash: canonicalDatasetHash(catalog), vectors: catalog.places.map((poi) => ({ poiId: poi.id, values: [1, 0] })) };
+    const cache = { schemaVersion: "1.0", model, dimensions: 2, datasetHash: canonicalDatasetHash(catalog), queries: { [rawQueryHash(request().query)]: [1, 0] } };
+    const deps = dependencies(); deps.retrieve = liveEval.createCachedSemanticRetriever(catalog, index, cache, { model, dimensions: 2 });
+    const factory = vi.fn(deps.createChat); deps.createChat = factory;
+    const inputCases = [...cases(), { ...cases()[0], id: "DEV-02", request: { ...request(), query: "MISSING_RAW_QUERY" } }];
+    expect(await runLiveEvaluation({ ...options(), input: { catalog, cases: inputCases, requireSemantic: true } }, deps)).toMatchObject({ status: "blocked", reason: "PREFLIGHT_FAILED", rows: [] });
+    expect(factory).not.toHaveBeenCalled(); expect(fetch).not.toHaveBeenCalled();
+  });
+  it("uses full endpoint metadata and preserves issued provider/billing policies while all three share original prompts", async () => {
+    const records = DEFAULT_EVAL_MODELS.map((id) => {
+      const quote = quoteRequest({ operation: "explanation", model: id, maxCompletionTokens: 1000 });
+      return { id, context_length: quote.contextLength, top_provider: { max_completion_tokens: quote.billing.maxOutputTokens },
+        supported_parameters: ["structured_outputs", "response_format", quote.outputParameter, "reasoning"],
+        pricing: { prompt: (Number(quote.provider.max_price.prompt) / 1e6).toFixed(10), completion: (Number(quote.provider.max_price.completion) / 1e6).toFixed(10) } };
+    });
+    vi.mocked(fetch).mockImplementation(async (url, init) => {
+      expect(init).not.toHaveProperty("headers");
+      const model = DEFAULT_EVAL_MODELS.find((id) => String(url).endsWith(id + "/endpoints"));
+      if (!model) return new Response(JSON.stringify({ data: records }), { status: 200 });
+      const item = records.find((record) => record.id === model)!;
+      const quote = quoteRequest({ operation: "explanation", model, maxCompletionTokens: 1000 });
+      return new Response(JSON.stringify({ data: { id: model, endpoints: [{ ...item, model_id: model, tag: quote.provider.only?.[0] ?? "TestProvider", max_completion_tokens: item.top_provider.max_completion_tokens }] } }), { status: 200 });
+    });
+    const deps = dependencies(); deps.verifyModels = undefined;
+    const result = await runLiveEvaluation({ ...options(), models: DEFAULT_EVAL_MODELS }, deps);
+    expect(result).toMatchObject({ status: "complete", comparisonComplete: false, winner: null, humanReviewRequired: true });
+    expect(result.reserveQuotes).toHaveLength(3);
+    expect(result.reserveQuotes.find((quote) => quote.model.includes("haiku"))).toMatchObject({ estimatedUsd: .264, provider: { only: ["azure/global"] } });
+    for (const stage of ["intent", "explanation"]) {
+      const rows = result.rows.filter((row) => row.stage === stage);
+      expect(rows).toHaveLength(3); expect(new Set(rows.map((row) => row.promptHash)).size).toBe(1);
+      expect(new Set(rows.map((row) => row.contextHash)).size).toBe(1);
+      expect(rows.every((row) => JSON.stringify(row.candidateIds) === JSON.stringify(rows[0].candidateIds))).toBe(true);
+    }
+    expect(fetch).toHaveBeenCalledTimes(4);
   });
 });
