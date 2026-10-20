@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { quoteRequest } from "./pricing";
-import { createLiveTransport, responseAccounting, TransportError, type Accounting, type GuardedTransport } from "./transport";
+import { createLiveTransport, responseAccounting, TransportError, type Accounting, type GuardedTransport, type TransportReason } from "./transport";
 import type { Purpose } from "./config";
 
 export type ChatMessage = Readonly<{ role: "system" | "user" | "assistant"; content: string }>;
@@ -10,6 +10,7 @@ export type ChatJsonRequest = Readonly<{
   deadlineAt: number; signal?: AbortSignal; purpose?: Purpose;
 }>;
 export type ChatJson = (request: ChatJsonRequest) => Promise<unknown>;
+export type SchemaProjectionVersion = "identity-v1" | "anthropic-bounds-v1";
 export type ChatJsonErrorCode = "PAID_CALLS_DISABLED" | "INVALID_REQUEST" | "REQUEST_ABORTED" | "DEADLINE_EXCEEDED" | "UPSTREAM_TIMEOUT" | "UPSTREAM_RATE_LIMITED" | "UPSTREAM_REJECTED" | "INVALID_UPSTREAM_RESPONSE" | "COST_UNKNOWN" | "BUDGET_BLOCKED";
 export class ChatJsonError extends Error {
   constructor(readonly code: ChatJsonErrorCode, readonly stage: ChatJsonRequest["stage"], readonly costKnown: boolean, readonly dispatched: boolean) { super(code); this.name = "ChatJsonError"; }
@@ -20,6 +21,10 @@ export type ChatAttemptEvent = Readonly<{
   costKnown: boolean; costUsd: number | null; usage: Accounting["usage"];
   outcome: "ok" | "invalid_response" | "http_error" | "error";
   status: number | null;
+  schemaProjectionVersion?: SchemaProjectionVersion;
+  reasoningPolicy?: "disabled" | "provider-default";
+  transportReason?: TransportReason;
+  generationId?: string;
 }>;
 
 const messageSchema = z.strictObject({ role: z.enum(["system", "user", "assistant"]), content: z.string().min(1).max(64_000) });
@@ -71,6 +76,40 @@ function strictSchema(value: unknown): void {
   }
 }
 
+// Claude's documented SDK strategy: unsupported bounds become guidance in the
+// wire description; the caller's original core Zod schema still validates all
+// returned values. Walk schema positions only, never property-name containers.
+function anthropicWireSchema(schema: Record<string, unknown>): Record<string, unknown> {
+  const projected = structuredClone(schema);
+  const visit = (value: unknown) => {
+    if (!value || typeof value !== "object" || Array.isArray(value)) return;
+    const node = value as Record<string, unknown>;
+    const constraints: Record<string, unknown> = {};
+    for (const key of ["minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum", "multipleOf", "minLength", "maxLength", "maxItems", "uniqueItems", "minContains", "maxContains"]) {
+      if (Object.hasOwn(node, key)) { constraints[key] = node[key]; delete node[key]; }
+    }
+    if (Object.hasOwn(node, "minItems") && node.minItems !== 0 && node.minItems !== 1) { constraints.minItems = node.minItems; delete node.minItems; }
+    if (Object.keys(constraints).length) {
+      const guidance = `Locally validated constraints: ${JSON.stringify(constraints)}`;
+      node.description = typeof node.description === "string" ? `${node.description}\n${guidance}` : guidance;
+    }
+    for (const key of ["properties", "$defs", "definitions", "patternProperties", "dependentSchemas"]) {
+      const children = node[key];
+      if (children && typeof children === "object" && !Array.isArray(children)) Object.values(children).forEach(visit);
+    }
+    for (const key of ["items", "not", "if", "then", "else", "contains"]) {
+      const child = node[key];
+      if (Array.isArray(child)) child.forEach(visit); else visit(child);
+    }
+    for (const key of ["anyOf", "oneOf", "allOf", "prefixItems"]) {
+      const children = node[key];
+      if (Array.isArray(children)) children.forEach(visit);
+    }
+  };
+  visit(projected);
+  return projected;
+}
+
 function protocol(body: unknown): { value?: unknown; failure?: "invalid" | "refusal" } {
   if (!body || typeof body !== "object" || !("choices" in body) || !Array.isArray(body.choices) || body.choices.length !== 1) return { failure: "invalid" };
   const choice = body.choices[0];
@@ -112,6 +151,7 @@ export function createChatJson(options: {
   onAttempt?: (event: ChatAttemptEvent) => void | Promise<void>;
 } = {}): ChatJson {
   const model = options.model ?? process.env.OPENROUTER_MODEL ?? "openai/gpt-6-luna";
+  const schemaProjectionVersion: SchemaProjectionVersion = model === "anthropic/claude-haiku-5.5" ? "anthropic-bounds-v1" : "identity-v1";
   const notify = (event: ChatAttemptEvent) => {
     try { void Promise.resolve(options.onAttempt?.(Object.freeze(event))).catch(() => {}); }
     catch { /* Metrics must never change billing, retry count or the user result. */ }
@@ -126,7 +166,9 @@ export function createChatJson(options: {
     try {
       if (request.jsonSchema.schema.type !== "object") throw new Error("INVALID_SCHEMA");
       strictSchema(request.jsonSchema.schema);
-      payload = immutableJson({ messages: request.messages, response_format: { type: "json_schema", json_schema: { name: request.jsonSchema.name, strict: true, schema: request.jsonSchema.schema } } });
+      const originalSchema = immutableJson(request.jsonSchema.schema);
+      const wireSchema = schemaProjectionVersion === "anthropic-bounds-v1" ? anthropicWireSchema(originalSchema) : originalSchema;
+      payload = immutableJson({ messages: request.messages, response_format: { type: "json_schema", json_schema: { name: request.jsonSchema.name, strict: true, schema: wireSchema } } });
     } catch { throw new ChatJsonError("INVALID_REQUEST", stage, true, false); }
     const deadlineAt = Math.min(request.deadlineAt, startedAt + 25_000);
     const early = interrupted(stage, request.signal, deadlineAt);
@@ -139,12 +181,12 @@ export function createChatJson(options: {
       const cancellation = interrupted(stage, request.signal, deadlineAt);
       if (cancellation) throw cancellation;
       const attemptStart = Date.now();
-      const emit = (outcome: ChatAttemptEvent["outcome"], accounting?: Accounting, status: number | null = null) => notify({ stage, attempt, model, responseModel: accounting?.responseModel ?? null, provider: accounting?.provider ?? null, latencyMs: Math.max(0, Date.now() - attemptStart), costKnown: accounting !== undefined, costUsd: accounting?.costUsd ?? null, usage: accounting?.usage ?? { promptTokens: null, completionTokens: null, totalTokens: null }, outcome, status });
       let retry = false;
       let failure: ChatJsonError;
       let quote;
       try { quote = quoteRequest({ operation: stage, model, maxCompletionTokens: stage === "intent" ? 400 : 1000 }); }
       catch { throw new ChatJsonError("INVALID_REQUEST", stage, true, false); }
+      const emit = (outcome: ChatAttemptEvent["outcome"], accounting?: Accounting, status: number | null = null, transportReason?: TransportReason, generationId?: string) => notify({ stage, attempt, model, responseModel: accounting?.responseModel ?? null, provider: accounting?.provider ?? null, latencyMs: Math.max(0, Date.now() - attemptStart), costKnown: accounting !== undefined, costUsd: accounting?.costUsd ?? null, usage: accounting?.usage ?? { promptTokens: null, completionTokens: null, totalTokens: null }, outcome, status, schemaProjectionVersion, reasoningPolicy: quote.reasoning ? "disabled" : "provider-default", ...(transportReason ? { transportReason } : {}), ...(generationId ? { generationId } : {}) });
       try {
         const body = await transport.execute({ purpose: request.purpose ?? "prep", quote, body: payload, signal: request.signal, deadlineAt, timeoutMs: 15_000 });
         const accounting = responseAccounting(body);
@@ -160,7 +202,7 @@ export function createChatJson(options: {
         if (error instanceof ChatJsonError) throw error;
         failure = mapped(error, stage);
         if (error instanceof TransportError) {
-          if (error.durablyRecorded) emit(error.reason === "http" ? "http_error" : "error", error.accounting, Number.isInteger(error.status) ? error.status! : null);
+          if (error.durablyRecorded) emit(error.reason === "http" ? "http_error" : "error", error.accounting, error.status ?? null, error.reason, error.generationId);
           retry = error.costKnown && error.durablyRecorded && error.reason === "http" && [429, 502, 503, 504].includes(error.status ?? 0);
         }
       }

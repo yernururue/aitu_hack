@@ -4,8 +4,10 @@ import { dirname, join, relative, resolve, sep } from "node:path";
 const projectRoot = process.cwd();
 const buildRoot = resolve(projectRoot, ".next");
 const requiredCatalog = "data/catalog/places.json";
+const requiredIndex = "data/index/places.json";
 const requiredPageTrace = ".next/server/app/page.js.nft.json";
-const allowedProjectFiles = new Set(["package.json", requiredCatalog, "evals/fixtures/places.json"]);
+const requiredApiTrace = ".next/server/app/api/recommend/route.js.nft.json";
+const allowedProjectFiles = new Set(["package.json", requiredCatalog, requiredIndex, "evals/fixtures/places.json"]);
 
 function projectPath(path) {
   return relative(projectRoot, path).split(sep).join("/");
@@ -28,10 +30,14 @@ function forbidden(path) {
 }
 
 async function main() {
+  const args = process.argv.slice(2);
+  const requireIndex = args.length === 1 && args[0] === "--require-index";
+  if (args.length && !requireIndex) throw new Error("Usage: node scripts/check-build-trace.mjs [--require-index]");
   const traces = await findTraces(buildRoot);
   if (!traces.length) throw new Error("No production NFT traces found; run pnpm build first.");
   const violations = new Set();
   let pageHasCatalog = false;
+  let apiHasIndex = false;
   let tracedEntries = 0;
   for (const path of traces) {
     const trace = JSON.parse(await readFile(path, "utf8"));
@@ -42,6 +48,7 @@ async function main() {
     const files = trace.files.map((file) => projectPath(resolve(dirname(path), file.replaceAll("\\", "/"))));
     tracedEntries += files.length;
     if (projectPath(path) === requiredPageTrace) pageHasCatalog = files.includes(requiredCatalog);
+    if (projectPath(path) === requiredApiTrace) apiHasIndex = files.includes(requiredIndex);
     for (const file of files) {
       if (forbidden(file)) violations.add(file);
       else if (!file.startsWith("node_modules/") && !file.startsWith(".next/") && !allowedProjectFiles.has(file)) violations.add(file);
@@ -49,13 +56,20 @@ async function main() {
   }
   await access(resolve(projectRoot, requiredCatalog));
   if (!pageHasCatalog) throw new Error(`Required catalogue is missing from ${requiredPageTrace}.`);
+  // Clean offline/stub builds have no generated index. Live release acceptance
+  // must opt into the stronger physical-asset and recommendation-trace gate.
+  if (requireIndex) {
+    try { await access(resolve(projectRoot, requiredIndex)); }
+    catch { throw new Error(`Required index asset is missing: ${requiredIndex}.`); }
+    if (!apiHasIndex) throw new Error(`Required index is missing from ${requiredApiTrace}.`);
+  }
   if (violations.size) {
     console.error(`FAIL: ${violations.size} forbidden or unexpected project assets in production NFT traces.`);
     [...violations].sort().slice(0, 20).forEach((file) => console.error(`  ${file}`));
     if (violations.size > 20) console.error(`  … ${violations.size - 20} more`);
     return 1;
   }
-  console.info(`PASS: ${traces.length} production NFT traces, ${tracedEntries} entries; required catalogue included, private/source tooling excluded.`);
+  console.info(`PASS: ${traces.length} production NFT traces, ${tracedEntries} entries; required catalogue included; ${requireIndex ? "required index included" : "index optional"}; private/source tooling excluded.`);
   return 0;
 }
 

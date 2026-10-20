@@ -1,0 +1,266 @@
+{
+  "schemaVersion": "1.0",
+  "labelsSha256": "73947dd92e4b33641897321e6832ef0dad463dbe33baee4512e8be2efc5cee36",
+  "catalogSha256": "c72d13a1d8df327edc22adce02743b0246aec157e86330c96c408bc44fabb873",
+  "datasetHash": "4677a7a004ef0626f4b911814a8f3b825f81e61ab8b03f82cb00d977fe6950a6",
+  "intentScoringPolicy": "hard-fields-v1; preferredTags-human-review",
+  "annotationBasis": "Source-first raw RU queries and explicit UI constraints; no model output or ranked output used. 12 positive cases only; 4 negative guards remain separately frozen and are not explanation measurements.",
+  "cases": [
+    {
+      "id": "REAL-RU-01",
+      "rawQueryHash": "91dc0e669326b78ac371096f0eb23a496f564e84a92ddb7b0ce5abe476490ac5",
+      "expectedIntent": {
+        "categories": [
+          "cafe"
+        ],
+        "radiusM": 1000,
+        "durationMinutes": 30,
+        "company": "solo",
+        "maxSpendKzt": null,
+        "openNow": true,
+        "requiredFacts": [],
+        "preferredTags": [],
+        "conflict": null
+      },
+      "unscoredSemanticRequirements": [],
+      "source": "evals/real-cases.json#REAL-RU-01.request (raw query + explicit UI filters)",
+      "rationale": "Все шесть полей UI сохранены; запрос не вводит обязательных amenities или конфликта. Предпочтения и смысловые подкатегории не оцениваются точным совпадением строк; перечисленные подусловия требуют ручной проверки validatedIntent и validatedItems."
+    },
+    {
+      "id": "REAL-RU-02",
+      "rawQueryHash": "7e6005fae9dbd3c85cd1a2a1a121efb7c2e9ba9d8d21a6a383732fb3843243cd",
+      "expectedIntent": {
+        "categories": [
+          "park"
+        ],
+        "radiusM": 2000,
+        "durationMinutes": 30,
+        "company": "couple",
+        "maxSpendKzt": null,
+        "openNow": false,
+        "requiredFacts": [],
+        "preferredTags": [],
+        "conflict": null
+      },
+      "unscoredSemanticRequirements": [],
+      "source": "evals/real-cases.json#REAL-RU-02.request (raw query + explicit UI filters)",
+      "rationale": "Все шесть полей UI сохранены; запрос не вводит обязательных amenities или конфликта. Предпочтения и смысловые подкатегории не оцениваются точным совпадением строк; перечисленные подусловия требуют ручной проверки validatedIntent и validatedItems."
+    },
+    {
+      "id": "REAL-RU-03",
+      "rawQueryHash": "a90a8b8ad52eeda2ab5eb4fad2c4dc944a7f8be76b486f470f548dec1c9a9073",
+      "expectedIntent": {
+        "categories": [
+          "entertainment"
+        ],
+        "radiusM": 1000,
+        "durationMinutes": 120,
+        "company": "friends",
+        "maxSpendKzt": null,
+        "openNow": true,
+        "requiredFacts": [],
+        "preferredTags": [],
+        "conflict": null
+      },
+      "unscoredSemanticRequirements": [
+        "Именно кинотеатр; смысловое сохранение проверить вручную, не по точному preferredTags."
+      ],
+      "source": "evals/real-cases.json#REAL-RU-03.request (raw query + explicit UI filters)",
+      "rationale": "Все шесть полей UI сохранены; запрос не вводит обязательных amenities или конфликта. Предпочтения и смысловые подкатегории не оцениваются точным совпадением строк; перечисленные подусловия требуют ручной проверки validatedIntent и validatedItems."
+    },
+    {
+      "id": "REAL-RU-04",
+      "rawQueryHash": "44812c4ce5c25d654ca971332c6c2cd12089128fbeb091adc7655785a33b9af3",
+      "expectedIntent": {
+        "categories": [
+          "cafe",
+          "other"
+        ],
+        "radiusM": 2000,
+        "durationMinutes": 60,
+        "company": "solo",
+        "maxSpendKzt": null,
+        "openNow": true,
+        "requiredFacts": [],
+        "preferredTags": [],
+        "conflict": null
+      },
+      "unscoredSemanticRequirements": [
+        "Именно коворкинг для работы; смысловое сохранение проверить вручную."
+      ],
+      "source": "evals/real-cases.json#REAL-RU-04.request (raw query + explicit UI filters)",
+      "rationale": "Все шесть полей UI сохранены; запрос не вводит обязательных amenities или конфликта. Предпочтения и смысловые подкатегории не оцениваются точным совпадением строк; перечисленные подусловия требуют ручной проверки validatedIntent и validatedItems."
+    },
+    {
+      "id": "REAL-RU-05",
+      "rawQueryHash": "2251ccfa538cb9ffbddbbc217c44c0b0e02ee201f17a3d839193a11aacdd9dd2",
+      "expectedIntent": {
+        "categories": [
+          "museum"
+        ],
+        "radiusM": 1000,
+        "durationMinutes": 120,
+        "company": "solo",
+        "maxSpendKzt": null,
+        "openNow": true,
+        "requiredFacts": [],
+        "preferredTags": [],
+        "conflict": null
+      },
+      "unscoredSemanticRequirements": [
+        "Художественная выставка или галерея; смысловое сохранение проверить вручную."
+      ],
+      "source": "evals/real-cases.json#REAL-RU-05.request (raw query + explicit UI filters)",
+      "rationale": "Все шесть полей UI сохранены; запрос не вводит обязательных amenities или конфликта. Предпочтения и смысловые подкатегории не оцениваются точным совпадением строк; перечисленные подусловия требуют ручной проверки validatedIntent и validatedItems."
+    },
+    {
+      "id": "REAL-RU-06",
+      "rawQueryHash": "8ec57b4c67d301dba7804e3c743248129ab9f9d5221165176d6bdbc0fbf40a2d",
+      "expectedIntent": {
+        "categories": [
+          "restaurant"
+        ],
+        "radiusM": 1000,
+        "durationMinutes": 60,
+        "company": "couple",
+        "maxSpendKzt": null,
+        "openNow": true,
+        "requiredFacts": [],
+        "preferredTags": [],
+        "conflict": null
+      },
+      "unscoredSemanticRequirements": [],
+      "source": "evals/real-cases.json#REAL-RU-06.request (raw query + explicit UI filters)",
+      "rationale": "Все шесть полей UI сохранены; запрос не вводит обязательных amenities или конфликта. Предпочтения и смысловые подкатегории не оцениваются точным совпадением строк; перечисленные подусловия требуют ручной проверки validatedIntent и validatedItems."
+    },
+    {
+      "id": "REAL-RU-07",
+      "rawQueryHash": "ca8f6df8fb3bac92045b63e4cd9e4feb7d885f820946e61cc3897b81674adf7f",
+      "expectedIntent": {
+        "categories": [
+          "cafe"
+        ],
+        "radiusM": 1000,
+        "durationMinutes": 30,
+        "company": "solo",
+        "maxSpendKzt": null,
+        "openNow": true,
+        "requiredFacts": [],
+        "preferredTags": [],
+        "conflict": null
+      },
+      "unscoredSemanticRequirements": [],
+      "source": "evals/real-cases.json#REAL-RU-07.request (raw query + explicit UI filters)",
+      "rationale": "Все шесть полей UI сохранены; запрос не вводит обязательных amenities или конфликта. Предпочтения и смысловые подкатегории не оцениваются точным совпадением строк; перечисленные подусловия требуют ручной проверки validatedIntent и validatedItems."
+    },
+    {
+      "id": "REAL-RU-08",
+      "rawQueryHash": "475a0c8516b5f91acc56bc80aae9b140fd7a38db79a41eee79fe55370f2c4268",
+      "expectedIntent": {
+        "categories": [
+          "park"
+        ],
+        "radiusM": 2000,
+        "durationMinutes": 60,
+        "company": "family",
+        "maxSpendKzt": null,
+        "openNow": false,
+        "requiredFacts": [],
+        "preferredTags": [],
+        "conflict": null
+      },
+      "unscoredSemanticRequirements": [
+        "Именно парк «Ғашықтар»; сохранение имени проверить вручную."
+      ],
+      "source": "evals/real-cases.json#REAL-RU-08.request (raw query + explicit UI filters)",
+      "rationale": "Все шесть полей UI сохранены; запрос не вводит обязательных amenities или конфликта. Предпочтения и смысловые подкатегории не оцениваются точным совпадением строк; перечисленные подусловия требуют ручной проверки validatedIntent и validatedItems."
+    },
+    {
+      "id": "REAL-RU-09",
+      "rawQueryHash": "14bd3e03b42a04f5b0fcb8fb6d3583161628b6078e3b0499788acced66740388",
+      "expectedIntent": {
+        "categories": [
+          "museum"
+        ],
+        "radiusM": 1000,
+        "durationMinutes": 60,
+        "company": "solo",
+        "maxSpendKzt": null,
+        "openNow": true,
+        "requiredFacts": [],
+        "preferredTags": [],
+        "conflict": null
+      },
+      "unscoredSemanticRequirements": [
+        "Художественная выставка; смысловое сохранение проверить вручную."
+      ],
+      "source": "evals/real-cases.json#REAL-RU-09.request (raw query + explicit UI filters)",
+      "rationale": "Все шесть полей UI сохранены; запрос не вводит обязательных amenities или конфликта. Предпочтения и смысловые подкатегории не оцениваются точным совпадением строк; перечисленные подусловия требуют ручной проверки validatedIntent и validatedItems."
+    },
+    {
+      "id": "REAL-RU-10",
+      "rawQueryHash": "c1efb4f95b7758ea1b71a9f37e33454363c2e52b2028638f52bb88a7e8e54702",
+      "expectedIntent": {
+        "categories": [
+          "cafe"
+        ],
+        "radiusM": 2000,
+        "durationMinutes": 30,
+        "company": "solo",
+        "maxSpendKzt": null,
+        "openNow": true,
+        "requiredFacts": [],
+        "preferredTags": [],
+        "conflict": null
+      },
+      "unscoredSemanticRequirements": [
+        "Именно кофейня-пекарня с выпечкой; смысловое сохранение проверить вручную."
+      ],
+      "source": "evals/real-cases.json#REAL-RU-10.request (raw query + explicit UI filters)",
+      "rationale": "Все шесть полей UI сохранены; запрос не вводит обязательных amenities или конфликта. Предпочтения и смысловые подкатегории не оцениваются точным совпадением строк; перечисленные подусловия требуют ручной проверки validatedIntent и validatedItems."
+    },
+    {
+      "id": "REAL-RU-11",
+      "rawQueryHash": "d6f3300c79648c058c5684e99b8b63d0b62757b5a8e9ae7127d21b96fe9bab7f",
+      "expectedIntent": {
+        "categories": [
+          "bowling"
+        ],
+        "radiusM": 5000,
+        "durationMinutes": 120,
+        "company": "friends",
+        "maxSpendKzt": null,
+        "openNow": true,
+        "requiredFacts": [],
+        "preferredTags": [],
+        "conflict": null
+      },
+      "unscoredSemanticRequirements": [],
+      "source": "evals/real-cases.json#REAL-RU-11.request (raw query + explicit UI filters)",
+      "rationale": "Все шесть полей UI сохранены; запрос не вводит обязательных amenities или конфликта. Предпочтения и смысловые подкатегории не оцениваются точным совпадением строк; перечисленные подусловия требуют ручной проверки validatedIntent и validatedItems."
+    },
+    {
+      "id": "REAL-RU-12",
+      "rawQueryHash": "d971a88eb8d4f7f431a7a5e99b9a0428d20633276fe86215a40ab37c51af8d8d",
+      "expectedIntent": {
+        "categories": [
+          "other",
+          "entertainment"
+        ],
+        "radiusM": 1000,
+        "durationMinutes": 60,
+        "company": "solo",
+        "maxSpendKzt": null,
+        "openNow": true,
+        "requiredFacts": [],
+        "preferredTags": [],
+        "conflict": null
+      },
+      "unscoredSemanticRequirements": [
+        "Именно тренажёрный зал; смысловое сохранение проверить вручную."
+      ],
+      "source": "evals/real-cases.json#REAL-RU-12.request (raw query + explicit UI filters)",
+      "rationale": "Все шесть полей UI сохранены; запрос не вводит обязательных amenities или конфликта. Предпочтения и смысловые подкатегории не оцениваются точным совпадением строк; перечисленные подусловия требуют ручной проверки validatedIntent и validatedItems."
+    }
+  ]
+}

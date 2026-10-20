@@ -220,6 +220,58 @@ describe("prepared documents, cache and guarded batching", () => {
   });
 });
 
+describe("guarded embedding response identity", () => {
+  it.each([model, "text-embedding-3-small"])("accepts the verified response name %s with a complete1536-vector", async (responseModel) => {
+    const values = [1, ...Array<number>(1535).fill(0)];
+    const embed = createGuardedEmbedder({ execute: async () => ({ model: responseModel, data: [{ index: 0, embedding: values }] }) }, "live_eval");
+    await expect(embed(["Контролируемый запрос"], { model, dimensions: 1536, inputType: "search_query" })).resolves.toEqual([values]);
+  });
+
+  it("keeps the requested slug in the index and document cache after a verified native response", async () => {
+    const embed = createGuardedEmbedder({ execute: async (args) => ({
+      model: "text-embedding-3-small",
+      data: (args.body as { input: string[] }).input.map((_text, index) => ({ index, embedding: [1, 0] })),
+    }) });
+    const result = await buildIndex(catalog, { model, dimensions: 2, embed });
+    expect(result.index.model).toBe("openai/text-embedding-3-small");
+    expect(result.index.vectors).toHaveLength(2);
+    expect(Object.values(result.cache.entries).map((entry) => entry.model)).toEqual([model, model]);
+  });
+
+  it.each([
+    "text-embedding-3-large", "openai/text-embedding-3-large", "other/text-embedding-3-small",
+    "openai/other/text-embedding-3-small", "openai/text-embedding-3-small:free",
+    "Text-embedding-3-small", " text-embedding-3-small", "text-embedding-3-small ", "", undefined,
+  ])("rejects an unverified response name %s rather than normalizing it", async (responseModel) => {
+    const embed = createGuardedEmbedder({ execute: async () => ({ model: responseModel, data: [{ index: 0, embedding: [1, 0] }] }) });
+    await expect(embed(["Документ"], { model, dimensions: 2, inputType: "search_document" })).rejects.toThrow("EMBEDDING_MODEL_MISMATCH");
+  });
+
+  it("does not authorize another requested namespace using the known native response", async () => {
+    const embed = createGuardedEmbedder({ execute: async () => ({ model: "text-embedding-3-small", data: [{ index: 0, embedding: [1, 0] }] }) });
+    await expect(embed(["Документ"], { model: "other/text-embedding-3-small", dimensions: 2, inputType: "search_document" })).rejects.toThrow("UNKNOWN_MODEL");
+  });
+
+  it.each([
+    ["wrong dimensions", [{ index: 0, embedding: [1] }, { index: 1, embedding: [0, 1] }]],
+    ["duplicate indexes", [{ index: 0, embedding: [1, 0] }, { index: 0, embedding: [0, 1] }]],
+    ["missing index zero", [{ index: 1, embedding: [1, 0] }, { index: 2, embedding: [0, 1] }]],
+  ])("still rejects %s after accepting the native model name", async (_label, data) => {
+    const embed = createGuardedEmbedder({ execute: async () => ({ model: "text-embedding-3-small", data }) });
+    await expect(embed(["Первый", "Второй"], { model, dimensions: 2, inputType: "search_document" })).rejects.toThrow("EMBEDDING_RESPONSE_MISMATCH");
+  });
+
+  it.each([
+    ["partial batch", [{ index: 0, embedding: [1, 0] }]],
+    ["extra vector", [{ index: 0, embedding: [1, 0] }, { index: 1, embedding: [0, 1] }, { index: 2, embedding: [1, 1] }]],
+    ["zero vector", [{ index: 0, embedding: [0, 0] }, { index: 1, embedding: [0, 1] }]],
+    ["nonfinite vector", [{ index: 0, embedding: [Infinity, 0] }, { index: 1, embedding: [0, 1] }]],
+  ])("rejects a native-model response containing a %s", async (_label, data) => {
+    const embed = createGuardedEmbedder({ execute: async () => ({ model: "text-embedding-3-small", data }) });
+    await expect(embed(["Первый", "Второй"], { model, dimensions: 2, inputType: "search_document" })).rejects.toMatchObject({ name: "ZodError" });
+  });
+});
+
 describe("visible semantic retrieval and safe lexical fallback", () => {
   it("does not turn an unavailable catalogue into an empty lexical response", async () => {
     const directory = await mkdtemp(join(tmpdir(), "aituhack-catalog-missing-")); tempDirs.push(directory);

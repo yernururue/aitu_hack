@@ -7,12 +7,13 @@ import { z } from "zod";
 import { BudgetGuard, type BudgetSnapshot } from "../src/lib/ai/budget";
 import { nanoUsd, readAiConfig, validUsd } from "../src/lib/ai/config";
 import { createChatJson, ChatJsonError, type ChatAttemptEvent, type ChatJson, type ChatJsonRequest } from "../src/lib/ai/openrouter";
-import { parseTokenPrice, quoteRequest } from "../src/lib/ai/pricing";
+import { verifyQuoteMetadata } from "../src/lib/ai/metadata";
+import { quoteRequest, type Quote } from "../src/lib/ai/pricing";
 import { explain } from "../src/lib/ai/explain";
-import { ExplanationSchema } from "../src/lib/ai/validate";
+import { ExplanationSchema, type GeneratedItems } from "../src/lib/ai/validate";
 import { CatalogSchema, type Catalog } from "../src/lib/contracts/poi";
 import { IntentSchema, RecommendRequestSchema, type Intent } from "../src/lib/contracts/request";
-import { canonicalDatasetHash } from "../src/lib/search/index";
+import { canonicalDatasetHash, DEFAULT_EMBEDDING_DIMENSIONS, DEFAULT_EMBEDDING_MODEL, rawQueryHash, validateIndex, validateQueryCache } from "../src/lib/search/index";
 import { parseIntent } from "../src/lib/search/intent";
 import { retrieveWithMetadata } from "../src/lib/search/retrieve";
 import type { RankedPoi } from "../src/lib/search/rank";
@@ -21,8 +22,11 @@ import { protectArtifactPaths } from "./build-index";
 export const DEFAULT_EVAL_MODELS = Object.freeze(["openai/gpt-6-luna", "anthropic/claude-haiku-5.5", "qwen/qwen3.8-flash"]);
 export const LIVE_PROMPT_VERSION = "m3-core-strict-v1";
 const CONTEXT_POLICY = "fixed_UI_filters_only; raw_query_unchanged; no_gold_in_retrieval; explanation_independent_of_model_intent";
+export const INTENT_SCORING_POLICY = "hard-fields-v1; preferredTags-human-review";
 const CaseSchema = z.object({
   id: z.string().regex(/^[a-zA-Z0-9_-]{1,80}$/), now: z.iso.datetime({ offset: true }), request: RecommendRequestSchema,
+  intentScoringPolicy: z.enum(["exact-v1", INTENT_SCORING_POLICY]).default("exact-v1"),
+  unscoredSemanticRequirements: z.array(z.string().min(1)).default([]),
   expected: z.object({ relevantIds: z.array(z.string()), intent: IntentSchema.optional(), status: z.array(z.string()).min(1).optional() }),
 });
 type EvalCase = z.infer<typeof CaseSchema>;
@@ -34,6 +38,9 @@ export type LiveEvalRow = {
   type: "measurement"; caseId: string; model: string; stage: ChatJsonRequest["stage"];
   promptVersion: string; promptHash: string | null; contextHash: string; datasetHash: string;
   candidateIds: string[]; expectedIds: string[]; actualIds: string[];
+  retrievalMode: string; validatedIntent: Intent | null; validatedItems: GeneratedItems | null;
+  evidenceSources: { poiId: string; sources: Catalog["places"][number]["sources"] }[];
+  intentScore: IntentScore | null; validatedRelevantTop3: boolean | null;
   schemaPass: boolean | null; groundingPass: boolean | null; intentMatch: boolean | null;
   abstained: boolean; abstentionPass: boolean | null; skipped: boolean;
   latencyMs: number; ttftMs: null; provider: string | null; responseModel: string | null;
@@ -43,13 +50,19 @@ export type LiveEvalRow = {
 export type LiveEvalResult = {
   type: "summary"; status: "disabled" | "blocked" | "complete"; reason: string | null;
   comparisonComplete: boolean; winner: null; diagnostic: boolean; models: readonly string[];
-  synthetic: boolean | null;
+  synthetic: boolean | null; intentScoringPolicy: string; annotationHash: string | null;
+  inputHashes: Readonly<Record<string, string>> | null; humanReviewRequired: true;
+  schemaProjectionPolicy: string; reserveQuotes: readonly Quote[];
   promptVersion: string; contextPolicy: string; latencyMs: number; ttftMs: null; rows: LiveEvalRow[];
 };
 export type LiveEvalOptions = {
   execute?: boolean; env?: Record<string, string | undefined>; models?: readonly string[];
-  input?: { catalog: Catalog; cases: readonly unknown[] }; outputPath?: string;
+  input?: LiveInput; outputPath?: string;
 };
+type LiveInput = { catalog: Catalog; cases: readonly unknown[]; requireSemantic?: boolean;
+  retrieve?: typeof retrieveWithMetadata; annotationHash?: string; inputHashes?: Readonly<Record<string, string>> };
+type IntentScore = { policy: string; hardFieldsPass: boolean; requiredFactsPass: boolean; conflictPass: boolean;
+  preferredTags: "exact" | "human-review"; unscoredSemanticRequirements: string[] };
 export type LiveEvalDependencies = {
   snapshot?: () => Promise<BudgetSnapshot>;
   retrieve?: typeof retrieveWithMetadata;
@@ -90,7 +103,7 @@ async function safeReportPath(path: string): Promise<string> {
   const root = resolve("evals/results"); const target = resolve(path);
   const child = relative(root, target);
   if (!child || child.startsWith("..") || isAbsolute(child) || !target.endsWith(".jsonl")) throw new Error("UNSAFE_REPORT_PATH");
-  const paths = await protectArtifactPaths(["evals/real-cases.json", "data/catalog/places.json"], [root, target]);
+  const paths = await protectArtifactPaths(["evals/real-cases.json", "evals/live-intent-expectations.json", "data/catalog/places.json", "data/index/places.json", "data/index/query-vectors.json"], [root, target]);
   const expectedRoot = resolve(await realpath(process.cwd()), "evals/results");
   const canonicalChild = relative(expectedRoot, paths.outputs[1]);
   if (paths.outputs[0] !== expectedRoot || !canonicalChild || canonicalChild.startsWith("..") || isAbsolute(canonicalChild)) throw new Error("UNSAFE_REPORT_PATH");
@@ -115,44 +128,88 @@ export async function writeLiveReport(path: string, records: readonly unknown[])
 // Public metadata only, with no credentials. Never reached in disabled mode or
 // when the whole model set is already impossible under the immutable quotes.
 async function verifyCurrentModels(models: readonly string[]): Promise<void> {
-  const response = await fetch("https://openrouter.ai/api/v1/models", { redirect: "error", signal: AbortSignal.timeout(10_000) });
-  if (!response.ok) throw new Error("MODEL_METADATA_UNAVAILABLE");
-  const body: unknown = await response.json();
-  const PriceSchema = z.object({ prompt: z.string(), completion: z.string() }).catchall(z.unknown());
-  const ModelSchema = z.object({ id: z.string(), context_length: z.number().int().positive(), pricing: PriceSchema,
-    supported_parameters: z.array(z.string()), top_provider: z.object({ max_completion_tokens: z.number().int().positive() }) });
+  const get = async (url: string): Promise<unknown> => {
+    const response = await fetch(url, { redirect: "error", signal: AbortSignal.timeout(10_000) });
+    if (!response.ok) throw new Error("MODEL_METADATA_UNAVAILABLE");
+    return response.json();
+  };
+  const [body, endpoints] = await Promise.all([
+    get("https://openrouter.ai/api/v1/models"),
+    Promise.all(models.map((model) => get(`https://openrouter.ai/api/v1/models/${model}/endpoints`))),
+  ]);
   const { data } = z.object({ data: z.array(z.unknown()) }).parse(body);
-  for (const id of models) {
-    const matches = data.filter((item) => item && typeof item === "object" && "id" in item && item.id === id);
+  models.forEach((model, i) => {
+    const matches = data.filter((item) => item && typeof item === "object" && "id" in item && item.id === model);
     if (matches.length !== 1) throw new Error("MODEL_METADATA_UNAVAILABLE");
-    const item = ModelSchema.parse(matches[0]);
-    const quote = quoteRequest({ operation: "explanation", model: id, maxCompletionTokens: 1000 });
-    if (!["structured_outputs", "response_format", quote.outputParameter].every((parameter) => item.supported_parameters.includes(parameter)) || item.context_length > quote.contextLength || item.context_length < 1000 || item.top_provider.max_completion_tokens < 1000) throw new Error("MODEL_METADATA_CHANGED");
-    const tiers = [item.pricing, ...z.array(PriceSchema).parse(item.pricing.overrides ?? [])];
-    let inputRate = 0; let outputRate = 0;
-    for (const price of tiers) {
-      const prompt = Number(quote.provider.max_price.prompt) / 1e6;
-      const completion = Number(quote.provider.max_price.completion) / 1e6;
-      if (parseTokenPrice(price.prompt) > prompt || parseTokenPrice(price.completion) > completion) throw new Error("MODEL_METADATA_CHANGED");
-      inputRate = Math.max(inputRate, parseTokenPrice(price.prompt));
-      outputRate = Math.max(outputRate, parseTokenPrice(price.completion));
-      for (const key of ["input_cache_read", "input_cache_write", "input_cache_write_1h"]) {
-        if (price[key] !== undefined) inputRate = Math.max(inputRate, parseTokenPrice(price[key]));
-      }
-    }
-    // Recheck the same full-context/full-output bound; neither a cache tier nor
-    // an increased output ceiling may borrow slack from the other component.
-    if (nanoUsd(item.context_length * inputRate + item.top_provider.max_completion_tokens * outputRate) > nanoUsd(quote.estimatedUsd)) throw new Error("MODEL_METADATA_CHANGED");
-  }
+    verifyQuoteMetadata(quoteRequest({ operation: "explanation", model, maxCompletionTokens: 1000 }), { model: matches[0], endpoints: endpoints[i] });
+  });
 }
 
-async function loadFrozenInput(): Promise<{ catalog: Catalog; cases: unknown[] }> {
-  const [catalogText, labelText] = await Promise.all([readFile("data/catalog/places.json", "utf8"), readFile("evals/real-cases.json", "utf8")]);
-  const labels = z.object({ synthetic: z.literal(false), metadata: z.object({ catalogSha256: z.string() }), cases: z.array(z.unknown()) }).parse(JSON.parse(labelText));
-  if (createHash("sha256").update(catalogText).digest("hex") !== labels.metadata.catalogSha256) throw new Error("FROZEN_CATALOG_MISMATCH");
+const AnnotationSchema = z.object({
+  schemaVersion: z.literal("1.0"), labelsSha256: z.string().regex(/^[a-f0-9]{64}$/),
+  catalogSha256: z.string().regex(/^[a-f0-9]{64}$/), datasetHash: z.string().regex(/^[a-f0-9]{64}$/),
+  intentScoringPolicy: z.literal(INTENT_SCORING_POLICY),
+  cases: z.array(z.object({ id: z.string(), rawQueryHash: z.string().regex(/^[a-f0-9]{64}$/),
+    expectedIntent: IntentSchema, unscoredSemanticRequirements: z.array(z.string().min(1)) })).min(1),
+});
+
+/** Source annotations affect scoring only; never pass them to retrieval or prompts. */
+export function attachIntentExpectations(cases: readonly unknown[], rawAnnotations: unknown): EvalCase[] {
+  const annotations = AnnotationSchema.parse(rawAnnotations);
+  const indexed = new Map(annotations.cases.map((item) => [item.id, item]));
+  const parsed = cases.map((item) => CaseSchema.parse(item));
+  if (indexed.size !== annotations.cases.length || indexed.size !== parsed.length || new Set(parsed.map((item) => item.id)).size !== parsed.length) throw new Error("INTENT_LABELS_INCOMPLETE");
+  return parsed.map((item) => {
+    const annotation = indexed.get(item.id);
+    if (!annotation) throw new Error("INTENT_LABELS_INCOMPLETE");
+    if (annotation.rawQueryHash !== rawQueryHash(item.request.query)) throw new Error("INTENT_QUERY_MISMATCH");
+    return CaseSchema.parse({ ...item, intentScoringPolicy: annotations.intentScoringPolicy,
+      unscoredSemanticRequirements: annotation.unscoredSemanticRequirements,
+      expected: { ...item.expected, intent: annotation.expectedIntent } });
+  });
+}
+
+/** Offline only. Missing or incompatible vectors fail instead of creating a live embedder. */
+export function createCachedSemanticRetriever(catalog: Catalog, rawIndex: unknown, rawCache: unknown, expected: { model: string; dimensions: number }): typeof retrieveWithMetadata {
+  const source = immutable(CatalogSchema.parse(catalog));
+  const index = immutable(validateIndex(rawIndex, source, expected));
+  const cache = immutable(validateQueryCache(rawCache, source, expected));
+  return async (request, intent, now) => {
+    const queryVector = cache.queries[rawQueryHash(request.query)];
+    if (!queryVector) throw new Error("QUERY_CACHE_MISS");
+    return retrieveWithMetadata(request, intent, now, { catalog: source, index,
+      embeddingModel: expected.model, embeddingDimensions: expected.dimensions, queryVector: [...queryVector] });
+  };
+}
+
+// Accepted Task 2 artifacts. A changed snapshot needs a new reviewed freeze.
+const FROZEN_HASHES = Object.freeze({
+  catalogSha256: "c72d13a1d8df327edc22adce02743b0246aec157e86330c96c408bc44fabb873",
+  labelsSha256: "73947dd92e4b33641897321e6832ef0dad463dbe33baee4512e8be2efc5cee36",
+  datasetHash: "4677a7a004ef0626f4b911814a8f3b825f81e61ab8b03f82cb00d977fe6950a6",
+  indexSha256: "568c855ff30dc866c8de4f0eed3038df4406898bd45fe25472f5afa318934d45",
+  queryCacheSha256: "2788286068ef9d7d45e00ead9cf30c18de7ca6258acd939cc07c89e6b0cc38eb",
+});
+export async function loadFrozenLiveInput(): Promise<LiveInput> {
+  const [catalogText, labelText, annotationText, indexText, queryText] = await Promise.all([
+    readFile("data/catalog/places.json", "utf8"), readFile("evals/real-cases.json", "utf8"),
+    readFile("evals/live-intent-expectations.json", "utf8"), readFile("data/index/places.json", "utf8"), readFile("data/index/query-vectors.json", "utf8"),
+  ]);
+  const sha = (text: string) => createHash("sha256").update(text, "utf8").digest("hex");
+  const inputHashes = { catalogSha256: sha(catalogText), labelsSha256: sha(labelText), indexSha256: sha(indexText), queryCacheSha256: sha(queryText) };
+  if (Object.entries(inputHashes).some(([key, value]) => value !== FROZEN_HASHES[key as keyof typeof inputHashes])) throw new Error("FROZEN_INPUT_MISMATCH");
+  const labels = z.object({ synthetic: z.literal(false), metadata: z.object({ catalogSha256: z.string() }),
+    cases: z.array(z.object({ kind: z.enum(["retrieval_positive", "negative_guard"]), countInPositiveMetrics: z.boolean() }).passthrough()) }).parse(JSON.parse(labelText));
+  const annotations = AnnotationSchema.parse(JSON.parse(annotationText));
   const catalog = CatalogSchema.parse(JSON.parse(catalogText));
-  if (catalog.synthetic) throw new Error("REAL_CATALOG_REQUIRED");
-  return { catalog, cases: labels.cases };
+  if (catalog.synthetic || catalog.places.length !== 298 || canonicalDatasetHash(catalog) !== FROZEN_HASHES.datasetHash
+    || labels.metadata.catalogSha256 !== inputHashes.catalogSha256 || annotations.catalogSha256 !== inputHashes.catalogSha256
+    || annotations.labelsSha256 !== inputHashes.labelsSha256 || annotations.datasetHash !== FROZEN_HASHES.datasetHash) throw new Error("FROZEN_INPUT_MISMATCH");
+  const positives = labels.cases.filter((item) => item.kind === "retrieval_positive" && item.countInPositiveMetrics);
+  if (positives.length !== 12 || labels.cases.filter((item) => item.kind === "negative_guard" && !item.countInPositiveMetrics).length !== 4) throw new Error("INVALID_CASES");
+  const cases = attachIntentExpectations(positives, annotations);
+  const retrieve = createCachedSemanticRetriever(catalog, JSON.parse(indexText), JSON.parse(queryText), { model: DEFAULT_EMBEDDING_MODEL, dimensions: DEFAULT_EMBEDDING_DIMENSIONS });
+  return { catalog, cases, requireSemantic: true, retrieve, annotationHash: sha(annotationText), inputHashes };
 }
 
 function totalUsage(attempts: readonly ChatAttemptEvent[]): ChatAttemptEvent["usage"] {
@@ -165,10 +222,25 @@ function sameIntent(left: Intent, right: Intent): boolean {
   return hash(normalized(left)) === hash(normalized(right));
 }
 
+function scoreIntent(actual: Intent, expected: Intent, item: EvalCase): { match: boolean; details: IntentScore } {
+  const sorted = (values: readonly string[]) => [...values].sort();
+  const fields = (intent: Intent) => ({ categories: sorted(intent.categories), radiusM: intent.radiusM,
+    durationMinutes: intent.durationMinutes, company: intent.company, maxSpendKzt: intent.maxSpendKzt, openNow: intent.openNow });
+  const details: IntentScore = { policy: item.intentScoringPolicy,
+    hardFieldsPass: hash(fields(actual)) === hash(fields(expected)),
+    requiredFactsPass: hash(sorted(actual.requiredFacts)) === hash(sorted(expected.requiredFacts)),
+    conflictPass: (actual.conflict === null) === (expected.conflict === null),
+    preferredTags: item.intentScoringPolicy === INTENT_SCORING_POLICY ? "human-review" : "exact",
+    unscoredSemanticRequirements: item.unscoredSemanticRequirements };
+  return { details, match: item.intentScoringPolicy === INTENT_SCORING_POLICY
+    ? details.hardFieldsPass && details.requiredFactsPass && details.conflictPass : sameIntent(actual, expected) };
+}
+
 export async function runLiveEvaluation(options: LiveEvalOptions = {}, dependencies: LiveEvalDependencies = {}): Promise<LiveEvalResult> {
   const started = performance.now(); const models = [...(options.models ?? DEFAULT_EVAL_MODELS)];
   const result: LiveEvalResult = { type: "summary", status: "disabled", reason: null, comparisonComplete: false, winner: null,
-    diagnostic: true, models, synthetic: null, promptVersion: LIVE_PROMPT_VERSION, contextPolicy: CONTEXT_POLICY, latencyMs: 0, ttftMs: null, rows: [] };
+    diagnostic: true, models, synthetic: null, intentScoringPolicy: "injected-exact-v1", annotationHash: null, inputHashes: null, humanReviewRequired: true,
+    reserveQuotes: [], schemaProjectionPolicy: "original-core-schema-hash; Haiku anthropic-bounds-v1 wire only; strict local validation unchanged", promptVersion: LIVE_PROMPT_VERSION, contextPolicy: CONTEXT_POLICY, latencyMs: 0, ttftMs: null, rows: [] };
   const finish = () => { result.latencyMs = Math.max(0, performance.now() - started); return result; };
   const block = (reason: string) => { result.status = "blocked"; result.reason = reason; return finish(); };
   if (!options.execute) return finish();
@@ -177,7 +249,8 @@ export async function runLiveEvaluation(options: LiveEvalOptions = {}, dependenc
   if (!config.paidEnabled || !config.liveEvalEnabled) return block("LIVE_EVAL_DISABLED");
   if (!models.length || new Set(models).size !== models.length || models.some((model) => !DEFAULT_EVAL_MODELS.includes(model))) return block("INVALID_MODEL_SET");
   result.diagnostic = models.length !== DEFAULT_EVAL_MODELS.length;
-  const estimates = new Map(models.map((model) => [model, quoteRequest({ operation: "explanation", model, maxCompletionTokens: 1000 }).estimatedUsd]));
+  result.reserveQuotes = Object.freeze(models.map((model) => quoteRequest({ operation: "explanation", model, maxCompletionTokens: 1000 })));
+  const estimates = new Map(result.reserveQuotes.map((quote) => [quote.model, quote.estimatedUsd]));
   if ([...estimates.values()].some((cost) => cost > config.caps.live_eval || cost > config.caps.prep)) return block("MODEL_QUOTE_EXCEEDS_CAP");
   const snapshot = dependencies.snapshot ?? (() => new BudgetGuard({ path: config.ledgerPath, caps: config.caps }).snapshot());
   const checkBudget = async (cost: number): Promise<string | null> => {
@@ -196,9 +269,14 @@ export async function runLiveEvaluation(options: LiveEvalOptions = {}, dependenc
     await safeReportPath(outputPath);
     await protectArtifactPaths([config.ledgerPath], [outputPath]);
     await (dependencies.verifyModels ?? verifyCurrentModels)(models);
-    const input = options.input ?? await loadFrozenInput();
-    cases = await freezeLiveCases(input.catalog, input.cases, dependencies.retrieve);
+    const input = options.input ?? await loadFrozenLiveInput();
+    cases = await freezeLiveCases(input.catalog, input.cases, dependencies.retrieve ?? input.retrieve);
+    if (input.requireSemantic && cases.some((item) => item.retrievalMode !== "semantic" || !item.item.expected.intent || !item.candidates.length)) throw new Error("SEMANTIC_PREFLIGHT_FAILED");
     result.synthetic = input.catalog.synthetic;
+    result.annotationHash = input.annotationHash ?? null; result.inputHashes = input.inputHashes ?? null;
+    result.intentScoringPolicy = cases.every((item) => item.item.intentScoringPolicy === INTENT_SCORING_POLICY) ? INTENT_SCORING_POLICY : "injected-exact-v1";
+    result.diagnostic ||= input.catalog.synthetic || cases.length !== 12 || !input.requireSemantic || !input.annotationHash;
+    if (cases.some((item) => !item.item.expected.intent)) result.diagnostic = true;
   } catch { return block("PREFLIGHT_FAILED"); }
   result.status = "complete";
   outer: for (const frozen of cases) {
@@ -213,7 +291,7 @@ export async function runLiveEvaluation(options: LiveEvalOptions = {}, dependenc
         if (budgetError) { block(budgetError); break outer; }
         const attempts: ChatAttemptEvent[] = [];
         let raw: unknown; let promptHash: string | null = null; let failure: unknown; let corePassed = false;
-        let intentResult: Intent | undefined;
+        let intentResult: Intent | undefined; let validatedItems: GeneratedItems | null = null;
         const stageStart = performance.now();
         try {
           const provider = (dependencies.createChat ?? createChatJson)({ model, onAttempt: (event) => { attempts.push(event); } });
@@ -225,7 +303,7 @@ export async function runLiveEvaluation(options: LiveEvalOptions = {}, dependenc
             intentResult = await parseIntent(frozen.item.request.query, frozen.item.request.filters, frozen.item.request.explicitFilterKeys, { mode: "live", chatJson, deadlineAt, purpose: "live_eval" });
             corePassed = IntentSchema.safeParse(raw).success;
           } else {
-            await explain(frozen.candidates, frozen.fixedIntent, { query: frozen.item.request.query, locale: frozen.item.request.locale, chatJson, deadlineAt, purpose: "live_eval" });
+            validatedItems = await explain(frozen.candidates, frozen.fixedIntent, { query: frozen.item.request.query, locale: frozen.item.request.locale, chatJson, deadlineAt, purpose: "live_eval" });
             corePassed = true;
           }
         } catch (error) { failure = error; }
@@ -241,12 +319,19 @@ export async function runLiveEvaluation(options: LiveEvalOptions = {}, dependenc
         const expectedAbstention = stage === "intent"
           ? frozen.item.expected.intent ? frozen.item.expected.intent.conflict !== null : undefined
           : frozen.item.expected.status?.every((status) => ["clarify", "no_results"].includes(status));
+        const intentScore = stage === "intent" && intentResult && frozen.item.expected.intent ? scoreIntent(intentResult, frozen.item.expected.intent, frozen.item) : null;
         const row: LiveEvalRow = {
           type: "measurement", caseId: frozen.item.id, model, stage, promptVersion: LIVE_PROMPT_VERSION, promptHash,
           contextHash: frozen.contextHash, datasetHash: frozen.datasetHash, candidateIds: frozen.candidates.map((candidate) => candidate.poi.id),
-          expectedIds: frozen.item.expected.relevantIds, actualIds, schemaPass: skipped ? null : schema.success,
+          expectedIds: frozen.item.expected.relevantIds, actualIds,
+          retrievalMode: frozen.retrievalMode, validatedIntent: intentResult ?? null, validatedItems,
+          evidenceSources: (validatedItems ?? []).map((item) => ({ poiId: item.poiId,
+            sources: frozen.candidates.find((candidate) => candidate.poi.id === item.poiId)!.poi.sources.filter((source) => item.evidenceIds.includes(source.id)) })),
+          intentScore: intentScore?.details ?? null,
+          validatedRelevantTop3: stage === "explanation" ? validatedItems ? validatedItems.slice(0, 3).some((item) => frozen.item.expected.relevantIds.includes(item.poiId)) : false : null,
+          schemaPass: skipped ? null : schema.success,
           groundingPass: stage === "explanation" && !skipped ? corePassed : null,
-          intentMatch: stage === "intent" && schema.success && frozen.item.expected.intent && intentResult ? sameIntent(intentResult, frozen.item.expected.intent) : null,
+          intentMatch: intentScore ? schema.success && intentScore.match : null,
           abstained, abstentionPass: expectedAbstention === undefined ? null : abstained === expectedAbstention, skipped,
           latencyMs: Math.max(0, performance.now() - stageStart), ttftMs: null, provider: unique("provider"), responseModel: unique("responseModel"),
           usage: totalUsage(attempts), costUsd, attemptCount: attempts.length, attempts,
@@ -259,7 +344,7 @@ export async function runLiveEvaluation(options: LiveEvalOptions = {}, dependenc
       }
     }
   }
-  result.comparisonComplete = result.status === "complete" && !result.diagnostic;
+  result.comparisonComplete = result.status === "complete" && !result.diagnostic && result.rows.length === cases.length * models.length * 2 && result.rows.every((row) => !row.skipped && (row.stage !== "intent" || row.intentMatch !== null));
   finish();
   try {
     const { rows, ...metadata } = result;

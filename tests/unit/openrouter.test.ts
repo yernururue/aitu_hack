@@ -5,6 +5,9 @@ import { join } from "node:path";
 import { BudgetGuard, initializeLedger } from "../../src/lib/ai/budget";
 import { GuardedTransport, TransportError, type ProviderSend } from "../../src/lib/ai/transport";
 import { createChatJson, type ChatAttemptEvent, type ChatJsonRequest } from "../../src/lib/ai/openrouter";
+import { z } from "zod";
+import { IntentSchema, createDefaultFilters } from "../../src/lib/contracts/request";
+import { ExplanationSchema, validateExplanation } from "../../src/lib/ai/validate";
 
 let directory: string;
 let guard: BudgetGuard;
@@ -34,6 +37,105 @@ function deferred<T>() {
 }
 
 describe("structured server chat", () => {
+  it.each([["intent", IntentSchema], ["explanation", ExplanationSchema]] as const)("projects actual core %s schema bounds only for Haiku without mutating the original", async (stage, coreSchema) => {
+    const schema = z.toJSONSchema(coreSchema);
+    const before = structuredClone(schema);
+    const events: ChatAttemptEvent[] = [];
+    const unsupported: string[] = [];
+    let descriptions = 0;
+    const walk = (value: unknown) => {
+      if (!value || typeof value !== "object") return;
+      for (const [key, child] of Object.entries(value)) {
+        if (["minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum", "multipleOf", "minLength", "maxLength", "maxItems"].includes(key) || key === "minItems" && child !== 0 && child !== 1) unsupported.push(key);
+        if (key === "description" && typeof child === "string" && child.includes("Locally validated constraints:")) descriptions++;
+        walk(child);
+      }
+    };
+    let wire: { schema: unknown; strict: boolean } | undefined;
+    const send: ProviderSend = async (call) => { wire = (call.body.response_format as { json_schema: typeof wire }).json_schema; return response(); };
+    const chat = createChatJson({ model: "anthropic/claude-haiku-5.5", transport: new GuardedTransport({ guard, send }), onAttempt: (event) => { events.push(event); } });
+    await expect(chat(request({ stage, jsonSchema: { name: "actual_core", schema } }))).resolves.toEqual({ ok: true });
+    expect(wire?.strict).toBe(true);
+    walk(wire?.schema);
+    expect(unsupported).toEqual([]);
+    expect(descriptions).toBeGreaterThan(0);
+    expect(wire?.schema).toMatchObject({ type: "object", additionalProperties: false, required: before.required });
+    expect(schema).toEqual(before);
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({ schemaProjectionVersion: "anthropic-bounds-v1", costKnown: true });
+  });
+  it("preserves schema-keyword property names, enum/required/closed shape, allowed minItems and nested descriptions", async () => {
+    const schema = { type: "object", properties: {
+      maxLength: { type: "string", maxLength: 5, description: "Original description" },
+      maximum: { type: "number", minimum: 0, maximum: 10, multipleOf: 2 },
+      items: { type: "array", minItems: 1, maxItems: 3, items: { type: "string", enum: ["park", "cafe"], minLength: 1 } },
+      properties: { type: "object", properties: { minimum: { anyOf: [{ type: "string", maxLength: 3 }, { type: "null" }] } }, required: ["minimum"], additionalProperties: false },
+    }, required: ["maxLength", "maximum", "items", "properties"], additionalProperties: false };
+    const before = structuredClone(schema);
+    let wire: typeof schema | undefined;
+    const send: ProviderSend = async (call) => { wire = (call.body.response_format as { json_schema: { schema: typeof schema } }).json_schema.schema; return response(); };
+    await expect(createChatJson({ model: "anthropic/claude-haiku-5.5", transport: new GuardedTransport({ guard, send }) })(request({ jsonSchema: { name: "keyword_names", schema } }))).resolves.toEqual({ ok: true });
+    expect(Object.keys(wire!.properties)).toEqual(Object.keys(schema.properties));
+    expect(wire!.required).toEqual(schema.required);
+    expect(wire!.properties.maxLength).toEqual({ type: "string", description: 'Original description\nLocally validated constraints: {"maxLength":5}' });
+    expect(wire!.properties.maximum).toEqual({ type: "number", description: 'Locally validated constraints: {"minimum":0,"maximum":10,"multipleOf":2}' });
+    expect(wire!.properties.items).toMatchObject({ type: "array", minItems: 1, items: { enum: ["park", "cafe"] } });
+    expect(wire!.properties.items).not.toHaveProperty("maxItems");
+    expect(wire!.properties.properties.properties.minimum.anyOf[0]).not.toHaveProperty("maxLength");
+    expect(schema).toEqual(before);
+  });
+  it.each(["openai/gpt-6-luna", "qwen/qwen3.8-flash"])("keeps the exact original wire schema for %s", async (model) => {
+    const schema = z.toJSONSchema(IntentSchema);
+    const send: ProviderSend = async (call) => { expect(call.body.response_format).toMatchObject({ json_schema: { schema } }); return response(); };
+    const events: ChatAttemptEvent[] = [];
+    await createChatJson({ model, transport: new GuardedTransport({ guard, send }), onAttempt: (event) => { events.push(event); } })(request({ jsonSchema: { name: "identity", schema } }));
+    expect(events[0]).toMatchObject({ schemaProjectionVersion: "identity-v1", reasoningPolicy: "provider-default" });
+  });
+  it.each([0, 1, 2])("retains only supported array minItems=%s on Haiku's wire", async (minItems) => {
+    const schema = { type: "object", properties: { values: { type: "array", items: { type: "string" }, minItems } }, required: ["values"], additionalProperties: false };
+    let wire: typeof schema | undefined;
+    const send: ProviderSend = async (call) => { wire = (call.body.response_format as { json_schema: { schema: typeof schema } }).json_schema.schema; return response(); };
+    await createChatJson({ model: "anthropic/claude-haiku-5.5", transport: new GuardedTransport({ guard, send }) })(request({ jsonSchema: { name: "array_bounds", schema } }));
+    if (minItems < 2) expect(wire!.properties.values.minItems).toBe(minItems);
+    else { expect(wire!.properties.values).not.toHaveProperty("minItems"); expect(wire!.properties.values).toHaveProperty("description", 'Locally validated constraints: {"minItems":2}'); }
+    expect(schema.properties.values.minItems).toBe(minItems);
+  });
+  it("still rejects out-of-bounds generated values through the unchanged core validators after wire projection", async () => {
+    const badIntent = { ...createDefaultFilters(), maxSpendKzt: -1, requiredFacts: [], preferredTags: [], conflict: null };
+    const badExplanation = { items: [{ poiId: "test-place", why: "a".repeat(10_001), activity: "Walk", evidenceIds: ["test-source"] }] };
+    for (const [stage, schema, raw] of [["intent", IntentSchema, badIntent], ["explanation", ExplanationSchema, badExplanation]] as const) {
+      const chat = createChatJson({ model: "anthropic/claude-haiku-5.5", transport: new GuardedTransport({ guard, send: async () => response(JSON.stringify(raw)) }) });
+      const parsed = await chat(request({ stage, jsonSchema: { name: "core_bounds", schema: z.toJSONSchema(schema) } }));
+      expect(schema.safeParse(parsed).success).toBe(false);
+      if (stage === "explanation") expect(() => validateExplanation(parsed, [])).toThrow(z.ZodError);
+    }
+    expect((await guard.snapshot()).spent.prep).toBe(0.002);
+  });
+  it.each([["intent", 400], ["explanation", 1000]] as const)("uses the issued fixed Haiku route and original %s output/deadline controls", async (stage, limit) => {
+    const send: ProviderSend = async (call) => {
+      expect(call.body).toMatchObject({ model: "anthropic/claude-haiku-5.5", max_completion_tokens: limit, stream: false, provider: { only: ["azure/global"], allow_fallbacks: false, require_parameters: true, max_price: { prompt: "0.1", completion: "0.5" } } });
+      const result = response();
+      return { ...result, body: { ...result.body, model: "anthropic/claude-haiku-5.5", provider: "Azure" } };
+    };
+    const chat = createChatJson({ model: "anthropic/claude-haiku-5.5", transport: new GuardedTransport({ guard, send, liveEvalEnabled: true }) });
+    await expect(chat(request({ stage, purpose: "live_eval" }))).resolves.toEqual({ ok: true });
+    expect(await guard.snapshot()).toMatchObject({ uncertain: false, inFlight: 0, caps: { prep: 2, live_eval: 0.5, demo: 4 }, spent: { prep: 0.001, live_eval: 0.001, demo: 0 } });
+  });
+  it.each([["intent", 400], ["explanation", 1000]] as const)("explicitly disables Haiku adaptive thinking for the %s visible-output budget", async (stage, limit) => {
+    let body: Record<string, unknown> | undefined;
+    const events: ChatAttemptEvent[] = [];
+    const chat = createChatJson({ model: "anthropic/claude-haiku-5.5", transport: new GuardedTransport({ guard, send: async (call) => { body = call.body; return response(); } }), onAttempt: (event) => { events.push(event); } });
+    await expect(chat(request({ stage }))).resolves.toEqual({ ok: true });
+    expect(body).toMatchObject({ max_completion_tokens: limit, reasoning: { enabled: false } });
+    expect(body!.reasoning).toEqual({ enabled: false });
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({ reasoningPolicy: "disabled", schemaProjectionVersion: "anthropic-bounds-v1", costKnown: true });
+  });
+  it.each(["openai/gpt-6-luna", "qwen/qwen3.8-flash"])("leaves %s reasoning policy unchanged", async (model) => {
+    let body: Record<string, unknown> | undefined;
+    await createChatJson({ model, transport: new GuardedTransport({ guard, send: async (call) => { body = call.body; return response(); } }) })(request());
+    expect(body).not.toHaveProperty("reasoning");
+  });
   it.each([["intent", 400], ["explanation", 1000]] as const)("sends strict schema and fixed %s output budget", async (stage, limit) => {
     const chat = client(async (call) => {
       expect(call.body).toMatchObject({ stream: false, max_completion_tokens: limit, provider: { require_parameters: true, allow_fallbacks: false }, response_format: { type: "json_schema", json_schema: { name: "intent_v1", strict: true, schema: { additionalProperties: false } } } });
@@ -112,6 +214,38 @@ describe("structured server chat", () => {
     expect(String(error)).not.toContain("PRIVATE_KEY_DETAIL");
     expect(calls).toBe(1);
     expect((await guard.snapshot()).uncertain).toBe(true);
+  });
+  it.each([400, 200])("retains HTTP%s missing-cost diagnostics only after durable unknown settlement without retry", async (status) => {
+    const events: ChatAttemptEvent[] = [];
+    let calls = 0;
+    const chat = client(async () => { calls++; return { status, body: { id: "gen-1792502351-safeReceipt", error: { message: "PRIVATE_PROVIDER_BODY" } } }; }, (event) => { events.push(event); });
+    await expect(chat(request())).rejects.toMatchObject({ code: "COST_UNKNOWN", costKnown: false, dispatched: true });
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({ status, generationId: "gen-1792502351-safeReceipt", transportReason: "unknown_cost", outcome: "error", costKnown: false, costUsd: null });
+    expect(calls).toBe(1);
+    expect((await guard.snapshot()).uncertain).toBe(true);
+    expect(JSON.stringify(events)).not.toMatch(/PRIVATE_PROVIDER_BODY|private text/);
+    await expect(chat(request())).rejects.toMatchObject({ code: "BUDGET_BLOCKED" });
+    expect(calls).toBe(1);
+    expect(events).toHaveLength(1);
+  });
+  it.each(["sk-or-v1-fixture-not-a-real-key", "gen-unsafe?query=private", "gen-unsafe\n", `gen-${"a".repeat(125)}`, "gen-", { id: "gen-nested" }])("drops unsafe generation identifiers on unknown responses (%j)", async (id) => {
+    const events: ChatAttemptEvent[] = [];
+    await expect(client(async () => ({ status: 400, body: { id } }), (event) => { events.push(event); })(request())).rejects.toMatchObject({ code: "COST_UNKNOWN" });
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({ status: 400, transportReason: "unknown_cost" });
+    expect(events[0]).not.toHaveProperty("generationId");
+  });
+  it.each(["network", "json-parse"])("keeps %s send rejection unknown without inventing response identifiers or status", async (kind) => {
+    const events: ChatAttemptEvent[] = [];
+    let calls = 0;
+    const chat = client(async () => { calls++; throw kind === "json-parse" ? new SyntaxError("PRIVATE_PARSE_BODY") : new Error("PRIVATE_NETWORK_BODY"); }, (event) => { events.push(event); });
+    await expect(chat(request())).rejects.toMatchObject({ code: "COST_UNKNOWN", costKnown: false });
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({ status: null, transportReason: "network", costKnown: false });
+    expect(events[0]).not.toHaveProperty("generationId");
+    expect(calls).toBe(1);
+    expect(JSON.stringify(events)).not.toMatch(/PRIVATE_PARSE_BODY|PRIVATE_NETWORK_BODY/);
   });
   it("does not trust a generic error claiming known cost to authorize retry", async () => {
     let calls = 0;
