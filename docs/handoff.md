@@ -4,7 +4,7 @@
 сначала сверить in_progress reports; не повторять брейншторм и исследования.
 [progress.md](progress.md) содержит текущие проверки и ограничения.
 
-Рабочая папка `/Users/macbook/Yernur/projects/aituhack`, ветка `codex/p0-mvp`.
+Рабочая папка `/Users/macbook/Yernur/projects/aituhack`, ветка `main`; локальная `codex/p0-mvp` сохранена.
 Runtime Node24.21.0/pnpm11.0.8. Исполнители/review и briefs: `/tmp/aituhack-mvp/`;
 root — единственный writer tracker. Всегда implementer и другой независимый reviewer,
 непересекающиеся owned files; после каждой принятой подзадачи сразу status/evidence/next.
@@ -68,7 +68,9 @@ M7.5: доступ с телефона, 3 карточки и оба native-пе
 
 Локальная передача/материалы сохранены stage commit`da659ed52fd276ae3787f46a266d3730b96a42b2`;
 Проверки сайта, карточек и обеих карт на физическом телефоне подтверждены пользователем;
-итоговый статус M7.5/M7 — в tracker.yaml. Публичная отправка не выполнялась.
+итоговый статус M7.5/M7 — в tracker.yaml. По прямому запросу пользователя история
+отправлена в `main` [GitHub](https://github.com/yernururue/aitu_hack) обычным push.
+YouTube/официальная отправка заявки не выполнялись.
 `next_task_id=M2.4`: первый внешний P0 gate — реальный индекс, но key/auth нельзя
 повторять, пока пользователь не подтвердит обновление. Остальные доступные offline
 задачи выполнены. $0 OpenRouter, $2prep/$0.50nested/$4demo reserve без изменений.

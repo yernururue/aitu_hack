@@ -1,6 +1,10 @@
 # Проверенные ссылки и запуск
 
 [Открыть временное HTTPS-демо](https://percentage-slim-contemporary-appropriate.trycloudflare.com).
+[Исходники в GitHub, ветка main](https://github.com/yernururue/aitu_hack/tree/main).
+Обычный push всех11исходных коммитов разрешён пользователем и проверен;
+один дополнительный служебный commit фиксирует результат.
+
 Локальный origin: [http://127.0.0.1:3000](http://127.0.0.1:3000).
 
 Текущая проверка20.10.2026 05:20 Asia/Almaty после M5.4: HTTPS200, реальный API/
@@ -52,9 +56,10 @@ NODE_ENV=production APP_AI_MODE=stub OPENROUTER_PAID_ENABLED=false LIVE_EVAL_ENA
 PPTX/видео сохранены неизменными как снимок source`572a813`/build`BlwNsPwtVQoToEIUwspvC`
 (554unit/62e2e). Текущее приложение добавляет пояснение/явное снятие бюджета;
 новая сборка приложения указана отдельно. SHA-256 и sourceSnapshot обоих файлов
-записаны в release-manifest.json. Материалы проверены локально
-и доступны владельцу workspace. Видео и private build/evidence игнорируются Git;
+записаны в release-manifest.json. Материалы проверены локально. PPTX также доступен
+[в GitHub](https://github.com/yernururue/aitu_hack/blob/main/output/submission/aituhack-demo.pptx)
+после разрешённого push; видео доступно владельцу workspace. Видео и private build/evidence игнорируются Git;
 локальная ссылка на них не означает публичную загрузку или доступность в новом clone.
 PPTX включает все четыре изображения внутри файла; native PowerPoint отдельно не открывался.
 Сайт, 3 карточки и оба native-перехода к выбранному месту на телефоне подтверждены пользователем.
-YouTube upload, push и официальная отправка заявки не выполнялись.
+GitHub push выполнен по запросу пользователя. YouTube upload и официальная отправка заявки не выполнялись.

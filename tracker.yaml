@@ -30,7 +30,7 @@ budget:
 handoff:
   state: "ready"
   application_state: "offline_stub_demo_and_materials_verified_external_gates_pending"
-  current_scope: "M7 authorizedoffline/localdelivery done; M5.4 deployedceb34a5. Physicalphone site/3cards/BOTHnative mapdestinations userconfirmed. Realindex/model/live gatesblocked; noauthretry/paid0. PPTX/video retain accepted572snapshot"
+  current_scope: "M7 verified; all11existing commits published to GitHub main under explicit userauthorization, documentationreceipt follows. Phone site/3cards/BOTHnative maps userconfirmed. Realindex/model/live gatesblocked/noauthretry/paid0; originalcollector preserved"
   internal_deadline: "2026-10-20T20:00:00+05:00"
   submission_deadline: "2026-10-20T23:59:00+05:00"
   collector_work:
@@ -557,6 +557,20 @@ stages:
           - "Independent M7.5-handoff-review.md finalconsistencyPASS/noopenfindings after P3 trackerhandoffcurrent_scopeADDRESSED byreadonly32–33check. NativePPTX/video artifactspec+qualityPASS. Finalmaterialpaths/statistics/limits/permissions/local-onlyignoredvideo and currentnewURL consistent. YouTubeupload/push/officialsubmission NOTperformed."
           - "BLOCKED remaining acceptance: physical-phone/private-device check and native map handoff not confirmed; two asyncphonequestions unanswered, elapsedtime/usercontinue notdeviceevidence. Laptopfreshprivate390/1440PASSdoesnotreplacephysicalphone. FullRAGlive/index/model gates remainseparatelyblockedM2.4/M4/M5.3; keyunchanged/noauthretry. Localavailableofflineworkdone; nextM2.4requiresuser-confirmedkeyupdatebeforeanypaidwork."
           - "M7.4 artifacts independently accepted. Finalize current links/materialmanifest/status/handoff/stagecommit and verifyalllocalfiles+actualURL/privatebrowser/permissions. Laptopprivatecontexts alreadyPASS; unansweredphysicalphonecheck remainsunverified and mustnotbe donebyemulation. NoYouTube/upload/push/officialsubmission actionauthorizedbylocaldelivery."
+
+      - id: "M7.6"
+        title: "Push authorized committed MVP history to main"
+        status: "done"
+        owner: "root_integrator"
+        depends_on:
+          - "M7.5"
+        acceptance: "User explicitly authorizes all committed work on origin/main; preserve history with ordinary push, verify remote main tip, keep keys/raw/private/original collector files out, record counts and independent review. Public Git push is distinct from YouTube/material upload and official submission."
+        evidence:
+          - "Independent7docreceipt review SPEC/CONSISTENCY PASS+QUALITYPASS/nofindings: /tmp/aituhack-mvp/main-push-receipt-review.md. Firstactualremote11/d670 recordedBeforeReceipt; oneadditionalbookkeepingcommit explicit. PublicPPTXvs localWebM/YouTube/officialfalse correctlyseparated. Source/build/dataset/AI/budgets/verification/privacy/hosting/artifactsnapshot+collectorunchanged; rootjsonasserts/harness/diff0. GO commitreceipt andordinarysecondpush, thenrootverifyfinalremotetip/count."
+          - "User-authorized ordinary git push --set-upstream origin main exit0; remote main created with ALL11existing commits at d6706da094efcdcfb7d0e35460ea9fcb22556895. Independent git ls-remote verifies exacttip; origin/main count11; gh confirmsdefaultbranchmain/isEmptyfalse. No force/mergecommit/rewrite;6untrackedcollectorpaths retained, secrets/raw/private/localvideo notpushed. PublicGitHub yernururue/aitu_hack includes acceptedPPTX; YouTube/officialsubmission notperformed. One following documentationreceipt commit will record this successful push and be pushed normally."
+          - "Independent pre-push historyaudit PASS/no blockers:11commits/200unique blobs/111historicalpaths, no realcredentials/env/raw/private/audio/index/ignoredoutput;7generic detectorhits proven blankexample/dummytests. Catalog298/591 intentional and contact/authorpatternclean; PPTXexactacceptedhash/noactiveattachments;6originalcollectoruntracked preserved. /tmp/aituhack-mvp/main-push-review.md. GOordinarypush, noforce; fresh554unit/lint/harness/diff0 onexactmergedd670."
+          - "User explicitly requested commit count and push all commits into main. Fresh fetch/ls-remote/gh view: origin yernururue/aitu_hack PUBLIC and empty. Local main b9ad6a0 ancestor of d6706da;11total/10new; normal fast-forward main to d6706da exit0, no merge commit."
+          - "Fresh AIexecutor verification on exact d6706da:554unit16files/14.00s,lint,harness,diff0;tracked/stagedclean,6collector untrackedpreserved. Rootreadreport /tmp/aituhack-mvp/main-push-verification.md; independent all-history pre-push audit pending, no push yet."
 
 # Data collector section. Updated only by this chat's main collector integrator.
 # This does not mark application ingestion task M1.3 as complete.
