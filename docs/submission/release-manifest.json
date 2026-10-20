@@ -165,7 +165,7 @@
     "rawOrCollectorFilesInProductionNft": false
   },
   "hosting": {
-    "status": "temporary_public_preview_verified",
+    "status": "local_origin_reachable_public_dns_unverified",
     "type": "cloudflare_quick_tunnel",
     "url": "https://percentage-slim-contemporary-appropriate.trycloudflare.com",
     "previousUrl": "https://converter-mirrors-commercial-gem.trycloudflare.com",
@@ -189,7 +189,14 @@
     "physicalPhoneSiteOpened": true,
     "runtimeReportSha256": "8cfdea94b5eb7d9cc62f7cf8759e425265bf1325964688a8125db845d11c3414",
     "publicBrowserCheckedAtUtc": "2026-10-20T00:20:25.214Z",
-    "physicalPhoneCardsVerified": true
+    "physicalPhoneCardsVerified": true,
+    "latestAvailabilityAudit": {
+      "checkedAtUtc": "2026-10-20T08:40:14.290001Z",
+      "originHttpStatus": 200,
+      "publicHttpResponses": 0,
+      "publicDnsVerifiedFromAuditHost": false,
+      "lastSuccessfulPublicCheckUtc": "2026-10-20T00:21:18.053126Z"
+    }
   },
   "outstandingGates": [
     "M2.4 real embeddings index",
@@ -262,7 +269,7 @@
       "verifiedAtUtc": "2026-10-20T00:39:08.757704+00:00"
     }
   },
-  "updatedAt": "2026-10-20T00:39:08.757704+00:00",
+  "updatedAt": "2026-10-20T08:46:28.592859+00:00",
   "applicationUpdate": {
     "taskId": "M5.4",
     "change": "Clarify strict zero versus blank budget and offer explicit budget removal without automatic search or changing other fields",
@@ -270,5 +277,32 @@
     "materialsSnapshot": "PPTX/video retain source572a813/buildBlw snapshot; current app adds budget explanation/recovery only",
     "providerCalls": 0,
     "independentIntegrationReview": "SPEC/CONSISTENCY PASS / QUALITY PASS"
+  },
+  "datasetSecurityAudit": {
+    "sourceDirectory": "data/normalized/astana",
+    "sourceMatchesAcceptedCatalog": true,
+    "sourcePlaceCount": 298,
+    "sourceReviewCount": 1953,
+    "exportedExcerpts": 591,
+    "offlineReplayByteIdentical": true,
+    "localVerdict": "PASS_WITHIN_SCANNED_BOUNDARIES",
+    "originVerdict": "PASS_WITHIN_SCANNED_BOUNDARIES",
+    "publicVerdict": "UNVERIFIED_DNS_FROM_AUDIT_HOST",
+    "knownSecretMatches": 0,
+    "highConfidenceSecretFindings": 0,
+    "unresolvedCandidates": 0,
+    "historyCommitsScanned": 12,
+    "historicalBlobsScanned": 207,
+    "localFilesScanned": 169,
+    "zipMembersScanned": 118,
+    "originResponses": 72,
+    "originClientAssets200": 12,
+    "publicHttpResponses": 0,
+    "envFileMode": "0600",
+    "credentialsPrinted": false,
+    "providerAuthPaidCalls": 0,
+    "report": "docs/security-audit.md",
+    "independentReview": "LINEAGE PASS / LOCAL-ORIGIN LIMITED PASS / PUBLIC DNS WARN",
+    "checkedAtUtc": "2026-10-20T08:40:14.290001Z"
   }
 }

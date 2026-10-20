@@ -8,6 +8,13 @@ Stage: implementation
 
 ## Выполнение MVP
 
+M7.7 done: повторно подтверждён источник `data/normalized/astana/`, полный набор298мест/
+1953проверенныхотзыва→591выдержка; приватный replay каталога и report byteEXACT.
+Локальный/Git/actualorigin secret scan: known0/high0/unresolved0; .env.local mode600.
+Внешний QuickTunnel DNS из машины аудита недоступен: publicHTTP0, актуальный
+publicPASS не заявляется. Независимый LINEAGE+LOCAL/ORIGIN LIMITEDPASS,
+PUBLICDNSWARN/noopenfindings. [Границы и evidence](security-audit.md).
+
 
 После локальной передачи пользователь открыл сайт на физическом телефоне, но получил
 0мест при явно заданном бюджете0₸. Это корректный строгий фильтр: все298цен неизвестны.
