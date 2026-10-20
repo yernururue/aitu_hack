@@ -32,7 +32,7 @@ afterEach(() => { vi.unstubAllEnvs(); vi.unstubAllGlobals(); vi.restoreAllMocks(
 
 describe("server-only runtime purpose configuration", () => {
   it("defaults to prep without enabling payment or changing hard caps", () => {
-    expect(readAiConfig({})).toMatchObject({ runtimePurpose: "prep", paidEnabled: false, caps: { prep: 2, live_eval: 1, demo: 4 } });
+    expect(readAiConfig({})).toMatchObject({ runtimePurpose: "prep", paidEnabled: false, caps: { prep: 2, live_eval: 1.5, demo: 4 } });
   });
   it.each(["prep", "demo"] as const)("accepts explicit %s only from server env", (purpose) => {
     expect(readAiConfig({ OPENROUTER_RUNTIME_PURPOSE: purpose }).runtimePurpose).toBe(purpose);

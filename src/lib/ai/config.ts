@@ -2,7 +2,9 @@
 import { cwd } from "node:process";
 import { isAbsolute, resolve } from "node:path";
 
-export const HARD_CAPS = Object.freeze({ prep: 2, live_eval: 1, demo: 4 });
+export const HARD_CAPS = Object.freeze({ prep: 2, live_eval: 1.5, demo: 4 });
+// Pin the second historical approval independently of later configuration caps.
+export const SECOND_APPROVED_CAPS = Object.freeze({ prep: 2, live_eval: 1, demo: 4 });
 // Existing/newly initialized ledgers cannot acquire an approved policy cap
 // through a constructor or environment override. Migration is operator-only.
 export const LEGACY_CAPS = Object.freeze({ prep: 2, live_eval: 0.5, demo: 4 });
