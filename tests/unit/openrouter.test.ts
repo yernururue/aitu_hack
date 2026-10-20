@@ -89,7 +89,7 @@ describe("structured server chat", () => {
     const send: ProviderSend = async (call) => { expect(call.body.response_format).toMatchObject({ json_schema: { schema } }); return response(); };
     const events: ChatAttemptEvent[] = [];
     await createChatJson({ model, transport: new GuardedTransport({ guard, send }), onAttempt: (event) => { events.push(event); } })(request({ jsonSchema: { name: "identity", schema } }));
-    expect(events[0]).toMatchObject({ schemaProjectionVersion: "identity-v1" });
+    expect(events[0]).toMatchObject({ schemaProjectionVersion: "identity-v1", reasoningPolicy: "provider-default" });
   });
   it.each([0, 1, 2])("retains only supported array minItems=%s on Haiku's wire", async (minItems) => {
     const schema = { type: "object", properties: { values: { type: "array", items: { type: "string" }, minItems } }, required: ["values"], additionalProperties: false };
@@ -120,6 +120,21 @@ describe("structured server chat", () => {
     const chat = createChatJson({ model: "anthropic/claude-haiku-5.5", transport: new GuardedTransport({ guard, send, liveEvalEnabled: true }) });
     await expect(chat(request({ stage, purpose: "live_eval" }))).resolves.toEqual({ ok: true });
     expect(await guard.snapshot()).toMatchObject({ uncertain: false, inFlight: 0, caps: { prep: 2, live_eval: 0.5, demo: 4 }, spent: { prep: 0.001, live_eval: 0.001, demo: 0 } });
+  });
+  it.each([["intent", 400], ["explanation", 1000]] as const)("explicitly disables Haiku adaptive thinking for the %s visible-output budget", async (stage, limit) => {
+    let body: Record<string, unknown> | undefined;
+    const events: ChatAttemptEvent[] = [];
+    const chat = createChatJson({ model: "anthropic/claude-haiku-5.5", transport: new GuardedTransport({ guard, send: async (call) => { body = call.body; return response(); } }), onAttempt: (event) => { events.push(event); } });
+    await expect(chat(request({ stage }))).resolves.toEqual({ ok: true });
+    expect(body).toMatchObject({ max_completion_tokens: limit, reasoning: { enabled: false } });
+    expect(body!.reasoning).toEqual({ enabled: false });
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({ reasoningPolicy: "disabled", schemaProjectionVersion: "anthropic-bounds-v1", costKnown: true });
+  });
+  it.each(["openai/gpt-6-luna", "qwen/qwen3.8-flash"])("leaves %s reasoning policy unchanged", async (model) => {
+    let body: Record<string, unknown> | undefined;
+    await createChatJson({ model, transport: new GuardedTransport({ guard, send: async (call) => { body = call.body; return response(); } }) })(request());
+    expect(body).not.toHaveProperty("reasoning");
   });
   it.each([["intent", 400], ["explanation", 1000]] as const)("sends strict schema and fixed %s output budget", async (stage, limit) => {
     const chat = client(async (call) => {

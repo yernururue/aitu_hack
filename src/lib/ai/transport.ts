@@ -52,7 +52,7 @@ function providerRequest(quote: Quote, body: unknown): ProviderRequest {
   }
   return {
     endpoint: embedding ? "embeddings" : "chat/completions", model: quote.model,
-    body: { ...parsed.data, model: quote.model, provider: quote.provider, ...(!embedding ? { stream: false, [quote.outputParameter]: quote.maxCompletionTokens } : {}) },
+    body: { ...parsed.data, model: quote.model, provider: quote.provider, ...(!embedding ? { stream: false, [quote.outputParameter]: quote.maxCompletionTokens, ...(quote.reasoning ? { reasoning: quote.reasoning } : {}) } : {}) },
   };
 }
 

@@ -23,6 +23,7 @@ export type Quote = Readonly<{
   operation: Exclude<Operation, "audio">; model: string; estimatedUsd: number;
   inputCount?: number; maxCompletionTokens?: number; contextLength: number;
   outputParameter: "max_tokens" | "max_completion_tokens";
+  reasoning?: Readonly<{ enabled: false }>;
   billing: Readonly<{ inputUsdPerToken: string; completionUsdPerToken: string; maxOutputTokens: number; cacheWriteMaxMultiplier?: 2 }>;
   provider: Readonly<{
     only?: readonly [string];
@@ -67,6 +68,9 @@ export function quoteRequest(args: { operation: Operation; model: string; inputC
     estimatedUsd: nanoUsd(raw) / 1e9, contextLength: model.context,
     ...(embedding ? { inputCount: args.inputCount } : { maxCompletionTokens: args.maxCompletionTokens }),
     outputParameter: model.parameter,
+    // Haiku 5.5 defaults to adaptive thinking; explicitly disable it so the
+    // fixed 400/1000 stage limits are available to visible structured output.
+    ...(pinnedHaiku ? { reasoning: Object.freeze({ enabled: false as const }) } : {}),
     billing: Object.freeze({ inputUsdPerToken: inputPrice, completionUsdPerToken: completionPrice, maxOutputTokens: model.output, ...(pinnedHaiku ? { cacheWriteMaxMultiplier: 2 as const } : {}) }),
     provider: Object.freeze({ ...(pinnedHaiku ? { only: Object.freeze(["azure/global"] as [string]) } : {}), allow_fallbacks: false, require_parameters: true, max_price: Object.freeze({ prompt: perMillion(promptPrice), completion: perMillion(completionPrice), request: "0", image: "0", audio: "0" }) }),
   });

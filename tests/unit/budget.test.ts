@@ -227,6 +227,10 @@ describe("server config and conservative prices", () => {
     expect(intent.estimatedUsd).toBeLessThanOrEqual(0.264000001);
     expect(explanation.estimatedUsd).toBe(intent.estimatedUsd);
     expect(intent.provider).toEqual({ only: ["azure/global"], allow_fallbacks: false, require_parameters: true, max_price: { prompt: "0.1", completion: "0.5", request: "0", image: "0", audio: "0" } });
+    expect(intent).toHaveProperty("reasoning", { enabled: false });
+    const reasoning = Object.getOwnPropertyDescriptor(intent, "reasoning")!.value;
+    expect(Object.isFrozen(reasoning)).toBe(true);
+    expect(Reflect.set(reasoning, "enabled", true)).toBe(false);
     expect(Object.isFrozen(intent.provider.only)).toBe(true);
     expect(Reflect.set(intent.provider.only!, "0", "azure/us")).toBe(false);
   });
@@ -258,6 +262,7 @@ describe("guarded endpoint transport (injected, no network)", () => {
   it.each([
     { provider: { only: ["anthropic"] } }, { cache_control: { type: "ephemeral" } },
     { tools: [{ type: "web_search" }] }, { plugins: [{ id: "web" }] },
+    { reasoning: { enabled: true } }, { reasoning: { exclude: true } },
   ])("never enables caller-selected routing/caching/tools under the pinned quote: %j", async (extra) => {
     const guard = new BudgetGuard({ path });
     const send = vi.fn(async () => ({ status: 200, body: { usage: { cost: 0 } } }));

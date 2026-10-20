@@ -11,8 +11,8 @@ function fixture(model = "anthropic/claude-haiku-5.5") {
     : luna
       ? { prompt: "0.0000001", completion: "0.0000005", input_cache_write: "0.000000125", overrides: [{ min_prompt_tokens: 272000, prompt: "0.0000002", completion: "0.00000075", input_cache_write: "0.00000025" }] }
       : { prompt: "0.00000015", completion: "0.00000047", input_cache_read: "0.000000016", input_cache_write: "0.0000002" };
-  const params = [quote.outputParameter, "response_format", "structured_outputs"];
-  const modelData = { id: model, context_length: quote.contextLength, top_provider: { max_completion_tokens: quote.billing.maxOutputTokens }, supported_parameters: params, pricing };
+  const params = [quote.outputParameter, "response_format", "structured_outputs", ...(haiku ? ["reasoning"] : [])];
+  const modelData = { id: model, context_length: quote.contextLength, top_provider: { max_completion_tokens: quote.billing.maxOutputTokens }, supported_parameters: params, pricing, reasoning: haiku ? { mandatory: false, supported_efforts: ["low", "medium", "high", "none"] } : undefined };
   const endpoint = { model_id: model, tag: haiku ? "azure/global" : luna ? "azure" : "alibaba", context_length: quote.contextLength, max_completion_tokens: quote.billing.maxOutputTokens, max_prompt_tokens: null as number | null, supported_parameters: params, pricing: { ...structuredClone(pricing), discount: 0 } };
   return { quote, input: { model: modelData, endpoints: { data: { id: model, endpoints: [endpoint] } } }, endpoint };
 }
@@ -28,9 +28,13 @@ describe("pure current endpoint metadata preflight", () => {
     expect(quote.provider.max_price.prompt).toBe("0.1");
     expect(() => verifyQuoteMetadata(quote, input)).not.toThrow();
   });
+  it("preserves Qwen's published reasoning metadata shape without imposing Haiku's disable policy", () => {
+    const { quote, input } = fixture("qwen/qwen3.8-flash");
+    expect(() => verifyQuoteMetadata(quote, { ...input, model: { ...input.model, reasoning: { mandatory: false, default_enabled: true, supports_max_tokens: true } } })).not.toThrow();
+  });
   it.each([
     "regional", "missing", "duplicate", "wrong-model", "model-context", "model-output", "endpoint-context", "endpoint-output", "prompt-ceiling",
-    "max_completion_tokens", "response_format", "structured_outputs", "base-prompt", "base-completion", "price-shape", "unknown-price", "request-price", "negative-discount", "cache-ratio", "excluded-tier-cache-ratio", "cache-read-ratio", "threshold", "duplicate-threshold", "time-window",
+    "max_completion_tokens", "response_format", "structured_outputs", "reasoning", "model-reasoning", "mandatory-reasoning", "missing-reasoning-policy", "no-disable-effort", "base-prompt", "base-completion", "price-shape", "unknown-price", "request-price", "negative-discount", "cache-ratio", "excluded-tier-cache-ratio", "cache-read-ratio", "threshold", "duplicate-threshold", "time-window",
   ])("fails closed on %s metadata drift", (kind) => {
     const { quote, input, endpoint } = fixture();
     const model = input.model;
@@ -45,7 +49,11 @@ describe("pure current endpoint metadata preflight", () => {
     if (kind === "endpoint-context") endpoint.context_length++;
     if (kind === "endpoint-output") endpoint.max_completion_tokens++;
     if (kind === "prompt-ceiling") endpoint.max_prompt_tokens = quote.contextLength + 1;
-    if (["max_completion_tokens", "response_format", "structured_outputs"].includes(kind)) endpoint.supported_parameters = endpoint.supported_parameters.filter((name) => name !== kind);
+    if (["max_completion_tokens", "response_format", "structured_outputs", "reasoning"].includes(kind)) endpoint.supported_parameters = endpoint.supported_parameters.filter((name) => name !== kind);
+    if (kind === "model-reasoning") model.supported_parameters = model.supported_parameters.filter((name) => name !== "reasoning");
+    if (kind === "mandatory-reasoning") model.reasoning!.mandatory = true;
+    if (kind === "missing-reasoning-policy") model.reasoning = undefined;
+    if (kind === "no-disable-effort") model.reasoning!.supported_efforts = ["medium"];
     if (kind === "base-prompt") prices.prompt = "0.00000011";
     if (kind === "base-completion") prices.completion = "0.00000055";
     if (kind === "price-shape") prices.prompt = "1e-7";

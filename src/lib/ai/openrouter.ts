@@ -22,6 +22,7 @@ export type ChatAttemptEvent = Readonly<{
   outcome: "ok" | "invalid_response" | "http_error" | "error";
   status: number | null;
   schemaProjectionVersion?: SchemaProjectionVersion;
+  reasoningPolicy?: "disabled" | "provider-default";
 }>;
 
 const messageSchema = z.strictObject({ role: z.enum(["system", "user", "assistant"]), content: z.string().min(1).max(64_000) });
@@ -178,12 +179,12 @@ export function createChatJson(options: {
       const cancellation = interrupted(stage, request.signal, deadlineAt);
       if (cancellation) throw cancellation;
       const attemptStart = Date.now();
-      const emit = (outcome: ChatAttemptEvent["outcome"], accounting?: Accounting, status: number | null = null) => notify({ stage, attempt, model, responseModel: accounting?.responseModel ?? null, provider: accounting?.provider ?? null, latencyMs: Math.max(0, Date.now() - attemptStart), costKnown: accounting !== undefined, costUsd: accounting?.costUsd ?? null, usage: accounting?.usage ?? { promptTokens: null, completionTokens: null, totalTokens: null }, outcome, status, schemaProjectionVersion });
       let retry = false;
       let failure: ChatJsonError;
       let quote;
       try { quote = quoteRequest({ operation: stage, model, maxCompletionTokens: stage === "intent" ? 400 : 1000 }); }
       catch { throw new ChatJsonError("INVALID_REQUEST", stage, true, false); }
+      const emit = (outcome: ChatAttemptEvent["outcome"], accounting?: Accounting, status: number | null = null) => notify({ stage, attempt, model, responseModel: accounting?.responseModel ?? null, provider: accounting?.provider ?? null, latencyMs: Math.max(0, Date.now() - attemptStart), costKnown: accounting !== undefined, costUsd: accounting?.costUsd ?? null, usage: accounting?.usage ?? { promptTokens: null, completionTokens: null, totalTokens: null }, outcome, status, schemaProjectionVersion, reasoningPolicy: quote.reasoning ? "disabled" : "provider-default" });
       try {
         const body = await transport.execute({ purpose: request.purpose ?? "prep", quote, body: payload, signal: request.signal, deadlineAt, timeoutMs: 15_000 });
         const accounting = responseAccounting(body);

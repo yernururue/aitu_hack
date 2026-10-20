@@ -10,7 +10,8 @@ const prices = {
 const tierSchema = z.strictObject({ ...prices, min_prompt_tokens: z.number().int().positive() });
 const priceSchema = z.strictObject({ ...prices, discount: z.number().min(0).max(1).optional(), overrides: z.array(tierSchema).optional() });
 const limits = { context_length: z.number().int().positive(), supported_parameters: z.array(z.string()) };
-const modelSchema = z.object({ ...limits, id: z.string(), top_provider: z.object({ max_completion_tokens: z.number().int().positive() }), pricing: priceSchema });
+const reasoningSchema = z.object({ mandatory: z.literal(false), supported_efforts: z.array(z.string()).refine((efforts) => efforts.includes("none")) });
+const modelSchema = z.object({ ...limits, id: z.string(), top_provider: z.object({ max_completion_tokens: z.number().int().positive() }), pricing: priceSchema, reasoning: z.unknown().optional() });
 const endpointSchema = z.object({ ...limits, model_id: z.string(), tag: z.string(), max_completion_tokens: z.number().int().positive(), max_prompt_tokens: z.number().int().positive().nullable().optional(), pricing: priceSchema });
 const envelopeSchema = z.object({ data: z.object({ id: z.string(), endpoints: z.array(z.unknown()) }) });
 type Prices = z.infer<typeof priceSchema>;
@@ -55,12 +56,13 @@ function checkPricing(price: Prices, quote: Quote): void {
 export function verifyQuoteMetadata(quote: Quote, input: { model: unknown; endpoints: unknown }): void {
   try {
     if (!isIssuedQuote(quote) || quote.inputCount !== undefined) throw new Error();
-    const required = [quote.outputParameter, "response_format", "structured_outputs"];
+    const required = [quote.outputParameter, "response_format", "structured_outputs", ...(quote.reasoning ? ["reasoning"] : [])];
     const validLimits = (item: { context_length: number; supported_parameters: string[] }, output: number) => {
       if (item.context_length > quote.contextLength || item.context_length < quote.maxCompletionTokens! || output > quote.billing.maxOutputTokens || output < quote.maxCompletionTokens! || required.some((key) => !item.supported_parameters.includes(key))) throw new Error();
     };
     const model = modelSchema.parse(input.model);
     if (model.id !== quote.model) throw new Error();
+    if (quote.reasoning) reasoningSchema.parse(model.reasoning);
     validLimits(model, model.top_provider.max_completion_tokens);
     checkPricing(model.pricing, quote);
     const envelope = envelopeSchema.parse(input.endpoints).data;
