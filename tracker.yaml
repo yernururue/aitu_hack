@@ -30,7 +30,7 @@ budget:
 handoff:
   state: "ready"
   application_state: "submission_stub_ready_live_ai_blocked"
-  current_scope: "User prioritizes submissionNOW; no fifthconsent granted, allpaidSTOP. WorkingdonateSTUB/298realPOI/maps/details/profiles retained. Offline9503/Mistralroute/source-review38+21/full1002/rootbuild4Yqxp/NFT/semantic12+4/scan254findings0 accepted andmainmerged. RealAI/modelselection/fullP0 stillunaccepted. Rootfinaldocs/submitpacket/mainpush; collector andoriginalmaterials preserved."
+  current_scope: "User prioritizes submissionNOW; no fifthconsent granted, allpaidSTOP. WorkingdonateSTUB/298realPOI/maps/details/profiles retained. Offline9503/Mistralroute/source-review38+21/full1002/rootbuild4Yqxp/NFT/semantic12+4/scan254findings0 accepted andmainmerged. RealAI/modelselection/fullP0 stillunaccepted. Rootfinaldocs/submitpacket/newPPTXpublishedmain e5b89ad; collector andoriginalmaterials preserved."
   internal_deadline: "2026-10-20T20:00:00+05:00"
   submission_deadline: "2026-10-20T23:59:00+05:00"
   collector_work:
@@ -41,7 +41,7 @@ handoff:
       - "scripts/collect_astana.py"
       - "scripts/test_astana_data.py"
     notes: "M1.3 independently accepted298realPOI/591excerpts and reviewed36demo slice. Original collector code/snapshots preserved separately, no paid recollection. Collection C6 remains owned by collector integrator; publication rights not established."
-next_task_id: "M7.9"
+next_task_id: "M4.3"
 workflow:
   tracker_writer: "Single main integrator updates tracker after every finished task"
   completion_rule: "Mark done only after acceptance verification; record exact commands, exit codes and limitations here and in docs/progress.md"
@@ -667,7 +667,7 @@ stages:
           - "No voice feature to device-test; Safari/iPhone and Android/Chrome audio verification not run. Voice unavailable in release; physical text/navigation check also remains unverified in M5.3."
   - id: "M7"
     title: "Deployment and submission evidence"
-    status: "in_progress"
+    status: "done"
     tasks:
       - id: "M7.1"
         title: "Freeze release manifest and feature scope"
@@ -755,6 +755,7 @@ stages:
           - "M7.5"
         acceptance: "User explicitly authorizes all committed work on origin/main; preserve history with ordinary push, verify remote main tip, keep keys/raw/private/original collector files out, record counts and independent review. Public Git push is distinct from YouTube/material upload and official submission."
         evidence:
+          - "Furtherauthorizedordinarymainpush49fc→e5b89ad exit0, gitls-remoteexactmain e5b89ad verified;46total/5newincludingreviewedv5sourcef864, offlineMistral9503 andcurrentdocs/newPPTX. Prepushoutgoingknownkeys5commits20blobs59ZIP/0findings. UsersteeringsubmissionNOW respected,no paidcontinuation; followingreceiptcommit recordsverifiedtipBeforeReceipt (avoid selfSHAcycle)."
           - "Authorizedmainpush0 12d5ffe→49fc095aef49737111697c768daf63ecf6a09c3a; gitls-remoteindependentlyconfirmsrefs/heads/main49fc095. Published25additionalcommitsincludingreviewed3410USpin/RAG/v4/CLI+rootdocs. Prepushcurrent-known-keyscan25commits86blobs1.63MB/findings0/no values-keyhashes/network; immutable /tmp/aituhack-mvp/final-docs-fourth-stop-20261020/source-history-before-first-push.json. Sixcollectoruntracked/materialhashes/ignoredkey-ledger-index-WEBMpreserved. Newfourthconsent/v5workafterthispushnotyetpublished; finalpushafterreview."
           - "Independent7docreceipt review SPEC/CONSISTENCY PASS+QUALITYPASS/nofindings: /tmp/aituhack-mvp/main-push-receipt-review.md. Firstactualremote11/d670 recordedBeforeReceipt; oneadditionalbookkeepingcommit explicit. PublicPPTXvs localWebM/YouTube/officialfalse correctlyseparated. Source/build/dataset/AI/budgets/verification/privacy/hosting/artifactsnapshot+collectorunchanged; rootjsonasserts/harness/diff0. GO commitreceipt andordinarysecondpush, thenrootverifyfinalremotetip/count."
           - "User-authorized ordinary git push --set-upstream origin main exit0; remote main created with ALL11existing commits at d6706da094efcdcfb7d0e35460ea9fcb22556895. Independent git ls-remote verifies exacttip; origin/main count11; gh confirmsdefaultbranchmain/isEmptyfalse. No force/mergecommit/rewrite;6untrackedcollectorpaths retained, secrets/raw/private/localvideo notpushed. PublicGitHub yernururue/aitu_hack includes acceptedPPTX; YouTube/officialsubmission notperformed. One following documentationreceipt commit will record this successful push and be pushed normally."
@@ -809,12 +810,13 @@ stages:
 
       - id: "M7.9"
         title: "Deliver submit-now packet and updated presentation while preserving working stub"
-        status: "in_progress"
+        status: "done"
         owner: "root_integrator"
         depends_on:
           - "M7.8"
         acceptance: "User prioritizes immediate submission; ready-to-paste description/demo script/current URLs and independently reviewed updated PPTX copy, accepted code pushed main, original collector/materials preserved. Truthful stub vs unaccepted liveP0; no inferred fifthconsent/new paidcalls or claim of official submission."
         evidence:
+          - "Submitted-readySTUBpacket+newpresentation accepted andPUSHED ordinary origin/main e5b89ada0763f20f53196ce9ca7637f426dbf563, remoteexacttipverified17:51:38UTC;46totalcommits/5new since49fc. IndependentfinaldocsSPECQUALITYPASS37+19checks/104links0missing/harnessdiff0, finalreviewSHAab65ec3928d39d81585ee613cf585478a4c9cf3eb6dbaef742b9b0fa426968be; root14frozenfileSHA match beforecommit. NewPPTX7slides17independentchecks/25authorhashes/7rendered/rootslide7visualPASS. Prepushknownkeyoutgoing5commits20blobs59ZIP1,631,054bytesfindings0. All15explicitstagedpaths only14docs+newdeck; collector6/untracked/originalmaterials/ledger7dc5/index/env preserved. No fifthapproval/no newpaidcalls/no officialYouTube submission/fullP0false. Onefollowingbookkeepingreceiptcommit willalsoordinarypush; finalverify required."
           - "User22:44 urgency shifts priorityto submissionNOW, no fifthfinancialapproval. FreshpublicGET200/stubnotice/no knownkeymatch/0modelPOST. AIcreatedonlyNEW aituhack-submit-now.pptx437313B/SHA8bcbaeb2edd39f438ad679de6afbec73b7874dcf7d91d7665ccbf1f3974dd96e;7renderedandviewed/15authorchecks/25hashesPASS. Independentcompat17ZIPtextlinkpreservationchecks+slide6-7visual SPECQUALITYPASS, reportSHA2da5270deb3d21e8066084ff9fdc68a57848d6e4d60b52466245f31ad03427f2. Rootviewedslide7; currentdonatedisplay/clicklink, originalPPTX8926+WEBM742cpreserved. Submitpacket/manifestnewcopyrefs updated; finaldocreview+mainpushpending."
 
 # Data collector section. Updated only by this chat's main collector integrator.

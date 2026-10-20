@@ -546,18 +546,35 @@
     }
   ],
   "delivery": {
-    "state": "local_delivery_complete_physical_phone_verified",
+    "state": "working_public_stub_submission_packet_published",
     "publicUploadPerformed": true,
     "youtubeUploadPerformed": false,
     "gitPushPerformed": true,
     "officialSubmissionPerformed": false,
     "stageCommit": "da659ed52fd276ae3787f46a266d3730b96a42b2",
-    "localMarkdownLinksChecked": 57,
-    "lastDeliveryCheckUtc": "2026-10-20T00:21:18.053126Z",
+    "localMarkdownLinksChecked": 104,
+    "lastDeliveryCheckUtc": "2026-10-20T17:51:38.566961+00:00",
     "scope": "Authorized offline/stub handoff, phone/maps checks, and public GitHub main push; YouTube/video upload and official submission not performed",
     "phoneEvidenceRecordedAtUtc": "2026-10-20T00:35:05.943338+00:00",
     "phoneEvidenceIndependentReview": "SPEC/CONSISTENCY PASS",
     "gitPublication": {
+      "repositoryUrl": "https://github.com/yernururue/aitu_hack",
+      "branch": "main",
+      "defaultBranch": "main",
+      "verifiedHistoryTipBeforeReceipt": "e5b89ada0763f20f53196ce9ca7637f426dbf563",
+      "verifiedCommitCountBeforeReceipt": 46,
+      "documentationReceiptAdditionalCommits": 1,
+      "forcePush": false,
+      "verifiedAtUtc": "2026-10-20T17:51:38.566961+00:00"
+    },
+    "readinessReport": "docs/readiness-report.md",
+    "lastPublicUrlRestorationTask": "M7.8",
+    "currentDemoUrl": "https://donate-cooperation-quick-annual.trycloudflare.com",
+    "publicRestorationReview": "JointSPEC/QUALITYPASS19freshGET/12assetsequal/actual3901440twoSTUBPOST/4screenshots; old7982stoppedafterPASS/new39251+70029alive; no newphone/liveproof",
+    "liveP0Plan": "docs/live-p0-plan.md",
+    "liveP0PlanSha256": "ee1d0772fe998984db50c591784f86161388ff114675b3e02f430141ed4e6a26",
+    "submitNowPacket": "docs/submission/submit-now.md",
+    "historicalInitialGitPublication": {
       "repositoryUrl": "https://github.com/yernururue/aitu_hack",
       "branch": "main",
       "defaultBranch": "main",
@@ -566,16 +583,9 @@
       "documentationReceiptAdditionalCommits": 1,
       "forcePush": false,
       "verifiedAtUtc": "2026-10-20T00:39:08.757704+00:00"
-    },
-    "readinessReport": "docs/readiness-report.md",
-    "lastPublicUrlRestorationTask": "M7.8",
-    "currentDemoUrl": "https://donate-cooperation-quick-annual.trycloudflare.com",
-    "publicRestorationReview": "JointSPEC/QUALITYPASS19freshGET/12assetsequal/actual3901440twoSTUBPOST/4screenshots; old7982stoppedafterPASS/new39251+70029alive; no newphone/liveproof",
-    "liveP0Plan": "docs/live-p0-plan.md",
-    "liveP0PlanSha256": "ee1d0772fe998984db50c591784f86161388ff114675b3e02f430141ed4e6a26",
-    "submitNowPacket": "docs/submission/submit-now.md"
+    }
   },
-  "updatedAt": "2026-10-20T17:49:13.681597+00:00",
+  "updatedAt": "2026-10-20T17:52:17.622176+00:00",
   "applicationUpdate": {
     "taskId": "M5.4",
     "change": "Clarify strict zero versus blank budget and offer explicit budget removal without automatic search or changing other fields",
@@ -677,6 +687,8 @@
     "youtubeUploaded": false,
     "officiallySubmitted": false,
     "newPaidCallsAfterUserSteering": 0,
-    "fifthFinancialConsentGranted": false
+    "fifthFinancialConsentGranted": false,
+    "publishedToMain": true,
+    "verifiedMainTipBeforeReceipt": "e5b89ada0763f20f53196ce9ca7637f426dbf563"
   }
 }

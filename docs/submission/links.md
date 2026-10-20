@@ -2,6 +2,8 @@
 
 [Текущее временное HTTPS-демо](https://donate-cooperation-quick-annual.trycloudflare.com).
 [Исходники main](https://github.com/yernururue/aitu_hack/tree/main).
+[Пакет для сабмита](submit-now.md), [актуальная презентация](../../output/submission/aituhack-submit-now.pptx).
+Main доe5b89ad/46commits проверен22:51; следующий commit хранит квитанцию push.
 [Готовность](../readiness-report.md), [ограничения](limitations.md),
 [manifest](release-manifest.json), [трекер](../../tracker.yaml).
 
