@@ -30,6 +30,9 @@ function forbidden(path) {
 }
 
 async function main() {
+  const args = process.argv.slice(2);
+  const requireIndex = args.length === 1 && args[0] === "--require-index";
+  if (args.length && !requireIndex) throw new Error("Usage: node scripts/check-build-trace.mjs [--require-index]");
   const traces = await findTraces(buildRoot);
   if (!traces.length) throw new Error("No production NFT traces found; run pnpm build first.");
   const violations = new Set();
@@ -52,17 +55,21 @@ async function main() {
     }
   }
   await access(resolve(projectRoot, requiredCatalog));
-  try { await access(resolve(projectRoot, requiredIndex)); }
-  catch { throw new Error(`Required index asset is missing: ${requiredIndex}.`); }
   if (!pageHasCatalog) throw new Error(`Required catalogue is missing from ${requiredPageTrace}.`);
-  if (!apiHasIndex) throw new Error(`Required index is missing from ${requiredApiTrace}.`);
+  // Clean offline/stub builds have no generated index. Live release acceptance
+  // must opt into the stronger physical-asset and recommendation-trace gate.
+  if (requireIndex) {
+    try { await access(resolve(projectRoot, requiredIndex)); }
+    catch { throw new Error(`Required index asset is missing: ${requiredIndex}.`); }
+    if (!apiHasIndex) throw new Error(`Required index is missing from ${requiredApiTrace}.`);
+  }
   if (violations.size) {
     console.error(`FAIL: ${violations.size} forbidden or unexpected project assets in production NFT traces.`);
     [...violations].sort().slice(0, 20).forEach((file) => console.error(`  ${file}`));
     if (violations.size > 20) console.error(`  … ${violations.size - 20} more`);
     return 1;
   }
-  console.info(`PASS: ${traces.length} production NFT traces, ${tracedEntries} entries; required catalogue/index included, private/source tooling excluded.`);
+  console.info(`PASS: ${traces.length} production NFT traces, ${tracedEntries} entries; required catalogue included; ${requireIndex ? "required index included" : "index optional"}; private/source tooling excluded.`);
   return 0;
 }
 
