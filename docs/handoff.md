@@ -1,5 +1,30 @@
 # Продолжение MVP
 
+## Текущий emergency checkpoint: 20.10, 23:16 Asia/Almaty
+
+[Публичное демо](https://donate-cooperation-quick-annual.trycloudflare.com) переключено на **live**: Mistral Small3.2 через точный `deepinfra/fp8`, OpenRouter embeddings `openai/text-embedding-3-small`, реальный индекс298×1536. Source UI `fe4c0ef8d04d35fe6d8b717b62dbf4f02915c968`, build `P3aScnSHAtsKMfuzUrbrK`; публичный HTTPS200,9assets равны сборке,7privatepaths404,known-key findings0. Cutover GET-проверка не делала новых paid QA POST.
+
+Приняты **два** фактических private smoke:390px freeform «Найдите парк для часовой прогулки» →2места (Ботанический сад и Президенттік саябақ);1440px обязательные розетки →0мест без ослабления требования. Backend `0f47fa90eab93bada3e51ebfd8ae156c14e8612c`; UI-only fe4 добавляет явную пометку «По отзывам (мнения пользователей):». Human source/why/activity review PASS после этой правки; raw тексты и evidence не менялись. Root:1051unit +4новых render tests, build/NFT/keyscan PASS. Полная приёмка12/72/48 и старые Qwen24 **не завершены**, winner исходного сравнения не объявлен.
+
+Четыре known provider calls (intent/query_embedding/explanation/intent) использовали prep и стоили $0.0002702. Снимок после двух private QA, до публичного пользовательского трафика: canonical v6: 39 записей — 34 known и 5 upper-bound allocations с actual=null. Известный actual prep $0.002178331, включая eval $0.00168309; бюджетные оценки $1.435957681 считаются отдельно от actual. Budget spent prep $1.438136012/eval $1.437640771; доступно prep $0.561863988/eval $0.062359229/demo $4. Резервов и in-flight нет, uncertain=false, права0600, caps $2/$1.50/$4 неизменны. Следующий unknown/overshoot/ошибка durable ledger снова останавливает платные вызовы.
+
+Последнее прямое указание пользователя «подключи настоящий ИИ, пару тестов…» записано интегратором как emergency scope: reviewed v6 применил ровно существующий fifth target по $0.26160384, actual=null. Пользователь не повторял сумму буквально; интерпретация и исходный текст сохранены в authorization receipt, финансовые source/operator/actual independently reviewed. Это не разрешение будущих unknown или полного нового eval.
+
+Доказательства: private пакет `/tmp/aituhack-mvp/emergency-live-release-20261020/` (public-cutover-proof, оба receipts, both-smokes-audit, human opinion-fix-review); v6 `/tmp/aituhack-mvp/fifth-upper-bound-emergency-20261020/actual-review.md`. Текущий URL физическим телефоном не подтверждён. Голос, постоянный hosting, YouTube и официальная отправка не выполнены. Ссылка зависит от Mac/сети/origin/tunnel; origin56483/demo и CF39251.
+
+## Следующий шаг
+
+Root сверяет [tracker](../tracker.yaml), завершает публикацию live-PPTX и docs обычным push. Source/README/MP4/2скриншота уже опубликованы в main09c58f3, проверен18:17UTC. Не повторять one-use policy/smoke operators, не создавать другой ledger, не тратить demo на разработку. Public purpose=demo; development smoke были prep. Полный модельный eval требует отдельного решения и остатка бюджета. Повторять платные QA ради UI-подписи не нужно.
+
+Сохранить исходный collector/raw/normalized и шесть untracked originals. Каталог298/591/7, source298/1953, catalogc72d13… и index568c855… неизменны. Исторические PPTX/WEBM не перезаписывать; MP4 — копия старой stub-записи, новый live-PPTX — отдельный файл. Трекер пишет только root; README/source/assets принадлежат другим исполнителям.
+
+[Текущие ссылки](submission/links.md) · [Пакет для формы](submission/submit-now.md) · [Бюджет](budget.md) · [Ограничения](submission/limitations.md)
+
+<details>
+<summary>Исторический checkpoint — не текущий статус</summary>
+
+# Продолжение MVP
+
 ## Текущий checkpoint: 20.10, 22:47 Asia/Almaty
 
 Полный P0 с настоящим ИИ **не принят**. [Публичное демо](https://donate-cooperation-quick-annual.trycloudflare.com) работает в stub-режиме с настоящим каталогом; произвольный текст и ИИ-объяснения ещё не опубликованы. Реальный сохранённый RAG принят локально: 298×1536, 12/12 top3, macro Recall@5 97.22%, micro 93.75%, четыре отрицательных сценария и hard filters PASS. Это development set, не слепой бенчмарк.
@@ -29,3 +54,5 @@ Current [URL](https://donate-cooperation-quick-annual.trycloudflare.com): origin
 Использован именно `data/normalized/astana/`: сохранённый сбор 2ГИС через Apify19.10.2026,298мест/1953отзыва → app298POI/591короткая выдержка/889provenance/7категорий. Dataset4677a7a004ef, catalogSHA `c72d13a1d8df327edc22adce02743b0246aec157e86330c96c408bc44fabb873`, indexSHA `568c855ff30dc866c8de4f0eed3038df4406898bd45fe25472f5afa318934d45`. Все цены и подтверждённые amenities неизвестны, ограничения не ослаблять. Повторного сбора или reindex не нужно; права публикации текстов источника не установлены.
 
 Сохранить collector raw/normalized/section и шесть untracked originals: `data/README.md`, `data/collection/`, `scripts/astana_data.py`, `scripts/collect_astana.py`, `scripts/test_astana_data.py`, `scripts/test_collect_astana.py`. Не auto-add их, ключи, ledger, raw, index/cache или WEBM. PPTX/WEBM остаются историческим source572/buildBlw, не новой AI-версией; не перезаписывать. Голос M6 skipped P1; YouTube, постоянный hosting и официальная отправка не выполнены. Внутренняя цель20:00 пропущена; deadline20.10.2026 23:59 Asia/Almaty.
+
+</details>

@@ -4,7 +4,7 @@
 
 Адаптивный помощник по Астане: задайте локацию и ограничения, получите до трёх мест, посмотрите источники и продолжите путь в 2ГИС или Google Maps. Проект для AituHack · Build with AI.
 
-[**Открыть демо →**](https://donate-cooperation-quick-annual.trycloudflare.com) · [Презентация, 7 слайдов](output/submission/aituhack-submit-now.pptx) · [Видео MP4, 1:50](output/submission/aituhack-demo.mp4) · [Пакет для сабмита](docs/submission/submit-now.md)
+[**Открыть демо →**](https://donate-cooperation-quick-annual.trycloudflare.com) · [Презентация, 7 слайдов](output/submission/aituhack-live-demo.pptx) · [Видео MP4, 1:50](output/submission/aituhack-demo.mp4) · [Пакет для сабмита](docs/submission/submit-now.md)
 
 <!-- LIVE_STATUS:BEGIN -->
 > **Живой ИИ и RAG подключены.** Mistral Small 3.2 через OpenRouter / DeepInfra разбирает свободный текст и объясняет выбор по источникам. Семантический поиск использует реальный сохранённый индекс.
@@ -114,7 +114,7 @@ python3 scripts/check_harness.py
 
 ## Материалы и границы
 
-- [Актуальная презентация — PPTX, 7 слайдов](output/submission/aituhack-submit-now.pptx).
+- [Актуальная презентация — PPTX, 7 слайдов](output/submission/aituhack-live-demo.pptx).
 - [MP4 — 110 секунд, H.264, без звука](output/submission/aituhack-demo.mp4): копия сохранённой записи stub-версии. В ролике указан прежний URL; для показа используйте ссылку на демо в начале README.
 - [Описание для формы и сценарий показа](docs/submission/submit-now.md).
 - [Готовность](docs/readiness-report.md) · [Статус задач](tracker.yaml) · [Передача](docs/handoff.md).

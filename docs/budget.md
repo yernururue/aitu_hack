@@ -1,5 +1,18 @@
 # Учёт расходов OpenRouter
 
+## Текущий emergency checkpoint
+
+Снимок после двух private QA, до публичного пользовательского трафика: canonical v6: 39 записей — 34 known и 5 upper-bound allocations с actual=null. Известный actual prep $0.002178331, включая eval $0.00168309; бюджетные оценки $1.435957681 считаются отдельно от actual. Budget spent prep $1.438136012/eval $1.437640771; доступно prep $0.561863988/eval $0.062359229/demo $4. Резервов и in-flight нет, uncertain=false, права0600, caps $2/$1.50/$4 неизменны. Следующий unknown/overshoot/ошибка durable ledger снова останавливает платные вызовы.
+
+После прямого указания пользователя «подключи настоящий ИИ, пару тестов…» root записал emergency-интерпретацию: exact fifth targetc54e0818-1757-4752-a3cc-42299566784d, $0.26160384 бюджетногоcharge/actualnull и только2smokes. Пользователь не повторял сумму буквально; это прямо указано в immutable authorizationa632150d-0dcb-45dc-9e8a-0e36eee2ce31/refuser-direct-emergency-live-smoke-20261020T175612Z. Reviewedv6source/operator примененыодинраз и отдельноаудированы29checks. Все5grants/history сохранены; не replay operators, не settle0 и не reset ledger.
+
+Реальные2private smoke:4settled calls prep(intent/query_embedding/explanation/intent), actual$0.0002702. Prior35SHA4a5061…64ef восстановленточно;39ledgerSHAa7a26c1d…645f9. Demo0,evalknownunchanged. Publicpurpose=demo; cutoverGET/assetprobe не делал новыхpaidQA. Ключтолькоserver, однаcanonicalpersistentledger/lock; новый неизвестныйcost/overshoot/IOfault сноваSTOP. Фактические расходы и approvedbudgetbasis не смешивать.
+
+Доказательства: `/tmp/aituhack-mvp/fifth-upper-bound-emergency-20261020/actual-review.md`, `/tmp/aituhack-mvp/emergency-live-release-20261020/both-smokes-audit.json` и независимыйsmoke/humanreview. Это не разрешениеfull12eval или будущихunknown. Полная модельнаяприёмка не завершена.
+
+## Исторические checkpoint и интерфейсы — прежние числа не текущий остаток
+
+
 Canonical ledger v5/35 записей/0600: 30 known, четыре approved upper bounds с actual=null и новый пятый unknown `c54e0818-1757-4752-a3cc-42299566784d`. uncertain=true, inFlight=0. Известный округлённый prep $0.001908131, включая eval $0.00168309; четыре бюджетные оценки $1.174353841 учтены по одному разу, они не являются восстановленной фактической стоимостью. Новый резерв $0.26160384; exposure prep $1.437865812/eval $1.437640771; доступно prep $0.562134188/eval $0.062359229/demo $4. Потолки $2/$1.50/$4 сохранены. Пятого согласия нет, все платные вызовы STOP. API принял ключ; отдельного лимита ключа не задано, кредит есть. Exact generation GET для `gen-1792517117-9rLmsCooRUs1A7VCZ6VY` вернул404; это не доказательство нулевой стоимости.
 
 

@@ -1,3 +1,23 @@
+# Модель: ограниченный emergency-выбор
+
+Для emergency-демо выбран `mistralai/mistral-small-3.2-24b-instruct` через exact `deepinfra/fp8`, без автоматического fallback. Embeddings — OpenRouter `openai/text-embedding-3-small`. Это выбор работающего маршрута под прямое указание пользователя «подключи настоящий ИИ, пару тестов», а не победитель незавершённого исходного сравнения3моделей.
+
+## Что доказано
+
+- Backend0f47: actualprivate390 freeform «Найдите парк для часовой прогулки» →2catalogPOI (Ботанический сад/Президенттік саябақ), реальныеqueryembedding/intent/explanation; actual1440mandatoryoutlets→0, толькоintent. Всего4known prep calls/$0.0002702.
+- Human source review подтвердил обаwhy иactivity по реальнымисточникам. P2: субъективное впечатление звучало как факт; UIfe4 теперь явно префиксует review-backedwhy «По отзывам (мнения пользователей):». Rawwhy/activity/evidence сохранены, занятие отдельно обозначено как идея. PureSSR2actualitems и независимый review PASS, backendtree unchanged.
+- Publicdonate live/demo: UIfe4/buildP3aScnSHAtsKMfuzUrbrK; HTTPS200/9assetsmatch/7private404/knownkeys0;0новых paid QA послеprivateприёмки.
+- Index298×1536/12queryvectors и retrieval12RU/4negative приняты локально. Model fullcontext256000/output16384 +консервативные.09375/.25USD/M дают reserve$.028096 наattempt; payload-эвристики/лимиты не ослаблены.
+
+## Что не доказано
+
+Полный12-case model benchmark, original72/amended48/старыеQwen24 незавершены; winner этихсравнений=null. Дваsmoke не устанавливают качество всех запросов/русскогоязыка. Haiku/Azure технически не квалифицирована; Luna не прошла текущие15s; обаQwen маршрута429. Их полная семантика не оценена. Нынешнийphysicalphone/native-app/liveKK не проверен. КритерииIDs/evidence/hard filters/неизвестных фактов не ослаблены.
+
+V6 и emergency2scope основаны на прозрачной интерпретации последнего directuser указания, reviewedsource/operator/actualaudit. Сумма не была повторена пользователем буквально. Caps2/1.5/4, новыеunknownSTOP; actual пяти историческихcharge остаётсяnull. [Бюджет](budget.md), [готовность](readiness-report.md), [источники](collection-import.md).
+
+<details>
+<summary>Историческое сравнение и offline-подготовка — не текущий выбор</summary>
+
 # Модель и качество: текущее решение
 
 20.10.2026. Рабочая live-модель **не выбрана**, fullP0=false. Публичный сайт пока
@@ -77,3 +97,5 @@ Winner автоматически null, human review обязателен.
 Метаданные объявляют structured_outputs/response_format/max_tokens, но не доказывают русский язык, фактическую grammar correctness,15sдоступность или liveкачество. Offline adapter/tests и metadata/math/source прошли независимый review; исходные defaults/CLI протокол не менялись. Кандидат не выбран и не разрешён к оплате. Смена приёмки и новый финансовый exception потребуют отдельного решения пользователя после конкретной подготовки. Исходные72/48 и Qwen24 останутся невыполненными.
 
 Критерии новой приёмки не ослаблять: все12intent+explanation,100%IDs/evidence/hard filters,0 неподтверждённых фактов, минимум10/12 relevant positives,4negative guards и независимая ручная проверка каждого ответа. Затем private/public prep QA. Auth/schema/retrieval PASS отдельно не доказывают полныйP0.
+
+</details>

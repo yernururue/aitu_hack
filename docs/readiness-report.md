@@ -1,3 +1,26 @@
+# Готовность emergency-версии
+
+## Текущий emergency checkpoint: 20.10, 23:16 Asia/Almaty
+
+[Публичное демо](https://donate-cooperation-quick-annual.trycloudflare.com) переключено на **live**: Mistral Small3.2 через точный `deepinfra/fp8`, OpenRouter embeddings `openai/text-embedding-3-small`, реальный индекс298×1536. Source UI `fe4c0ef8d04d35fe6d8b717b62dbf4f02915c968`, build `P3aScnSHAtsKMfuzUrbrK`; публичный HTTPS200,9assets равны сборке,7privatepaths404,known-key findings0. Cutover GET-проверка не делала новых paid QA POST.
+
+Приняты **два** фактических private smoke:390px freeform «Найдите парк для часовой прогулки» →2места (Ботанический сад и Президенттік саябақ);1440px обязательные розетки →0мест без ослабления требования. Backend `0f47fa90eab93bada3e51ebfd8ae156c14e8612c`; UI-only fe4 добавляет явную пометку «По отзывам (мнения пользователей):». Human source/why/activity review PASS после этой правки; raw тексты и evidence не менялись. Root:1051unit +4новых render tests, build/NFT/keyscan PASS. Полная приёмка12/72/48 и старые Qwen24 **не завершены**, winner исходного сравнения не объявлен.
+
+Четыре known provider calls (intent/query_embedding/explanation/intent) использовали prep и стоили $0.0002702. Снимок после двух private QA, до публичного пользовательского трафика: canonical v6: 39 записей — 34 known и 5 upper-bound allocations с actual=null. Известный actual prep $0.002178331, включая eval $0.00168309; бюджетные оценки $1.435957681 считаются отдельно от actual. Budget spent prep $1.438136012/eval $1.437640771; доступно prep $0.561863988/eval $0.062359229/demo $4. Резервов и in-flight нет, uncertain=false, права0600, caps $2/$1.50/$4 неизменны. Следующий unknown/overshoot/ошибка durable ledger снова останавливает платные вызовы.
+
+Последнее прямое указание пользователя «подключи настоящий ИИ, пару тестов…» записано интегратором как emergency scope: reviewed v6 применил ровно существующий fifth target по $0.26160384, actual=null. Пользователь не повторял сумму буквально; интерпретация и исходный текст сохранены в authorization receipt, финансовые source/operator/actual independently reviewed. Это не разрешение будущих unknown или полного нового eval.
+
+Доказательства: private пакет `/tmp/aituhack-mvp/emergency-live-release-20261020/` (public-cutover-proof, оба receipts, both-smokes-audit, human opinion-fix-review); v6 `/tmp/aituhack-mvp/fifth-upper-bound-emergency-20261020/actual-review.md`. Текущий URL физическим телефоном не подтверждён. Голос, постоянный hosting, YouTube и официальная отправка не выполнены. Ссылка зависит от Mac/сети/origin/tunnel; origin56483/demo и CF39251.
+
+## Что можно показать сейчас
+
+Введите «Найдите парк для часовой прогулки», выберите EXPO/5км/60мин/пустой бюджет. В принятом прогоне получены2парка; API допускает0–3, три карточки не гарантируются. Для обязательных неизвестных розеток ожидается0, а не выдуманный факт. [Сценарий и материалы](submission/submit-now.md).
+
+Ограниченная emergency-приёмка принята; полный12-case модельный benchmark, новый physicalphone/native-app тест, YouTube и официальная заявка остаются вне выполненной приёмки. Материалы прошлого stub относятся только к историческому снимку.
+
+<details>
+<summary>Исторический checkpoint — не текущий статус</summary>
+
 # Готовность на 20 октября 2026
 
 ## Текущий checkpoint: 20.10, 22:47 Asia/Almaty
@@ -26,3 +49,5 @@ Canonical ledger v5/35 записей/0600: 30 known, четыре approved uppe
 Текущий donate URL прошёл actual browser390/1440: два stub POST, три реальных парка, подробности/источники/карты/focus/overflow PASS. Независимое review PASS. Физическим телефоном текущий URL не проверен; пользователь подтвердил прежние URL той же stub-сборки и обе нативные карты. Ссылка зависит от Mac/сети/сервера/туннеля.
 
 Голос skipped P1. Исторические PPTX7слайдов/6min notes и WEBM110s/source572/buildBlw сохранены; они не показывают новую AI-версию. Постоянный hosting, YouTube и официальная отправка не выполнены. Внутренняя цель20:00 пропущена, deadline23:59 Asia/Almaty. [Материалы и запуск](submission/links.md), [manifest](submission/release-manifest.json), [ограничения](submission/limitations.md).
+
+</details>

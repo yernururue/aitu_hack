@@ -1,3 +1,24 @@
+# Демо, материалы и запуск
+
+[**Открыть live-демо**](https://donate-cooperation-quick-annual.trycloudflare.com) · [GitHub main](https://github.com/yernururue/aitu_hack) · [Пакет для формы](submit-now.md)
+
+[Live-PPTX](../../output/submission/aituhack-live-demo.pptx) · [MP4,110секунд](../../output/submission/aituhack-demo.mp4) · [Исходная презентация572](../../output/submission/aituhack-demo.pptx). MP4 — историческийstub, не записьнынешнегоlive. MP4/source/README уже опубликованы в main09c58f3; live-PPTX и эти docs следуют отдельным push. YouTube/официальная отправканевыполнены.
+
+Publiccutover rootproof18:16:03UTC: HTTPS200, **live/demo**, MistralSmall3.2/`deepinfra/fp8`,sourcefe4/build`P3aScnSHAtsKMfuzUrbrK`,origin56483/3000 ипрежнийCF39251.9assets byteequal,7private404,knownkey0,0новыхpaidQA. Предшествующаяstubсборка/процессыисторические; новыйruntimeпроверенпослеprivateприёмки.
+
+## Сценарий показа
+
+Введите **«Найдите парк для часовой прогулки»**, выберитеEXPO/5км/60мин, бюджетпустой. В принятомprivate390прогонеполучены **Ботанический сад и Президенттік саябақ**, не3. APIдопускает0–3; количество не гарантировать. Откройтеподробности/источники/маршруты2ГИСилиGoogleMaps.
+
+Второйactual1440запрос **«Нужно кафе, обязательно с розеткой для ноутбука»** →0: unknownoutlets неослаблены. Нулевойбюджетстрогоозначаетподтверждённобесплатно, пустой — безлимита. Дваsmoke неравныполному12-caseeval.
+
+Нынешнийphysicalphone/nativehandoff не подтверждён; прежниеloan/percentageсвидетельстваотносятсякстаромуstub. QuickTunnelзависитотработающихMac/сети/origin/tunnel, постоянногоhosting/SLAнет. Неостанавливатьпроцессыдозавершенияпоказа.
+
+[Готовность](../readiness-report.md) · [Ограничения](limitations.md) · [Manifest](release-manifest.json) · [Бюджет](../budget.md)
+
+<details>
+<summary>История прежнего stub и публикаций — не текущий режим</summary>
+
 # Проверенные ссылки и запуск
 
 [Текущее временное HTTPS-демо](https://donate-cooperation-quick-annual.trycloudflare.com).
@@ -62,3 +83,5 @@ YouTube/официальная отправка/постоянный hosting н�
 CF39251 сохранены. Reviewer выполнил19freshGET, проверил12assetsbyteequal,
 18runtimechecksums/8UIchecksums/4screenshots/дваactualstubPOST/sourceguard/3offlineguards.
 CurrentURL physicalphone не проверен; fullP0/живые ответы модели не заявлены.
+
+</details>
