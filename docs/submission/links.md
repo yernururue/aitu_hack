@@ -3,22 +3,27 @@
 [Открыть временное HTTPS-демо](https://percentage-slim-contemporary-appropriate.trycloudflare.com).
 Локальный origin: [http://127.0.0.1:3000](http://127.0.0.1:3000).
 
-Текущая проверка20.10.2026 04:59 Asia/Almaty: HTTPS200, строгая response schema,
-настоящий API/каталог и canonical hash совпали; 12 внутренних путей404, GET API405,
-POST no-store, ошибки400, локальный лимит429 и контрольные лог-маркеры проверены.
-Root отдельно открыл новые приватные Chromium contexts1440/390: реальный park-запрос
-дал3 места, подробности/HTTPSкарты и неизвестный запрос проверены, overflow/page errors0.
-Физический телефон и запуск приложений карт этим не подтверждаются.
+Текущая проверка20.10.2026 05:20 Asia/Almaty после M5.4: HTTPS200, реальный API/
+каталог и canonical hash совпали. Root открыл новые приватные Chromium contexts1440/390:
+бюджет0→0мест, явное снятие бюджета без POST, повторный поиск→3реальныхпарка;
+весь запрос кроме бюджета совпал. Подробности/HTTPSкарты и неизвестный текст проверены,
+overflow/page errors0. Новая сборка прошла554unit/64e2e/lint/types/build/NFT.
+Локальные строгаяresponse schema/no-store/400/429/12private404/GET405 и canarylogs PASS.
+Пользователь подтвердил открытие сайта на физическом телефоне; карточки после снятия
+бюджета и переход в native карты этим ещё не подтверждены.
 
 После паузы предыдущие tool-сессии завершились. Старый адрес
 `https://converter-mirrors-commercial-gem.trycloudflare.com` больше не используется.
-Текущий запуск: отдельные detached processes, PID64525 (Next) и64556 (cloudflared),
+Текущий запуск: отдельные detached processes, PID70029 (Next) и64556 (cloudflared),
 PPID1/собственные process groups; launchers завершились, дети проверены вторым tool-call.
 Это не системный service и не автоматический перезапуск. Mac, процессы и сеть должны
 работать; после остановки/нового туннеля URL меняется. Постоянный hosting/SLA не заявлен.
 
-Приватные launcher/probe/log receipts: `/tmp/aituhack-mvp/release-runtime-restart-20261019T235726Z/`.
-Build `BlwNsPwtVQoToEIUwspvC`, исходники `572a813`, каталог не изменились.
+Текущий origin launcher/probe/log: `/tmp/aituhack-mvp/release-runtime-M5.4-20261020T001928Z/`.
+Туннель/log receipts сохранены: `/tmp/aituhack-mvp/release-runtime-restart-20261019T235726Z/`.
+Build `NASkuokYCKTpTbx_JqKpo`, исходники `ceb34a5`; каталог не изменён.
+При M5.4 прежний origin64525 остановлен после проверки PID; туннель64556 сохранён,
+URL остался прежним. Новый production-процесс отделён от launcher/tool session.
 
 Для ручного перезапуска выбрать Node24.21.0/pnpm11.0.8, выполнить сборку по README,
 затем явно закрепить бесплатный режим и реальный каталог:
@@ -43,9 +48,12 @@ NODE_ENV=production APP_AI_MODE=stub OPENROUTER_PAID_ENABLED=false LIVE_EVAL_ENA
   14034370bytes; полный decode и независимая packet/frame проверка PASS.
 - [План выступления и источники](presentation-outline.md).
 
-SHA-256 обоих файлов записаны в release-manifest.json. Материалы проверены локально
+PPTX/видео сохранены неизменными как снимок source`572a813`/build`BlwNsPwtVQoToEIUwspvC`
+(554unit/62e2e). Текущее приложение добавляет пояснение/явное снятие бюджета;
+новая сборка приложения указана отдельно. SHA-256 и sourceSnapshot обоих файлов
+записаны в release-manifest.json. Материалы проверены локально
 и доступны владельцу workspace. Видео и private build/evidence игнорируются Git;
 локальная ссылка на них не означает публичную загрузку или доступность в новом clone.
 PPTX включает все четыре изображения внутри файла; native PowerPoint отдельно не открывался.
-Физический телефон/переходы в native карты остаются непроверенными.
+Получение карточек после снятия бюджета/переходы в native карты на телефоне пока не подтверждены.
 YouTube upload, push и официальная отправка заявки не выполнялись.

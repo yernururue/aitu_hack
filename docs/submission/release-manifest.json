@@ -4,7 +4,7 @@
   "scope": "offline_stub_preview",
   "fullP0Accepted": false,
   "featuresFrozen": true,
-  "sourceCommit": "572a81394048974d848be7299ed7ef53d27a2b49",
+  "sourceCommit": "ceb34a51854925baf7f2329aee425201c0f6391c",
   "runtime": {
     "node": "24.21.0",
     "pnpm": "11.0.8",
@@ -76,7 +76,7 @@
   "verification": {
     "unitTestsPassed": 554,
     "unitFilesPassed": 16,
-    "browserTestsPassed": 62,
+    "browserTestsPassed": 64,
     "browserViewports": [
       [
         390,
@@ -112,6 +112,19 @@
       "macroRecallAt5": 0.9166666666666667,
       "nativeSpeakerVerified": false,
       "liveLanguageVerified": false
+    },
+    "physicalPhoneSiteOpened": true,
+    "physicalPhoneResultAndNativeMapsVerified": false,
+    "budgetRecovery": {
+      "strictZeroResults": 0,
+      "explicitClearMakesNoPost": true,
+      "blankBudgetResults": 3,
+      "otherRequestFieldsPreserved": true,
+      "publicBrowserViewports": [
+        390,
+        1440
+      ],
+      "checkedAtUtc": "2026-10-20T00:20:25.214Z"
     }
   },
   "privacy": {
@@ -133,18 +146,23 @@
     "origin": "http://127.0.0.1:3000",
     "stableHosting": false,
     "requiresLocalOriginAndTunnelAlive": true,
-    "checkedAtUtc": "2026-10-19T23:59:44.328Z",
+    "checkedAtUtc": "2026-10-20T00:21:18.053126Z",
     "publicPrivatePaths404": 12,
     "getApi405": true,
     "postNoStore": true,
     "controlledQueryGpsAudioCanariesAbsentFromLogs": true,
     "freshBrowserContextsVerified": true,
     "physicalPhoneVerified": false,
-    "productionPid": 64525,
+    "productionPid": 70029,
     "tunnelPid": 64556,
     "detachedProcesses": true,
     "launcherParentsExitedVerified": true,
-    "runtimeEvidenceDirectory": "/tmp/aituhack-mvp/release-runtime-restart-20261019T235726Z"
+    "runtimeEvidenceDirectory": "/tmp/aituhack-mvp/release-runtime-M5.4-20261020T001928Z",
+    "previousProductionPid": 64525,
+    "existingTunnelEvidenceDirectory": "/tmp/aituhack-mvp/release-runtime-restart-20261019T235726Z",
+    "physicalPhoneSiteOpened": true,
+    "runtimeReportSha256": "8cfdea94b5eb7d9cc62f7cf8759e425265bf1325964688a8125db845d11c3414",
+    "publicBrowserCheckedAtUtc": "2026-10-20T00:20:25.214Z"
   },
   "outstandingGates": [
     "M2.4 real embeddings index",
@@ -152,7 +170,7 @@
     "M4.4 validated model selection",
     "M5.3 physical phone/native maps and real paid live smoke"
   ],
-  "buildId": "BlwNsPwtVQoToEIUwspvC",
+  "buildId": "NASkuokYCKTpTbx_JqKpo",
   "materials": [
     {
       "path": "output/submission/aituhack-demo.pptx",
@@ -164,7 +182,13 @@
       "slides": 7,
       "speakerNotesSeconds": 360,
       "editableTextShapes": 43,
-      "nativeTables": 2
+      "nativeTables": 2,
+      "sourceSnapshot": {
+        "sourceCommit": "572a81394048974d848be7299ed7ef53d27a2b49",
+        "buildId": "BlwNsPwtVQoToEIUwspvC",
+        "unitTestsPassed": 554,
+        "browserTestsPassed": 62
+      }
     },
     {
       "path": "output/submission/aituhack-demo.webm",
@@ -178,7 +202,13 @@
       "height": 900,
       "codec": "VP9",
       "audioStreams": 0,
-      "fullDecodeExitCode": 0
+      "fullDecodeExitCode": 0,
+      "sourceSnapshot": {
+        "sourceCommit": "572a81394048974d848be7299ed7ef53d27a2b49",
+        "buildId": "BlwNsPwtVQoToEIUwspvC",
+        "unitTestsPassed": 554,
+        "browserTestsPassed": 62
+      }
     }
   ],
   "delivery": {
@@ -189,6 +219,15 @@
     "officialSubmissionPerformed": false,
     "stageCommit": "da659ed52fd276ae3787f46a266d3730b96a42b2",
     "localMarkdownLinksChecked": 57,
-    "lastDeliveryCheckUtc": "2026-10-20T00:06:48.717711+00:00"
+    "lastDeliveryCheckUtc": "2026-10-20T00:21:18.053126Z"
+  },
+  "updatedAt": "2026-10-20T00:22:44.815289+00:00",
+  "applicationUpdate": {
+    "taskId": "M5.4",
+    "change": "Clarify strict zero versus blank budget and offer explicit budget removal without automatic search or changing other fields",
+    "materialsRecaptured": false,
+    "materialsSnapshot": "PPTX/video retain source572a813/buildBlw snapshot; current app adds budget explanation/recovery only",
+    "providerCalls": 0,
+    "independentIntegrationReview": "SPEC/CONSISTENCY PASS / QUALITY PASS"
   }
 }

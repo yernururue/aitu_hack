@@ -256,6 +256,13 @@ M5.1–M5.2 done: root554unit/62e2e/390+1440/types/lint/build/NFT PASS, independ
 M5.3 blocked: физический телефон/native map handoff и реальный paid live smoke не проверены;
 ключ не обновлён, продолжение со stubs разрешено явно. Offline UI не объявляется полной RAG acceptance.
 
+M5.4 done: пользовательский0бюджет объяснён, добавлены переход к полю и явное снятие
+только бюджета без автопоиска. RED2→GREEN, independentSPEC/QUALITYPASS; root554unit/
+64e2e390+1440/lint/types/build/NFT/harness PASS. Public private390/1440 подтвердил
+строгий0→0/явнаяочисткабезPOST/null→3реальныхпарка при сохранении остальных условий.
+Source`ceb34a5`, build`NASkuokYCKTpTbx_JqKpo`. Физический доступ к сайту подтверждён;
+карточки/native maps после снятия бюджета и live smoke ещё не подтверждены.
+
 ## Этап 6. Голос (P1, максимум один час)
 
 **Files:** components/voice-input.tsx, api/transcribe/route.ts,

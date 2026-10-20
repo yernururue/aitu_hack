@@ -9,16 +9,18 @@ Stage: implementation
 ## Выполнение MVP
 
 
-M7.1–M7.4 done: manifest, независимый OFFLINE release review, восстановленное временное
-демо и финальные материалы приняты. [Адрес/файлы/lifecycle](submission/links.md).
-PPTX7слайдов/6мин/43native text/2tables; video110с/1440×900/VP9/audio0/full-decode0.
-Независимое artifact SPEC/QUALITY PASS: hashes/XML/7renders/2750packet-prefix/10framepixels.
-Production64525 и tunnel64556 detached, проверены после выхода launchers; Mac/сеть нужны.
-Root fresh private contexts390/1440:3реальныхпарка/детали/HTTPSкарты/unknowntext PASS,
-overflow/errors0. Исходники/build неизменны. Локальная передача сохранена commit`da659ed`;
-M7.5/M7 blocked только на физическом телефоне/native maps: ответа нет, эмуляция не PASS.
-Независимый финальный docs review PASS/P3ADDRESSED. Следующий taskM2.4 blocked до
-подтверждённого обновления ключа; auth/paid retry пока запрещён указанием пользователя.
+После локальной передачи пользователь открыл сайт на физическом телефоне, но получил
+0мест при явно заданном бюджете0₸. Это корректный строгий фильтр: все298цен неизвестны.
+Тот же запрос EXPO/5км/«Хочу погулять» с пустым бюджетом даёт3реальныхпарка.
+M5.4: добавлены объяснение0vsпустое поле, подсказка у пустого результата, переход
+к бюджету и явная кнопка его снятия. Она сохраняет остальные условия и не запускает
+поиск автоматически. Независимый SPEC/QUALITY review PASS. Root fresh public smoke
+390/1440 подтвердил0→0/явнаяочисткабезPOST/повторныйпоиск→3, все остальные поля совпали.
+Текущий source`ceb34a5`, build`NASkuokYCKTpTbx_JqKpo`, origin70029/tunnel64556.
+PPTX/видео M7.1–M7.4 сохранены как снимок source572/buildBlw/554unit/62e2e.
+Финальный независимый integration/docs review SPEC/CONSISTENCY+QUALITY PASS;
+tracker/manifest/current build и неизменённые материалы согласованы.
+На физическом телефоне карточки/маршруты ещё не подтверждены; live/semantic gates blocked.
 
 Проверенный offline/stub текстовый путь работает на 298 реальных POI: фильтры,
 лексическое ранжирование, серверный API, адаптивный UI, подробности/источники,
@@ -44,7 +46,7 @@ GREEN2viewport cases, независимый probe/re-review PASS. Голос M6
 | `pnpm test` | exit0, 554 теста /16 файлов после финального UI fix |
 | `APP_AI_MODE=stub OPENROUTER_PAID_ENABLED=false LIVE_EVAL_ENABLED=false pnpm build` | exit0, production |
 | `pnpm check:build-artifacts` | exit0, 6 NFT traces/1568 entries; каталог включён, raw/private/env/collector tooling исключены |
-| `pnpm test:e2e` | exit0, 62/62 за25.0s, 390/1440 Chromium, после финального fix |
+| `pnpm test:e2e` | exit0, 64/64 за30.7s, 390/1440 Chromium после M5.4 |
 | `pnpm eval:retrieval` | exit1 ожидаемо: numericalPASS, semanticVerified=false/acceptancePassed=false |
 | `LIVE_EVAL_ENABLED=false pnpm eval:live` | exit0, disabled, 0rows/0network/0cost |
 | `git diff --check` | exit0 |
@@ -87,6 +89,8 @@ M5.3: физический телефон/native map handoff и один реа�
 Это process-bound preview, не стабильный hosting. Root fresh private contexts390/1440
 подтвердили реальный API/hash/3parks/детали/routes/unknowntext, overflow/errors0.
 12private404/GET405/POSTno-store/400/429 и canarylogs проверены снаружи/локально.
+После M5.4 повторены strictschema/0vsnull/400/isolated429/private404/GET405 и3private0600
+canarylogs; runtime report PASS, процессы живы в00:21:18UTC. Публичный browser390/1440 PASS.
 
 OpenRouter учтённый расход проекта$0; баланс аккаунта не проверен.
 Persistent guard (concurrency/reservation/usage/crash/failure) проверен независимо;
@@ -97,5 +101,6 @@ $4demo reserve сохранён; serverless paid запрещён. Apify — о�
 ## Сохранённые этапы
 
 `10f4981` M1; `57ce0f2` M2 offline; `fd37acb` M3 offline;
-`0a6b53a` M4 labels/lexical. M5 offline feature snapshot — `572a813`; M7 материалы/демо — `da659ed`.
+`0a6b53a` M4 labels/lexical. M5 offline feature snapshot — `572a813`; M7 материалы/демо — `da659ed`;
+M5.4 бюджет/recovery — `ceb34a5`.
 Дедлайн20.10.2026 23:59, внутренняя цель20:00 Asia/Almaty.

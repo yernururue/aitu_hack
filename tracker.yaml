@@ -30,7 +30,7 @@ budget:
 handoff:
   state: "ready"
   application_state: "offline_stub_demo_and_materials_verified_external_gates_pending"
-  current_scope: "Available offline/stub work and materials locally delivered in da659ed (554unit/62e2e); next M2.4 needs user-confirmed updated key; phone/native/semantic/live gates remain unverified or blocked"
+  current_scope: "M5.4 verified/deployed sourceceb34a5: strict0 budget explained with explicitclear, public390/1440 recovers3parks. Phone siteaccessconfirmed; phonecards/native/semantic/live gates stillunverified or blocked. PPTX/video retain accepted572snapshot"
   internal_deadline: "2026-10-20T20:00:00+05:00"
   submission_deadline: "2026-10-20T23:59:00+05:00"
   collector_work:
@@ -420,10 +420,27 @@ stages:
           - "M5.2"
         acceptance: "Deterministic-stub Playwright covers details/external URL/profile changes/races/denied location/empty states/focus; pnpm test:e2e at 390/1440 and full quality gate pass; physical phone and one budgeted real-data live smoke recorded with limits; progress and stage commit."
         evidence:
+          - "Physicalphone siteaccessconfirmedbyuser; initialno_results matchedstrictbudget0. M5.4clarity/recovery nowverified+deployed with554unit/64e2e/publicprivate3901440 PASS. Actualphonecards/nativehandoff afterbudgetclear and realpaidlive smoke remainunverified; keyunchanged/noauthretry."
           - "Offline feature snapshot committed and git log verified:572a81394048974d848be7299ed7ef53d27a2b49 feat:add local demo profiles,place details and map routes. Only22explicit app/docs/tests paths staged; original collector data/README,data/collection,Pythonfiles remain untracked/preserved. Physical/live external gates still blocked."
           - "Offline acceptance complete: root fresh post-fix pnpm lint/typecheck/554unit/build/check-build-artifacts all exit0; full62Playwright25.0s at390/1440 exit0; independent unifiedM5.2spec/qualityPASS and HTTPfixADDRESSED. Root inspected4detail/source screenshots, source/core/helpers/diff/harnessPASS."
           - "Remaining external gates: no physical-phone/native map handoff verification; no real paid live smoke because user confirmed key not updated after401. No auth retries or paidcalls; this task/stage not falsely done. Offline feature snapshot commit follows before release work."
           - "Implementation accepted; root full62Playwright390/1440 exit0 after finalsourcefix. Fresh final lint/types/unit/build/NFT started; physical-phone/nativehandoff and realpaidlive smoke not yet verified. User key unchanged; no auth/paid retry."
+      - id: "M5.4"
+        title: "Clarify zero budget and explicit recovery from empty results"
+        status: "done"
+        owner: "root_integrator"
+        depends_on:
+          - "M5.2"
+        acceptance: "Preserve strict zero-budget filtering; show zero versus blank meaning, budget-specific empty-state guidance and an explicit budget-clear action that retains every other form field. Behavioral RED then GREEN at390/1440; independent review and production recheck before acceptance. No automatic relaxation or paid calls."
+        evidence:
+          - "Final independentintegrationreview SPEC/CONSISTENCY PASS+QUALITYPASS/noopenfindings: /tmp/aituhack-mvp/M5.4-integration-review.md. Currentceb/NASku/64app separated from immutable572/Blw/62materialsnapshots; actualphone siteaccess distinguished from cards/native; externalblockedstates/nextM2.4/noauth/paid0 intact; collectorblockunchanged. MinorP3manifestupdatedAt refreshed and independentlyreadbackADDRESSED. Finalharness/diff/manifest-build-material assertions0; docs/evidencecommit follows."
+          - "Runtimeauthor completion report independentlyread: /tmp/aituhack-mvp/release-runtime-M5.4-20261020T001928Z/report.md SHA8cfdea94b5eb7d9cc62f7cf8759e425265bf1325964688a8125db845d11c3414. Local/externalGETprobes0:strictschema/realPOI/hash/no-store/400/isolated20→429RetryAfter/12private404/GET405;0/null budgetchecked;3private0600logs canaryclean. Postreport00:21:18UTC origin70029/tunnel64556 PPID1/ownPGID/Ss/alive, source/buildpinverified. ExistingURL/tunnelretained, historicalcapsules/artifacts/collectorunchanged, noauth/provider/paidcalls."
+          - "ACCEPTED: independent SPEC/QUALITYPASS; root lint/types/554unit/64e2e390+1440/build/NFT6traces1568/harness/diff all exit0. Source ceb34a51854925baf7f2329aee425201c0f6391c/build NASkuokYCKTpTbx_JqKpo deployed detachedorigin70029 with retainedtunnel64556/sameURL. Rootfresh publicprivate390/1440 actual0→0/clear(noPOST)/null→3parks exactsameotherrequestfields PASS; catalogPOI/hash/details/maps/unknowntext/overflow/pageerrors checked,3production screenshots viewed. No paid/provider/authcalls; phonecards/native/live stillunverified. output/evaluation/budget-release-public-browser-smoke.json at2026-10-20T00:20:25.214Z."
+          - "Source commit ceb34a51854925baf7f2329aee425201c0f6391c; production build exit0 BUILD_ID NASkuokYCKTpTbx_JqKpo; pnpm check:build-artifacts exit0/6NFTtraces1568entries. Priororigin64525 cleanlystopped afteridentitycheck, existingtunnel64556 retained; new detachedorigin/publicacceptance inprogress."
+          - "Root integratedpnpm lint/typecheck/554unit16files/64e2e390+1440/harness/diff-check all exit0; new strict0→explicitclear(noPOST)→null/3parks regression passes bothviewports. IndependentSPEC/QUALITYPASS. Sourcefreeze accepted for controlledproductionbuild; liveacceptance pending."
+          - "Independent reviewer SPEC PASS /QUALITY PASS:4ownedfiles, strict0/returned usedContext/focus/noautoPOST and4screenshots390/1440 checked, no actionable findings. Root fresh lint/typecheck/554unit16files exit0; full64e2e currentlyrunning. Production rebuild/publicrecheck pending; /tmp/aituhack-mvp/M5.4-review.md."
+          - "Implementation frozen: strict0 semantics retained; hint0vsblank, explicitclearonlybudget/noPOST and usedContext-aware emptyrecovery added in4ownedUI/testfiles. RED2 expected failures beforefix→GREEN22textflow390/1440, ownedESLint/typecheck/diff0; /tmp/aituhack-mvp/M5.4-implementation.md. Independent review and integratedproductiongate pending; live origin still old acceptedbuild."
+          - "Physical-phone user provided actual context EXPO/5km/60/solo/Хочу погулять/parks/maxSpend0/profileNone/history0/openNowfalse. Pure offline real-catalog probe exit0:category11/radius4/price0→no_results0; only maxSpend=null gives4eligible/3results, fetch/chat0. Fresh publicmobile390 exact0→0/explicitclearonly→3 reproduced independently; backend behavior correct, UI meaning/recovery needs clarity."
   - id: "M6"
     title: "Optional voice"
     status: "skipped"
@@ -527,6 +544,8 @@ stages:
           - "M7.4"
         acceptance: "Check demo/material links in private window on phone/laptop; finalize progress and stage commit; upload YouTube only on publication request; push/public submission only under current user authorization; distinguish local delivery from submission."
         evidence:
+          - "M5.4 followup sourceceb34a5/buildNASkuokYCKTpTbx_JqKpo servedatSAMEcurrentURL, origin70029/tunnel64556 detached. Publicprivatebrowserstrict0/recovery3parksPASS3901440; userphysicalsiteopens confirmed, cards/nativehandoff stillpending. AcceptedPPTX/video immutablewithsource572/buildBlw snapshots explicitly retained; no uploads/push/officialsubmission."
+          - "User physical-phone check now answered: siteopened but no_results. SuppliedWhatConsidered confirms strictbudget0 withEXPO/5km/60/solo/Хочу погулять/parks/profileNone/history0; controlledmobile+puredata probes match0budget→0/nullbudget→3. Siteaccessconfirmed, actualphonecards/native map links stillunverified; M5.4UIclarityfollowupstarted, no silentconstraintchange/keyretry."
           - "Local delivery COMPLETE and stage commit verified:da659ed52fd276ae3787f46a266d3730b96a42b2 docs:save verifiedstubdemoandsubmissionmaterials. Only11explicitdocs/PPTXpaths staged; collector/raw/private/env/videoexcluded. Final-PPTX436736B+localvideo14034370B exactacceptedhashes/readability;57localmateriallinksPASS; actualHTTPS200/PIDs64525+64556alive/3logcanariesabsent at00:06:48UTC. Freshartifact-era lint/harness/diff0, no appsourcechanges."
           - "Independent M7.5-handoff-review.md finalconsistencyPASS/noopenfindings after P3 trackerhandoffcurrent_scopeADDRESSED byreadonly32–33check. NativePPTX/video artifactspec+qualityPASS. Finalmaterialpaths/statistics/limits/permissions/local-onlyignoredvideo and currentnewURL consistent. YouTubeupload/push/officialsubmission NOTperformed."
           - "BLOCKED remaining acceptance: physical-phone/private-device check and native map handoff not confirmed; two asyncphonequestions unanswered, elapsedtime/usercontinue notdeviceevidence. Laptopfreshprivate390/1440PASSdoesnotreplacephysicalphone. FullRAGlive/index/model gates remainseparatelyblockedM2.4/M4/M5.3; keyunchanged/noauthretry. Localavailableofflineworkdone; nextM2.4requiresuser-confirmedkeyupdatebeforeanypaidwork."

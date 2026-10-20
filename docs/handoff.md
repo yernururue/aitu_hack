@@ -13,13 +13,15 @@ root — единственный writer tracker. Всегда implementer и д
 индексатор/кеш и persistent single-host spend guard; M3 API и полный текстовый UI;
 M4.1–M4.2 source-first labels и numerical lexical gate; M5.1–M5.2 профили, локальные
 ID-only preferences, подробности/источники и HTTPS walking/driving ссылки обеих карт.
-Root final lint/types/554unit/build/NFT/62e2e PASS, независимые task reviews PASS.
+Root current lint/types/554unit/build/NFT/64e2e PASS, независимые task reviews PASS.
 RU12/12top3, macroRecall5 97.22%, negative4/4/hardPASS; KK отдельно4/4/91.67%.
 Это agent-curated dev set и lexical, не blind benchmark и не semantic/live acceptance.
 `eval:retrieval` exit1: semanticVerified=false/acceptancePassed=false при numericalPASS.
 
 M2.4 настоящий индекс и M4.3–M4.4 сравнение/выбор модели blocked.
-M5.3 blocked на физическом телефоне/native maps и реальном paid smoke.
+M5.4: уточнение нулевого бюджета и явное снятие только этого ограничения.
+Пользователь открыл сайт на телефоне; нулевой результат был при бюджете0.
+M5.3 blocked на карточках/native maps физического телефона и реальном paid smoke.
 M6 голос skipped: P1 gate не выполнен, UI/endpoint записи отсутствуют.
 Продолжение независимых offline/release задач разрешено пользователем со stubs;
 waivers записаны явно и не превращают внешние gates в done. Следующий шаг брать
@@ -51,16 +53,20 @@ M7.1–M7.4 приняты: [демо/файлы/lifecycle](submission/links.md)
 [ограничения](submission/limitations.md), [презентация/заметки](submission/presentation-outline.md).
 Actual temporary URL: https://percentage-slim-contemporary-appropriate.trycloudflare.com .
 Предыдущий URL converter-mirrors-commercial-gem retired после завершения tool sessions.
-Новый origin64525 и tunnel64556 detached/PPID1/ownPGIDs, остаются зависимыми от Mac/сети.
-Приватный launcher/log/probe пакет: `/tmp/aituhack-mvp/release-runtime-restart-20261019T235726Z/`.
-Исходники572a813/buildBlwNsPwtVQoToEIUwspvC; документы/материалы сохраняются отдельным commit.
-PPTX7slides/6min и video110s приняты независимым reviewer; новые sourcegates не требовались.
+После M5.4 origin70029 и прежний tunnel64556 detached/PPID1/ownPGIDs, остаются зависимыми от Mac/сети.
+Текущий launcher/log/probe: `/tmp/aituhack-mvp/release-runtime-M5.4-20261020T001928Z/`;
+прежний tunnel/log пакет: `/tmp/aituhack-mvp/release-runtime-restart-20261019T235726Z/`.
+Текущее приложение: source`ceb34a5`, build`NASkuokYCKTpTbx_JqKpo`.
+PPTX/видео неизменны: source572a813/buildBlwNsPwtVQoToEIUwspvC.
+PPTX7slides/6min и video110s приняты независимым reviewer и сохранены неизменными.
+Новая UI-сборка M5.4 отдельно прошла перечисленные выше проверки.
 Видео/privatebuild ignoredGit и доступны локально, не считать их публично загруженными.
-M7.5 phone/private-device часть остаётся непроверенной, как и M5.3 realpaid smoke.
+M7.5: доступ с телефона подтверждён; карточки после снятия бюджета/native maps
+остаются непроверенными, как и M5.3 realpaid smoke.
 Пока пользователь не подтвердит обновление ключа, не выполнять auth/paid retry.
 
 Локальная передача/материалы сохранены stage commit`da659ed52fd276ae3787f46a266d3730b96a42b2`;
-M7.5/M7 blocked на неподтверждённом физическом устройстве/native maps, не на local files.
+M7.5/M7 blocked на карточках/native maps физического телефона, не на local files.
 `next_task_id=M2.4`: первый внешний P0 gate — реальный индекс, но key/auth нельзя
 повторять, пока пользователь не подтвердит обновление. Остальные доступные offline
 задачи выполнены. $0 OpenRouter, $2prep/$0.50nested/$4demo reserve без изменений.
