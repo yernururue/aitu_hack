@@ -64,8 +64,13 @@ test("actual park phrase shows grounded real cards, warnings and the catalogue s
   expect(result.recommendations.length).toBeGreaterThan(0);
   expect(result.recommendations.every(({ poi }) => poi.category === "park")).toBe(true);
   expect(http.request().postDataJSON().explicitFilterKeys).toEqual(["radiusM"]);
-  await expect(page.getByRole("heading", { name: "Вот что нашлось рядом" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Ваши варианты", exact: true })).toBeVisible();
+  await expect(page.locator(".result-announcement")).toContainText("Вот что нашлось рядом");
   await expect(page.getByLabel("Что учтено").getByText("Парки", { exact: true })).toBeVisible();
+  const dataDetails = page.getByLabel("О данных и ограничениях", { exact: true });
+  await expect(dataDetails).not.toHaveAttribute("open", "");
+  if (result.warnings.length) await expect(page.getByLabel("Ограничения данных")).not.toBeVisible();
+  await dataDetails.locator(":scope > summary").click();
   await expect(page.getByLabel("Версия каталога")).toContainText(datasetHash.slice(0, 12));
   await page.getByLabel("Версия каталога").locator("summary").click();
   await expect(page.getByText(datasetHash, { exact: true })).toBeVisible();

@@ -85,6 +85,7 @@ test("actual profile, save, dismiss and reset persist only IDs and preserve curr
   await page.getByRole("article", { name: first.name, exact: true }).locator(".idea-disclosure > summary").click();
   await page.getByRole("article", { name: first.name, exact: true }).getByRole("button", { name: `Сохранить ${first.name}`, exact: true }).click();
   expect((await pending).postDataJSON().savedIds).toContain(first.id);
+  await expect(page.getByLabel("Текущие условия поиска").getByText("Сохранено: 1", { exact: true })).toBeVisible();
   const savedDisclosure = page.getByRole("article", { name: first.name, exact: true }).locator(".idea-disclosure");
   if (await savedDisclosure.getAttribute("open") === null) await savedDisclosure.locator(":scope > summary").click();
   await expect(page.getByRole("button", { name: `Убрать из сохранённых ${first.name}`, exact: true })).toBeVisible();
@@ -92,6 +93,7 @@ test("actual profile, save, dismiss and reset persist only IDs and preserve curr
   await page.getByRole("article", { name: first.name, exact: true }).getByRole("button", { name: `Не интересно: ${first.name}`, exact: true }).click();
   const dismissed = (await pending).postDataJSON();
   expect(dismissed.dismissedIds).toContain(first.id);
+  await expect(page.getByLabel("Текущие условия поиска").getByText("Скрыто: 1", { exact: true })).toBeVisible();
   expect(dismissed.savedIds).not.toContain(first.id);
   await expect(page.getByRole("article", { name: first.name, exact: true })).toHaveCount(0);
   const stored = await page.evaluate((storageKey) => JSON.parse(localStorage.getItem(storageKey)!), key);

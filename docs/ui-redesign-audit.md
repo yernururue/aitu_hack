@@ -22,3 +22,7 @@ The main path is describe → review a visible condition summary → receive pla
 ## Verification
 
 See the current checkpoint in [progress](progress.md) and [tracker](../tracker.yaml). Browser tests cover keyboard disclosures, full condition summaries, zero-budget recovery/focus, sources/opinions, both map modes, stale responses and preferences. Root additionally inspected production360px: initial submission did not reveal results, so the executor added a failing360px regression and explicit-submit-only focus/scroll correction before final acceptance. No automatic preference-refresh jump is intended. New real-AI media is accepted separately from offline/stub UI verification.
+
+## Final content reduction
+
+Latest user direction asks for minimal content. Removed extra hero/footer slogans, duplicate success heading/message, and inactive summary defaults; core and every active condition remain visible. Data/warnings/version are behind one clear disclosure, while card unknown values, opinions, degraded and empty/error guidance remain visible. Scoped independent review and70offline browser scenarios passed; root current1055unit suite and final production build passed.

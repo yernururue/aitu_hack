@@ -901,11 +901,20 @@ stages:
         acceptance: "lint/typecheck/unit/build/NFT pass; desktop/mobile main flow, filters, strict empty budget result, sources, maps, focus and no overflow verified; independent spec/quality review passes."
         evidence:
           - "Independent reviewer /tmp/aituhack-redesign-ui-review.md SPEC/QUALITY PASS, root360productionPNG inspected; explicitsearchP2 resolved, noremainingUIfindings. HelpercodeSPEC/QUALITYPASS (P3runbookretrywording correction only). Root finalbuild0Q_YvkiNJccG06egYrHAx exit0, strictNFT6/1569requiredcatalog+index/privateexcludedPASS, harness/diff/YAML0, knownkeyscan268files177ZIP35.7MBfindings0; mainroute/filter/zeroresult/source/maps/focus/nooverflow covered70offlinee2e+root360prod3cards. Oldpublicruntime/buildstillpreserved. No newpaidcalls/evals."
+      - id: "R1.2b"
+        title: "Apply user's Apple-like minimal content direction and re-review"
+        status: "done"
+        owner: "ui_executor"
+        depends_on: ["R1.3"]
+        acceptance: "One concise hero/subtitle and query hint; short visible core/active conditions; no repeated slogans/success copy; technical/data detail by disclosure. Active constraints, price/hours unknowns, review opinions, empty/error/clarification and degraded notices remain clear. Relevant behavior checks, build and separate scoped review pass before video."
+        evidence:
+          - "Direct user steering20October: Детали по минимуму как у apple сделай по контенту. Previous acceptedddaa16e/build0Q kept; media HOLD beforeanypaidcall; rootassignedsameexecutor concisecontentpass and independentre-review."
+          - "Independent scopedSPEC/QUALITYPASS /tmp/aituhack-redesign-ui-review.md; currentdesktop/mobile/strictbudgetvisuals inspected. Rootfreshfull1055unit/22suites59.43s, executor70e2e34.0s/attribution4/lint/types all0; rootfinalbuild6OQMmPb1YJ3ddzPsvzGf9/NFT6-1569requiredindex/harness/diff0, sourcebuildknownkey268files177ZIP35.7MBfindings0. Hero1subtitle, core+activeconditions, no duplicatelabels/slogans, data disclosure; activeunknown/opinion/empty/error/degraded retained. No paidcalls."
       - id: "R1.4"
         title: "Record one real AI browser scenario and verify new MP4"
         status: "in_progress"
         owner: "runtime_media_executor"
-        depends_on: ["R1.3"]
+        depends_on: ["R1.3", "R1.2b"]
         acceptance: "Canonical guard healthy before one real query through browser; no mocked provider/response; video shows query/result/explanation/sources/map navigation; new H264/yuv420p/faststart MP4 decodes and plays, previous video preserved; new unknown stops paid."
         evidence: []
       - id: "R1.5"

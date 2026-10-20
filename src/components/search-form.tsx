@@ -135,7 +135,7 @@ export function SearchForm({ onSearch, loading, aiMode, synthetic, preferences, 
         />
         <Button type="submit" className="search-submit" size="lg" aria-label="Найти места" aria-busy={loading}><Search aria-hidden="true" />{loading ? "Ищем…" : "Найти места"}<ArrowUpRight aria-hidden="true" /></Button></div>
         {error && <p id="search-validation-error" role="alert" className="validation-error">{error}</p>}
-        <p id="query-hint" className="field-hint">{aiMode === "stub" ? "Готовую фразу можно сочетать с фильтрами. При конфликте попросим уточнение." : aiMode === "disabled" ? "Категории работают без ИИ. Фильтры сохранят выбранные ограничения." : "Напишите желание или выберите категорию. Можно вместе."}</p>
+        <p id="query-hint" className="field-hint">{aiMode === "stub" ? "Готовую фразу можно сочетать с фильтрами. При конфликте попросим уточнение." : aiMode === "disabled" ? "Категории работают без ИИ. Фильтры сохранят выбранные ограничения." : "Опишите желание или выберите категорию."}</p>
         {aiMode === "stub" && <div className="demo-phrase-options" aria-label="Готовые фразы демо-разбора">
           <span className="demo-phrase-label">Попробуйте точную фразу</span>
           {DEMO_PHRASES.map((phrase) => <Button key={phrase} variant="ghost" className="demo-phrase-button" onClick={() => { setQuery(phrase); setError(""); queryRef.current?.focus(); }}>{phrase}</Button>)}
@@ -204,7 +204,7 @@ export function SearchForm({ onSearch, loading, aiMode, synthetic, preferences, 
       </div></details>
       {profileControls}
       </div>
-      <p className="submit-hint">До трёх мест под ваши условия. Время на дорогу — отдельно.{loading ? " Поиск выполняется." : ""}</p>
+      <p className="submit-hint">Дорога — отдельно от времени посещения.</p>
     </form>
   );
 }

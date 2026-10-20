@@ -3,20 +3,29 @@ import { expect, test } from "@playwright/test";
 test("compact search keeps defaults visible and disclosures keyboard accessible", async ({ page }) => {
   await page.goto("/");
   const summary = page.getByLabel("Текущие условия поиска");
-  for (const text of ["EXPO", "2 км по прямой", "Посещение до 60 мин · оценка", "Один / одна", "Все категории", "Бюджет без ограничения", "Неизвестные часы допустимы", "Без демо-профиля"]) {
+  for (const text of ["EXPO", "2 км по прямой", "Посещение до 60 мин · оценка", "Один / одна", "Бюджет без ограничения"]) {
     await expect(summary.getByText(text, { exact: true })).toBeVisible();
   }
+  await expect(summary).not.toContainText("Все категории");
+  await expect(summary).not.toContainText("Неизвестные часы допустимы");
+  await expect(summary).not.toContainText("Без демо-профиля");
   const conditions = page.locator("#search-conditions");
   await expect(conditions).not.toHaveAttribute("open", "");
   await expect(page.getByLabel("5 км", { exact: true })).not.toBeVisible();
   await conditions.locator("summary").focus();
   await page.keyboard.press("Enter");
   await page.getByLabel("5 км", { exact: true }).check();
+  await page.getByLabel("30 минут", { exact: true }).check();
+  await page.getByLabel("С друзьями", { exact: true }).check();
+  await page.getByRole("button", { name: "Бәйтерек", exact: true }).click();
   await page.getByLabel("Парки", { exact: true }).check();
   await page.getByLabel("Бюджет на человека, ₸").fill("0");
   await page.getByLabel("По расписанию открыто сейчас").check();
   await conditions.locator("summary").click();
-  for (const text of ["5 км по прямой", "Парки", "Только подтверждённо бесплатно", "По расписанию открыто"]) await expect(summary.getByText(text, { exact: true })).toBeVisible();
+  await page.locator(".profile-disclosure > summary").click();
+  await page.getByLabel("Демо-профиль", { exact: true }).selectOption("student");
+  await page.locator(".profile-disclosure > summary").click();
+  for (const text of ["Бәйтерек", "5 км по прямой", "Посещение до 30 мин · оценка", "С друзьями", "Парки", "Только подтверждённо бесплатно", "По расписанию открыто", "Демо-профиль: Студент"]) await expect(summary.getByText(text, { exact: true })).toBeVisible();
   await expect(summary).toContainText("Неизвестные цены исключаются");
   await expect(summary).toContainText("Неизвестные часы исключаются");
   await expect(page.getByRole("button", { name: "Найти места" })).toBeVisible();
@@ -68,7 +77,9 @@ test("360px explicit submit reveals loading and results without moving focus on 
     await expect(page.getByRole("button", { name: "Найти места", exact: true })).toHaveText("Ищем…");
   } finally { release?.(); }
   await expect(region.getByRole("article")).toHaveCount(3);
-  await expect(region.getByRole("heading", { name: "Вот что нашлось рядом", exact: true })).toBeInViewport();
+  await expect(region.locator(".results-toolbar")).toContainText("3 из 3");
+  await expect(region.getByRole("article").first()).toBeInViewport();
+  await expect(region.locator(".result-announcement")).toContainText("Вот что нашлось рядом");
   await expect(heading).toBeFocused();
   expect(requests).toBe(1);
   const profile = page.locator(".profile-disclosure");

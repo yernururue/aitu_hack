@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight, MapPin, Search, ShieldCheck } from "lucide-react";
+import { ArrowUpRight, MapPin } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { SearchForm, CATEGORY_LABELS, type SearchMode } from "@/components/search-form";
@@ -94,7 +94,7 @@ export function SearchExperience({ dataset, aiMode }: { dataset: DatasetInfo; ai
     : state.status === "error" ? "Поиск временно недоступен"
       : response?.status === "needs_clarification" ? "Нужно немного уточнить"
         : response?.status === "no_results" || (response?.status === "degraded" && response.recommendations.length === 0) ? "Мест по этим условиям нет"
-          : response ? "Вот что нашлось рядом" : "Здесь будет ваш следующий план";
+          : response ? "Вот что нашлось рядом" : "Ваш следующий план";
 
   return (
     <div className="app-shell">
@@ -104,7 +104,7 @@ export function SearchExperience({ dataset, aiMode }: { dataset: DatasetInfo; ai
         <div className="city-label"><span className="city-dot" />Астана<span className="city-country">, Казахстан</span></div>
       </header>
       <main className="workspace">
-        <section className="results-intro" aria-labelledby="page-title"><div><span className="eyebrow">Городской проводник · Астана</span><h1 id="page-title">Куда сегодня<span>?</span></h1><p>Немного времени. Целый город возможностей.<br />Найдём место под ваше настроение.</p></div><div className="field-guide-note"><ArrowUpRight className="guide-symbol" aria-hidden="true" /><p>От желания —<br />к месту в городе.</p><span>Кофе / прогулки / впечатления</span></div></section>
+        <section className="results-intro" aria-labelledby="page-title"><div><span className="eyebrow">Городской проводник · Астана</span><h1 id="page-title">Куда сегодня<span>?</span></h1><p>Места под ваше настроение.</p></div></section>
         <section className="search-sidebar" aria-label="Условия поиска"><SearchForm preferences={preferences} profileControls={<ProfileSwitcher preferences={preferences} ready={preferencesReady} onChange={(profileId) => applyPreferences({ ...preferences, profileId }, "Демо-профиль изменён.")} onReset={resetHistory} />} aiMode={aiMode} synthetic={synthetic} onSearch={(request, locationLabel) => search(request, locationLabel, true)} loading={state.status === "loading"} /></section>
         <section className="results-area" aria-label="Результаты поиска">
           {synthetic && <p className="synthetic-warning" role="note">Синтетические тестовые данные — не реальные места</p>}
@@ -116,29 +116,32 @@ export function SearchExperience({ dataset, aiMode }: { dataset: DatasetInfo; ai
             <span>{contextFilters.radiusM / 1000} км по прямой</span><span>Посещение до {contextFilters.durationMinutes} мин</span>
             <span>{companyLabels[contextFilters.company]}</span>
             {submitted.request.query && <span className="context-query">«{submitted.request.query}»</span>}
-            {contextFilters.categories.length ? contextFilters.categories.map((category) => <span key={category}>{CATEGORY_LABELS[category]}</span>) : <span>Все категории</span>}
+            {contextFilters.categories.map((category) => <span key={category}>{CATEGORY_LABELS[category]}</span>)}
             {contextFilters.maxSpendKzt !== null ? <span>До {contextFilters.maxSpendKzt.toLocaleString("ru-RU")} ₸ / чел. · неизвестные цены исключены</span> : <span>Бюджет без ограничения</span>}
-            <span>{contextFilters.openNow ? "По расписанию открыто · неизвестные часы исключены" : "Неизвестные часы допустимы"}</span>
+            {contextFilters.openNow && <span>По расписанию открыто · неизвестные часы исключены</span>}
             {response?.usedContext.filters.requiredFacts.map((fact) => <span key={fact}>Требуется: {{ quiet: "подтверждённая тишина", outlets: "розетки", wifi: "Wi-Fi", childFriendly: "подходит детям", indoor: "в помещении" }[fact]}</span>)}
-            <span>{contextIsDemo ? `Демо-профиль: ${contextProfileId ? profileLabels[contextProfileId] : "демонстрационная история"}` : "Без демо-профиля"}</span>
+            {contextIsDemo && <span>Демо-профиль: {contextProfileId ? profileLabels[contextProfileId] : "демонстрационная история"}</span>}
+            {submitted.request.savedIds.length > 0 && <span>Сохранено: {submitted.request.savedIds.length}</span>}
+            {submitted.request.dismissedIds.length > 0 && <span>Скрыто: {submitted.request.dismissedIds.length}</span>}
           </div>}
-          <div className="result-announcement" aria-live="polite" aria-atomic="true"><h3 id="search-result-status" className={response?.recommendations.length ? "result-heading" : "sr-only"}>{title}</h3></div>
+          <div className="result-announcement" aria-live="polite" aria-atomic="true"><h3 id="search-result-status" className="sr-only">{title}</h3></div>
           {(!response || response.recommendations.length === 0) && <Card className={`empty-canvas ${state.status === "loading" ? "is-loading" : ""}`} aria-busy={state.status === "loading"}>
-            <div className="empty-copy"><h3 aria-hidden="true">{title}</h3><p>{state.status === "idle" ? "Расскажите, чего хочется, и выберите точку старта. Найдём подходящие места в каталоге." : state.status === "loading" ? "Проверяем ваш запрос и выбранные условия. Это может занять немного времени." : state.status === "error" ? "Не удалось получить проверенный ответ. Попробуйте ещё раз — ваши условия остались в форме." : response?.message}</p>{response?.status === "no_results" && <p className="empty-next-step">{response.usedContext.filters.maxSpendKzt !== null ? <>При заданном бюджете места с неизвестной ценой исключаются. Измените бюджет или уберите ограничение и повторите поиск. <a href="#search-budget" onClick={(event) => { event.preventDefault(); const details = document.getElementById("search-conditions") as HTMLDetailsElement | null; if (details) details.open = true; document.getElementById("search-budget")?.focus(); }}>Изменить бюджет</a></> : <>Попробуйте увеличить радиус или изменить категорию. Условия не будут изменены автоматически.</>}</p>}</div>
+            <div className="empty-copy"><h3 aria-hidden="true">{title}</h3><p>{state.status === "idle" ? "Опишите желание или выберите категорию." : state.status === "loading" ? "Проверяем ваш запрос и выбранные условия. Это может занять немного времени." : state.status === "error" ? "Не удалось получить проверенный ответ. Попробуйте ещё раз — ваши условия остались в форме." : response?.message}</p>{response?.status === "no_results" && <p className="empty-next-step">{response.usedContext.filters.maxSpendKzt !== null ? <>При заданном бюджете места с неизвестной ценой исключаются. Измените бюджет или уберите ограничение и повторите поиск. <a href="#search-budget" onClick={(event) => { event.preventDefault(); const details = document.getElementById("search-conditions") as HTMLDetailsElement | null; if (details) details.open = true; document.getElementById("search-budget")?.focus(); }}>Изменить бюджет</a></> : <>Попробуйте увеличить радиус или изменить категорию. Условия не будут изменены автоматически.</>}</p>}</div>
             {state.status === "error" && submitted && <Button variant="outline" onClick={() => search(submitted.request, submitted.locationLabel, true)}>Повторить поиск<ArrowUpRight aria-hidden="true" /></Button>}
           </Card>}
           {response && response.recommendations.length > 0 && <div className="recommendation-list">
-            <p className={response.status === "degraded" ? "degraded-notice" : "response-message"}>{response.message}</p>
+            {response.status === "degraded" && <p className="degraded-notice">{response.message}</p>}
             {response.recommendations.map((recommendation) => <PlaceCard key={recommendation.poi.id} recommendation={recommendation} saved={preferences.savedIds.includes(recommendation.poi.id)} onSave={() => applyPreferences(updateDemoPreference(preferences, { kind: "save", poiId: recommendation.poi.id, active: !preferences.savedIds.includes(recommendation.poi.id) }), "Сохранения обновлены.")} onDismiss={() => applyPreferences(updateDemoPreference(preferences, { kind: "dismiss", poiId: recommendation.poi.id, active: true }), "Место скрыто. Вернуть скрытые места можно сбросом демо-истории.")} onDetails={(trigger) => { detailTrigger.current = trigger; setSelected(recommendation); }} />)}
           </div>}
-          {response?.warnings.length ? <ul className="response-warnings" aria-label="Ограничения данных">{response.warnings.map((warning, index) => <li key={index}>{warning}</li>)}</ul> : null}
-          {response && <details className="snapshot-details" aria-label="Версия каталога"><summary>Версия данных: <code>{response.usedContext.dataSnapshot.slice(0, 12)}</code></summary><code className="snapshot-value">{response.usedContext.dataSnapshot}</code></details>}
-          <div className="dataset-note"><ShieldCheck aria-hidden="true" /><p>{dataset.available ? <>В каталоге <strong>{dataset.count.toLocaleString("ru-RU")}</strong> мест{dataset.synthetic ? " для тестирования" : " Астаны"}. Подбираем только из этого набора.</> : <>Каталог мест сейчас недоступен. Поиск покажет понятное сообщение, если данные ещё не подключены.</>}<span>Неизвестные цены и часы остаются неизвестными.</span></p></div>
-          <div className="search-principles"><span><Search aria-hidden="true" />Ваш запрос важнее настроек по умолчанию</span><span>Сначала место. Затем маршрут.<ArrowUpRight aria-hidden="true" /></span></div>
+          <div className="data-disclosure-area"><p className="data-note">Цены и часы уточните перед визитом.</p><details className="data-disclosure" aria-label="О данных и ограничениях"><summary>О данных и ограничениях</summary>
+            <div className="dataset-note"><p>{dataset.available ? <>В каталоге <strong>{dataset.count.toLocaleString("ru-RU")}</strong> мест{dataset.synthetic ? " для тестирования" : " Астаны"}. Подбираем только из этого набора.</> : <>Каталог мест сейчас недоступен.</>}<span>Неизвестные цены и часы остаются неизвестными.</span></p></div>
+            {response?.warnings.length ? <ul className="response-warnings" aria-label="Ограничения данных">{response.warnings.map((warning, index) => <li key={index}>{warning}</li>)}</ul> : null}
+            {response && <details className="snapshot-details" aria-label="Версия каталога"><summary>Версия данных: <code>{response.usedContext.dataSnapshot.slice(0, 12)}</code></summary><code className="snapshot-value">{response.usedContext.dataSnapshot}</code></details>}
+          </details></div>
         </section>
       </main>
       <PlaceDetails recommendation={selected} synthetic={synthetic} onClose={() => setSelected(null)} triggerRef={detailTrigger} fallbackRef={resultsHeading} />
-      <footer className="site-footer"><span>Куда в Астане</span><span>Город ближе, когда есть план.</span></footer>
+      <footer className="site-footer"><span>Куда в Астане</span></footer>
     </div>
   );
 }

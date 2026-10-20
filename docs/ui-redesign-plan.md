@@ -23,3 +23,7 @@ Current public live UI opened in IAB, then browser captures at1440×900 and390×
 ## Visual references inspected after user steering
 
 User reiterated removing white/violet and requested looking at other designs. Opened both in IAB and inspected current screenshots on20October2026: [Cereal City Guides / Studio Faculty](https://www.studiofaculty.com/work/cereal-city-guides) — generous margins, expressive book typography, consistent metadata; [The Modern House Journal](https://themodernhouse.com/journal) — serif editorial hierarchy and restrained dividers. Borrow composition principles only, while following the user’s warm paper/ink/olive palette. No third-party code, fonts or photographs copied.
+
+## Content refinement — latest user steering
+
+User asks “Детали по минимуму как у apple сделай по контенту.” R1.2b trims the content after the first accepted redesign: one hero/subtitle, one hint, a short summary of core and active constraints, no repeated slogans/success copy; technical/data warnings behind a clear disclosure with a concise visible caution. Empty categories/inactive demo/openNow defaults need not repeat. Active filters, strict unknown exclusion, demo use, price/hours unknowns, opinions and degraded/empty/error states remain explicit. Same UI owner, scoped independent review and fresh build before the single real recording. No paid call occurred before this steering.

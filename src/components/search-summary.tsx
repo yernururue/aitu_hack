@@ -16,10 +16,10 @@ export function SearchSummary({ filters, locationLabel, profileId, savedCount = 
     <span>{filters.radiusM / 1000} км по прямой</span>
     <span>Посещение до {filters.durationMinutes} мин · оценка</span>
     <span>{companyLabels[filters.company]}</span>
-    {filters.categories.length ? filters.categories.map((category) => <span key={category}>{CATEGORY_LABELS[category]}</span>) : <span>Все категории</span>}
+    {filters.categories.map((category) => <span key={category}>{CATEGORY_LABELS[category]}</span>)}
     <span>{budgetInvalid ? "Бюджет: проверьте значение" : filters.maxSpendKzt === null ? "Бюджет без ограничения" : filters.maxSpendKzt === 0 ? "Только подтверждённо бесплатно" : `До ${filters.maxSpendKzt.toLocaleString("ru-RU")} ₸ / чел.`}</span>
-    <span>{filters.openNow ? "По расписанию открыто" : "Неизвестные часы допустимы"}</span>
-    <span className={profileId ? "summary-demo" : undefined}>{profileId ? `Демо-профиль: ${DEMO_PROFILE_LABELS[profileId]}` : "Без демо-профиля"}</span>
+    {filters.openNow && <span>По расписанию открыто</span>}
+    {profileId && <span className="summary-demo">Демо-профиль: {DEMO_PROFILE_LABELS[profileId]}</span>}
     {savedCount > 0 && <span>Сохранено: {savedCount}</span>}{dismissedCount > 0 && <span>Скрыто: {dismissedCount}</span>}
     {!budgetInvalid && filters.maxSpendKzt !== null && <small>Неизвестные цены исключаются.</small>}
     {filters.openNow && <small>Неизвестные часы исключаются; фактическую работу уточните у места.</small>}
