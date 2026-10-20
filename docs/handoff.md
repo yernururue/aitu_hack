@@ -52,11 +52,13 @@ Guard проверен, paid defaultoff; для paid нужны действую
 M7.1–M7.4 приняты: [демо/файлы/lifecycle](submission/links.md),
 [manifest](submission/release-manifest.json), [сценарии](submission/scenarios.md),
 [ограничения](submission/limitations.md), [презентация/заметки](submission/presentation-outline.md).
-Actual temporary URL: https://percentage-slim-contemporary-appropriate.trycloudflare.com .
-Предыдущий URL converter-mirrors-commercial-gem retired после завершения tool sessions.
-После M5.4 origin70029 и прежний tunnel64556 detached/PPID1/ownPGIDs, остаются зависимыми от Mac/сети.
+Actual temporary URL: https://loan-begins-sleeps-unavailable.trycloudflare.com .
+M7.8 заменил только tunnel: origin70029 и новый tunnel80285 detached/PPID1/ownPGIDs.
+Старый percentage-slim DNS недоступен, tunnel64556 остановлен после новогоHTTPS200.
+НовыйURL проверен actualAPI390/1440; физический телефон на нём пока не перепроверен.
+Доступ остаётся зависимым от Mac/сети, постоянного hosting нет.
 Текущий launcher/log/probe: `/tmp/aituhack-mvp/release-runtime-M5.4-20261020T001928Z/`;
-прежний tunnel/log пакет: `/tmp/aituhack-mvp/release-runtime-restart-20261019T235726Z/`.
+новый tunnel/log пакет: `/tmp/aituhack-mvp/public-restore-20261020/`.
 Текущее приложение: source`ceb34a5`, build`NASkuokYCKTpTbx_JqKpo`.
 PPTX/видео неизменны: source572a813/buildBlwNsPwtVQoToEIUwspvC.
 PPTX7slides/6min и video110s приняты независимым reviewer и сохранены неизменными.
@@ -79,7 +81,9 @@ YouTube/официальная отправка заявки не выполня
 
 M7.7: [аудит](security-audit.md) подтверждает normalized→catalog298/591 и
 byteEXACT приватный replay. Known/high/unresolved secrets0 в локальных данных,
-Git и actualorigin; .env.local0600. Текущий внешний DNS не разрешился из машины
-аудита, publicHTTP0: не считать старую внешнюю проверку актуальным PASS.
+Git и actualorigin; .env.local0600. M7.7 publicHTTP0/DNSWARN относится к прежнему URL.
+M7.8 новыйURL:HTTPS200/12clientassets byteequal/private55closed/GET405,
+actual8POST/mobile390+desktopbaseline1440PASS, без model/provider/auth/paid.
+[Текущая готовность](readiness-report.md): offline text demo готов, полная P0 RAG нет.
 При смене данных/.env/build повторить redacted scan перед отправкой провайдеру.
 Ключи не выводить, auth/paid retry до подтверждения пользователя не выполнять.

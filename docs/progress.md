@@ -8,12 +8,24 @@ Stage: implementation
 
 ## Выполнение MVP
 
-M7.7 done: повторно подтверждён источник `data/normalized/astana/`, полный набор298мест/
-1953проверенныхотзыва→591выдержка; приватный replay каталога и report byteEXACT.
-Локальный/Git/actualorigin secret scan: known0/high0/unresolved0; .env.local mode600.
-Внешний QuickTunnel DNS из машины аудита недоступен: publicHTTP0, актуальный
-publicPASS не заявляется. Независимый LINEAGE+LOCAL/ORIGIN LIMITEDPASS,
-PUBLICDNSWARN/noopenfindings. [Границы и evidence](security-audit.md).
+M7.8 done: публичный адрес восстановлен заменой только туннеля:
+[открыть демо](https://loan-begins-sleeps-unavailable.trycloudflare.com).
+20.10 около14:12 Asia/Almaty новыйHTTPS200,12clientassets byteequal/private55closed/GET405.
+Свежие8publicPOST без mocks: мобильный390 полный проверенный набор,
+настольный1440 базовый поиск;3realparks/hash4677, strict0/явнаяочисткабезPOST/null3,
+детали/источники/обе карты2режима/профиль/save/dismiss/reset/unknownclarify0PASS.
+Интегратор просмотрел текущие скриншоты. Origin70029/buildNASku/sourceceb сохранены,
+новый detachedtunnel80285; старый64556 остановлен после проверки замены.
+Повторная физическая проверка новогоURL ожидается; прошлое подтверждение телефона
+и native-карт относится к той же сборке на прежнем адресе.
+[Отчёт о готовности](readiness-report.md): текстовое stub-демо работает,
+полная P0 RAG остаётся незавершённой. Платных/auth/provider-вызовов0. Независимый SPEC/QUALITY review PASS в рамках
+offline/stub; root harness/diff/94local links/manifest+неизменные hashes PASS.
+
+M7.7 ранее повторно подтвердил `data/normalized/astana/`:298мест/1953отзыва→591выдержка;
+приватный replay каталога/report byteEXACT. Local/Git/origin secret scan:
+known0/high0/unresolved0, .env.local0600. Исторический PUBLICDNSWARN относится
+к прежнему URL, новый внешний адрес перепроверен в M7.8. [Аудит](security-audit.md).
 
 
 После локальной передачи пользователь открыл сайт на физическом телефоне, но получил
@@ -23,7 +35,7 @@ M5.4: добавлены объяснение0vsпустое поле, подс�
 к бюджету и явная кнопка его снятия. Она сохраняет остальные условия и не запускает
 поиск автоматически. Независимый SPEC/QUALITY review PASS. Root fresh public smoke
 390/1440 подтвердил0→0/явнаяочисткабезPOST/повторныйпоиск→3, все остальные поля совпали.
-Текущий source`ceb34a5`, build`NASkuokYCKTpTbx_JqKpo`, origin70029/tunnel64556.
+Текущий source`ceb34a5`, build`NASkuokYCKTpTbx_JqKpo`, origin70029/tunnel80285 после восстановления M7.8.
 PPTX/видео M7.1–M7.4 сохранены как снимок source572/buildBlw/554unit/62e2e.
 Финальный независимый integration/docs review SPEC/CONSISTENCY+QUALITY PASS;
 tracker/manifest/current build и неизменённые материалы согласованы.
@@ -45,8 +57,8 @@ GREEN2viewport cases, независимый probe/re-review PASS. Голос M6
 записи/транскрипции нет. M7 принят в рамках offline/local передачи по явному waiver;
 полная P0 RAG-приёмка остаётся незавершённой.
 По прямому запросу пользователя вся история отправлена обычным push в `main`
-[GitHub-репозитория](https://github.com/yernururue/aitu_hack). До служебной записи —
-11коммитов; один дополнительный commit фиксирует push. Код/PPTX доступны в GitHub,
+[GitHub-репозитория](https://github.com/yernururue/aitu_hack). Исторический первый push включал11коммитов; затем опубликованы служебная запись
+и аудит датасета/ключей. Код/PPTX доступны в GitHub,
 видео остаётся локальным. YouTube и официальная отправка заявки не выполнялись.
 
 ## Последние проверки интегратора

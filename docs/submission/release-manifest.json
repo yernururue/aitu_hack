@@ -151,6 +151,25 @@
       "openedIn": "native applications",
       "verifiedBy": "user report",
       "deviceBrowserVersionKnown": false
+    },
+    "historicalPhysicalPhoneUrl": "https://percentage-slim-contemporary-appropriate.trycloudflare.com",
+    "currentUrlPhysicalPhoneVerified": false,
+    "currentPublicBrowserRecheck": {
+      "url": "https://loan-begins-sleeps-unavailable.trycloudflare.com",
+      "scope": "mobile390 complete targeted checks; desktop1440 baseline search",
+      "publicPostCount": 8,
+      "mockedResponses": false,
+      "allResponsesHttp200": true,
+      "catalogIdentityAndCanonicalHashMatch": true,
+      "strictZeroThenExplicitClearNoPostAndNullRecovery": true,
+      "detailsSourcesAndBothMapModes": true,
+      "profileSaveDismissReloadReset": true,
+      "unsupportedTextClarificationZero": true,
+      "horizontalOverflow": false,
+      "pageErrors": 0,
+      "externalMapAppsLaunched": false,
+      "independentReview": "SPEC PASS / QUALITY PASS within offline-stub scope",
+      "report": "docs/readiness-report.md"
     }
   },
   "privacy": {
@@ -165,38 +184,66 @@
     "rawOrCollectorFilesInProductionNft": false
   },
   "hosting": {
-    "status": "local_origin_reachable_public_dns_unverified",
+    "status": "temporary_public_https_verified",
     "type": "cloudflare_quick_tunnel",
-    "url": "https://percentage-slim-contemporary-appropriate.trycloudflare.com",
-    "previousUrl": "https://converter-mirrors-commercial-gem.trycloudflare.com",
+    "url": "https://loan-begins-sleeps-unavailable.trycloudflare.com",
+    "previousUrl": "https://percentage-slim-contemporary-appropriate.trycloudflare.com",
     "origin": "http://127.0.0.1:3000",
     "stableHosting": false,
     "requiresLocalOriginAndTunnelAlive": true,
-    "checkedAtUtc": "2026-10-20T00:21:18.053126Z",
-    "publicPrivatePaths404": 12,
+    "checkedAtUtc": "2026-10-20T09:13:26.114907+00:00",
+    "publicPrivatePaths404": 55,
     "getApi405": true,
     "postNoStore": true,
     "controlledQueryGpsAudioCanariesAbsentFromLogs": true,
     "freshBrowserContextsVerified": true,
-    "physicalPhoneVerified": true,
+    "physicalPhoneVerified": false,
     "productionPid": 70029,
-    "tunnelPid": 64556,
+    "tunnelPid": 80285,
     "detachedProcesses": true,
     "launcherParentsExitedVerified": true,
     "runtimeEvidenceDirectory": "/tmp/aituhack-mvp/release-runtime-M5.4-20261020T001928Z",
     "previousProductionPid": 64525,
     "existingTunnelEvidenceDirectory": "/tmp/aituhack-mvp/release-runtime-restart-20261019T235726Z",
-    "physicalPhoneSiteOpened": true,
+    "physicalPhoneSiteOpened": false,
     "runtimeReportSha256": "8cfdea94b5eb7d9cc62f7cf8759e425265bf1325964688a8125db845d11c3414",
-    "publicBrowserCheckedAtUtc": "2026-10-20T00:20:25.214Z",
-    "physicalPhoneCardsVerified": true,
+    "physicalPhoneCardsVerified": false,
     "latestAvailabilityAudit": {
+      "checkedAtUtc": "2026-10-20T09:13:26.114907+00:00",
+      "url": "https://loan-begins-sleeps-unavailable.trycloudflare.com",
+      "originHttpStatus": 200,
+      "publicHttpStatus": 200,
+      "publicDnsVerifiedFromAuditHost": true,
+      "all12ClientAssetsHashEqualCurrentBuild": true,
+      "privateLocationsClosed": 55,
+      "getApi405": true,
+      "knownSecretMatches": 0,
+      "providerAuthPaidCalls": 0
+    },
+    "previousAvailabilityAudit": {
       "checkedAtUtc": "2026-10-20T08:40:14.290001Z",
       "originHttpStatus": 200,
       "publicHttpResponses": 0,
       "publicDnsVerifiedFromAuditHost": false,
       "lastSuccessfulPublicCheckUtc": "2026-10-20T00:21:18.053126Z"
-    }
+    },
+    "retiredUrls": [
+      "https://converter-mirrors-commercial-gem.trycloudflare.com",
+      "https://percentage-slim-contemporary-appropriate.trycloudflare.com"
+    ],
+    "publicPrivatePathsDirect404": 51,
+    "publicDirectory308ThenCanonical404": 4,
+    "previousTunnelPid": 64556,
+    "tunnelEvidenceDirectory": "/tmp/aituhack-mvp/public-restore-20261020",
+    "publicBrowserEvidenceDirectory": "/tmp/aituhack-mvp/public-ui-recheck",
+    "publicBrowserCheckedAtUtcApproximate": "2026-10-20T09:11:00Z",
+    "previousUrlPhysicalPhoneVerified": true,
+    "previousUrlNativeMapHandoffVerified": true,
+    "physicalPhoneVerificationStatus": "awaiting_user_retest_of_new_url_same_unchanged_build",
+    "restorationRuntimeReportSha256": "14ec785995571aa34a878fbe1cf5f5a81c10c1b39d7ea0db87aba3a81bfa3563",
+    "restorationPublicGetCount": 77,
+    "restorationIndependentReview": "SPEC PASS / QUALITY PASS within scanned boundaries",
+    "restorationReviewReportSha256": "300571ef5bf7206cf8d855bf729d8b8ec5a9b607c4a537387f77725dce452c75"
   },
   "outstandingGates": [
     "M2.4 real embeddings index",
@@ -221,9 +268,12 @@
         "sourceCommit": "572a81394048974d848be7299ed7ef53d27a2b49",
         "buildId": "BlwNsPwtVQoToEIUwspvC",
         "unitTestsPassed": 554,
-        "browserTestsPassed": 62
+        "browserTestsPassed": 62,
+        "demoUrl": "https://percentage-slim-contemporary-appropriate.trycloudflare.com"
       },
-      "url": "https://github.com/yernururue/aitu_hack/blob/main/output/submission/aituhack-demo.pptx"
+      "url": "https://github.com/yernururue/aitu_hack/blob/main/output/submission/aituhack-demo.pptx",
+      "snapshotUrlMayBeUnavailable": true,
+      "currentDemoUrl": "https://loan-begins-sleeps-unavailable.trycloudflare.com"
     },
     {
       "path": "output/submission/aituhack-demo.webm",
@@ -242,8 +292,11 @@
         "sourceCommit": "572a81394048974d848be7299ed7ef53d27a2b49",
         "buildId": "BlwNsPwtVQoToEIUwspvC",
         "unitTestsPassed": 554,
-        "browserTestsPassed": 62
-      }
+        "browserTestsPassed": 62,
+        "demoUrl": "https://percentage-slim-contemporary-appropriate.trycloudflare.com"
+      },
+      "snapshotUrlMayBeUnavailable": true,
+      "currentDemoUrl": "https://loan-begins-sleeps-unavailable.trycloudflare.com"
     }
   ],
   "delivery": {
@@ -267,9 +320,13 @@
       "documentationReceiptAdditionalCommits": 1,
       "forcePush": false,
       "verifiedAtUtc": "2026-10-20T00:39:08.757704+00:00"
-    }
+    },
+    "readinessReport": "docs/readiness-report.md",
+    "lastPublicUrlRestorationTask": "M7.8",
+    "currentDemoUrl": "https://loan-begins-sleeps-unavailable.trycloudflare.com",
+    "publicRestorationReview": "PASS; physical new-url retest pending; fullP0Accepted=false"
   },
-  "updatedAt": "2026-10-20T08:46:28.592859+00:00",
+  "updatedAt": "2026-10-20T09:19:51.781143+00:00",
   "applicationUpdate": {
     "taskId": "M5.4",
     "change": "Clarify strict zero versus blank budget and offer explicit budget removal without automatic search or changing other fields",
@@ -303,6 +360,20 @@
     "providerAuthPaidCalls": 0,
     "report": "docs/security-audit.md",
     "independentReview": "LINEAGE PASS / LOCAL-ORIGIN LIMITED PASS / PUBLIC DNS WARN",
-    "checkedAtUtc": "2026-10-20T08:40:14.290001Z"
+    "checkedAtUtc": "2026-10-20T08:40:14.290001Z",
+    "publicRecheck": {
+      "taskId": "M7.8",
+      "url": "https://loan-begins-sleeps-unavailable.trycloudflare.com",
+      "checkedAtUtc": "2026-10-20T09:13:26.114907+00:00",
+      "verdict": "PASS_WITHIN_SCANNED_BOUNDARIES",
+      "clientAssets200AndByteEqual": 12,
+      "privateLocationsClosed": 55,
+      "getApi405": true,
+      "knownSecretMatches": 0,
+      "sourceBuildDataChanged": false,
+      "providerAuthPaidCalls": 0,
+      "previousPublicVerdictPreserved": true,
+      "report": "docs/security-audit.md"
+    }
   }
 }

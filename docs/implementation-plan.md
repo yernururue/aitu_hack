@@ -320,3 +320,15 @@ M7.6 done: по прямому запросу пользователя выпо�
 До служебной записи11коммитов, дополнительный commit фиксирует результат push.
 PPTX опубликован вместе с кодом; видео/YouTube/официальная отправка не выполнялись.
 Реальный индекс/live/model gates остаются blocked; paid0 и резерв$4 сохранены.
+
+M7.7 done: повторная проверка normalized→catalog298/591, byteEXACT replay и
+local/Git/origin secret audit PASS в перечисленных границах; publicDNSWARN
+сохранён как исторический receipt прежнего адреса. Ключи не выводились.
+
+M7.8 done: восстановлен только публичный туннель, новыйURL и actual8POST проверены:
+мобильный390 — поиск/0vsnull/профили/history/подробности/карты/уточнение,
+настольный1440 — базовый поиск. Build/source/catalog неизменны, публичные12assets
+byteEXACT/private55closed/GET405/secretguardPASS. Текущий адрес и точный статус
+в [отчёте о готовности](readiness-report.md) и tracker. Физический повтор новогоURL
+ожидается; прежний телефон/nativeкарты подтверждены пользователем на той же сборке.
+Независимый SPEC/QUALITY review PASS. Никаких auth/provider/paid-вызовов; fullP0Accepted=false.
