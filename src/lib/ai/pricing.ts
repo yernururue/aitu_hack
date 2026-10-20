@@ -10,6 +10,7 @@ const models = {
   "openai/gpt-6-luna": { kind: "chat", context: 1050000, output: 128000, prompt: "0.0000002", completion: "0.00000075", cache: "0.000000275", parameter: "max_completion_tokens" },
   "anthropic/claude-haiku-5.5": { kind: "chat", context: 1000000, output: 128000, prompt: "0.0000005", completion: "0.0000025", cache: "0.0000011", parameter: "max_completion_tokens" },
   "qwen/qwen3.8-flash": { kind: "chat", context: 1000000, output: 131072, prompt: "0.00000015", completion: "0.00000047", cache: "0.0000002", parameter: "max_tokens" },
+  "mistralai/mistral-small-3.2-24b-instruct": { kind: "chat", context: 256000, output: 16384, prompt: "0.00000009375", completion: "0.00000025", cache: "0", parameter: "max_tokens" },
 } as const;
 
 export function parseTokenPrice(value: unknown): number {
@@ -58,7 +59,11 @@ export function quoteRequest(args: { operation: Operation; model: string; inputC
   const pinnedHaiku = args.model === "anthropic/claude-haiku-5.5";
   // Deterministic Qwen route candidate, not a claim of separate quota or a429 fix.
   // The regional endpoint keeps the same full cache/context/output reserve.
-  const pinnedProvider = pinnedHaiku ? "azure/global" : args.model === "qwen/qwen3.8-flash" ? "alibaba/us-east-1" : undefined;
+  // Offline Mistral candidate: fixed FP8 endpoint advertises128k context and
+  // lower rates, but reserve the full256k model envelope at model-level maxima.
+  const pinnedProvider = pinnedHaiku ? "azure/global"
+    : args.model === "qwen/qwen3.8-flash" ? "alibaba/us-east-1"
+    : args.model === "mistralai/mistral-small-3.2-24b-instruct" ? "deepinfra/fp8" : undefined;
   const promptPrice = pinnedHaiku ? "0.0000001" : model.prompt;
   const completionPrice = pinnedHaiku ? "0.0000005" : model.completion;
   const inputPrice = pinnedHaiku ? "0.0000002" : parseTokenPrice(model.cache) > parseTokenPrice(promptPrice) ? model.cache : promptPrice;
