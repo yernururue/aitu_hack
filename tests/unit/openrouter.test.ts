@@ -5,6 +5,9 @@ import { join } from "node:path";
 import { BudgetGuard, initializeLedger } from "../../src/lib/ai/budget";
 import { GuardedTransport, TransportError, type ProviderSend } from "../../src/lib/ai/transport";
 import { createChatJson, type ChatAttemptEvent, type ChatJsonRequest } from "../../src/lib/ai/openrouter";
+import { z } from "zod";
+import { IntentSchema, createDefaultFilters } from "../../src/lib/contracts/request";
+import { ExplanationSchema, validateExplanation } from "../../src/lib/ai/validate";
 
 let directory: string;
 let guard: BudgetGuard;
@@ -34,6 +37,80 @@ function deferred<T>() {
 }
 
 describe("structured server chat", () => {
+  it.each([["intent", IntentSchema], ["explanation", ExplanationSchema]] as const)("projects actual core %s schema bounds only for Haiku without mutating the original", async (stage, coreSchema) => {
+    const schema = z.toJSONSchema(coreSchema);
+    const before = structuredClone(schema);
+    const events: ChatAttemptEvent[] = [];
+    const unsupported: string[] = [];
+    let descriptions = 0;
+    const walk = (value: unknown) => {
+      if (!value || typeof value !== "object") return;
+      for (const [key, child] of Object.entries(value)) {
+        if (["minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum", "multipleOf", "minLength", "maxLength", "maxItems"].includes(key) || key === "minItems" && child !== 0 && child !== 1) unsupported.push(key);
+        if (key === "description" && typeof child === "string" && child.includes("Locally validated constraints:")) descriptions++;
+        walk(child);
+      }
+    };
+    let wire: { schema: unknown; strict: boolean } | undefined;
+    const send: ProviderSend = async (call) => { wire = (call.body.response_format as { json_schema: typeof wire }).json_schema; return response(); };
+    const chat = createChatJson({ model: "anthropic/claude-haiku-5.5", transport: new GuardedTransport({ guard, send }), onAttempt: (event) => { events.push(event); } });
+    await expect(chat(request({ stage, jsonSchema: { name: "actual_core", schema } }))).resolves.toEqual({ ok: true });
+    expect(wire?.strict).toBe(true);
+    walk(wire?.schema);
+    expect(unsupported).toEqual([]);
+    expect(descriptions).toBeGreaterThan(0);
+    expect(wire?.schema).toMatchObject({ type: "object", additionalProperties: false, required: before.required });
+    expect(schema).toEqual(before);
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({ schemaProjectionVersion: "anthropic-bounds-v1", costKnown: true });
+  });
+  it("preserves schema-keyword property names, enum/required/closed shape, allowed minItems and nested descriptions", async () => {
+    const schema = { type: "object", properties: {
+      maxLength: { type: "string", maxLength: 5, description: "Original description" },
+      maximum: { type: "number", minimum: 0, maximum: 10, multipleOf: 2 },
+      items: { type: "array", minItems: 1, maxItems: 3, items: { type: "string", enum: ["park", "cafe"], minLength: 1 } },
+      properties: { type: "object", properties: { minimum: { anyOf: [{ type: "string", maxLength: 3 }, { type: "null" }] } }, required: ["minimum"], additionalProperties: false },
+    }, required: ["maxLength", "maximum", "items", "properties"], additionalProperties: false };
+    const before = structuredClone(schema);
+    let wire: typeof schema | undefined;
+    const send: ProviderSend = async (call) => { wire = (call.body.response_format as { json_schema: { schema: typeof schema } }).json_schema.schema; return response(); };
+    await expect(createChatJson({ model: "anthropic/claude-haiku-5.5", transport: new GuardedTransport({ guard, send }) })(request({ jsonSchema: { name: "keyword_names", schema } }))).resolves.toEqual({ ok: true });
+    expect(Object.keys(wire!.properties)).toEqual(Object.keys(schema.properties));
+    expect(wire!.required).toEqual(schema.required);
+    expect(wire!.properties.maxLength).toEqual({ type: "string", description: 'Original description\nLocally validated constraints: {"maxLength":5}' });
+    expect(wire!.properties.maximum).toEqual({ type: "number", description: 'Locally validated constraints: {"minimum":0,"maximum":10,"multipleOf":2}' });
+    expect(wire!.properties.items).toMatchObject({ type: "array", minItems: 1, items: { enum: ["park", "cafe"] } });
+    expect(wire!.properties.items).not.toHaveProperty("maxItems");
+    expect(wire!.properties.properties.properties.minimum.anyOf[0]).not.toHaveProperty("maxLength");
+    expect(schema).toEqual(before);
+  });
+  it.each(["openai/gpt-6-luna", "qwen/qwen3.8-flash"])("keeps the exact original wire schema for %s", async (model) => {
+    const schema = z.toJSONSchema(IntentSchema);
+    const send: ProviderSend = async (call) => { expect(call.body.response_format).toMatchObject({ json_schema: { schema } }); return response(); };
+    const events: ChatAttemptEvent[] = [];
+    await createChatJson({ model, transport: new GuardedTransport({ guard, send }), onAttempt: (event) => { events.push(event); } })(request({ jsonSchema: { name: "identity", schema } }));
+    expect(events[0]).toMatchObject({ schemaProjectionVersion: "identity-v1" });
+  });
+  it.each([0, 1, 2])("retains only supported array minItems=%s on Haiku's wire", async (minItems) => {
+    const schema = { type: "object", properties: { values: { type: "array", items: { type: "string" }, minItems } }, required: ["values"], additionalProperties: false };
+    let wire: typeof schema | undefined;
+    const send: ProviderSend = async (call) => { wire = (call.body.response_format as { json_schema: { schema: typeof schema } }).json_schema.schema; return response(); };
+    await createChatJson({ model: "anthropic/claude-haiku-5.5", transport: new GuardedTransport({ guard, send }) })(request({ jsonSchema: { name: "array_bounds", schema } }));
+    if (minItems < 2) expect(wire!.properties.values.minItems).toBe(minItems);
+    else { expect(wire!.properties.values).not.toHaveProperty("minItems"); expect(wire!.properties.values).toHaveProperty("description", 'Locally validated constraints: {"minItems":2}'); }
+    expect(schema.properties.values.minItems).toBe(minItems);
+  });
+  it("still rejects out-of-bounds generated values through the unchanged core validators after wire projection", async () => {
+    const badIntent = { ...createDefaultFilters(), maxSpendKzt: -1, requiredFacts: [], preferredTags: [], conflict: null };
+    const badExplanation = { items: [{ poiId: "test-place", why: "a".repeat(10_001), activity: "Walk", evidenceIds: ["test-source"] }] };
+    for (const [stage, schema, raw] of [["intent", IntentSchema, badIntent], ["explanation", ExplanationSchema, badExplanation]] as const) {
+      const chat = createChatJson({ model: "anthropic/claude-haiku-5.5", transport: new GuardedTransport({ guard, send: async () => response(JSON.stringify(raw)) }) });
+      const parsed = await chat(request({ stage, jsonSchema: { name: "core_bounds", schema: z.toJSONSchema(schema) } }));
+      expect(schema.safeParse(parsed).success).toBe(false);
+      if (stage === "explanation") expect(() => validateExplanation(parsed, [])).toThrow(z.ZodError);
+    }
+    expect((await guard.snapshot()).spent.prep).toBe(0.002);
+  });
   it.each([["intent", 400], ["explanation", 1000]] as const)("uses the issued fixed Haiku route and original %s output/deadline controls", async (stage, limit) => {
     const send: ProviderSend = async (call) => {
       expect(call.body).toMatchObject({ model: "anthropic/claude-haiku-5.5", max_completion_tokens: limit, stream: false, provider: { only: ["azure/global"], allow_fallbacks: false, require_parameters: true, max_price: { prompt: "0.1", completion: "0.5" } } });
