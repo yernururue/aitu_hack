@@ -27,13 +27,14 @@ export function PlaceCard({ recommendation: item, saved, onSave, onDismiss, onDe
   recommendation: Recommendation; saved: boolean; onSave: () => void; onDismiss: () => void; onDetails: (trigger: HTMLButtonElement) => void;
 }) {
   const { poi } = item;
+  const citesReview = poi.sources.some((source) => source.kind === "review" && item.evidenceIds.includes(source.id));
   return <Card role="article" aria-label={poi.name} data-poi-id={poi.id} className="recommendation-card">
     <div className="recommendation-meta"><span>{CATEGORY_LABELS[poi.category]}</span><span><Navigation aria-hidden="true" />{formatDistance(item.distanceM)} по прямой</span></div>
     <h3>{poi.name}</h3>
     {poi.rating && <p className="rating"><Star aria-hidden="true" />{poi.rating.value.toLocaleString("ru-RU")}<span>· {poi.rating.count.toLocaleString("ru-RU")} оценок</span></p>}
     {poi.description.text && <div className="catalog-description"><span className="mini-label">Из каталога</span><p className="place-description">{poi.description.text}</p></div>}
     <div className="place-data-labels"><span>{poi.price ? `${poi.price.min.toLocaleString("ru-RU")}–${poi.price.max.toLocaleString("ru-RU")} ₸ / чел.` : "Цена не подтверждена"}</span><span>{poi.hours?.weekly.length ? "Есть расписание в каталоге" : "Время работы не подтверждено"}</span></div>
-    <div className="recommendation-reason"><span className="mini-label">Почему подходит</span><p>{item.why}</p></div>
+    <div className="recommendation-reason"><span className="mini-label">Почему подходит</span><p>{citesReview && <span>По отзывам (мнения пользователей): </span>}{item.why}</p></div>
     <div className="activity-idea"><span className="mini-label">Идея занятия</span><p>{item.activity}</p></div>
     <div className="recommendation-footer"><span><Clock3 aria-hidden="true" />{item.visitMinutes.min}–{item.visitMinutes.max} мин<span className="estimate-label">оценка посещения</span></span><Button variant="outline" aria-label={`Подробнее о ${poi.name}`} onClick={(event) => onDetails(event.currentTarget)}>Подробности<ArrowUpRight aria-hidden="true" /></Button></div>
     <div className="preference-actions"><Button variant="ghost" aria-pressed={saved} aria-label={`${saved ? "Убрать из сохранённых" : "Сохранить"} ${poi.name}`} onClick={onSave}><Bookmark aria-hidden="true" />{saved ? "Сохранено" : "Сохранить"}</Button><Button variant="ghost" aria-label={`Не интересно: ${poi.name}`} onClick={onDismiss}><EyeOff aria-hidden="true" />Не интересно</Button></div>
