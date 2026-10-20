@@ -55,7 +55,8 @@ M7.1–M7.4 приняты: [демо/файлы/lifecycle](submission/links.md)
 Actual temporary URL: https://loan-begins-sleeps-unavailable.trycloudflare.com .
 M7.8 заменил только tunnel: origin70029 и новый tunnel80285 detached/PPID1/ownPGIDs.
 Старый percentage-slim DNS недоступен, tunnel64556 остановлен после новогоHTTPS200.
-НовыйURL проверен actualAPI390/1440; физический телефон на нём пока не перепроверен.
+НовыйURL проверен actualAPI390/1440 и пользователем на телефоне:
+«Открылся, три карточки есть». Повторный native-переход этим ответом не подтверждён.
 Доступ остаётся зависимым от Mac/сети, постоянного hosting нет.
 Текущий launcher/log/probe: `/tmp/aituhack-mvp/release-runtime-M5.4-20261020T001928Z/`;
 новый tunnel/log пакет: `/tmp/aituhack-mvp/public-restore-20261020/`.

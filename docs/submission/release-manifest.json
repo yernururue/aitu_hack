@@ -153,7 +153,7 @@
       "deviceBrowserVersionKnown": false
     },
     "historicalPhysicalPhoneUrl": "https://percentage-slim-contemporary-appropriate.trycloudflare.com",
-    "currentUrlPhysicalPhoneVerified": false,
+    "currentUrlPhysicalPhoneVerified": true,
     "currentPublicBrowserRecheck": {
       "url": "https://loan-begins-sleeps-unavailable.trycloudflare.com",
       "scope": "mobile390 complete targeted checks; desktop1440 baseline search",
@@ -170,7 +170,19 @@
       "externalMapAppsLaunched": false,
       "independentReview": "SPEC PASS / QUALITY PASS within offline-stub scope",
       "report": "docs/readiness-report.md"
-    }
+    },
+    "currentUrlPhysicalPhoneSiteOpened": true,
+    "currentUrlPhysicalPhoneCardsVerified": true,
+    "currentUrlPhysicalPhoneEvidence": {
+      "url": "https://loan-begins-sleeps-unavailable.trycloudflare.com",
+      "basis": "Direct user answer to the exact new-URL physical-phone retry question: EXPO / park phrase / 5km / blank budget",
+      "quote": "Открылся, три карточки есть",
+      "siteOpened": true,
+      "recommendationCount": 3,
+      "deviceBrowserVersionKnown": false,
+      "nativeMapAppsRetestConfirmed": false
+    },
+    "currentUrlNativeMapHandoffRetestVerified": false
   },
   "privacy": {
     "deviceLocationOptIn": true,
@@ -197,7 +209,7 @@
     "postNoStore": true,
     "controlledQueryGpsAudioCanariesAbsentFromLogs": true,
     "freshBrowserContextsVerified": true,
-    "physicalPhoneVerified": false,
+    "physicalPhoneVerified": true,
     "productionPid": 70029,
     "tunnelPid": 80285,
     "detachedProcesses": true,
@@ -205,9 +217,9 @@
     "runtimeEvidenceDirectory": "/tmp/aituhack-mvp/release-runtime-M5.4-20261020T001928Z",
     "previousProductionPid": 64525,
     "existingTunnelEvidenceDirectory": "/tmp/aituhack-mvp/release-runtime-restart-20261019T235726Z",
-    "physicalPhoneSiteOpened": false,
+    "physicalPhoneSiteOpened": true,
     "runtimeReportSha256": "8cfdea94b5eb7d9cc62f7cf8759e425265bf1325964688a8125db845d11c3414",
-    "physicalPhoneCardsVerified": false,
+    "physicalPhoneCardsVerified": true,
     "latestAvailabilityAudit": {
       "checkedAtUtc": "2026-10-20T09:13:26.114907+00:00",
       "url": "https://loan-begins-sleeps-unavailable.trycloudflare.com",
@@ -239,11 +251,21 @@
     "publicBrowserCheckedAtUtcApproximate": "2026-10-20T09:11:00Z",
     "previousUrlPhysicalPhoneVerified": true,
     "previousUrlNativeMapHandoffVerified": true,
-    "physicalPhoneVerificationStatus": "awaiting_user_retest_of_new_url_same_unchanged_build",
+    "physicalPhoneVerificationStatus": "current_url_site_and_three_cards_confirmed_by_user; native_map_retest_not_reported",
     "restorationRuntimeReportSha256": "14ec785995571aa34a878fbe1cf5f5a81c10c1b39d7ea0db87aba3a81bfa3563",
     "restorationPublicGetCount": 77,
     "restorationIndependentReview": "SPEC PASS / QUALITY PASS within scanned boundaries",
-    "restorationReviewReportSha256": "300571ef5bf7206cf8d855bf729d8b8ec5a9b607c4a537387f77725dce452c75"
+    "restorationReviewReportSha256": "300571ef5bf7206cf8d855bf729d8b8ec5a9b607c4a537387f77725dce452c75",
+    "physicalPhoneEvidence": {
+      "url": "https://loan-begins-sleeps-unavailable.trycloudflare.com",
+      "basis": "Direct user answer to the exact new-URL physical-phone retry question: EXPO / park phrase / 5km / blank budget",
+      "quote": "Открылся, три карточки есть",
+      "siteOpened": true,
+      "recommendationCount": 3,
+      "deviceBrowserVersionKnown": false,
+      "nativeMapAppsRetestConfirmed": false
+    },
+    "currentUrlNativeMapHandoffRetestVerified": false
   },
   "outstandingGates": [
     "M2.4 real embeddings index",
@@ -324,9 +346,9 @@
     "readinessReport": "docs/readiness-report.md",
     "lastPublicUrlRestorationTask": "M7.8",
     "currentDemoUrl": "https://loan-begins-sleeps-unavailable.trycloudflare.com",
-    "publicRestorationReview": "PASS; physical new-url retest pending; fullP0Accepted=false"
+    "publicRestorationReview": "PASS; current-url physical site and three cards confirmed by user; native-map retest absent; fullP0Accepted=false"
   },
-  "updatedAt": "2026-10-20T09:19:51.781143+00:00",
+  "updatedAt": "2026-10-20T09:35:05.476473+00:00",
   "applicationUpdate": {
     "taskId": "M5.4",
     "change": "Clarify strict zero versus blank budget and offer explicit budget removal without automatic search or changing other fields",
