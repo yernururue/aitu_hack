@@ -1,3 +1,13 @@
+# UI redesign checkpoint — 20 October 2026
+
+User requested a substantial warm city-guide redesign, new actual-AI MP4, README and ordinary main push. Submission already sent by user; never resubmit. R1 acceptance and screenshot-grounded audit are in [ui-redesign-plan.md](ui-redesign-plan.md); current statuses in tracker. Managed city-guide-redesign checkout starts at main500274a; original public live-p0 buildP3a/origin56483 and tunnel39251 are preserved. Root is sole tracker writer; UI and runtime/media have disjoint ownership; separate reviewer follows.
+
+R1.1 accepted: existing1440x900/390x844 browser captures inspected, form/chip/card overload documented. User reiterated removing white/violet; actual Cereal City Guides and Modern House Journal references inspected, no copied code/assets. R1.2 accepted: warm paper/ink/olive/terra, systemGeorgia, query-first layout, visible complete condition summary and compact route-led cards; secondary conditions/profile/history/activity/maps are native disclosures. Lint/types0; full1055unit then affected4attribution; full70e2ePASS after360px explicit-search regression/fix. Root final productionbuild0Q_YvkiNJccG06egYrHAx/NFT6traces1569entries/index required/harness/diff0; known-key scan268files/177ZIP/35.7MB0findings. Root360productiononeactualstubPOST:3cards/resultsfocused/inviewport/nooverflow. R1.3 accepted: independent UI SPEC/QUALITY PASS,360px explicit-submit visibility issue resolved; no open UI findings. Runtime helper code independently passed; runbook retry wording correction only. R1.4 in progress: exactly one new real browser submission/video after source pin, no paid call yet. R1.2a accepted with root rerun18:38UTC:298realPOI/591excerpts/index298x1536 exact hashes; canonicalv6 healthy39entries/unknown0/reserved0/uncertainfalse, availableprep$0.561863988/demo$4, caps unchanged. Original media/collector snapshots preserved. Full model qualification remains incomplete.
+
+---
+
+## Historical checkpoint before this redesign
+
 # Состояние проекта
 
 ## Текущий emergency checkpoint: 20.10, 23:16 Asia/Almaty

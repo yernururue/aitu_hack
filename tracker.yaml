@@ -41,7 +41,7 @@ handoff:
       - "scripts/collect_astana.py"
       - "scripts/test_astana_data.py"
     notes: "M1.3 independently accepted298realPOI/591excerpts and reviewed36demo slice. Original collector code/snapshots preserved separately, no paid recollection. Collection C6 remains owned by collector integrator; publication rights not established."
-next_task_id: "M4.3"
+next_task_id: "R1.4"
 workflow:
   tracker_writer: "Single main integrator updates tracker after every finished task"
   completion_rule: "Mark done only after acceptance verification; record exact commands, exit codes and limitations here and in docs/progress.md"
@@ -863,6 +863,58 @@ stages:
           - "CurrentpublicIAB read-only1280x720: freeformhintvisible/stublabelabsent/nohorizontaloverflow,0recommendationPOST. Publiccutoverproof observed18:16:03UTC, sameDONATElivefe4/P3a."
           - "IndependentCompatREADME/MP4preparationsnapshotPASS14checks/freshffprobe/18links0missing/faststartatoms/2PNG+midlastframesvisual/original3hashespreserved, reportSHA7d5c64209e49b5aa4292c056fab12b596e92b04c7498bda43f603200613bd5e8. RootownsONLYpostsmokeLIVE_STATUS replacement thenpublication; no prematureliveclaim. MP4actual110s1.79MiBH264noaudio accepted, sourceWEBMpreserved."
           - "DataauthorREADMEandNEW MP4+2acceptedPNG copies ready16checks/18links/harness/diffPASS. MP4110s/1440x90025fps/H264yuv420p/audio0/faststart/full decode0/1,872,211B/SHA4fbcecceb6c48e251f6991f89bf78bfa13304d912284e48864b1f9e783820469; originalWEBM/PPTXunchanged. READMEoneLIVE_PENDINGstatusblock untilactualsmokes; historicalSTUBscreenshotslabelled. IndepCompatreviewqueued."
+
+  - id: "R1"
+    title: "City guide redesign, real AI browser demo and main publication"
+    status: "in_progress"
+    owner: "root_integrator"
+    tasks:
+      - id: "R1.1"
+        title: "Capture existing desktop/mobile flow and define redesign acceptance"
+        status: "done"
+        owner: "root_integrator"
+        depends_on: ["M7.10"]
+        acceptance: "Current real UI captured at 1440 and 390; screenshot-grounded audit and concrete typography/layout/UX acceptance recorded; working live origin/build preserved."
+        evidence:
+          - "Root read AGENTS/tracker/handoff/progress/harness; IAB current live screen plus fresh CLI1440x900/390x844 captures visually inspected, docs/ui-redesign-plan.md acceptance saved. Live origin56483 checkout live-p0 and build preserved; isolated managed city-guide-redesign checkout created from main500274a. No recommendation POST/paid calls."
+      - id: "R1.2"
+        title: "Implement coherent responsive city guide and test changed interactions"
+        status: "done"
+        owner: "ui_executor"
+        depends_on: ["R1.1"]
+        acceptance: "Warm paper/ink/olive/terracotta, licensed Cyrillic serif, one main query path, collapsed secondary controls with visible condition summary; compact results with explanation/distance/visit estimate/route; accessible focus, labels and 360px layout; unchanged API/data invariants."
+        evidence:
+          - "Root reviewed actualUI diff+executorreport, desktop1440/mobile360+390 visuals: fullwarmstylesheet/Georgia/queryfirst/nativefilters/profile/history/activity/mapsdisclosures/compactcards. No API/backend/data/dependencychange. Executor lint/typecheck0/full1055unit beforelastmarkup+affected4attribution after; original68e2e then RED360explicitsearchoffscreen regression ->fix ->full70e2ePASS32.5s. Root rebuiltfinalproduction0Q_YvkiNJccG06egYrHAx exit0, actual360stubonePOST3cards/focusedresults/inviewport/scrollWidth360; rootfixedwhitespacecheck0. Independentoriginalscope no new findings; finalvisualreview R1.3 pending."
+      - id: "R1.2a"
+        title: "Verify existing live data, canonical budget and rollback readiness"
+        status: "done"
+        owner: "runtime_media_executor"
+        depends_on: ["R1.1"]
+        acceptance: "Read-only schema/index check proves298realPOI/591excerpts/298x1536; healthy same canonical ledger and unchanged caps; old public/runtime/media/collector preserved. No paid calls."
+        evidence:
+          - "Root reran python3 /tmp/aituhack-redesign-runtime/preflight.py exit0 at18:38UTC: threecheckout catalog/index validations PASS/exactc72d+568c/4677dataset; canonicalv6/39entries/uncertainfalse/unknown0/reserved0/availableprep.561863988/demo4, caps2/1.5/4. Oldlocal/public200, origin56483/tunnel39251/buildP3a unchanged;15preservedmedia/collector hashes. No keyread/providerPOST. Launcher remains inert pending independent UI/build acceptance."
+      - id: "R1.3"
+        title: "Independent review and integrated offline/browser acceptance"
+        status: "done"
+        owner: "independent_reviewer"
+        depends_on: ["R1.2"]
+        acceptance: "lint/typecheck/unit/build/NFT pass; desktop/mobile main flow, filters, strict empty budget result, sources, maps, focus and no overflow verified; independent spec/quality review passes."
+        evidence:
+          - "Independent reviewer /tmp/aituhack-redesign-ui-review.md SPEC/QUALITY PASS, root360productionPNG inspected; explicitsearchP2 resolved, noremainingUIfindings. HelpercodeSPEC/QUALITYPASS (P3runbookretrywording correction only). Root finalbuild0Q_YvkiNJccG06egYrHAx exit0, strictNFT6/1569requiredcatalog+index/privateexcludedPASS, harness/diff/YAML0, knownkeyscan268files177ZIP35.7MBfindings0; mainroute/filter/zeroresult/source/maps/focus/nooverflow covered70offlinee2e+root360prod3cards. Oldpublicruntime/buildstillpreserved. No newpaidcalls/evals."
+      - id: "R1.4"
+        title: "Record one real AI browser scenario and verify new MP4"
+        status: "in_progress"
+        owner: "runtime_media_executor"
+        depends_on: ["R1.3"]
+        acceptance: "Canonical guard healthy before one real query through browser; no mocked provider/response; video shows query/result/explanation/sources/map navigation; new H264/yuv420p/faststart MP4 decodes and plays, previous video preserved; new unknown stops paid."
+        evidence: []
+      - id: "R1.5"
+        title: "Publish verified replacement and current README/media to main"
+        status: "todo"
+        owner: "root_integrator"
+        depends_on: ["R1.4"]
+        acceptance: "Public replacement checked while rollback preserved; known-key scan source/build/outgoing commits clean; README current screenshots/MP4/demo and honest limits; handoff/tracker synced, independent final review; ordinary push main and remote commit verified. No resubmission."
+        evidence: []
 
 # Data collector section. Updated only by this chat's main collector integrator.
 # This does not mark application ingestion task M1.3 as complete.

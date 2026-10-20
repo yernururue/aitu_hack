@@ -1,3 +1,4 @@
+import { openConditions, openProfile } from "./disclosure-helpers";
 import { createHash } from "node:crypto";
 import { expect, test, type Page, type Response } from "@playwright/test";
 import rawCatalog from "../../data/catalog/places.json" with { type: "json" };
@@ -56,6 +57,7 @@ test("runtime mode and exact phrase choices disclose the stub limitations", asyn
 test("actual park phrase shows grounded real cards, warnings and the catalogue snapshot", async ({ page }, info) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Хочу погулять", exact: true }).click();
+  await openConditions(page);
   await page.getByLabel("5 км", { exact: true }).check();
   const { result, http } = await submit(page);
   expect(result.status).toBe("degraded");
@@ -69,6 +71,7 @@ test("actual park phrase shows grounded real cards, warnings and the catalogue s
   await expect(page.getByText(datasetHash, { exact: true })).toBeVisible();
   for (const warning of result.warnings) await expect(page.getByLabel("Ограничения данных").getByText(warning, { exact: true })).toBeVisible();
   await expect(page.getByRole("article").first().getByText("Цена не подтверждена", { exact: true })).toBeVisible();
+  await page.getByRole("article").first().locator(".idea-disclosure > summary").click();
   await expect(page.getByRole("article").first().getByText("Идея занятия", { exact: true })).toBeVisible();
   await assertNoOverflow(page);
   await page.getByRole("heading", { name: "Куда сегодня?" }).click();
@@ -77,7 +80,9 @@ test("actual park phrase shows grounded real cards, warnings and the catalogue s
 
 test("actual category-only request works without claiming general text parsing", async ({ page }) => {
   await page.goto("/");
+  await openConditions(page);
   await page.getByLabel("Парки", { exact: true }).check();
+  await openConditions(page);
   await page.getByLabel("5 км", { exact: true }).check();
   const { result, http } = await submit(page);
   expect(result.status).toBe("degraded");
@@ -89,6 +94,7 @@ test("actual category-only request works without claiming general text parsing",
 test("actual mandatory outlet request returns no places rather than unknown amenities", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Кафе с розеткой", exact: true }).click();
+  await openConditions(page);
   await page.getByLabel("5 км", { exact: true }).check();
   const { result } = await submit(page);
   expect(result.status).toBe("no_results");
@@ -103,8 +109,11 @@ test("actual mandatory outlet request returns no places rather than unknown amen
 
 test("actual per-person budget rejects the catalogue's unknown prices", async ({ page }) => {
   await page.goto("/");
+  await openConditions(page);
   await page.getByLabel("Кафе", { exact: true }).check();
+  await openConditions(page);
   await page.getByLabel("5 км", { exact: true }).check();
+  await openConditions(page);
   await page.getByLabel("Бюджет на человека, ₸").fill("2500");
   const { result } = await submit(page);
   expect(catalog.places.every((poi) => poi.price === null)).toBe(true);
@@ -122,10 +131,14 @@ test("zero budget stays strict and explicit budget recovery preserves the reques
   page.on("request", (request) => {
     if (new URL(request.url()).pathname === "/api/recommend" && request.method() === "POST") requests.push(request.postDataJSON());
   });
+  await openConditions(page);
   await page.getByRole("button", { name: "EXPO", exact: true }).click();
   await page.getByRole("button", { name: "Хочу погулять", exact: true }).click();
+  await openConditions(page);
   await page.getByLabel("Парки", { exact: true }).check();
+  await openConditions(page);
   await page.getByLabel("5 км", { exact: true }).check();
+  await openConditions(page);
   await page.getByLabel("60 минут", { exact: true }).check();
   const budget = page.getByLabel("Бюджет на человека, ₸");
   await budget.fill("0");
@@ -158,7 +171,9 @@ test("zero budget stays strict and explicit budget recovery preserves the reques
   await expect(page.getByLabel("Один / одна", { exact: true })).toBeChecked();
   await expect(page.getByLabel("По расписанию открыто сейчас", { exact: true })).not.toBeChecked();
   await expect(page.getByLabel("Демо-профиль", { exact: true })).toHaveValue("");
+  await openProfile(page);
   await expect(page.getByText("Сохранено: 0", { exact: true })).toBeVisible();
+  await openProfile(page);
   await expect(page.getByText("Скрыто: 0", { exact: true })).toBeVisible();
   await expect(page.getByRole("article")).toHaveCount(0);
   expect(requests).toHaveLength(1);
@@ -188,6 +203,7 @@ test("actual unknown suffix requires clarification and retains the whole request
 
 test("actual text conflict keeps the explicitly selected category", async ({ page }) => {
   await page.goto("/");
+  await openConditions(page);
   await page.getByLabel("Боулинг", { exact: true }).check();
   await page.getByRole("button", { name: "Кофе рядом", exact: true }).click();
   const { result } = await submit(page);
@@ -202,6 +218,7 @@ for (const [phrase, category] of [["Кофе рядом", "cafe"], ["Музей 
   test(`actual exact phrase ${phrase} uses real server time and grounded category`, async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: phrase, exact: true }).click();
+  await openConditions(page);
     await page.getByLabel("5 км", { exact: true }).check();
     const { result } = await submit(page);
     expect(["degraded", "no_results"]).toContain(result.status);

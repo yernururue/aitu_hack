@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight, Clock3, MapPin, Search, ShieldCheck, SlidersHorizontal } from "lucide-react";
+import { ArrowUpRight, MapPin, Search, ShieldCheck } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { SearchForm, CATEGORY_LABELS, type SearchMode } from "@/components/search-form";
@@ -27,6 +27,7 @@ export function SearchExperience({ dataset, aiMode }: { dataset: DatasetInfo; ai
   const [state, setState] = useState<SearchState>({ status: "idle" });
   const [submitted, setSubmitted] = useState<{ request: RecommendRequest; locationLabel: string } | null>(null);
   const sequence = useRef(0);
+  const [revealSequence, setRevealSequence] = useState<number | null>(null);
   const controller = useRef<AbortController | null>(null);
   const response = state.status === "response" ? state.response : null;
   const contextFilters = response?.usedContext.filters ?? submitted?.request.filters;
@@ -45,7 +46,16 @@ export function SearchExperience({ dataset, aiMode }: { dataset: DatasetInfo; ai
 
   useEffect(() => () => { sequence.current++; controller.current?.abort(); }, []);
 
-  async function search(request: RecommendRequest, locationLabel: string) {
+  useEffect(() => {
+    // Only an explicit search moves the reader to the results. Preference
+    // refreshes keep their control's focus and the current reading position.
+    if (revealSequence === null || revealSequence !== sequence.current) return;
+    const heading = resultsHeading.current;
+    heading?.focus({ preventScroll: true });
+    heading?.scrollIntoView({ block: "start", behavior: "instant" });
+  }, [revealSequence]);
+
+  async function search(request: RecommendRequest, locationLabel: string, revealResults = false) {
     const currentSequence = ++sequence.current;
     controller.current?.abort();
     const nextController = new AbortController();
@@ -53,6 +63,7 @@ export function SearchExperience({ dataset, aiMode }: { dataset: DatasetInfo; ai
     setSelected(null);
     setSubmitted({ request, locationLabel });
     setState({ status: "loading" });
+    if (revealResults) setRevealSequence(currentSequence);
     try {
       const result = await fetch("/api/recommend", {
         method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(request), signal: nextController.signal,
@@ -89,34 +100,32 @@ export function SearchExperience({ dataset, aiMode }: { dataset: DatasetInfo; ai
     <div className="app-shell">
       <a className="skip-link" href="#search-query">Перейти к поиску</a>
       <header className="site-header">
-        <Link className="brand" href="/" aria-label="Куда в Астане — на главную"><span className="brand-symbol" aria-hidden="true"><i /><i /><i /></span><span>Куда в Астане<span className="brand-caption">Места для вашего времени</span></span></Link>
+        <Link className="brand" href="/" aria-label="Куда в Астане — на главную"><MapPin className="brand-symbol" aria-hidden="true" /><span>Куда в Астане<span className="brand-caption">Места для вашего времени</span></span></Link>
         <div className="city-label"><span className="city-dot" />Астана<span className="city-country">, Казахстан</span></div>
       </header>
       <main className="workspace">
-        <aside className="search-sidebar" aria-label="Условия поиска"><SearchForm preferences={preferences} profileControls={<ProfileSwitcher preferences={preferences} ready={preferencesReady} onChange={(profileId) => applyPreferences({ ...preferences, profileId }, "Демо-профиль изменён.")} onReset={resetHistory} />} aiMode={aiMode} synthetic={synthetic} onSearch={search} loading={state.status === "loading"} /></aside>
-        <section className="results-area" aria-labelledby="page-title">
-          <div className="results-intro"><span className="eyebrow">Рядом есть куда</span><h1 id="page-title">Куда сегодня<span>?</span></h1><p>На кофе, на прогулку или за новым впечатлением.<br className="desktop-break" /> Найдите место под ваше время и настроение.</p></div>
+        <section className="results-intro" aria-labelledby="page-title"><div><span className="eyebrow">Городской проводник · Астана</span><h1 id="page-title">Куда сегодня<span>?</span></h1><p>Немного времени. Целый город возможностей.<br />Найдём место под ваше настроение.</p></div><div className="field-guide-note"><ArrowUpRight className="guide-symbol" aria-hidden="true" /><p>От желания —<br />к месту в городе.</p><span>Кофе / прогулки / впечатления</span></div></section>
+        <section className="search-sidebar" aria-label="Условия поиска"><SearchForm preferences={preferences} profileControls={<ProfileSwitcher preferences={preferences} ready={preferencesReady} onChange={(profileId) => applyPreferences({ ...preferences, profileId }, "Демо-профиль изменён.")} onReset={resetHistory} />} aiMode={aiMode} synthetic={synthetic} onSearch={(request, locationLabel) => search(request, locationLabel, true)} loading={state.status === "loading"} /></section>
+        <section className="results-area" aria-label="Результаты поиска">
           {synthetic && <p className="synthetic-warning" role="note">Синтетические тестовые данные — не реальные места</p>}
           {historyMessage && <p className="history-message" role="status">{historyMessage}</p>}
-          <div className="results-toolbar"><h2 ref={resultsHeading} tabIndex={-1}><SlidersHorizontal aria-hidden="true" />Ваши варианты</h2><span>{response ? `${response.recommendations.length} из 3` : "До 3 мест"}</span></div>
+          <div className="results-toolbar"><h2 ref={resultsHeading} tabIndex={-1} aria-describedby="search-result-status">Ваши варианты</h2><span>{response ? `${response.recommendations.length} из 3` : "До 3 мест"}</span></div>
           {submitted && contextFilters && <div className="search-context" aria-label="Что учтено">
             <span className="context-title">{response ? "Что учтено" : "Условия запроса"}</span>
             <span><MapPin aria-hidden="true" />{response?.usedContext.locationLabel ?? submitted.locationLabel}</span>
-            <span>{contextFilters.radiusM / 1000} км</span><span>Посещение до {contextFilters.durationMinutes} мин</span>
+            <span>{contextFilters.radiusM / 1000} км по прямой</span><span>Посещение до {contextFilters.durationMinutes} мин</span>
             <span>{companyLabels[contextFilters.company]}</span>
             {submitted.request.query && <span className="context-query">«{submitted.request.query}»</span>}
-            {contextFilters.categories.map((category) => <span key={category}>{CATEGORY_LABELS[category]}</span>)}
-            {contextFilters.maxSpendKzt !== null && <span>До {contextFilters.maxSpendKzt.toLocaleString("ru-RU")} ₸ / чел.</span>}
-            {contextFilters.openNow && <span>По расписанию открыто</span>}
+            {contextFilters.categories.length ? contextFilters.categories.map((category) => <span key={category}>{CATEGORY_LABELS[category]}</span>) : <span>Все категории</span>}
+            {contextFilters.maxSpendKzt !== null ? <span>До {contextFilters.maxSpendKzt.toLocaleString("ru-RU")} ₸ / чел. · неизвестные цены исключены</span> : <span>Бюджет без ограничения</span>}
+            <span>{contextFilters.openNow ? "По расписанию открыто · неизвестные часы исключены" : "Неизвестные часы допустимы"}</span>
             {response?.usedContext.filters.requiredFacts.map((fact) => <span key={fact}>Требуется: {{ quiet: "подтверждённая тишина", outlets: "розетки", wifi: "Wi-Fi", childFriendly: "подходит детям", indoor: "в помещении" }[fact]}</span>)}
             <span>{contextIsDemo ? `Демо-профиль: ${contextProfileId ? profileLabels[contextProfileId] : "демонстрационная история"}` : "Без демо-профиля"}</span>
           </div>}
-          <div className="result-announcement" aria-live="polite" aria-atomic="true"><h3 className={response?.recommendations.length ? "result-heading" : "sr-only"}>{title}</h3></div>
+          <div className="result-announcement" aria-live="polite" aria-atomic="true"><h3 id="search-result-status" className={response?.recommendations.length ? "result-heading" : "sr-only"}>{title}</h3></div>
           {(!response || response.recommendations.length === 0) && <Card className={`empty-canvas ${state.status === "loading" ? "is-loading" : ""}`} aria-busy={state.status === "loading"}>
-            <div className="city-route" aria-hidden="true"><span className="route-stop stop-first"><i /><span>желание</span></span><span className="route-line line-first" /><span className="route-stop stop-middle"><i /><MapPin /></span><span className="route-line line-last" /><span className="route-stop stop-last"><i /><span>ваше место</span></span></div>
-            <div className="empty-copy"><h3 aria-hidden="true">{title}</h3><p>{state.status === "idle" ? "Расскажите, чего хочется, и выберите точку старта. Найдём подходящие места в каталоге." : state.status === "loading" ? "Проверяем ваш запрос и выбранные условия. Это может занять немного времени." : state.status === "error" ? "Не удалось получить проверенный ответ. Попробуйте ещё раз — ваши условия остались в форме." : response?.message}</p>{response?.status === "no_results" && <p className="empty-next-step">{response.usedContext.filters.maxSpendKzt !== null ? <>При заданном бюджете места с неизвестной ценой исключаются. Измените бюджет или уберите ограничение и повторите поиск. <a href="#search-budget" onClick={(event) => { event.preventDefault(); document.getElementById("search-budget")?.focus(); }}>Изменить бюджет</a></> : <>Попробуйте увеличить радиус или изменить категорию. Условия не будут изменены автоматически.</>}</p>}</div>
-            {state.status === "idle" && <div className="empty-caption"><span><MapPin aria-hidden="true" />Точка старта — на ваш выбор</span><span><Clock3 aria-hidden="true" />Время на дорогу — отдельно</span></div>}
-            {state.status === "error" && submitted && <Button variant="outline" onClick={() => search(submitted.request, submitted.locationLabel)}>Повторить поиск<ArrowUpRight aria-hidden="true" /></Button>}
+            <div className="empty-copy"><h3 aria-hidden="true">{title}</h3><p>{state.status === "idle" ? "Расскажите, чего хочется, и выберите точку старта. Найдём подходящие места в каталоге." : state.status === "loading" ? "Проверяем ваш запрос и выбранные условия. Это может занять немного времени." : state.status === "error" ? "Не удалось получить проверенный ответ. Попробуйте ещё раз — ваши условия остались в форме." : response?.message}</p>{response?.status === "no_results" && <p className="empty-next-step">{response.usedContext.filters.maxSpendKzt !== null ? <>При заданном бюджете места с неизвестной ценой исключаются. Измените бюджет или уберите ограничение и повторите поиск. <a href="#search-budget" onClick={(event) => { event.preventDefault(); const details = document.getElementById("search-conditions") as HTMLDetailsElement | null; if (details) details.open = true; document.getElementById("search-budget")?.focus(); }}>Изменить бюджет</a></> : <>Попробуйте увеличить радиус или изменить категорию. Условия не будут изменены автоматически.</>}</p>}</div>
+            {state.status === "error" && submitted && <Button variant="outline" onClick={() => search(submitted.request, submitted.locationLabel, true)}>Повторить поиск<ArrowUpRight aria-hidden="true" /></Button>}
           </Card>}
           {response && response.recommendations.length > 0 && <div className="recommendation-list">
             <p className={response.status === "degraded" ? "degraded-notice" : "response-message"}>{response.message}</p>

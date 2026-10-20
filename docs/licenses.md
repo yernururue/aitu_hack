@@ -472,3 +472,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+## Interface fonts
+
+The city-guide redesign uses the browser/system Georgia serif stack for Cyrillic headings and the platform system sans-serif stack for body text. No font files are downloaded, copied, bundled or redistributed. Georgia is referenced by family name and falls back to the local serif font.

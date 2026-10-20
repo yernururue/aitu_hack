@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, type FormEvent, type ReactNode } from "react";
-import { ArrowUpRight, Coffee, Footprints, LocateFixed, MapPin, Search, Utensils, Users, Landmark, Sparkles, CircleDot } from "lucide-react";
+import { ArrowUpRight, Coffee, Footprints, LocateFixed, MapPin, Search, Utensils, Users, Landmark, Sparkles, CircleDot, SlidersHorizontal, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -11,10 +11,8 @@ import {
 import type { DemoPreferences } from "@/lib/preferences";
 import type { Poi } from "@/lib/contracts/poi";
 
-export const CATEGORY_LABELS: Record<Poi["category"], string> = {
-  cafe: "Кафе", restaurant: "Рестораны", park: "Парки", museum: "Музеи",
-  bowling: "Боулинг", entertainment: "Развлечения", other: "Другое",
-};
+import { SearchSummary, CATEGORY_LABELS } from "@/components/search-summary";
+export { CATEGORY_LABELS } from "@/components/search-summary";
 const CATEGORIES: { value: Poi["category"]; icon: ReactNode }[] = [
   { value: "cafe", icon: <Coffee /> }, { value: "restaurant", icon: <Utensils /> },
   { value: "park", icon: <Footprints /> }, { value: "museum", icon: <Landmark /> },
@@ -41,6 +39,8 @@ export function SearchForm({ onSearch, loading, aiMode, synthetic, preferences, 
   const [filters, setFilters] = useState(createDefaultFilters);
   const [explicit, setExplicit] = useState<Set<keyof Filters>>(() => new Set());
   const [budget, setBudget] = useState("");
+  const [budgetInvalid, setBudgetInvalid] = useState(false);
+  const conditionsRef = useRef<HTMLDetailsElement>(null);
   const [location, setLocation] = useState<RecommendRequest["location"]>({ lat: PRESETS[0].lat, lon: PRESETS[0].lon, source: "preset" });
   const [locationLabel, setLocationLabel] = useState<string>(PRESETS[0].label);
   const [geoMessage, setGeoMessage] = useState("");
@@ -103,6 +103,7 @@ export function SearchForm({ onSearch, loading, aiMode, synthetic, preferences, 
     const maxSpendKzt = budget.trim() ? Number(budget) : null;
     if (budgetRef.current?.validity.badInput || (maxSpendKzt !== null && (!Number.isFinite(maxSpendKzt) || maxSpendKzt < 0))) {
       setErrorField("budget");
+      if (conditionsRef.current) conditionsRef.current.open = true;
       budgetRef.current?.focus();
       setError("Укажите бюджет на человека: 0 ₸ или больше. Либо оставьте поле пустым.");
       return;
@@ -124,25 +125,30 @@ export function SearchForm({ onSearch, loading, aiMode, synthetic, preferences, 
 
   return (
     <form className="search-form" onSubmit={submit} noValidate aria-label="Поиск мест">
-      <div className="form-heading"><span className="eyebrow">Ваш план</span><span className="form-heading-note">На сегодня</span></div>
       <div className="form-section query-section">
         <label className="field-label" htmlFor="search-query">Чем хочется заняться?</label>
-        {aiMode !== "live" && <div className="search-mode-notice" role="note" aria-label="Режим текстового поиска">
-          <strong>{aiMode === "stub" ? "Демо-разбор текста" : "ИИ-разбор отключён"}</strong>
-          <p>{aiMode === "stub" ? "Распознаём только пять готовых фраз ниже. ИИ-объяснения недоступны." : "Выберите категории и фильтры без текста. Для текстового запроса потребуется уточнение; ИИ-объяснения недоступны."}</p>
-          <span>{synthetic ? "Места из синтетического тестового каталога." : "Места из реального каталога; данные могут быть неполными."}</span>
-        </div>}
-        <textarea
+        <div className="query-entry"><textarea
           ref={queryRef} id="search-query" name="query" rows={3} maxLength={1000}
           placeholder={aiMode === "stub" ? "Например, «Хочу погулять»" : aiMode === "disabled" ? "Выберите категорию ниже, оставив текст пустым" : "Например, выпить кофе в тихом месте или прогуляться у воды"}
           value={query} onChange={(event) => { setQuery(event.target.value); setError(""); }}
           aria-describedby={error && errorField === "query" ? "search-validation-error" : "query-hint"} aria-invalid={Boolean(error) && errorField === "query"}
         />
+        <Button type="submit" className="search-submit" size="lg" aria-label="Найти места" aria-busy={loading}><Search aria-hidden="true" />{loading ? "Ищем…" : "Найти места"}<ArrowUpRight aria-hidden="true" /></Button></div>
+        {error && <p id="search-validation-error" role="alert" className="validation-error">{error}</p>}
         <p id="query-hint" className="field-hint">{aiMode === "stub" ? "Готовую фразу можно сочетать с фильтрами. При конфликте попросим уточнение." : aiMode === "disabled" ? "Категории работают без ИИ. Фильтры сохранят выбранные ограничения." : "Напишите желание или выберите категорию. Можно вместе."}</p>
         {aiMode === "stub" && <div className="demo-phrase-options" aria-label="Готовые фразы демо-разбора">
           <span className="demo-phrase-label">Попробуйте точную фразу</span>
           {DEMO_PHRASES.map((phrase) => <Button key={phrase} variant="ghost" className="demo-phrase-button" onClick={() => { setQuery(phrase); setError(""); queryRef.current?.focus(); }}>{phrase}</Button>)}
         </div>}
+      </div>
+      <SearchSummary filters={filters} locationLabel={locationLabel} profileId={preferences.profileId} savedCount={preferences.savedIds.length} dismissedCount={preferences.dismissedIds.length} budgetInvalid={budgetInvalid} label="Текущие условия поиска" />
+        {aiMode !== "live" && <div className="search-mode-notice" role="note" aria-label="Режим текстового поиска">
+          <strong>{aiMode === "stub" ? "Демо-разбор текста" : "ИИ-разбор отключён"}</strong>
+          <p>{aiMode === "stub" ? "Распознаём только пять готовых фраз выше. ИИ-объяснения недоступны." : "Выберите категории и фильтры без текста. Для текстового запроса потребуется уточнение; ИИ-объяснения недоступны."}</p>
+          <span>{synthetic ? "Места из синтетического тестового каталога." : "Места из реального каталога; данные могут быть неполными."}</span>
+        </div>}
+      <div className="form-disclosures">
+      <details id="search-conditions" className="conditions-disclosure" ref={conditionsRef}><summary><SlidersHorizontal aria-hidden="true" />Условия поиска<ChevronDown aria-hidden="true" /></summary><div className="conditions-content">
         <fieldset className="categories-fieldset">
           <legend className="sr-only">Категории мест</legend>
           <div className="category-options">
@@ -154,9 +160,8 @@ export function SearchForm({ onSearch, loading, aiMode, synthetic, preferences, 
             ))}
           </div>
         </fieldset>
-      </div>
 
-      <div className="form-section">
+      <div className="form-section location-section">
         <div className="field-title-row"><span className="field-label"><MapPin aria-hidden="true" />Откуда начнём?</span><span className="location-selection">{locationLabel}</span></div>
         <Button className="location-button" variant="outline" onClick={locate} disabled={locating} aria-label="Определить моё местоположение">
           <LocateFixed aria-hidden="true" />{locating ? "Определяем…" : "Моё местоположение"}<ArrowUpRight aria-hidden="true" className="location-arrow" />
@@ -190,18 +195,16 @@ export function SearchForm({ onSearch, loading, aiMode, synthetic, preferences, 
         </fieldset>
         <div>
           <label className="field-label" htmlFor="search-budget">Бюджет на человека, ₸<span className="optional-label">необязательно</span></label>
-          <Input ref={budgetRef} id="search-budget" name="budget" type="number" min="0" step="any" inputMode="decimal" placeholder="Без ограничения" value={budget} onChange={(event) => { setBudget(event.target.value); updateFilter("maxSpendKzt", event.target.value === "" ? null : Number(event.target.value)); }} aria-describedby={error && errorField === "budget" ? "search-validation-error budget-hint" : "budget-hint"} aria-invalid={Boolean(error) && errorField === "budget"} />
+          <Input ref={budgetRef} id="search-budget" name="budget" type="number" min="0" step="any" inputMode="decimal" placeholder="Без ограничения" value={budget} onChange={(event) => { setBudget(event.target.value); setBudgetInvalid(event.target.validity.badInput || (event.target.value !== "" && Number(event.target.value) < 0)); updateFilter("maxSpendKzt", event.target.value === "" ? null : Number(event.target.value)); }} aria-describedby={error && errorField === "budget" ? "search-validation-error budget-hint" : "budget-hint"} aria-invalid={Boolean(error) && errorField === "budget"} />
           <p className="field-hint" id="budget-hint">0 ₸ — только подтверждённо бесплатные места. Пустое поле — без ограничения бюджета. При заданном бюджете нужна известная цена.</p>
-          {budget !== "" && <Button type="button" variant="ghost" className="budget-clear" onClick={() => { setBudget(""); updateFilter("maxSpendKzt", null); budgetRef.current?.focus(); }}>Убрать ограничение бюджета</Button>}
+          {budget !== "" && <Button type="button" variant="ghost" className="budget-clear" onClick={() => { setBudget(""); setBudgetInvalid(false); updateFilter("maxSpendKzt", null); budgetRef.current?.focus(); }}>Убрать ограничение бюджета</Button>}
         </div>
         <label className="open-checkbox"><input type="checkbox" checked={filters.openNow} onChange={(event) => updateFilter("openNow", event.target.checked)} /><span>По расписанию открыто сейчас</span></label>
       </div>
+      </div></details>
       {profileControls}
-      <div className="form-action">
-        {error && <p id="search-validation-error" role="alert" className="validation-error">{error}</p>}
-        <Button type="submit" className="search-submit" size="lg"><Search aria-hidden="true" />Найти места<ArrowUpRight aria-hidden="true" /></Button>
-        <p className="submit-hint">До трёх вариантов под ваши условия{loading ? " · Поиск выполняется" : ""}</p>
       </div>
+      <p className="submit-hint">До трёх мест под ваши условия. Время на дорогу — отдельно.{loading ? " Поиск выполняется." : ""}</p>
     </form>
   );
 }

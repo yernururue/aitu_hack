@@ -1,3 +1,4 @@
+import { openConditions } from "./disclosure-helpers";
 import { expect, test, type Page } from "@playwright/test";
 import fixture from "../../evals/fixtures/places.json" with { type: "json" };
 import { createDefaultFilters, RecommendRequestSchema } from "../../src/lib/contracts/request";
@@ -52,12 +53,19 @@ test("text and categories submit together with exact explicit user filters", asy
   });
   await page.goto("/");
   await page.getByLabel("Чем хочется заняться?").fill("Хочу гулять у воды");
+  await openConditions(page);
   await page.getByLabel("Парки", { exact: true }).check();
+  await openConditions(page);
   await page.getByLabel("1 км", { exact: true }).check();
+  await openConditions(page);
   await page.getByLabel("30 минут", { exact: true }).check();
+  await openConditions(page);
   await page.getByLabel("С друзьями", { exact: true }).check();
+  await openConditions(page);
   await page.getByLabel("Бюджет на человека, ₸").fill("2500");
+  await openConditions(page);
   await page.getByLabel("По расписанию открыто сейчас").check();
+  await openConditions(page);
   await page.getByRole("button", { name: "Бәйтерек", exact: true }).click();
   await page.getByRole("button", { name: "Найти места" }).click();
   await expect(page.getByRole("heading", { name: "Мест по этим условиям нет" })).toBeVisible();
@@ -75,6 +83,7 @@ test("category-only search leaves untouched defaults implicit", async ({ page })
   let body: unknown;
   await page.route("**/api/recommend", async (route) => { body = route.request().postDataJSON(); await route.fulfill({ json: makeResponse() }); });
   await page.goto("/");
+  await openConditions(page);
   await page.getByLabel("Музеи", { exact: true }).check();
   await page.getByRole("button", { name: "Найти места" }).click();
   await expect(page.getByRole("heading", { name: "Мест по этим условиям нет" })).toBeVisible();
@@ -93,8 +102,10 @@ test("device location is opt-in and denial leaves manual presets available", asy
   });
   await page.goto("/");
   expect(await page.locator("html").getAttribute("data-location-requests")).toBeNull();
+  await openConditions(page);
   await page.getByRole("button", { name: "Определить моё местоположение" }).click();
   await expect(page.getByRole("status").filter({ hasText: "Доступ к геолокации закрыт" })).toBeVisible();
+  await openConditions(page);
   await page.getByRole("button", { name: "Набережная", exact: true }).click();
   await expect(page.getByRole("button", { name: "Набережная", exact: true })).toHaveAttribute("aria-pressed", "true");
   await assertNoOverflow(page);
@@ -133,12 +144,14 @@ test("degraded real response data is labelled and synthetic places stay watermar
     }],
   } }));
   await page.goto("/");
+  await openConditions(page);
   await page.getByLabel("Кафе", { exact: true }).check();
   await page.getByRole("button", { name: "Найти места" }).click();
   await expect(page.getByText("Показаны результаты поиска; объяснение AI временно недоступно")).toBeVisible();
   await expect(page.getByRole("heading", { name: poi.name })).toBeVisible();
   await expect(page.getByText("Синтетические тестовые данные — не реальные места", { exact: true })).toBeVisible();
   await expect(page.getByText("450 м по прямой", { exact: false })).toBeVisible();
+  await page.locator(".idea-disclosure > summary").first().click();
   await expect(page.getByText("Идея занятия", { exact: true })).toBeVisible();
   await assertNoOverflow(page);
 });
@@ -152,8 +165,10 @@ test("successful device location is sent only after explicit permission action",
   });
   await page.route("**/api/recommend", async (route) => { body = route.request().postDataJSON(); await route.fulfill({ json: makeResponse() }); });
   await page.goto("/");
+  await openConditions(page);
   await page.getByRole("button", { name: "Определить моё местоположение" }).click();
   await expect(page.getByRole("status").filter({ hasText: "Местоположение получено" })).toBeVisible();
+  await openConditions(page);
   await page.getByLabel("Парки", { exact: true }).check();
   await page.getByRole("button", { name: "Найти места" }).click();
   await expect(page.getByRole("heading", { name: "Мест по этим условиям нет" })).toBeVisible();
@@ -170,9 +185,12 @@ test("a late device callback cannot replace a manually chosen preset", async ({ 
   });
   await page.route("**/api/recommend", async (route) => { body = route.request().postDataJSON(); await route.fulfill({ json: makeResponse() }); });
   await page.goto("/");
+  await openConditions(page);
   await page.getByRole("button", { name: "Определить моё местоположение" }).click();
+  await openConditions(page);
   await page.getByRole("button", { name: "Набережная", exact: true }).click();
   await page.evaluate(() => window.dispatchEvent(new Event("test-location")));
+  await openConditions(page);
   await page.getByLabel("Парки", { exact: true }).check();
   await page.getByRole("button", { name: "Найти места" }).click();
   await expect(page.getByRole("heading", { name: "Мест по этим условиям нет" })).toBeVisible();
@@ -210,7 +228,9 @@ test("negative budget is rejected without silently removing the constraint", asy
   let requests = 0;
   await page.route("**/api/recommend", async (route) => { requests++; await route.fulfill({ json: makeResponse() }); });
   await page.goto("/");
+  await openConditions(page);
   await page.getByLabel("Кафе", { exact: true }).check();
+  await openConditions(page);
   await page.getByLabel("Бюджет на человека, ₸").fill("-1");
   await page.getByRole("button", { name: "Найти места" }).click();
   await expect(page.getByRole("alert").filter({ hasText: "Укажите бюджет" })).toBeVisible();
@@ -231,7 +251,9 @@ test("incomplete numeric budget is not treated as an empty optional field", asyn
   let requests = 0;
   await page.route("**/api/recommend", async (route) => { requests++; await route.fulfill({ json: makeResponse() }); });
   await page.goto("/");
+  await openConditions(page);
   await page.getByLabel("Кафе", { exact: true }).check();
+  await openConditions(page);
   await page.getByLabel("Бюджет на человека, ₸").pressSequentially("1e");
   await page.getByRole("button", { name: "Найти места" }).click();
   await expect(page.getByRole("alert").filter({ hasText: "Укажите бюджет" })).toBeVisible();

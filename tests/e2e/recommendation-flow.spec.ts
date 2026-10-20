@@ -1,3 +1,4 @@
+import { openConditions, openProfile } from "./disclosure-helpers";
 import { createHash } from "node:crypto";
 import { expect, test, type Page } from "@playwright/test";
 import fixture from "../../evals/fixtures/places.json" with { type: "json" };
@@ -11,6 +12,7 @@ test.beforeEach(async ({ context }, info) => {
 });
 async function parkSearch(page: Page) {
   await page.getByRole("button", { name: "Хочу погулять", exact: true }).click();
+  await openConditions(page);
   await page.getByLabel("5 км", { exact: true }).check();
   const pending = page.waitForResponse((r) => new URL(r.url()).pathname === "/api/recommend" && r.request().method() === "POST");
   await page.getByRole("button", { name: "Найти места" }).click();
@@ -49,6 +51,7 @@ test("actual selected place details keep identity, focus and destination-only ma
   if (!poi.address) await expect(dialog.getByText("Адрес не подтверждён", { exact: true })).toBeVisible();
   if (!poi.hours) await expect(dialog.getByText("Время работы не подтверждено", { exact: true })).toBeVisible();
   await expect(dialog.getByText("Цена не подтверждена", { exact: true })).toBeVisible();
+  await dialog.locator(".route-disclosure > summary").click();
   const google = dialog.getByRole("link", { name: "Google Maps", exact: true });
   expect(new URL((await google.getAttribute("href"))!).searchParams.get("destination")).toBe(`${poi.location.lat},${poi.location.lon}`);
   expect(new URL((await google.getAttribute("href"))!).searchParams.has("origin")).toBe(false);
@@ -72,14 +75,18 @@ test("actual selected place details keep identity, focus and destination-only ma
 test("actual profile, save, dismiss and reset persist only IDs and preserve current form", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByLabel("Демо-профиль", { exact: true })).toHaveValue("");
+  await openProfile(page);
   await page.getByLabel("Демо-профиль", { exact: true }).selectOption("student");
   const response = await parkSearch(page);
   expect(response.usedContext.profileId).toBe("student");
   await expect(page.getByLabel("Что учтено").getByText("Демо-профиль: Студент", { exact: true })).toBeVisible();
   const first = response.recommendations[0].poi;
   let pending = page.waitForRequest((r) => new URL(r.url()).pathname === "/api/recommend" && r.method() === "POST");
+  await page.getByRole("article", { name: first.name, exact: true }).locator(".idea-disclosure > summary").click();
   await page.getByRole("article", { name: first.name, exact: true }).getByRole("button", { name: `Сохранить ${first.name}`, exact: true }).click();
   expect((await pending).postDataJSON().savedIds).toContain(first.id);
+  const savedDisclosure = page.getByRole("article", { name: first.name, exact: true }).locator(".idea-disclosure");
+  if (await savedDisclosure.getAttribute("open") === null) await savedDisclosure.locator(":scope > summary").click();
   await expect(page.getByRole("button", { name: `Убрать из сохранённых ${first.name}`, exact: true })).toBeVisible();
   pending = page.waitForRequest((r) => new URL(r.url()).pathname === "/api/recommend" && r.method() === "POST");
   await page.getByRole("article", { name: first.name, exact: true }).getByRole("button", { name: `Не интересно: ${first.name}`, exact: true }).click();
@@ -91,10 +98,12 @@ test("actual profile, save, dismiss and reset persist only IDs and preserve curr
   expect(Object.keys(stored).sort()).toEqual(["dismissedIds", "profileId", "savedIds", "version"]);
   await page.reload();
   await expect(page.getByLabel("Демо-профиль", { exact: true })).toHaveValue("student");
-  await expect(page.getByText("Скрыто: 1", { exact: true })).toBeVisible();
+  await expect(page.getByLabel("Текущие условия поиска").getByText("Скрыто: 1", { exact: true })).toBeVisible();
   await page.getByLabel("Чем хочется заняться?").fill("Хочу погулять");
+  await openConditions(page);
   await page.getByLabel("1 км", { exact: true }).check();
   await page.evaluate(() => localStorage.setItem("another-app", "keep"));
+  await openProfile(page);
   await page.getByRole("button", { name: "Сбросить демо-историю", exact: true }).click();
   await expect(page.getByLabel("Демо-профиль", { exact: true })).toHaveValue("");
   await expect(page.getByLabel("Чем хочется заняться?")).toHaveValue("Хочу погулять");
@@ -132,6 +141,7 @@ test("a profile change aborts the old request and rejects its late response", as
   await page.getByRole("button", { name: "Хочу погулять", exact: true }).click();
   await page.getByRole("button", { name: "Найти места" }).click();
   await expect.poll(() => Boolean(release)).toBe(true);
+  await openProfile(page);
   await page.getByLabel("Демо-профиль", { exact: true }).selectOption("family");
   await expect(page.getByText("Ответ для нового профиля", { exact: true })).toBeVisible();
   release?.();
@@ -152,6 +162,7 @@ test("synthetic reviews are revealed as sourced opinions, at most two, and rende
     ...emptyResponse(), status: "degraded", recommendations: [{ poi, distanceM: 100, distanceKind: "straight_line", why: "Категория совпала.", activity: "Тестовая идея.", visitMinutes: { min: 20, max: 40, isEstimate: true }, evidenceIds: [poi.sources[0].id], navigation: { twoGis: null, googleMaps: "https://www.google.com/maps/dir/?api=1&destination=51.09,71.42" } }],
   } }));
   await page.goto("/");
+  await openConditions(page);
   await page.getByLabel("Кафе", { exact: true }).check();
   await page.getByRole("button", { name: "Найти места" }).click();
   await page.getByRole("button", { name: `Подробнее о ${poi.name}`, exact: true }).click();
@@ -197,6 +208,7 @@ test("blocked local storage leaves a usable in-memory profile and honest persist
     };
   }, key);
   await page.goto("/");
+  await openProfile(page);
   await page.getByLabel("Демо-профиль", { exact: true }).selectOption("tourist");
   await expect(page.getByRole("status").filter({ hasText: "Браузер не дал сохранить изменения" })).toBeVisible();
   const result = await parkSearch(page);
@@ -212,6 +224,7 @@ test("pending context keeps the selected demo profile while the new response is 
     await route.fulfill({ json: { ...result, usedContext: { ...result.usedContext, profileId: "student", isDemoProfile: true } } }).catch(() => undefined);
   });
   await page.goto("/");
+  await openProfile(page);
   await page.getByLabel("Демо-профиль", { exact: true }).selectOption("student");
   await page.getByRole("button", { name: "Хочу погулять", exact: true }).click();
   await page.getByRole("button", { name: "Найти места" }).click();
