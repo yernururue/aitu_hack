@@ -5,6 +5,7 @@ import { isAbsolute, resolve } from "node:path";
 export const HARD_CAPS = Object.freeze({ prep: 2, live_eval: 0.5, demo: 4 });
 export type BudgetCaps = Readonly<{ prep: number; live_eval: number; demo: number }>;
 export type Purpose = keyof BudgetCaps;
+export type RuntimePurpose = "prep" | "demo";
 
 export function validUsd(value: unknown): value is number {
   return typeof value === "number" && Number.isFinite(value) && value >= 0 && Number.isSafeInteger(Math.ceil(value * 1e9));
@@ -37,14 +38,22 @@ function flag(value: string | undefined): boolean {
   return value === "true";
 }
 
+function runtimePurpose(value: string | undefined): RuntimePurpose {
+  if (value === undefined) return "prep";
+  if (value !== "prep" && value !== "demo") throw new Error("INVALID_RUNTIME_PURPOSE");
+  return value;
+}
+
 export function readAiConfig(env: Record<string, string | undefined> = process.env) {
   if (Object.keys(env).some((key) => /^NEXT_PUBLIC_(?:OPENROUTER|LIVE_EVAL)/.test(key))) throw new Error("PUBLIC_AI_CONFIGURATION");
+  const purpose = runtimePurpose(env.OPENROUTER_RUNTIME_PURPOSE);
   const paidEnabled = flag(env.OPENROUTER_PAID_ENABLED);
   const ledgerPath = env.OPENROUTER_LEDGER_PATH?.trim() || resolve(cwd(), "data/private/openrouter-budget.json");
   if (env.OPENROUTER_BASE_URL && env.OPENROUTER_BASE_URL !== "https://openrouter.ai/api/v1") throw new Error("INVALID_AI_ORIGIN");
   if (paidEnabled && (env.OPENROUTER_STORAGE !== "single_host_persistent" || !isAbsolute(ledgerPath) || env.VERCEL || env.AWS_LAMBDA_FUNCTION_NAME || env.NETLIFY)) throw new Error("PERSISTENT_STORAGE_REQUIRED");
   if (paidEnabled && !env.OPENROUTER_API_KEY?.trim()) throw new Error("OPENROUTER_KEY_REQUIRED");
   return {
+    runtimePurpose: purpose,
     paidEnabled,
     ledgerPath,
     apiKey: env.OPENROUTER_API_KEY ?? "",

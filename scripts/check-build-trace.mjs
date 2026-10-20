@@ -4,8 +4,10 @@ import { dirname, join, relative, resolve, sep } from "node:path";
 const projectRoot = process.cwd();
 const buildRoot = resolve(projectRoot, ".next");
 const requiredCatalog = "data/catalog/places.json";
+const requiredIndex = "data/index/places.json";
 const requiredPageTrace = ".next/server/app/page.js.nft.json";
-const allowedProjectFiles = new Set(["package.json", requiredCatalog, "evals/fixtures/places.json"]);
+const requiredApiTrace = ".next/server/app/api/recommend/route.js.nft.json";
+const allowedProjectFiles = new Set(["package.json", requiredCatalog, requiredIndex, "evals/fixtures/places.json"]);
 
 function projectPath(path) {
   return relative(projectRoot, path).split(sep).join("/");
@@ -32,6 +34,7 @@ async function main() {
   if (!traces.length) throw new Error("No production NFT traces found; run pnpm build first.");
   const violations = new Set();
   let pageHasCatalog = false;
+  let apiHasIndex = false;
   let tracedEntries = 0;
   for (const path of traces) {
     const trace = JSON.parse(await readFile(path, "utf8"));
@@ -42,20 +45,24 @@ async function main() {
     const files = trace.files.map((file) => projectPath(resolve(dirname(path), file.replaceAll("\\", "/"))));
     tracedEntries += files.length;
     if (projectPath(path) === requiredPageTrace) pageHasCatalog = files.includes(requiredCatalog);
+    if (projectPath(path) === requiredApiTrace) apiHasIndex = files.includes(requiredIndex);
     for (const file of files) {
       if (forbidden(file)) violations.add(file);
       else if (!file.startsWith("node_modules/") && !file.startsWith(".next/") && !allowedProjectFiles.has(file)) violations.add(file);
     }
   }
   await access(resolve(projectRoot, requiredCatalog));
+  try { await access(resolve(projectRoot, requiredIndex)); }
+  catch { throw new Error(`Required index asset is missing: ${requiredIndex}.`); }
   if (!pageHasCatalog) throw new Error(`Required catalogue is missing from ${requiredPageTrace}.`);
+  if (!apiHasIndex) throw new Error(`Required index is missing from ${requiredApiTrace}.`);
   if (violations.size) {
     console.error(`FAIL: ${violations.size} forbidden or unexpected project assets in production NFT traces.`);
     [...violations].sort().slice(0, 20).forEach((file) => console.error(`  ${file}`));
     if (violations.size > 20) console.error(`  … ${violations.size - 20} more`);
     return 1;
   }
-  console.info(`PASS: ${traces.length} production NFT traces, ${tracedEntries} entries; required catalogue included, private/source tooling excluded.`);
+  console.info(`PASS: ${traces.length} production NFT traces, ${tracedEntries} entries; required catalogue/index included, private/source tooling excluded.`);
   return 0;
 }
 
