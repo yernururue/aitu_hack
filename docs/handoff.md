@@ -14,7 +14,7 @@
 
 ## Следующий шаг
 
-Root сверяет [tracker](../tracker.yaml), завершает публикацию live-PPTX и docs обычным push. Source/README/MP4/2скриншота уже опубликованы в main09c58f3, проверен18:17UTC. Не повторять one-use policy/smoke operators, не создавать другой ledger, не тратить demo на разработку. Public purpose=demo; development smoke были prep. Полный модельный eval требует отдельного решения и остатка бюджета. Повторять платные QA ради UI-подписи не нужно.
+Source, README, MP4, два скриншота, новый live-PPTX и текущие документы опубликованы в main `912ee9de2fe38093ce22ad594543ca4eb59a28c5`, remote проверен23:21 Asia/Almaty. M5.5/M7.10 завершены; следующий незавершённый gate — M4.3 (полная квалификация модели). Root сверяет [tracker](../tracker.yaml). Не повторять one-use policy/smoke operators, не создавать другой ledger, не тратить demo на разработку. Public purpose=demo; development smoke были prep. Полный модельный eval требует отдельного решения и остатка бюджета. Повторять платные QA ради UI-подписи не нужно.
 
 Сохранить исходный collector/raw/normalized и шесть untracked originals. Каталог298/591/7, source298/1953, catalogc72d13… и index568c855… неизменны. Исторические PPTX/WEBM не перезаписывать; MP4 — копия старой stub-записи, новый live-PPTX — отдельный файл. Трекер пишет только root; README/source/assets принадлежат другим исполнителям.
 

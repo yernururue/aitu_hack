@@ -30,7 +30,7 @@ budget:
 handoff:
   state: "ready"
   application_state: "emergency_real_ai_public_demo_live"
-  current_scope: "EmergencyrealAIpublicLIVEfe4/P3a sameDONATE/demo-purpose; actualtwoUIPOSTs+independentfinance/humanreviewPASS,9staticassetsmatch/7private404/knownkey0. Full12/72P0qualificationremainsuncompleted. README/MP4publicationM7.10inprogress; newlivePPTXbeingprepared."
+  current_scope: "EmergencyLIVEdemo+twoactualsmokes+independentreviewDONE; README/MP4/newlive7slidePPTX+acceptedsource/currentdocs publishedmain912ee9dverified18:21UTC. Originalfull12/72modelqualificationM4.3/M4.4 andcurrentphysicalphonegateM5.3 remainincomplete. No newpaidQA authorizedbypublication; keepMac/runtime/tunnelon."
   internal_deadline: "2026-10-20T20:00:00+05:00"
   submission_deadline: "2026-10-20T23:59:00+05:00"
   collector_work:
@@ -41,7 +41,7 @@ handoff:
       - "scripts/collect_astana.py"
       - "scripts/test_astana_data.py"
     notes: "M1.3 independently accepted298realPOI/591excerpts and reviewed36demo slice. Original collector code/snapshots preserved separately, no paid recollection. Collection C6 remains owned by collector integrator; publication rights not established."
-next_task_id: "M7.10"
+next_task_id: "M4.3"
 workflow:
   tracker_writer: "Single main integrator updates tracker after every finished task"
   completion_rule: "Mark done only after acceptance verification; record exact commands, exit codes and limitations here and in docs/progress.md"
@@ -696,7 +696,7 @@ stages:
           - "No voice feature to device-test; Safari/iPhone and Android/Chrome audio verification not run. Voice unavailable in release; physical text/navigation check also remains unverified in M5.3."
   - id: "M7"
     title: "Deployment and submission evidence"
-    status: "in_progress"
+    status: "done"
     tasks:
       - id: "M7.1"
         title: "Freeze release manifest and feature scope"
@@ -850,12 +850,14 @@ stages:
 
       - id: "M7.10"
         title: "Publish polished README with demo/presentation/screenshots and MP4 copy"
-        status: "in_progress"
+        status: "done"
         owner: "root_integrator"
         depends_on:
           - "M7.9"
         acceptance: "User requests GitHub README features/qualities plus presentation/demo and MP4 answer; truthful currentlive status, working relativepublicassets, H264MP4 probe/decode/visualchecks, independentdifferentreview and ordinarymainpush. Preserve originals/collector."
         evidence:
+          - "Allrequestedcode/README/MP4/screenshots/newLIVEPPTX+9currentdocs PUBLISHED ordinaryorigin/main912ee9de2fe38093ce22ad594543ca4eb59a28c5, remoteexactverified18:21UTC/52commits. FinaldifferentCompatDOCSPECQUALITYPASS9frozenSHA/45links0missing/historicalmanifestexact/emergencyscopehonest; newdeck14independentchecks+changedslidesvisualPASS. Prepushknownkeyscan1commit12blobs59ZIP1,479,958bytes/findings0. Original3materials/6collectoruntracked/primaryoldbuild/env/ledger/index preserved."
+          - "RootcurrentPUBLICGET+IAB1280and390readonlyformfreeformhintvisible/nooverflow PASS; twoactualpaidbackendUItests were earlierprivate0f47, UI-onlyfe4reviewedseparately. No newpaidQA/newunknown/newcapincrease/demo reallocation. MP4H264110snoaudio islabelledhistoricalSTUB; YouTube/formsubmit/currentphysicalphone/full12remainnotdone."
           - "NEWlivepresentation accepted: output/submission/aituhack-live-demo.pptx437944B/SHA661e1f301ddc751a7e0881be7d2b98d9e3233732e6d294c6a4e05419ba7f4d51,7slides/firstpartyfinalizer+7renders. DifferentCompat14package/content/preservationchecks+6changedslidesvisualPASS; currentDONATEclicklink/model/RAG/twoactualsmokes/caveats accurate. Rootslide7visualand4originalmaterialSHA checksPASS. README2linksnownewlivecopy; finaldocs+ordinarypushpending."
           - "README livefollowup independentCompatPASS18links/1051plus4/twoactualscenarios/historicalmedia disclosed. Source+README+MP4+2PNG+AGENTS/tracker published main09c58f3d1d653a9249266db9a5f550a3d5001e9e, remoteexact18:17UTC. Outgoing4commits11blobs2,368,528bytes knownkeyfindings0; originalcollector6files and3originalmaterials preserved. NewlivePPTX+finalcheckpointdocs followup inprogress."
           - "CurrentpublicIAB read-only1280x720: freeformhintvisible/stublabelabsent/nohorizontaloverflow,0recommendationPOST. Publiccutoverproof observed18:16:03UTC, sameDONATElivefe4/P3a."

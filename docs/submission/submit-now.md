@@ -4,7 +4,7 @@
 
 **GitHub:** https://github.com/yernururue/aitu_hack
 
-[Live-презентация, отдельный PPTX](../../output/submission/aituhack-live-demo.pptx) · [Видео MP4,110секунд](../../output/submission/aituhack-demo.mp4). MP4 — историческая запись stub без звука, со старым URL; актуальное демо — по ссылке выше. YouTube не загружен. Source, README, MP4 и2скриншота опубликованы в main09c58f3 (root verified18:17UTC). Новый live-PPTX и эти документы публикуются следующим push.
+[Live-презентация, отдельный PPTX](../../output/submission/aituhack-live-demo.pptx) · [Видео MP4,110секунд](../../output/submission/aituhack-demo.mp4). MP4 — историческая запись stub без звука, со старым URL; актуальное демо — по ссылке выше. YouTube не загружен. Source, README, MP4, два скриншота, новый live-PPTX и документы опубликованы в main `912ee9de2fe38093ce22ad594543ca4eb59a28c5`; remote проверен23:21 Asia/Almaty.
 
 ## Описание для формы
 

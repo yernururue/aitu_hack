@@ -234,26 +234,26 @@
     }
   ],
   "delivery": {
-    "state": "emergency_live_runtime_accepted_new_artifact_git_push_pending",
+    "state": "emergency_live_runtime_and_artifacts_published",
     "publicUploadPerformed": true,
     "youtubeUploadPerformed": false,
     "gitPushPerformed": true,
     "officialSubmissionPerformed": false,
     "stageCommit": "da659ed52fd276ae3787f46a266d3730b96a42b2",
     "localMarkdownLinksChecked": 104,
-    "lastDeliveryCheckUtc": "2026-10-20T17:51:38.566961+00:00",
-    "scope": "Emergency2live-smoke release; full12 benchmark not complete; current new artifacts pending root push",
+    "lastDeliveryCheckUtc": "2026-10-20T18:21:06+00:00",
+    "scope": "Emergency2live-smoke release and source/README/MP4/livePPTX/docs published main912ee9d; full12 benchmark not complete",
     "phoneEvidenceRecordedAtUtc": "2026-10-20T00:35:05.943338+00:00",
     "phoneEvidenceIndependentReview": "SPEC/CONSISTENCY PASS",
     "gitPublication": {
       "repositoryUrl": "https://github.com/yernururue/aitu_hack",
       "branch": "main",
       "defaultBranch": "main",
-      "verifiedHistoryTipBeforeReceipt": "e5b89ada0763f20f53196ce9ca7637f426dbf563",
-      "verifiedCommitCountBeforeReceipt": 46,
+      "verifiedHistoryTipBeforeReceipt": "912ee9de2fe38093ce22ad594543ca4eb59a28c5",
+      "verifiedCommitCountBeforeReceipt": 52,
       "documentationReceiptAdditionalCommits": 1,
       "forcePush": false,
-      "verifiedAtUtc": "2026-10-20T17:51:38.566961+00:00"
+      "verifiedAtUtc": "2026-10-20T18:21:06+00:00"
     },
     "readinessReport": "docs/readiness-report.md",
     "lastPublicUrlRestorationTask": "M7.8",
@@ -271,9 +271,9 @@
       "forcePush": false,
       "verifiedAtUtc": "2026-10-20T00:39:08.757704+00:00"
     },
-    "currentEmergencyArtifactsPublished": false,
+    "currentEmergencyArtifactsPublished": true,
     "sourceReadmeMp4VerifiedTip": "09c58f3d1d653a9249266db9a5f550a3d5001e9e",
-    "newDocsAndLivePptxPendingPush": true,
+    "newDocsAndLivePptxPendingPush": false,
     "historicalStubPublicRestorationReview": "JointSPEC/QUALITYPASS19freshGET/12assetsequal/actual3901440twoSTUBPOST/4screenshots; old7982stoppedafterPASS/new39251+70029alive; no newphone/liveproof"
   },
   "updatedAt": "2026-10-20T18:19:50.070121+00:00",
@@ -374,7 +374,7 @@
       "sha256": "661e1f301ddc751a7e0881be7d2b98d9e3233732e6d294c6a4e05419ba7f4d51",
       "slides": 7,
       "independentReview": "PASS:14checks and6changedslides visually accepted by independent Compat/root",
-      "publication": "pending_root_push",
+      "publication": "published_main_912ee9de2fe38093ce22ad594543ca4eb59a28c5",
       "metadataPending": false
     },
     "mp4": {
@@ -389,7 +389,7 @@
     },
     "youtubeUploaded": false,
     "officiallySubmitted": false,
-    "publishedToMain": false,
+    "publishedToMain": true,
     "latestEmergencyAuthorizationInterpreted": true,
     "literalFifthAmountRestatedByUser": false,
     "actualPrivateQaProviderEntries": 4
@@ -1136,7 +1136,7 @@
       "sha256": "661e1f301ddc751a7e0881be7d2b98d9e3233732e6d294c6a4e05419ba7f4d51",
       "slides": 7,
       "independentReview": "PASS:14checks and6changedslides visually accepted by independent Compat/root",
-      "publication": "pending_root_push",
+      "publication": "published_main_912ee9de2fe38093ce22ad594543ca4eb59a28c5",
       "metadataPending": false
     },
     "mp4": {
@@ -1157,6 +1157,13 @@
       "rootVerified": true,
       "newDocsAndLivePptxPendingPush": true
     },
-    "financialSnapshotScope": "After2privateQA/cutover before public user traffic; demo-purpose live usage may change subsequent ledger/spend."
+    "financialSnapshotScope": "After2privateQA/cutover before public user traffic; demo-purpose live usage may change subsequent ledger/spend.",
+    "publication": {
+      "verifiedMain": "912ee9de2fe38093ce22ad594543ca4eb59a28c5",
+      "verifiedAt": "2026-10-20T18:21:06+00:00",
+      "commitsAtMaterialsPush": 52,
+      "README": "README.md",
+      "officiallySubmitted": false
+    }
   }
 }
