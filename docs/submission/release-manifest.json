@@ -1,0 +1,191 @@
+{
+  "schemaVersion": "1.0",
+  "createdAt": "2026-10-19T20:35:11.360433+00:00",
+  "scope": "offline_stub_preview",
+  "fullP0Accepted": false,
+  "featuresFrozen": true,
+  "sourceCommit": "572a81394048974d848be7299ed7ef53d27a2b49",
+  "runtime": {
+    "node": "24.21.0",
+    "pnpm": "11.0.8",
+    "next": "16.4.2",
+    "react": "19.3.1"
+  },
+  "dataset": {
+    "path": "data/catalog/places.json",
+    "synthetic": false,
+    "poiCount": 298,
+    "reviewExcerptCount": 591,
+    "provenanceRecordCount": 889,
+    "categories": {
+      "bowling": 4,
+      "cafe": 135,
+      "entertainment": 46,
+      "museum": 21,
+      "other": 48,
+      "park": 11,
+      "restaurant": 33
+    },
+    "reviewedSlice": {
+      "poiCount": 36,
+      "zoneCount": 3,
+      "categoryCount": 3
+    },
+    "fileSha256": "c72d13a1d8df327edc22adce02743b0246aec157e86330c96c408bc44fabb873",
+    "canonicalRuntimeSha256": "4677a7a004ef0626f4b911814a8f3b825f81e61ab8b03f82cb00d977fe6950a6",
+    "source": "2GIS listings and short literal review excerpts via preserved Apify collector",
+    "sourceCollectedFrom": "2026-10-19T18:24:24Z",
+    "sourceCollectedTo": "2026-10-19T18:35:43Z",
+    "normalizedSnapshotAt": "2026-10-19T18:41:06.854110+00:00",
+    "reviewPublicationRightsVerified": false,
+    "unknownPriceCount": 298,
+    "unknownFactsCount": 298
+  },
+  "ai": {
+    "mode": "stub",
+    "retrieval": "lexical",
+    "actualModel": null,
+    "semanticIndex": null,
+    "liveComparisonComplete": false,
+    "paidEnabled": false,
+    "liveEvalEnabled": false,
+    "stubPhrases": [
+      "Кофе рядом",
+      "Хочу погулять",
+      "Музей на час",
+      "Боулинг с друзьями",
+      "Кафе с розеткой"
+    ],
+    "unknownTextBehavior": "needs_clarification with zero recommendations"
+  },
+  "budget": {
+    "currency": "USD",
+    "recordedProjectOpenRouterSpend": 0,
+    "accountBalanceVerified": false,
+    "preparationCap": 2,
+    "liveEvalSubcapWithinPreparation": 0.5,
+    "demoReserve": 4,
+    "persistentGuardVerified": true,
+    "realLedgerInitialized": false
+  },
+  "voice": {
+    "enabled": false,
+    "implementation": "omitted after optional P1 gate decision",
+    "audioCalls": 0
+  },
+  "verification": {
+    "unitTestsPassed": 554,
+    "unitFilesPassed": 16,
+    "browserTestsPassed": 62,
+    "browserViewports": [
+      [
+        390,
+        844
+      ],
+      [
+        1440,
+        900
+      ]
+    ],
+    "browser": "Chromium emulation",
+    "physicalPhoneVerified": false,
+    "nativeMapHandoffVerified": false,
+    "paidLiveSmokeVerified": false,
+    "independentImplementationReview": "PASS",
+    "retrieval": {
+      "positiveRuCases": 12,
+      "negativeGuards": 4,
+      "top3Success": 12,
+      "macroRecallAt5": 0.9722222222222222,
+      "microRecallAt5": 0.9375,
+      "negativePassed": 4,
+      "hardConstraintsPassed": true,
+      "qualityGatePassed": true,
+      "semanticVerified": false,
+      "acceptancePassed": false,
+      "commandExitCode": 1,
+      "labels": "agent-curated development set, not a blind benchmark"
+    },
+    "kkSupplement": {
+      "cases": 4,
+      "top3Success": 4,
+      "macroRecallAt5": 0.9166666666666667,
+      "nativeSpeakerVerified": false,
+      "liveLanguageVerified": false
+    }
+  },
+  "privacy": {
+    "deviceLocationOptIn": true,
+    "localStorageFields": [
+      "version",
+      "profileId",
+      "savedIds",
+      "dismissedIds"
+    ],
+    "queryCoordinatesAudioLogged": false,
+    "rawOrCollectorFilesInProductionNft": false
+  },
+  "hosting": {
+    "status": "temporary_public_preview_verified",
+    "type": "cloudflare_quick_tunnel",
+    "url": "https://percentage-slim-contemporary-appropriate.trycloudflare.com",
+    "previousUrl": "https://converter-mirrors-commercial-gem.trycloudflare.com",
+    "origin": "http://127.0.0.1:3000",
+    "stableHosting": false,
+    "requiresLocalOriginAndTunnelAlive": true,
+    "checkedAtUtc": "2026-10-19T23:59:44.328Z",
+    "publicPrivatePaths404": 12,
+    "getApi405": true,
+    "postNoStore": true,
+    "controlledQueryGpsAudioCanariesAbsentFromLogs": true,
+    "freshBrowserContextsVerified": true,
+    "physicalPhoneVerified": false,
+    "productionPid": 64525,
+    "tunnelPid": 64556,
+    "detachedProcesses": true,
+    "launcherParentsExitedVerified": true,
+    "runtimeEvidenceDirectory": "/tmp/aituhack-mvp/release-runtime-restart-20261019T235726Z"
+  },
+  "outstandingGates": [
+    "M2.4 real embeddings index",
+    "M4.3 frozen-context live comparison within unchanged budget",
+    "M4.4 validated model selection",
+    "M5.3 physical phone/native maps and real paid live smoke"
+  ],
+  "buildId": "BlwNsPwtVQoToEIUwspvC",
+  "materials": [
+    {
+      "path": "output/submission/aituhack-demo.pptx",
+      "kind": "presentation",
+      "bytes": 436736,
+      "sha256": "8926d3c3de406b81f5774af01f1f6db367604540489ff87ffcc74caab3b65941",
+      "independentReview": "SPEC PASS / QUALITY PASS",
+      "publication": "local_only",
+      "slides": 7,
+      "speakerNotesSeconds": 360,
+      "editableTextShapes": 43,
+      "nativeTables": 2
+    },
+    {
+      "path": "output/submission/aituhack-demo.webm",
+      "kind": "video",
+      "bytes": 14034370,
+      "sha256": "742c1c2bcd8407013db426e8ac306ea40f01ab104a64121d641aa1277425c7c9",
+      "independentReview": "SPEC PASS / QUALITY PASS",
+      "publication": "local_only",
+      "durationSeconds": 110,
+      "width": 1440,
+      "height": 900,
+      "codec": "VP9",
+      "audioStreams": 0,
+      "fullDecodeExitCode": 0
+    }
+  ],
+  "delivery": {
+    "state": "local_materials_accepted_phone_gate_pending",
+    "publicUploadPerformed": false,
+    "youtubeUploadPerformed": false,
+    "gitPushPerformed": false,
+    "officialSubmissionPerformed": false
+  }
+}

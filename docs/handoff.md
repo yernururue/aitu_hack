@@ -43,3 +43,18 @@ Guard проверен, paid defaultoff; для paid нужны действую
 стабильным хостингом или локальный commit официальной сдачей.
 
 Дедлайн20.10.2026 23:59 Asia/Almaty, внутренняя цель20:00.
+
+## Финальные локальные материалы
+
+M7.1–M7.4 приняты: [демо/файлы/lifecycle](submission/links.md),
+[manifest](submission/release-manifest.json), [сценарии](submission/scenarios.md),
+[ограничения](submission/limitations.md), [презентация/заметки](submission/presentation-outline.md).
+Actual temporary URL: https://percentage-slim-contemporary-appropriate.trycloudflare.com .
+Предыдущий URL converter-mirrors-commercial-gem retired после завершения tool sessions.
+Новый origin64525 и tunnel64556 detached/PPID1/ownPGIDs, остаются зависимыми от Mac/сети.
+Приватный launcher/log/probe пакет: `/tmp/aituhack-mvp/release-runtime-restart-20261019T235726Z/`.
+Исходники572a813/buildBlwNsPwtVQoToEIUwspvC; документы/материалы сохраняются отдельным commit.
+PPTX7slides/6min и video110s приняты независимым reviewer; новые sourcegates не требовались.
+Видео/privatebuild ignoredGit и доступны локально, не считать их публично загруженными.
+M7.5 phone/private-device часть остаётся непроверенной, как и M5.3 realpaid smoke.
+Пока пользователь не подтвердит обновление ключа, не выполнять auth/paid retry.

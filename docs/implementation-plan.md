@@ -280,16 +280,23 @@ M6.1–M6.3 skipped: P1 gate не выполнен при незавершённ
 **Files:** docs/submission/{scenarios,limitations,presentation-outline,links}.md,
 deployment config при необходимости, финальный docs/progress.md.
 
-- [ ] Зафиксировать dataset hash, число POI, источники, время сбора и актуальную модель.
-- [ ] `python3 scripts/check_harness.py`, `pnpm lint`, `pnpm typecheck`, `pnpm test`,
+- [x] Зафиксировать dataset hash, число POI, источники, время сбора и актуальную модель.
+  M7.1: release-manifest.json сверён с реальным каталогом и build после финального fix;
+  source572a813, mode=stub/model=null/index=null, voiceoff, fullP0Accepted=false.
+- [x] `python3 scripts/check_harness.py`, `pnpm lint`, `pnpm typecheck`, `pnpm test`,
   `pnpm build`, `pnpm test:e2e`, `pnpm eval:retrieval` — записать каждый результат.
-- [ ] Проверить публичное демо, API-key только server-side, лимиты, отсутствие raw
+  M7.2: independent OFFLINE SCOPE PASS; 554unit/62e2e/прочие gates0;
+  retrieval exit1/semantic=false сохранён явно, полный P0 не принят.
+- [x] Проверить публичное демо, API-key только server-side, лимиты, отсутствие raw
   координат/запросов/аудио в логах. Указать использованную локацию и данные в UI.
-- [ ] Подготовить 5–7 минут: проблема → сценарий → RAG/сбор → персонализация →
+- [x] Подготовить 5–7 минут: проблема → сценарий → RAG/сбор → персонализация →
   качество/ограничения → развитие/бизнес-гипотеза.
-- [ ] Записать три сценария на реальных POI, отдельно показать воспроизводимый сбор.
+- [x] Записать три сценария на реальных POI, отдельно показать воспроизводимый сбор.
 - [ ] Загрузить видео на YouTube по запросу пользователя на этапе публикации;
   подготовка видео сама по себе не считается разрешением публикации.
 - [ ] Проверить права доступа ко всем ссылкам в приватном окне; зафиксировать их.
 - [ ] Финальный коммит и передача пользователю; push/публичную сдачу выполнять в
   пределах актуального разрешения пользователя, не считать локальный commit отправкой.
+
+M7.4 done:7slides/native43text/2tables/notes360s +continuous110sVP9/audio0,
+independent artifact SPEC/QUALITY PASS. Public upload/YouTube/submission не выполнялись.

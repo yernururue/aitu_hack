@@ -13,6 +13,10 @@
 и реальный платный smoke не проверены; полный P0 RAG не объявляется готовым.
 Текущий шаг — в трекере.
 
+[Открыть временное демо](https://percentage-slim-contemporary-appropriate.trycloudflare.com)
+— работает, пока включены Mac, production-сервер и туннель.
+[Проверки и запуск](docs/submission/links.md), [границы версии](docs/submission/limitations.md).
+
 - [Трекер глобальных задач и подзадач](tracker.yaml)
 - [Промпт и контекст для нового чата](docs/handoff.md)
 - [Спецификация MVP](docs/product-spec.md)

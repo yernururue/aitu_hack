@@ -29,8 +29,8 @@ budget:
   dataset_volume: "298 accepted real POI /591 short sourced review excerpts; verified36 in3zones/3categories; original298/1953collector snapshot preserved"
 handoff:
   state: "ready"
-  application_state: "offline_text_e2e_accepted_profiles_pending"
-  current_scope: "M3 offline text end-to-end accepted (465unit/46e2e); M4 source labels/retrieval quality next then M5; live index/comparison blocked by401"
+  application_state: "offline_stub_demo_and_materials_verified_external_gates_pending"
+  current_scope: "M7.1–M7.4 offline release/demo/materials accepted (554unit/62e2e); local delivery and stage commit next; phone/native/semantic/live gates remain unverified or blocked"
   internal_deadline: "2026-10-20T20:00:00+05:00"
   submission_deadline: "2026-10-20T23:59:00+05:00"
   collector_work:
@@ -41,7 +41,7 @@ handoff:
       - "scripts/collect_astana.py"
       - "scripts/test_astana_data.py"
     notes: "M1.3 independently accepted298realPOI/591excerpts and reviewed36demo slice. Original collector code/snapshots preserved separately, no paid recollection. Collection C6 remains owned by collector integrator; publication rights not established."
-next_task_id: "M7.1"
+next_task_id: "M7.5"
 workflow:
   tracker_writer: "Single main integrator updates tracker after every finished task"
   completion_rule: "Mark done only after acceptance verification; record exact commands, exit codes and limitations here and in docs/progress.md"
@@ -420,6 +420,7 @@ stages:
           - "M5.2"
         acceptance: "Deterministic-stub Playwright covers details/external URL/profile changes/races/denied location/empty states/focus; pnpm test:e2e at 390/1440 and full quality gate pass; physical phone and one budgeted real-data live smoke recorded with limits; progress and stage commit."
         evidence:
+          - "Offline feature snapshot committed and git log verified:572a81394048974d848be7299ed7ef53d27a2b49 feat:add local demo profiles,place details and map routes. Only22explicit app/docs/tests paths staged; original collector data/README,data/collection,Pythonfiles remain untracked/preserved. Physical/live external gates still blocked."
           - "Offline acceptance complete: root fresh post-fix pnpm lint/typecheck/554unit/build/check-build-artifacts all exit0; full62Playwright25.0s at390/1440 exit0; independent unifiedM5.2spec/qualityPASS and HTTPfixADDRESSED. Root inspected4detail/source screenshots, source/core/helpers/diff/harnessPASS."
           - "Remaining external gates: no physical-phone/native map handoff verification; no real paid live smoke because user confirmed key not updated after401. No auth retries or paidcalls; this task/stage not falsely done. Offline feature snapshot commit follows before release work."
           - "Implementation accepted; root full62Playwright390/1440 exit0 after finalsourcefix. Fresh final lint/types/unit/build/NFT started; physical-phone/nativehandoff and realpaidlive smoke not yet verified. User key unchanged; no auth/paid retry."
@@ -462,7 +463,7 @@ stages:
     tasks:
       - id: "M7.1"
         title: "Freeze release manifest and feature scope"
-        status: "in_progress"
+        status: "done"
         owner: "root_integrator"
         depends_on:
           - "M5.3"
@@ -471,35 +472,62 @@ stages:
         waiver_reason: "User explicitly instructed continue with stubs while key is unchanged. Release materials and temporary preview can verify the completed offline text path; physical-device/live smoke remain blocked and full P0 semantic/model acceptance is not claimed."
         acceptance: "Record dataset hash, actual POI count, sources/collection time and model; minimum demo gate 30 reviewed real POI in 3 zones/categories; record M6 enabled/disabled/skipped decision and freeze new features."
         evidence:
+          - "Release manifest docs/submission/release-manifest.json frozen offline_stub_preview/fullP0Accepted=false, sourcecommit572a813/buildBlwNsPwtVQoToEIUwspvC verified afterfinalUIfix. Root Node24 assertions exit0: parsedCatalog canonical/filehashes,298POI/591excerpts/889provenance/syntheticfalse and Git sourcecommit match."
+          - "Verified source dates18:24:24–18:35:43UTC/normalized18:41:06.854110UTC Oct19, reviewed36/3zones/3categories; actualmodelnull/indexnull/stub/paidfalse/evalfalse/voiceomitted. Phone/native/live remainfalse, agent-curated12RU separate4negative/4KK. Harness/diff0; no newfeatures or paidcalls."
           - "Narrow M5.3 waiver recorded for independent offline release work under user's continue-stubs instruction. Final app source frozen after reviewed M5fix; manifest will pin298catalog/hash/source times, actualAIstub/modelnull/indexabsent, voiceomitted and unverifiedphone/live limits."
       - id: "M7.2"
         title: "Run final gates and independent release review"
-        status: "todo"
+        status: "done"
+        owner: "root_integrator + reviewer"
         depends_on:
           - "M7.1"
         acceptance: "Record exact check-harness, lint, typecheck, test, build, test:e2e and eval:retrieval outcomes; independently review primary path, facts, failures and mobile; resolve blockers."
-        evidence: []
+        evidence:
+          - "Independent M7.2-release-review.md OFFLINE SCOPE PASS, no unresolved implementation/doc blockers; source/tests/config/lockfile frozen572a813. Fresh independent CatalogSchema/manifest/full-src-buildmtime/buildID/hash/counts/client11JS806752bytes marker0 PASS; existing taskreviews/RAGOps denominator inspected, no paid/network/fullgatedup."
+          - "Exact final gates recorded: harness/lint/typecheck/554unit16files/build/NFT6traces1568/full62e2e390+1440/diff exit0; evalretrieval exit1 semanticfalse/acceptancefalse despite numerical12/12top3/.972222/4negativeshardPASS; evalLive defaultdisabled exit0/0rows/network0. FullP0/phone/native/live/rights notclaimed. TechnicalGO only to sequential runtime verification."
+          - "Exact final app gates already run afterlastsourcefix: lint/typecheck/554unit/build/NFT/62e2e/harness/diff exit0; evalretrieval exit1explicitsemanticfalse/numericalPASS; evalLive disabled exit0/0rows. Independent final offline release scope review begins on frozen572a813 app +manifest/docs, no claim of semantic/live/physical acceptance."
       - id: "M7.3"
         title: "Deploy and inspect public demo"
-        status: "todo"
+        status: "done"
+        owner: "ai_executor (detached runtime); root_integrator (re-acceptance)"
         depends_on:
           - "M7.2"
         acceptance: "Verify public URL, snapshot, server-only key, request/cost controls and no exact coordinates/query/audio in production logs; UI discloses location/data; preserve demo reserve."
-        evidence: []
+        evidence:
+          - "Restored actualURL https://percentage-slim-contemporary-appropriate.trycloudflare.com; detachedproduction64525/tunnel64556 PPID1/ownPGIDs survive launcherexit and secondtoolcall. Root read minimalPopenlauncher/metadata/final lifecycle; exactNode/build/catalog/binary/safeenv verified, no globalservice/config/auth/paidchanges."
+          - "Newlocal+externalprobes exit0:strictRecommendResponseSchema/realIDs+canonicalhash/12private404/GET405/no-store/malformed+query1001+16KiB+audio400/isolated20→429/canariesabsent3logs. Root actualfreshprivateChromium1440/390 newURL exit0:3realparkPOIsdeepmatchcatalog/details/maps/unknowntext0/nooverflow/pageerrors/devbadge. Root viewed bothnewdetailimages; manifest/README/links/progress/plan updated toNEWURL, harness/diff0."
+          - "UI restoredproduction diagnostic PASS park→Student→save→dismiss eachactualPOST200degraded3, no requestfailed/pageerror; originaltimeout notreproduced. Four acceptedPNGsunchanged; fullrecordretry ongoing. Root verified-runtime-final-v5.json authorizes finalPPTX withcurrentverifiedURL only; source572/buildBlw unchanged; physical/native/live remainunverified."
+          - "Detached production restored PID64525/PPID1/ownPGID64525; launcher64523exited and secondindependenttoolcall provedchildalive. ExactNode24.21.0/buildBlw.../source572/catalogpinned/safeenv. Localruntime exit0:strictRecommendResponseSchema/2realIDs+canonicalhash/no-store/12private404/GET405/malformed+mode+query1001+16KiB+audio400/isolated20→429RetryAfter60/canarylogsabsent. UIactualdiagnostic/recordretryGO; newdetachedtunnel+publicreacceptance pending."
+          - "After user pause currentUTC23:56Oct19, root actualchecks: oldproduction59014/tunnel59302 absent, localhostURLError, oldexecsession45608unknown. Historical20:40publicPASS remains evidenceonly; currentURLnotclaimedalive. Reopenedruntime task/nextM7.3 to restore safeorigin+newtemporaryURL; source/tests/config/lockfile stillidentical572a813, samebuildBlwNsPwtVQoToEIUwspvC."
+          - "Restore should use detached process sessions with private logs and explicit safe flags, no globalservice/config/account/paid changes; redo local/public probes and finalbrowser before replacingmanifest/docs/PPTXURL. Originalfailedvideo preserved, authorrecordingpaused untilactual3000ready."
+          - "Actual temporary HTTPS https://converter-mirrors-commercial-gem.trycloudflare.com from verifiedcloudflared2026.10.1 log; external sweep exit0:TLS200/12private404/GETapi405/POST200+no-store/realIDs+canonicalhash/malformed+audio400/canaryqueryGPSaudio absent3logs. Production59014/session45608+tunnel59302/session69528 alive, safeexplicitflags/pinnedcatalog; no provider/auth/paidcalls."
+          - "Root independent fresh PRIVATE Chromium1440/390 actualURL PASS (output/evaluation/public-browser-smoke.json):home200/POST200stubdegraded3realparkIDs/exact4677snapshot/details/HTTPSmapmodes/unknowntextclarification0/nooverflow/pageerrors0/noNextdevbadge. Root viewed bothpublicdetail images +4cleanproductionassets. Hosting/limits/README/links updated, harness/diff0. Process-boundtemporarypreview, physical/native/fullP0 notclaimed; optionaluserphonecheckpending."
+          - "Actual loopback production READY/PASS reported: PID59014/execsession45608, freshbuildBlwNsPwtVQoToEIUwspvC/Node24.21.0/safestub+paidfalse+evalfalse/pinnedrealcatalog. Local probe exit0:12privatepaths404,GETapi405,realcatalogIDs+canonicalhash,POSTno-store,malformed/strictmode/query1001/16KiB/audio400,isolated20→429numericRetryAfter,query/GPS/audio canariesabsentproductionlog. Tunnel+externalbrowser/log acceptance stillpending; UIproductionrecordingauthorized."
+          - "After M7.2 offline technicalGO, start pinned safe loopback production using freshbuildBlwNsPwtVQoToEIUwspvC and absoluteacceptedcatalog. Local private404/405/no-store/realIDs+snapshot/limits/canarylogs required before verified temporary QuickTunnel; actualpublicURL/browser/logverification pending. No new login/accounts/paidcalls."
       - id: "M7.4"
         title: "Prepare presentation, scenarios and video"
-        status: "todo"
+        status: "done"
+        owner: "data_executor (PPTX/outline); ui_executor (video/assets); root_integrator (docs/integration)"
         depends_on:
           - "M7.3"
         acceptance: "Prepare 5–7 minute presentation, limitations and links; record 3 scenarios on real POI and reproducible collection; video preparation does not authorize YouTube publication."
-        evidence: []
+        evidence:
+          - "Independent M7.4-artifact-review.md SPEC PASS/QUALITY PASS nofindings. Root readfinalreports/receipts/viewed7slidePNGs+5criticalvideoframes; PPTX436736B/SHA8926d3...b65941/7slides43nativetext2tables7notes360s/min18pt/4acceptedimagesonce/currentclickableURL; final-byte renders matchcandidate, noPowerPointopeningclaim."
+          - "Finalvideo110.000s VP9/1440x900/0audio/14034370B/SHA742c1c...425c7c9; ffprobe/full-decode0. Reviewer all2750finalpacketstimestamps+bytes equaloriginalrawprefix and10decodedframepixelmatches PASS. Continuous actualpark/details/sources/mapsmodes,Student/save/dismiss/reload/reset,budget2500zero/unknownsuffixclarificationzero; sourcechapterexplicitinstructions/notnewpaidrun. Firstfailedraw+untrimmed122.88s preservedprivately; onlystaticendtailtrimmed, no interiorcuts/speedchange."
+          - "Finalfiles output/submission/aituhack-demo.pptx +aituhack-demo.webm; outline/scenarios/limitations/manifest/links prepared. NewURLpercentage-slim...matchesallcurrentartifacts; localpreparationnotYouTube/push/officialsubmission. Rootfreshpnpm lint/harness/diff PASS aftergeneratedmaterials; sourcefrozen572/buildBlw,collectorfilespresent+collectortrackerblockbyteidentical572. Paid0,phone/native/live/fullRAGunverified."
+          - "Originalagents successfully resumed after explicit usercontinue. UI boundedfreshbrowserdiagnosis now fails page.goto localhost3000 with ERR_CONNECTION_REFUSED beforeanyAPI; no appsource defect established. Video retry/finaldeckURL paused while M7.3restored; fouracceptedPNGs/nativeprivatePPTXdrafts preserved."
+          - "First continuous recording attempt honestly stopped at dismiss checkpoint on waitForResponse30s timeout after actualpark/profile/save degraded3; no finalvideo published. Driver/rawframes retained privately, runtime source unchanged. Authors/reviewer hit Codexusage errors; user explicitly saidcontinue, bounded original-agent resume attempted, no purchase/reset/auth/accountchanges."
+          - "Root verified preliminary docs finding and removed obsolete pending/current bullets from short progress; tracker retains chronological evidence. Current docs show M7.1–M7.3done/M7.4inprogress and pendingphone/live honestly. Harness/diff exit0; source/build remain572a813/Blw..., production+tunnel retained."
+          - "Verified temporaryURL and acceptedcleanproduction4assets available; final7slide/6minute nativePPTX +continuous~110svideo/threeactualscenarios/sourceinstructions now being prepared. Root owns scenarios/limitations/links/manifest, DataonlyPPTX+outline, UIonlyignoredvideo/assets; independent artifactreview required beforedone. NoYouTube/push/submissionauthorizedbythispreparation."
       - id: "M7.5"
         title: "Verify links and deliver within authorization"
-        status: "todo"
+        status: "in_progress"
+        owner: "root_integrator"
         depends_on:
           - "M7.4"
         acceptance: "Check demo/material links in private window on phone/laptop; finalize progress and stage commit; upload YouTube only on publication request; push/public submission only under current user authorization; distinguish local delivery from submission."
-        evidence: []
+        evidence:
+          - "M7.4 artifacts independently accepted. Finalize current links/materialmanifest/status/handoff/stagecommit and verifyalllocalfiles+actualURL/privatebrowser/permissions. Laptopprivatecontexts alreadyPASS; unansweredphysicalphonecheck remainsunverified and mustnotbe donebyemulation. NoYouTube/upload/push/officialsubmission actionauthorizedbylocaldelivery."
 
 # Data collector section. Updated only by this chat's main collector integrator.
 # This does not mark application ingestion task M1.3 as complete.

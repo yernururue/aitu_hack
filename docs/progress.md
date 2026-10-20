@@ -8,6 +8,16 @@ Stage: implementation
 
 ## Выполнение MVP
 
+
+M7.1–M7.4 done: manifest, независимый OFFLINE release review, восстановленное временное
+демо и финальные материалы приняты. [Адрес/файлы/lifecycle](submission/links.md).
+PPTX7слайдов/6мин/43native text/2tables; video110с/1440×900/VP9/audio0/full-decode0.
+Независимое artifact SPEC/QUALITY PASS: hashes/XML/7renders/2750packet-prefix/10framepixels.
+Production64525 и tunnel64556 detached, проверены после выхода launchers; Mac/сеть нужны.
+Root fresh private contexts390/1440:3реальныхпарка/детали/HTTPSкарты/unknowntext PASS,
+overflow/errors0. Исходники/build неизменны. M7.5: финальная локальная передача/commit;
+физический телефон и native maps пока не подтверждены, unanswered check не считается PASS.
+
 Проверенный offline/stub текстовый путь работает на 298 реальных POI: фильтры,
 лексическое ранжирование, серверный API, адаптивный UI, подробности/источники,
 демо-профили, локальные сохранения/скрытия/сброс, 2ГИС и Google Maps walking/driving.
@@ -27,7 +37,7 @@ GREEN2viewport cases, независимый probe/re-review PASS. Голос M6
 | Команда | Результат |
 |---|---|
 | `python3 scripts/check_harness.py` | exit0, документы/fixtures/ссылки |
-| `pnpm lint` | exit0, без предупреждений |
+| `pnpm lint` | exit0, в том числе повтор после финальных материалов, без предупреждений |
 | `pnpm typecheck` | exit0, Next typegen + strict TS |
 | `pnpm test` | exit0, 554 теста /16 файлов после финального UI fix |
 | `APP_AI_MODE=stub OPENROUTER_PAID_ENABLED=false LIVE_EVAL_ENABLED=false pnpm build` | exit0, production |
@@ -71,7 +81,10 @@ M2.4: настоящий embedding index отсутствует. M4.3/M4.4: live
 Haiku conservative reserve$1.32>$0.50 eval cap; лимиты не повышены.
 M5.3: физический телефон/native map handoff и один реальный paid smoke не проверены.
 Это не полная P0 RAG acceptance. Vercel session preflight403, нового login не было;
-временный QuickTunnel подготовлен, публичный URL пока не создан/не проверен.
+временный QuickTunnel восстановлен и повторно проверен: [адрес/запуск](submission/links.md).
+Это process-bound preview, не стабильный hosting. Root fresh private contexts390/1440
+подтвердили реальный API/hash/3parks/детали/routes/unknowntext, overflow/errors0.
+12private404/GET405/POSTno-store/400/429 и canarylogs проверены снаружи/локально.
 
 OpenRouter учтённый расход проекта$0; баланс аккаунта не проверен.
 Persistent guard (concurrency/reservation/usage/crash/failure) проверен независимо;
@@ -82,5 +95,5 @@ $4demo reserve сохранён; serverless paid запрещён. Apify — о�
 ## Сохранённые этапы
 
 `10f4981` M1; `57ce0f2` M2 offline; `fd37acb` M3 offline;
-`0a6b53a` M4 labels/lexical. M5 offline feature snapshot сохраняется перед M7.
+`0a6b53a` M4 labels/lexical. M5 offline feature snapshot — `572a813`.
 Дедлайн20.10.2026 23:59, внутренняя цель20:00 Asia/Almaty.
