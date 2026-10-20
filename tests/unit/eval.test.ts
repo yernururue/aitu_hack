@@ -362,6 +362,7 @@ describe("final semantic/metadata preflight boundaries", () => {
     const records = DEFAULT_EVAL_MODELS.map((id) => {
       const quote = quoteRequest({ operation: "explanation", model: id, maxCompletionTokens: 1000 });
       return { id, context_length: quote.contextLength, top_provider: { max_completion_tokens: quote.billing.maxOutputTokens },
+        ...(id === "anthropic/claude-haiku-5.5" ? { reasoning: { mandatory: false, supported_efforts: ["max", "xhigh", "high", "medium", "low", "none"] } } : {}),
         supported_parameters: ["structured_outputs", "response_format", quote.outputParameter, "reasoning"],
         pricing: { prompt: (Number(quote.provider.max_price.prompt) / 1e6).toFixed(10), completion: (Number(quote.provider.max_price.completion) / 1e6).toFixed(10) } };
     });
@@ -377,7 +378,7 @@ describe("final semantic/metadata preflight boundaries", () => {
     const result = await runLiveEvaluation({ ...options(), models: DEFAULT_EVAL_MODELS }, deps);
     expect(result).toMatchObject({ status: "complete", comparisonComplete: false, winner: null, humanReviewRequired: true });
     expect(result.reserveQuotes).toHaveLength(3);
-    expect(result.reserveQuotes.find((quote) => quote.model.includes("haiku"))).toMatchObject({ estimatedUsd: .264, provider: { only: ["azure/global"] } });
+    expect(result.reserveQuotes.find((quote) => quote.model.includes("haiku"))).toMatchObject({ estimatedUsd: .264, provider: { only: ["azure/global"] }, reasoning: { enabled: false } });
     for (const stage of ["intent", "explanation"]) {
       const rows = result.rows.filter((row) => row.stage === stage);
       expect(rows).toHaveLength(3); expect(new Set(rows.map((row) => row.promptHash)).size).toBe(1);
