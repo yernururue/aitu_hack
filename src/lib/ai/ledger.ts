@@ -28,6 +28,13 @@ export const THIRD_HISTORICAL_UPPER_BOUND_AUTHORIZATION = Object.freeze({
   approvedAt: "2026-10-20T14:49:53.969679+00:00",
   budgetCharge: 384750001,
 });
+export const FOURTH_HISTORICAL_UPPER_BOUND_AUTHORIZATION = Object.freeze({
+  reservationId: "bf021306-da2b-43ca-a54e-6a7cfe23ac48",
+  authorizationId: "9cc3b06a-502e-4e52-810b-4f38f56f6854",
+  grantRef: "call_74ed6bb11f2b4f529912ce83a8146e0e",
+  approvedAt: "2026-10-20T17:09:52.384194+00:00",
+  budgetCharge: 261603840,
+});
 const auditIdSchema = z.string().regex(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
 export const upperBoundGrantInputSchema = z.strictObject({
   reservationId: z.literal(HISTORICAL_UPPER_BOUND_AUTHORIZATION.reservationId),
@@ -47,6 +54,12 @@ export const thirdUpperBoundGrantInputSchema = z.strictObject({
   grantRef: z.literal(THIRD_HISTORICAL_UPPER_BOUND_AUTHORIZATION.grantRef),
   approvedAt: z.literal(THIRD_HISTORICAL_UPPER_BOUND_AUTHORIZATION.approvedAt), auditId: auditIdSchema,
 });
+export const fourthUpperBoundGrantInputSchema = z.strictObject({
+  reservationId: z.literal(FOURTH_HISTORICAL_UPPER_BOUND_AUTHORIZATION.reservationId),
+  authorizationId: z.literal(FOURTH_HISTORICAL_UPPER_BOUND_AUTHORIZATION.authorizationId),
+  grantRef: z.literal(FOURTH_HISTORICAL_UPPER_BOUND_AUTHORIZATION.grantRef),
+  approvedAt: z.literal(FOURTH_HISTORICAL_UPPER_BOUND_AUTHORIZATION.approvedAt), auditId: auditIdSchema,
+});
 const entrySchema = z.strictObject({
   id: z.uuid(), purpose: z.enum(["prep", "live_eval", "demo"]),
   operation: z.enum(["index_embedding", "query_embedding", "intent", "explanation"]),
@@ -63,6 +76,10 @@ const secondAuthorizedEntrySchema = authorizedEntrySchema.extend({ id: z.literal
 const thirdAuthorizedEntrySchema = authorizedEntrySchema.extend({
   id: z.literal(THIRD_HISTORICAL_UPPER_BOUND_AUTHORIZATION.reservationId), operation: z.literal("intent"),
   reserved: z.literal(384750001), budgetCharge: z.literal(384750001),
+});
+const fourthAuthorizedEntrySchema = thirdAuthorizedEntrySchema.extend({
+  id: z.literal(FOURTH_HISTORICAL_UPPER_BOUND_AUTHORIZATION.reservationId),
+  reserved: z.literal(261603840), budgetCharge: z.literal(261603840),
 });
 const legacyLedgerSchema = z.strictObject({
   version: z.literal(1), caps: capsSchema, uncertain: z.boolean(), entries: z.array(entrySchema),
@@ -83,7 +100,12 @@ const v4LedgerSchema = legacyLedgerSchema.extend({
   entries: z.array(z.union([entrySchema, authorizedEntrySchema, secondAuthorizedEntrySchema, thirdAuthorizedEntrySchema])),
   policyGrants: z.tuple([upperBoundGrantInputSchema.extend({ appliedAt: units }), secondUpperBoundGrantInputSchema.extend({ appliedAt: units }), thirdUpperBoundGrantInputSchema.extend({ appliedAt: units })]),
 });
-const ledgerSchema = z.discriminatedUnion("version", [legacyLedgerSchema, v2LedgerSchema, v3LedgerSchema, v4LedgerSchema]);
+const v5LedgerSchema = legacyLedgerSchema.extend({
+  version: z.literal(5), caps: capsSchema.extend({ live_eval: units.max(1.5e9) }),
+  entries: z.array(z.union([entrySchema, authorizedEntrySchema, secondAuthorizedEntrySchema, thirdAuthorizedEntrySchema, fourthAuthorizedEntrySchema])),
+  policyGrants: z.tuple([upperBoundGrantInputSchema.extend({ appliedAt: units }), secondUpperBoundGrantInputSchema.extend({ appliedAt: units }), thirdUpperBoundGrantInputSchema.extend({ appliedAt: units }), fourthUpperBoundGrantInputSchema.extend({ appliedAt: units })]),
+});
+const ledgerSchema = z.discriminatedUnion("version", [legacyLedgerSchema, v2LedgerSchema, v3LedgerSchema, v4LedgerSchema, v5LedgerSchema]);
 export type Ledger = z.infer<typeof ledgerSchema>;
 export type LedgerEntry = Ledger["entries"][number];
 

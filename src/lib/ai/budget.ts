@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { budgetCaps, nanoUsd, SECOND_APPROVED_CAPS, type BudgetCaps, type Purpose } from "./config";
-import { HISTORICAL_UPPER_BOUND_AUTHORIZATION, SECOND_HISTORICAL_UPPER_BOUND_AUTHORIZATION, THIRD_HISTORICAL_UPPER_BOUND_AUTHORIZATION, ledgerTransaction, upperBoundGrantInputSchema, secondUpperBoundGrantInputSchema, thirdUpperBoundGrantInputSchema, type Ledger, type LedgerEntry } from "./ledger";
+import { HISTORICAL_UPPER_BOUND_AUTHORIZATION, SECOND_HISTORICAL_UPPER_BOUND_AUTHORIZATION, THIRD_HISTORICAL_UPPER_BOUND_AUTHORIZATION, FOURTH_HISTORICAL_UPPER_BOUND_AUTHORIZATION, ledgerTransaction, upperBoundGrantInputSchema, secondUpperBoundGrantInputSchema, thirdUpperBoundGrantInputSchema, fourthUpperBoundGrantInputSchema, type Ledger, type LedgerEntry } from "./ledger";
 export { initializeLedger } from "./ledger";
 
 export type Operation = LedgerEntry["operation"] | "audio";
@@ -172,7 +172,7 @@ export class BudgetGuard {
       const target = ledger.entries.find((entry) => entry.id === grant.reservationId);
       if (ledger.entries.some((entry) => entry.id !== grant.reservationId && ["reserved", "dispatched", "unknown"].includes(entry.state))) throw new Error("UNSETTLED_RESERVATIONS");
       if (ledger.entries.some((entry) => entry.actual !== null && entry.actual > entry.reserved)) throw new Error("RESERVATION_EXCEEDED");
-      if (ledger.version === 3 || ledger.version === 4) {
+      if (ledger.version === 3 || ledger.version === 4 || ledger.version === 5) {
         const existing = ledger.policyGrants[1];
         if (Object.entries(grant).some(([key, value]) => existing[key as keyof typeof grant] !== value)) throw new Error("UPPER_BOUND_POLICY_CONFLICT");
         return;
@@ -203,7 +203,7 @@ export class BudgetGuard {
       const target = ledger.entries.find((entry) => entry.id === grant.reservationId);
       if (ledger.entries.some((entry) => entry.id !== grant.reservationId && ["reserved", "dispatched", "unknown"].includes(entry.state))) throw new Error("UNSETTLED_RESERVATIONS");
       if (ledger.entries.some((entry) => entry.actual !== null && entry.actual > entry.reserved)) throw new Error("RESERVATION_EXCEEDED");
-      if (ledger.version === 4) {
+      if (ledger.version === 4 || ledger.version === 5) {
         const existing = ledger.policyGrants[2];
         if (Object.entries(grant).some(([key, value]) => existing[key as keyof typeof grant] !== value)) throw new Error("UPPER_BOUND_POLICY_CONFLICT");
         return;
@@ -217,6 +217,37 @@ export class BudgetGuard {
       if (appliedAt < Date.parse(grant.approvedAt) || appliedAt < ledger.policyGrants[1].appliedAt) throw new Error("UPPER_BOUND_GRANT_INVALID");
       Object.assign(ledger, {
         version: 4, caps: { ...ledger.caps, live_eval: 1.5e9 },
+        entries: ledger.entries.map((entry) => entry === target ? { ...entry, state: "authorized_upper_bound", accountingBasis: "authorized_upper_bound", budgetCharge: target.reserved, authorizationAuditId: grant.auditId } : entry),
+        policyGrants: [...ledger.policyGrants, { ...grant, appliedAt }],
+      });
+    }, true);
+  }
+
+  // Exact fourth approval for the previous Qwen429 only. It leaves v4 caps
+  // unchanged and retains the barrier for a separate explicit audit clear.
+  async authorizeFourthHistoricalUpperBound(input: unknown): Promise<void> {
+    const parsed = fourthUpperBoundGrantInputSchema.safeParse(input);
+    if (!parsed.success) throw new Error("UPPER_BOUND_GRANT_INVALID");
+    if (purposes.some((purpose) => this.caps[purpose] !== thirdPolicyCaps[purpose])) throw new Error("UPPER_BOUND_CAP_MISMATCH");
+    const grant = parsed.data;
+    return ledgerTransaction(this.options.path, (ledger) => {
+      const target = ledger.entries.find((entry) => entry.id === grant.reservationId);
+      if (ledger.entries.some((entry) => entry.id !== grant.reservationId && ["reserved", "dispatched", "unknown"].includes(entry.state))) throw new Error("UNSETTLED_RESERVATIONS");
+      if (ledger.entries.some((entry) => entry.actual !== null && entry.actual > entry.reserved)) throw new Error("RESERVATION_EXCEEDED");
+      if (ledger.version === 5) {
+        const existing = ledger.policyGrants[3];
+        if (Object.entries(grant).some(([key, value]) => existing[key as keyof typeof grant] !== value)) throw new Error("UPPER_BOUND_POLICY_CONFLICT");
+        return;
+      }
+      if (ledger.version !== 4 || !ledger.uncertain || !target || target.state !== "unknown" || target.actual !== null || target.reserved !== FOURTH_HISTORICAL_UPPER_BOUND_AUTHORIZATION.budgetCharge || target.purpose !== "live_eval" || target.operation !== "intent") throw new Error("UPPER_BOUND_TARGET_MISMATCH");
+      if (ledger.caps.prep !== 2e9 || ledger.caps.live_eval !== 1.5e9 || ledger.caps.demo !== 4e9) throw new Error("UPPER_BOUND_CAP_MISMATCH");
+      if (ledger.policyGrants.some((existing) => existing.auditId === grant.auditId) || ledger.reconciliations.some((audit) => audit.id === grant.auditId)) throw new Error("UPPER_BOUND_POLICY_CONFLICT");
+      const state = totals(ledger);
+      if (state.spent.prep + target.reserved > 2e9 || state.spent.live_eval + target.reserved > 1.5e9 || state.spent.demo > 4e9) throw new Error("BUDGET_EXCEEDED");
+      const appliedAt = Date.now();
+      if (appliedAt < Date.parse(grant.approvedAt) || appliedAt < ledger.policyGrants[2].appliedAt) throw new Error("UPPER_BOUND_GRANT_INVALID");
+      Object.assign(ledger, {
+        version: 5,
         entries: ledger.entries.map((entry) => entry === target ? { ...entry, state: "authorized_upper_bound", accountingBasis: "authorized_upper_bound", budgetCharge: target.reserved, authorizationAuditId: grant.auditId } : entry),
         policyGrants: [...ledger.policyGrants, { ...grant, appliedAt }],
       });
