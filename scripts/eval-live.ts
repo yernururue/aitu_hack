@@ -22,9 +22,13 @@ import { protectArtifactPaths } from "./build-index";
 export const DEFAULT_EVAL_MODELS = Object.freeze(["openai/gpt-6-luna", "anthropic/claude-haiku-5.5", "qwen/qwen3.8-flash"]);
 export const AMENDED_EVAL_PROTOCOL = "approved-luna-qwen-20261020";
 export const AMENDED_EVAL_MODELS = Object.freeze(["openai/gpt-6-luna", "qwen/qwen3.8-flash"]);
-type EvalProtocol = "original-three-model" | typeof AMENDED_EVAL_PROTOCOL;
+export const QWEN_EVAL_PROTOCOL = "approved-qwen-20261020";
+export const QWEN_EVAL_MODELS = Object.freeze(["qwen/qwen3.8-flash"]);
+type EvalProtocol = "original-three-model" | typeof AMENDED_EVAL_PROTOCOL | typeof QWEN_EVAL_PROTOCOL;
 const AMENDMENT_AUTHORIZATION = Object.freeze({ authorizationId: "87921423-9345-419a-bd47-c90f0e8b0c38",
   grantRef: "call_082bf0991a884dbdab84f204cf7058ce", approvedAt: "2026-10-20T14:19:34.395565+00:00" });
+const QWEN_AUTHORIZATION = Object.freeze({ authorizationId: "00d1c10d-26b9-4daf-8107-964a5375bb67",
+  grantRef: "call_dd3ce7d726fb4aebb4d0fe1b10a88e9e", approvedAt: "2026-10-20T14:49:53.969679+00:00" });
 const QUALITY_REQUIREMENTS = Object.freeze({ positiveCasesPerModel: 12, minimumValidPositivesPerModel: 10,
   idEvidenceHardFilterPassRate: 1, unsupportedFacts: 0, separateNegativeGuards: 4 });
 export const LIVE_PROMPT_VERSION = "m3-core-strict-origin-context-v2";
@@ -54,14 +58,14 @@ export type LiveEvalRow = {
   usage: ChatAttemptEvent["usage"]; costUsd: number | null; attemptCount: number;
   attempts: ChatAttemptEvent[]; errorCode: string | null;
 };
-type ModelDisposition = { model: string; provider?: "Azure";
+type ModelDisposition = { model: string; provider?: "Azure"; reason?: "current_15s_single_attempt_timeout";
   status: "measured" | "partially_measured" | "not_assessed" | "technically_disqualified";
   remainingCases: "none" | "not_assessed"; qualityAssessment: null;
   observations?: { status: number | null; costKnown: false }[] };
 export type LiveEvalResult = {
   type: "summary"; status: "disabled" | "blocked" | "complete"; reason: string | null;
-  comparisonComplete: boolean; originalFullThreeModelComparisonComplete: boolean; amendedComparisonComplete: boolean;
-  protocol: EvalProtocol; protocolAuthorization: typeof AMENDMENT_AUTHORIZATION | null;
+  comparisonComplete: boolean; originalFullThreeModelComparisonComplete: boolean; amendedComparisonComplete: boolean; qwenQualificationComplete: boolean;
+  protocol: EvalProtocol; protocolAuthorization: typeof AMENDMENT_AUTHORIZATION | typeof QWEN_AUTHORIZATION | null;
   modelDispositions: ModelDisposition[]; qualityRequirements: typeof QUALITY_REQUIREMENTS;
   winner: null; diagnostic: boolean; models: readonly string[];
   synthetic: boolean | null; intentScoringPolicy: string; annotationHash: string | null;
@@ -228,7 +232,7 @@ export async function loadFrozenLiveInput(): Promise<LiveInput> {
 
 /** The amendment changes the measured models, never the frozen queries, labels or
  * cached context inputs. Negative guards stay in the authoritative retrieval run. */
-async function assertAmendedInput(input: LiveInput, cases: readonly FrozenLiveCase[]): Promise<void> {
+async function assertApprovedInput(input: LiveInput, cases: readonly FrozenLiveCase[]): Promise<void> {
   const [labelText, annotationText] = await Promise.all([
     readFile("evals/real-cases.json", "utf8"), readFile("evals/live-intent-expectations.json", "utf8"),
   ]);
@@ -274,14 +278,20 @@ function scoreIntent(actual: Intent, expected: Intent, item: EvalCase): { match:
 export async function runLiveEvaluation(options: LiveEvalOptions = {}, dependencies: LiveEvalDependencies = {}): Promise<LiveEvalResult> {
   const started = performance.now(); const protocol = options.protocol ?? "original-three-model";
   const amended = protocol === AMENDED_EVAL_PROTOCOL;
-  const models = [...(options.models ?? (amended ? AMENDED_EVAL_MODELS : DEFAULT_EVAL_MODELS))];
+  const qwenQualification = protocol === QWEN_EVAL_PROTOCOL;
+  const approvedProtocol = amended || qwenQualification;
+  const expectedModels = amended ? AMENDED_EVAL_MODELS : qwenQualification ? QWEN_EVAL_MODELS : DEFAULT_EVAL_MODELS;
+  const models = [...(options.models ?? expectedModels)];
   const result: LiveEvalResult = { type: "summary", status: "disabled", reason: null, comparisonComplete: false,
-    originalFullThreeModelComparisonComplete: false, amendedComparisonComplete: false, protocol,
-    protocolAuthorization: amended ? AMENDMENT_AUTHORIZATION : null, qualityRequirements: QUALITY_REQUIREMENTS,
-    modelDispositions: DEFAULT_EVAL_MODELS.map((model): ModelDisposition => amended && model === "anthropic/claude-haiku-5.5"
+    originalFullThreeModelComparisonComplete: false, amendedComparisonComplete: false, qwenQualificationComplete: false, protocol,
+    protocolAuthorization: amended ? AMENDMENT_AUTHORIZATION : qwenQualification ? QWEN_AUTHORIZATION : null, qualityRequirements: QUALITY_REQUIREMENTS,
+    modelDispositions: DEFAULT_EVAL_MODELS.map((model): ModelDisposition => approvedProtocol && model === "anthropic/claude-haiku-5.5"
       ? { model, provider: "Azure", status: "technically_disqualified", remainingCases: "not_assessed", qualityAssessment: null,
         observations: [{ status: null, costKnown: false }, { status: 400, costKnown: false }] }
-      : { model, status: "not_assessed", remainingCases: "not_assessed", qualityAssessment: null }), winner: null,
+      : qwenQualification && model === "openai/gpt-6-luna"
+        ? { model, status: "technically_disqualified", reason: "current_15s_single_attempt_timeout",
+          remainingCases: "not_assessed", qualityAssessment: null, observations: [{ status: null, costKnown: false }] }
+        : { model, status: "not_assessed", remainingCases: "not_assessed", qualityAssessment: null }), winner: null,
     diagnostic: true, models, synthetic: null, intentScoringPolicy: "injected-exact-v1", annotationHash: null, inputHashes: null, humanReviewRequired: true,
     reserveQuotes: [], schemaProjectionPolicy: "original-core-schema-hash; Haiku anthropic-bounds-v1 wire only; strict local validation unchanged", promptVersion: LIVE_PROMPT_VERSION, contextPolicy: CONTEXT_POLICY, latencyMs: 0, ttftMs: null, rows: [] };
   const finish = () => {
@@ -295,14 +305,14 @@ export async function runLiveEvaluation(options: LiveEvalOptions = {}, dependenc
     result.latencyMs = Math.max(0, performance.now() - started); return result;
   };
   const block = (reason: string) => { result.status = "blocked"; result.reason = reason; return finish(); };
-  if (protocol !== "original-three-model" && !amended) return block("INVALID_PROTOCOL");
+  if (protocol !== "original-three-model" && !approvedProtocol) return block("INVALID_PROTOCOL");
   if (!options.execute) return finish();
   let config: ReturnType<typeof readAiConfig>;
   try { config = readAiConfig(options.env); } catch { return block("INVALID_AI_CONFIGURATION"); }
   if (!config.paidEnabled || !config.liveEvalEnabled) return block("LIVE_EVAL_DISABLED");
   if (!models.length || new Set(models).size !== models.length || models.some((model) => !DEFAULT_EVAL_MODELS.includes(model))) return block("INVALID_MODEL_SET");
-  if (amended && hash(models) !== hash(AMENDED_EVAL_MODELS)) return block("INVALID_PROTOCOL_MODEL_SET");
-  result.diagnostic = amended ? false : models.length !== DEFAULT_EVAL_MODELS.length;
+  if (approvedProtocol && hash(models) !== hash(expectedModels)) return block("INVALID_PROTOCOL_MODEL_SET");
+  result.diagnostic = approvedProtocol ? false : models.length !== DEFAULT_EVAL_MODELS.length;
   result.reserveQuotes = Object.freeze(models.map((model) => quoteRequest({ operation: "explanation", model, maxCompletionTokens: 1000 })));
   const estimates = new Map(result.reserveQuotes.map((quote) => [quote.model, quote.estimatedUsd]));
   if ([...estimates.values()].some((cost) => cost > config.caps.live_eval || cost > config.caps.prep)) return block("MODEL_QUOTE_EXCEEDS_CAP");
@@ -317,7 +327,7 @@ export async function runLiveEvaluation(options: LiveEvalOptions = {}, dependenc
   };
   const batchFailure = await checkBudget(Math.max(...estimates.values()));
   if (batchFailure) return block(batchFailure);
-  const outputPath = options.outputPath ?? (amended ? "evals/results/live-eval-approved-luna-qwen-20261020.jsonl" : "evals/results/live-eval.jsonl");
+  const outputPath = options.outputPath ?? (qwenQualification ? "evals/results/live-eval-approved-qwen-20261020.jsonl" : amended ? "evals/results/live-eval-approved-luna-qwen-20261020.jsonl" : "evals/results/live-eval.jsonl");
   let cases: FrozenLiveCase[];
   try {
     await safeReportPath(outputPath);
@@ -325,7 +335,7 @@ export async function runLiveEvaluation(options: LiveEvalOptions = {}, dependenc
     await (dependencies.verifyModels ?? verifyCurrentModels)(models);
     const input = options.input ?? await loadFrozenLiveInput();
     cases = await freezeLiveCases(input.catalog, input.cases, dependencies.retrieve ?? input.retrieve);
-    if (amended) await assertAmendedInput(input, cases);
+    if (approvedProtocol) await assertApprovedInput(input, cases);
     if (input.requireSemantic && cases.some((item) => item.retrievalMode !== "semantic" || !item.item.expected.intent || !item.candidates.length)) throw new Error("SEMANTIC_PREFLIGHT_FAILED");
     result.synthetic = input.catalog.synthetic;
     result.annotationHash = input.annotationHash ?? null; result.inputHashes = input.inputHashes ?? null;
@@ -401,28 +411,31 @@ export async function runLiveEvaluation(options: LiveEvalOptions = {}, dependenc
   }
   const measuredComplete = result.status === "complete" && !result.diagnostic && result.rows.length === cases.length * models.length * 2 && result.rows.every((row) => !row.skipped && (row.stage !== "intent" || row.intentMatch !== null));
   // Completeness describes coverage only, never model quality or release approval.
-  result.originalFullThreeModelComparisonComplete = !amended && measuredComplete;
+  result.originalFullThreeModelComparisonComplete = !approvedProtocol && measuredComplete;
   result.comparisonComplete = result.originalFullThreeModelComparisonComplete;
   result.amendedComparisonComplete = amended && measuredComplete;
+  result.qwenQualificationComplete = qwenQualification && measuredComplete;
   finish();
   try {
     const { rows, ...metadata } = result;
     const records = [{ ...metadata, type: "metadata" }, ...rows];
     await (dependencies.writeReport ?? ((records, path) => writeLiveReport(path, records)))(records, outputPath);
-  } catch { block("REPORT_WRITE_FAILED"); result.comparisonComplete = false; result.originalFullThreeModelComparisonComplete = false; result.amendedComparisonComplete = false; }
+  } catch { block("REPORT_WRITE_FAILED"); result.comparisonComplete = false; result.originalFullThreeModelComparisonComplete = false; result.amendedComparisonComplete = false; result.qwenQualificationComplete = false; }
   return finish();
 }
 
 export async function main(args: string[]): Promise<number> {
   // Only the specifically approved amendment is selectable; arbitrary subsets
   // stay injected diagnostics and cannot qualify for either comparison flag.
-  const protocolArg = `--protocol=${AMENDED_EVAL_PROTOCOL}`;
-  if (args.some((arg) => !["--execute", protocolArg].includes(arg)) || new Set(args).size !== args.length) {
+  const amendedArg = `--protocol=${AMENDED_EVAL_PROTOCOL}`;
+  const qwenArg = `--protocol=${QWEN_EVAL_PROTOCOL}`;
+  if (args.some((arg) => !["--execute", amendedArg, qwenArg].includes(arg)) || new Set(args).size !== args.length
+    || args.filter((arg) => arg.startsWith("--protocol=")).length > 1) {
     console.info(JSON.stringify({ status: "blocked", reason: "INVALID_ARGUMENTS", comparisonComplete: false,
-      originalFullThreeModelComparisonComplete: false, amendedComparisonComplete: false, winner: null })); return 1;
+      originalFullThreeModelComparisonComplete: false, amendedComparisonComplete: false, qwenQualificationComplete: false, winner: null })); return 1;
   }
   const result = await runLiveEvaluation({ execute: args.includes("--execute"),
-    protocol: args.includes(protocolArg) ? AMENDED_EVAL_PROTOCOL : "original-three-model" });
+    protocol: args.includes(qwenArg) ? QWEN_EVAL_PROTOCOL : args.includes(amendedArg) ? AMENDED_EVAL_PROTOCOL : "original-three-model" });
   const { rows, ...summary } = result;
   console.info(JSON.stringify({ ...summary, rowCount: rows.length }));
   return result.status === "blocked" ? 1 : 0;

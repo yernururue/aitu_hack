@@ -449,7 +449,7 @@ describe("approved Luna/Qwen amendment and shared origin context", () => {
     const { input, deps } = await frozenProtocolFixture();
     const result = await runLiveEvaluation({ execute: true, env: env(), input }, deps);
     expect(result).toMatchObject({ status: "complete", comparisonComplete: true,
-      originalFullThreeModelComparisonComplete: true, amendedComparisonComplete: false, winner: null });
+      originalFullThreeModelComparisonComplete: true, amendedComparisonComplete: false, qwenQualificationComplete: false, winner: null });
     expect(result.models).toEqual(["openai/gpt-6-luna", "anthropic/claude-haiku-5.5", "qwen/qwen3.8-flash"]);
     expect(result.rows).toHaveLength(72);
     expect(fetch).not.toHaveBeenCalled();
@@ -458,7 +458,7 @@ describe("approved Luna/Qwen amendment and shared origin context", () => {
     const { input, deps, wirePayloads } = await frozenProtocolFixture();
     const result = await runLiveEvaluation({ execute: true, env: env(), input, protocol }, deps);
     expect(result).toMatchObject({ status: "complete", comparisonComplete: false,
-      originalFullThreeModelComparisonComplete: false, amendedComparisonComplete: true,
+      originalFullThreeModelComparisonComplete: false, amendedComparisonComplete: true, qwenQualificationComplete: false,
       diagnostic: false, winner: null, humanReviewRequired: true,
       protocolAuthorization: { authorizationId: "87921423-9345-419a-bd47-c90f0e8b0c38" },
       qualityRequirements: { positiveCasesPerModel: 12, minimumValidPositivesPerModel: 10,
@@ -549,6 +549,85 @@ describe("approved Luna/Qwen amendment and shared origin context", () => {
     expect(JSON.parse(output.mock.calls[0][0])).toMatchObject({ status: "disabled", protocol,
       models: ["openai/gpt-6-luna", "qwen/qwen3.8-flash"], amendedComparisonComplete: false, rowCount: 0 });
     expect(await main(["--protocol=arbitrary"])).toBe(1);
+    expect(fetch).not.toHaveBeenCalled();
+  });
+});
+
+
+describe("approved Qwen release qualification", () => {
+  const protocol = "approved-qwen-20261020" as const;
+  it("measures only Qwen on all original12 cases and reports24-stage qualification separately", async () => {
+    const { input, deps } = await frozenProtocolFixture();
+    const result = await runLiveEvaluation({ execute: true, env: env(), input, protocol }, deps);
+    expect({ status: result.status, models: result.models, rows: result.rows.length,
+      original: result.originalFullThreeModelComparisonComplete, amended: result.amendedComparisonComplete,
+      legacy: result.comparisonComplete, qualified: result.qwenQualificationComplete, winner: result.winner })
+      .toEqual({ status: "complete", models: ["qwen/qwen3.8-flash"], rows: 24,
+        original: false, amended: false, legacy: false, qualified: true, winner: null });
+    expect(new Set(result.rows.map((row) => row.caseId)).size).toBe(12);
+    expect(result.rows.every((row) => !row.skipped && row.attemptCount === 1)).toBe(true);
+    expect(result).toMatchObject({ protocolAuthorization: { authorizationId: "00d1c10d-26b9-4daf-8107-964a5375bb67",
+      grantRef: "call_dd3ce7d726fb4aebb4d0fe1b10a88e9e" }, humanReviewRequired: true,
+      qualityRequirements: { positiveCasesPerModel: 12, minimumValidPositivesPerModel: 10,
+        idEvidenceHardFilterPassRate: 1, unsupportedFacts: 0, separateNegativeGuards: 4 } });
+    expect(result.modelDispositions).toContainEqual({ model: "openai/gpt-6-luna", status: "technically_disqualified",
+      reason: "current_15s_single_attempt_timeout", remainingCases: "not_assessed", qualityAssessment: null,
+      observations: [{ status: null, costKnown: false }] });
+    expect(result.modelDispositions.find((item) => item.model.includes("haiku"))).toMatchObject({ provider: "Azure",
+      status: "technically_disqualified", remainingCases: "not_assessed", qualityAssessment: null,
+      observations: [{ status: null, costKnown: false }, { status: 400, costKnown: false }] });
+    expect(result.modelDispositions.find((item) => item.model === "qwen/qwen3.8-flash"))
+      .toMatchObject({ status: "measured", remainingCases: "none", qualityAssessment: null });
+    expect(fetch).not.toHaveBeenCalled();
+  }, 20_000);
+  it("does not qualify a Qwen-only injected subset without the named protocol", async () => {
+    const { input, deps } = await frozenProtocolFixture();
+    const result = await runLiveEvaluation({ execute: true, env: env(), input, models: ["qwen/qwen3.8-flash"] }, deps);
+    expect(result).toMatchObject({ diagnostic: true, comparisonComplete: false, originalFullThreeModelComparisonComplete: false,
+      amendedComparisonComplete: false, qwenQualificationComplete: false, winner: null });
+  }, 20_000);
+  it.each(["override", "missing", "changed_gold", "changed_hash"])("rejects %s Qwen protocol input before any provider call", async (change) => {
+    const { input, deps } = await frozenProtocolFixture();
+    if (change === "missing") input.cases.pop();
+    if (change === "changed_gold") input.cases[0].expected.relevantIds = [];
+    if (change === "changed_hash") input.inputHashes.indexSha256 = "0".repeat(64);
+    const factory = vi.fn(deps.createChat); deps.createChat = factory;
+    const result = await runLiveEvaluation({ execute: true, env: env(), input, protocol,
+      ...(change === "override" ? { models: ["openai/gpt-6-luna", "qwen/qwen3.8-flash"] } : {}) }, deps);
+    expect({ status: result.status, reason: result.reason, rows: result.rows.length, qualified: result.qwenQualificationComplete })
+      .toEqual({ status: "blocked", reason: change === "override" ? "INVALID_PROTOCOL_MODEL_SET" : "PREFLIGHT_FAILED", rows: 0, qualified: false });
+    expect(factory).not.toHaveBeenCalled();
+  });
+  it.each([0, 23])("does not qualify skipped or partial Qwen coverage (%i actual stages)", async (actualStages) => {
+    const { input, deps } = await frozenProtocolFixture(); const create = deps.createChat!; let stage = 0;
+    deps.createChat = (options) => { if (stage++ >= actualStages) throw new Error("OFFLINE_BEFORE_DISPATCH"); return create(options); };
+    const result = await runLiveEvaluation({ execute: true, env: env(), input, protocol }, deps);
+    expect(result.rows).toHaveLength(24);
+    expect(result.rows.filter((row) => !row.skipped)).toHaveLength(actualStages);
+    expect(result.qwenQualificationComplete).toBe(false);
+    expect(result.modelDispositions.find((item) => item.model === "qwen/qwen3.8-flash"))
+      .toMatchObject({ status: actualStages ? "partially_measured" : "not_assessed", remainingCases: "not_assessed" });
+  });
+  it("keeps unknown-cost STOP and failed report persistence from claiming Qwen qualification", async () => {
+    const { input, deps } = await frozenProtocolFixture();
+    const broken = dependencies(async () => ({ status: 200, body: {} })); deps.createChat = broken.createChat;
+    const unknown = await runLiveEvaluation({ execute: true, env: env(), input, protocol }, deps);
+    expect({ status: unknown.status, reason: unknown.reason, rows: unknown.rows.length, qualified: unknown.qwenQualificationComplete })
+      .toEqual({ status: "blocked", reason: "COST_UNKNOWN", rows: 1, qualified: false });
+    expect((await guard.snapshot()).uncertain).toBe(true);
+  });
+  it("clears qualification after a failed report write even if24 stages were measured", async () => {
+    const { input, deps } = await frozenProtocolFixture(); deps.writeReport = async () => { throw new Error("OFFLINE_WRITE_FAILURE"); };
+    const result = await runLiveEvaluation({ execute: true, env: env(), input, protocol }, deps);
+    expect({ status: result.status, reason: result.reason, rows: result.rows.length, qualified: result.qwenQualificationComplete })
+      .toEqual({ status: "blocked", reason: "REPORT_WRITE_FAILED", rows: 24, qualified: false });
+  }, 20_000);
+  it("supports only explicit Qwen CLI preview without executing or combining protocols", async () => {
+    const output = vi.spyOn(console, "info").mockImplementation(() => {});
+    expect(await main(["--protocol=approved-qwen-20261020"])).toBe(0);
+    expect(JSON.parse(output.mock.calls[0][0])).toMatchObject({ status: "disabled", protocol,
+      models: ["qwen/qwen3.8-flash"], qwenQualificationComplete: false, rowCount: 0 });
+    expect(await main(["--protocol=approved-qwen-20261020", "--protocol=approved-luna-qwen-20261020"])).toBe(1);
     expect(fetch).not.toHaveBeenCalled();
   });
 });
