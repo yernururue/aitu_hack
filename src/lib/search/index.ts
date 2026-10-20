@@ -10,6 +10,14 @@ import type { Purpose } from "../ai/config";
 export const DEFAULT_EMBEDDING_MODEL = "openai/text-embedding-3-small";
 export const DEFAULT_EMBEDDING_DIMENSIONS = 1536;
 export const DOCUMENT_VERSION = "poi-v1";
+
+function isAcceptedEmbeddingResponseModel(requested: string, actual: unknown): boolean {
+  // Verified OpenRouter slug / OpenAI native response pair. Do not normalize
+  // arbitrary provider namespaces into a seemingly compatible embedding model.
+  return requested === DEFAULT_EMBEDDING_MODEL
+    && (actual === requested || actual === "text-embedding-3-small");
+}
+
 const HashSchema = z.string().regex(/^[a-f0-9]{64}$/);
 const VectorSchema = z.array(z.number().finite()).min(1).max(1536).refine((values) => values.some((value) => value !== 0), "Zero vector");
 export const IndexSchema = z.strictObject({
@@ -135,7 +143,7 @@ export function createGuardedEmbedder(transport: Pick<GuardedTransport, "execute
     const quote = quoteRequest({ operation: options.inputType === "search_document" ? "index_embedding" : "query_embedding", model: options.model, inputCount: texts.length });
     const raw = await transport.execute({ purpose, quote, body: { input: texts, dimensions: options.dimensions, encoding_format: "float" } });
     const response = z.object({ model: z.string().optional(), data: z.array(z.strictObject({ index: z.number().int().min(0), embedding: VectorSchema, object: z.string().optional() })).length(texts.length) }).parse(raw);
-    if (response.model && response.model !== options.model) throw new Error("EMBEDDING_MODEL_MISMATCH");
+    if (!isAcceptedEmbeddingResponseModel(options.model, response.model)) throw new Error("EMBEDDING_MODEL_MISMATCH");
     const ordered = new Map(response.data.map((row) => [row.index, row.embedding]));
     if (ordered.size !== texts.length || response.data.some((row) => row.index >= texts.length || row.embedding.length !== options.dimensions)) throw new Error("EMBEDDING_RESPONSE_MISMATCH");
     return texts.map((_text, index) => ordered.get(index)!);
