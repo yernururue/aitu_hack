@@ -287,7 +287,8 @@ export async function runLiveEvaluation(options: LiveEvalOptions = {}, dependenc
   const finish = () => {
     for (const disposition of result.modelDispositions) {
       if (disposition.status === "technically_disqualified") continue;
-      const measured = result.rows.filter((row) => row.model === disposition.model).length;
+      const measured = new Set(result.rows.filter((row) => row.model === disposition.model && !row.skipped)
+        .map((row) => `${row.caseId}:${row.stage}`)).size;
       disposition.status = measured >= 24 ? "measured" : measured ? "partially_measured" : "not_assessed";
       disposition.remainingCases = measured >= 24 ? "none" : "not_assessed";
     }

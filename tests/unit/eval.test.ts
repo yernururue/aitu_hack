@@ -465,6 +465,8 @@ describe("approved Luna/Qwen amendment and shared origin context", () => {
         idEvidenceHardFilterPassRate: 1, unsupportedFacts: 0, separateNegativeGuards: 4 } });
     expect(result.models).toEqual(["openai/gpt-6-luna", "qwen/qwen3.8-flash"]);
     expect(result.rows).toHaveLength(48);
+    for (const model of result.models) expect(result.modelDispositions.find((item) => item.model === model))
+      .toMatchObject({ status: "measured", remainingCases: "none" });
     for (const model of result.models) expect(new Set(result.rows.filter((row) => row.model === model).map((row) => row.caseId)).size).toBe(12);
     expect(result.modelDispositions).toContainEqual({ model: "anthropic/claude-haiku-5.5", provider: "Azure",
       status: "technically_disqualified", remainingCases: "not_assessed", qualityAssessment: null,
@@ -478,6 +480,25 @@ describe("approved Luna/Qwen amendment and shared origin context", () => {
     }
     expect(fetch).not.toHaveBeenCalled();
   }, 20_000);
+  it.each([0, 1, 23])("does not count skipped rows toward measured model coverage (%i actual Luna stages)", async (measuredLunaStages) => {
+    const { input, deps } = await frozenProtocolFixture();
+    const create = deps.createChat!;
+    let lunaStages = 0;
+    deps.createChat = (options) => {
+      if (options.model !== "openai/gpt-6-luna" || lunaStages++ >= measuredLunaStages) throw new Error("OFFLINE_BEFORE_DISPATCH");
+      return create(options);
+    };
+    const result = await runLiveEvaluation({ execute: true, env: env(), input, protocol }, deps);
+    expect(result.rows).toHaveLength(48);
+    expect(result.rows.filter((row) => !row.skipped)).toHaveLength(measuredLunaStages);
+    expect(result.amendedComparisonComplete).toBe(false);
+    expect(result.modelDispositions.find((item) => item.model === "openai/gpt-6-luna"))
+      .toMatchObject({ status: measuredLunaStages ? "partially_measured" : "not_assessed", remainingCases: "not_assessed" });
+    expect(result.modelDispositions.find((item) => item.model === "qwen/qwen3.8-flash"))
+      .toMatchObject({ status: "not_assessed", remainingCases: "not_assessed" });
+    expect(result.rows.filter((row) => row.skipped).every((row) => row.attemptCount === 0 && row.costUsd === 0)).toBe(true);
+    expect(fetch).not.toHaveBeenCalled();
+  });
   it("does not promote an unapproved subset and rejects amended model overrides before any calls", async () => {
     const { input, deps } = await frozenProtocolFixture();
     const subset = await runLiveEvaluation({ execute: true, env: env(), input, models: ["openai/gpt-6-luna", "qwen/qwen3.8-flash"] }, deps);
