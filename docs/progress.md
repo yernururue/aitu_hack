@@ -20,7 +20,10 @@ M5.4: добавлены объяснение0vsпустое поле, подс�
 PPTX/видео M7.1–M7.4 сохранены как снимок source572/buildBlw/554unit/62e2e.
 Финальный независимый integration/docs review SPEC/CONSISTENCY+QUALITY PASS;
 tracker/manifest/current build и неизменённые материалы согласованы.
-На физическом телефоне карточки/маршруты ещё не подтверждены; live/semantic gates blocked.
+Пользователь подтвердил на физическом телефоне 3 из 3 карточки после снятия бюджета:
+Ботанический сад, Samal Park, Ғашықтар; EXPO/5км/60мин/solo/без профиля,
+версия данных `4677a7a004ef`. Пользователь также подтвердил: 2ГИС и Google Maps
+открыли выбранный Ботанический сад в приложениях. Live/semantic gates blocked.
 
 Проверенный offline/stub текстовый путь работает на 298 реальных POI: фильтры,
 лексическое ранжирование, серверный API, адаптивный UI, подробности/источники,
@@ -32,7 +35,8 @@ M1/M3 приняты, M2 offline code принят; M4.1/M4.2 numerical gate п�
 M5.1/M5.2 приняты после независимого review. Последний UI P2 исправлен:
 HTTP provenance остаётся точным текстом, HTTPS — кликабельной ссылкой; RED2anchors →
 GREEN2viewport cases, независимый probe/re-review PASS. Голос M6 skipped по P1 gate,
-записи/транскрипции нет. M7 release work продолжается по явному offline waiver.
+записи/транскрипции нет. M7 принят в рамках offline/local передачи по явному waiver;
+полная P0 RAG-приёмка остаётся незавершённой.
 
 ## Последние проверки интегратора
 
@@ -57,7 +61,7 @@ Browser покрывает настоящий локальный API/катал�
 focus trap/restoration/Close и отсутствие горизонтального скролла. Scoped mocks
 используются только для гонок/отказов и явно synthetic literal-HTML review fixture.
 Root просмотрел реальные desktop/mobile скриншоты карточек и подробностей.
-Разбор href не подтверждает физический телефон или запуск native карт.
+Native-переходы 2ГИС и Google Maps на физическом телефоне отдельно подтверждены пользователем.
 
 ## Данные и качество
 
@@ -83,7 +87,7 @@ M2.4: настоящий embedding index отсутствует. M4.3/M4.4: live
 не выполнены; actual model=null, Luna provisional. Ключ401; пользователь подтвердил,
 что не обновлял его и поручил продолжать со stubs. Auth/paid retries не выполнять.
 Haiku conservative reserve$1.32>$0.50 eval cap; лимиты не повышены.
-M5.3: физический телефон/native map handoff и один реальный paid smoke не проверены.
+M5.3 blocked только на одном реальном paid live smoke, который не выполнен.
 Это не полная P0 RAG acceptance. Vercel session preflight403, нового login не было;
 временный QuickTunnel восстановлен и повторно проверен: [адрес/запуск](submission/links.md).
 Это process-bound preview, не стабильный hosting. Root fresh private contexts390/1440

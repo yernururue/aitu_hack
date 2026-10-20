@@ -253,15 +253,16 @@ tests/e2e/recommendation-flow.spec.ts.
 
 
 M5.1–M5.2 done: root554unit/62e2e/390+1440/types/lint/build/NFT PASS, independentreviewPASS.
-M5.3 blocked: физический телефон/native map handoff и реальный paid live smoke не проверены;
+M5.3 blocked только на реальном paid live smoke;
 ключ не обновлён, продолжение со stubs разрешено явно. Offline UI не объявляется полной RAG acceptance.
 
 M5.4 done: пользовательский0бюджет объяснён, добавлены переход к полю и явное снятие
 только бюджета без автопоиска. RED2→GREEN, independentSPEC/QUALITYPASS; root554unit/
 64e2e390+1440/lint/types/build/NFT/harness PASS. Public private390/1440 подтвердил
 строгий0→0/явнаяочисткабезPOST/null→3реальныхпарка при сохранении остальных условий.
-Source`ceb34a5`, build`NASkuokYCKTpTbx_JqKpo`. Физический доступ к сайту подтверждён;
-карточки/native maps после снятия бюджета и live smoke ещё не подтверждены.
+Source`ceb34a5`, build`NASkuokYCKTpTbx_JqKpo`. Пользователь подтвердил физический доступ
+к сайту, 3 карточки после снятия бюджета и открытие выбранного Ботанического сада
+в приложениях 2ГИС и Google Maps. Paid live smoke ещё не выполнен.
 
 ## Этап 6. Голос (P1, максимум один час)
 
@@ -308,6 +309,8 @@ deployment config при необходимости, финальный docs/pro
 M7.4 done:7slides/native43text/2tables/notes360s +continuous110sVP9/audio0,
 independent artifact SPEC/QUALITY PASS. Public upload/YouTube/submission не выполнялись.
 
-M7.5 blocked: локальная передача/материалы сохранены da659ed,57local links и private
-Chromium390/1440 PASS; физический телефон/native map handoff не подтверждён.
-M7parent blocked, а не done. Следующий внешний P0 gateM2.4 без authretry до обновления ключа.
+M7.5: локальная передача/материалы сохранены da659ed,57local links и private
+Chromium390/1440 PASS; сайт и 3 карточки на физическом телефоне подтверждены пользователем,
+обе кнопки карт открыли выбранное место в native-приложениях.
+Итоговый статус M7 — в tracker.yaml; полная P0 RAG-приёмка не пройдена.
+Следующий внешний P0 gateM2.4 без authretry до обновления ключа.

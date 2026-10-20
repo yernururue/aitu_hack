@@ -88,8 +88,8 @@
       ]
     ],
     "browser": "Chromium emulation",
-    "physicalPhoneVerified": false,
-    "nativeMapHandoffVerified": false,
+    "physicalPhoneVerified": true,
+    "nativeMapHandoffVerified": true,
     "paidLiveSmokeVerified": false,
     "independentImplementationReview": "PASS",
     "retrieval": {
@@ -114,7 +114,7 @@
       "liveLanguageVerified": false
     },
     "physicalPhoneSiteOpened": true,
-    "physicalPhoneResultAndNativeMapsVerified": false,
+    "physicalPhoneResultAndNativeMapsVerified": true,
     "budgetRecovery": {
       "strictZeroResults": 0,
       "explicitClearMakesNoPost": true,
@@ -125,6 +125,32 @@
         1440
       ],
       "checkedAtUtc": "2026-10-20T00:20:25.214Z"
+    },
+    "physicalPhoneCardsVerified": true,
+    "physicalPhoneCardsEvidence": {
+      "basis": "User-supplied page text following physical-phone retry request",
+      "recommendationCount": 3,
+      "names": [
+        "Ботанический сад",
+        "Samal Park",
+        "Ғашықтар"
+      ],
+      "budget": "blank / null",
+      "dataSnapshotPrefix": "4677a7a004ef",
+      "mapButtonsVisible": true,
+      "mapButtonsClickedVerified": true
+    },
+    "physicalPhoneVerificationScope": "User confirmed physical phone site, three recommendation cards, and both 2GIS/Google Maps opening chosen Botanical Garden in native applications",
+    "nativeMapHandoffEvidence": {
+      "basis": "Direct user answer to exact destination/native-versus-browser phone question",
+      "providers": [
+        "2GIS",
+        "Google Maps"
+      ],
+      "destination": "Ботанический сад",
+      "openedIn": "native applications",
+      "verifiedBy": "user report",
+      "deviceBrowserVersionKnown": false
     }
   },
   "privacy": {
@@ -152,7 +178,7 @@
     "postNoStore": true,
     "controlledQueryGpsAudioCanariesAbsentFromLogs": true,
     "freshBrowserContextsVerified": true,
-    "physicalPhoneVerified": false,
+    "physicalPhoneVerified": true,
     "productionPid": 70029,
     "tunnelPid": 64556,
     "detachedProcesses": true,
@@ -162,13 +188,14 @@
     "existingTunnelEvidenceDirectory": "/tmp/aituhack-mvp/release-runtime-restart-20261019T235726Z",
     "physicalPhoneSiteOpened": true,
     "runtimeReportSha256": "8cfdea94b5eb7d9cc62f7cf8759e425265bf1325964688a8125db845d11c3414",
-    "publicBrowserCheckedAtUtc": "2026-10-20T00:20:25.214Z"
+    "publicBrowserCheckedAtUtc": "2026-10-20T00:20:25.214Z",
+    "physicalPhoneCardsVerified": true
   },
   "outstandingGates": [
     "M2.4 real embeddings index",
     "M4.3 frozen-context live comparison within unchanged budget",
     "M4.4 validated model selection",
-    "M5.3 physical phone/native maps and real paid live smoke"
+    "M5.3 real paid live smoke"
   ],
   "buildId": "NASkuokYCKTpTbx_JqKpo",
   "materials": [
@@ -212,16 +239,19 @@
     }
   ],
   "delivery": {
-    "state": "local_delivery_complete_physical_phone_gate_blocked",
+    "state": "local_delivery_complete_physical_phone_verified",
     "publicUploadPerformed": false,
     "youtubeUploadPerformed": false,
     "gitPushPerformed": false,
     "officialSubmissionPerformed": false,
     "stageCommit": "da659ed52fd276ae3787f46a266d3730b96a42b2",
     "localMarkdownLinksChecked": 57,
-    "lastDeliveryCheckUtc": "2026-10-20T00:21:18.053126Z"
+    "lastDeliveryCheckUtc": "2026-10-20T00:21:18.053126Z",
+    "scope": "Authorized offline/stub local handoff and verified links; public upload/push/official submission not performed",
+    "phoneEvidenceRecordedAtUtc": "2026-10-20T00:35:05.943338+00:00",
+    "phoneEvidenceIndependentReview": "SPEC/CONSISTENCY PASS"
   },
-  "updatedAt": "2026-10-20T00:22:44.815289+00:00",
+  "updatedAt": "2026-10-20T00:35:05.943502+00:00",
   "applicationUpdate": {
     "taskId": "M5.4",
     "change": "Clarify strict zero versus blank budget and offer explicit budget removal without automatic search or changing other fields",

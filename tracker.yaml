@@ -30,7 +30,7 @@ budget:
 handoff:
   state: "ready"
   application_state: "offline_stub_demo_and_materials_verified_external_gates_pending"
-  current_scope: "M5.4 verified/deployed sourceceb34a5: strict0 budget explained with explicitclear, public390/1440 recovers3parks. Phone siteaccessconfirmed; phonecards/native/semantic/live gates stillunverified or blocked. PPTX/video retain accepted572snapshot"
+  current_scope: "M7 authorizedoffline/localdelivery done; M5.4 deployedceb34a5. Physicalphone site/3cards/BOTHnative mapdestinations userconfirmed. Realindex/model/live gatesblocked; noauthretry/paid0. PPTX/video retain accepted572snapshot"
   internal_deadline: "2026-10-20T20:00:00+05:00"
   submission_deadline: "2026-10-20T23:59:00+05:00"
   collector_work:
@@ -420,6 +420,8 @@ stages:
           - "M5.2"
         acceptance: "Deterministic-stub Playwright covers details/external URL/profile changes/races/denied location/empty states/focus; pnpm test:e2e at 390/1440 and full quality gate pass; physical phone and one budgeted real-data live smoke recorded with limits; progress and stage commit."
         evidence:
+          - "New direct user answer to exactphonequestion confirms BOTH2GIS and GoogleMaps opened chosen Ботанический сад in native applications. Physical site/search/3cards and both clicked destination handoffs VERIFIEDbyuser. Only realpaidlive smoke remains unmet forM5.3; index/live/model remainseparateblocked gates, keyunchanged/noauthretry."
+          - "User physical-phone retry CONFIRMS real search/cards after blank budget: EXPO/5km/60min/solo/profileNone; 3of3 Ботанический сад, Samal Park, Ғашықтар; snapshot4677a7a004ef. Evidence is user-supplied page text, not emulation. Both map buttons visible but clicking/native handoff not confirmed; remaining maps and paidlive gate stillblocked, noauth/paidretry."
           - "Physicalphone siteaccessconfirmedbyuser; initialno_results matchedstrictbudget0. M5.4clarity/recovery nowverified+deployed with554unit/64e2e/publicprivate3901440 PASS. Actualphonecards/nativehandoff afterbudgetclear and realpaidlive smoke remainunverified; keyunchanged/noauthretry."
           - "Offline feature snapshot committed and git log verified:572a81394048974d848be7299ed7ef53d27a2b49 feat:add local demo profiles,place details and map routes. Only22explicit app/docs/tests paths staged; original collector data/README,data/collection,Pythonfiles remain untracked/preserved. Physical/live external gates still blocked."
           - "Offline acceptance complete: root fresh post-fix pnpm lint/typecheck/554unit/build/check-build-artifacts all exit0; full62Playwright25.0s at390/1440 exit0; independent unifiedM5.2spec/qualityPASS and HTTPfixADDRESSED. Root inspected4detail/source screenshots, source/core/helpers/diff/harnessPASS."
@@ -476,7 +478,7 @@ stages:
           - "No voice feature to device-test; Safari/iPhone and Android/Chrome audio verification not run. Voice unavailable in release; physical text/navigation check also remains unverified in M5.3."
   - id: "M7"
     title: "Deployment and submission evidence"
-    status: "blocked"
+    status: "done"
     tasks:
       - id: "M7.1"
         title: "Freeze release manifest and feature scope"
@@ -486,7 +488,7 @@ stages:
           - "M5.3"
         dependency_waivers:
           - "M5.3"
-        waiver_reason: "User explicitly instructed continue with stubs while key is unchanged. Release materials and temporary preview can verify the completed offline text path; physical-device/live smoke remain blocked and full P0 semantic/model acceptance is not claimed."
+        waiver_reason: "User explicitly instructed continue with stubs while key is unchanged. Release materials and temporary preview verify the completed offline text path. Physical phone/site/cards/native maps are now user-confirmed; paid live smoke remains blocked and full P0 semantic/model acceptance is not claimed."
         acceptance: "Record dataset hash, actual POI count, sources/collection time and model; minimum demo gate 30 reviewed real POI in 3 zones/categories; record M6 enabled/disabled/skipped decision and freeze new features."
         evidence:
           - "Release manifest docs/submission/release-manifest.json frozen offline_stub_preview/fullP0Accepted=false, sourcecommit572a813/buildBlwNsPwtVQoToEIUwspvC verified afterfinalUIfix. Root Node24 assertions exit0: parsedCatalog canonical/filehashes,298POI/591excerpts/889provenance/syntheticfalse and Git sourcecommit match."
@@ -538,12 +540,17 @@ stages:
           - "Verified temporaryURL and acceptedcleanproduction4assets available; final7slide/6minute nativePPTX +continuous~110svideo/threeactualscenarios/sourceinstructions now being prepared. Root owns scenarios/limitations/links/manifest, DataonlyPPTX+outline, UIonlyignoredvideo/assets; independent artifactreview required beforedone. NoYouTube/push/submissionauthorizedbythispreparation."
       - id: "M7.5"
         title: "Verify links and deliver within authorization"
-        status: "blocked"
+        status: "done"
         owner: "root_integrator"
         depends_on:
           - "M7.4"
         acceptance: "Check demo/material links in private window on phone/laptop; finalize progress and stage commit; upload YouTube only on publication request; push/public submission only under current user authorization; distinguish local delivery from submission."
         evidence:
+          - "Final independentphone-cards-review.md addendum conditionSATISFIED: exactreadback M7/M7.5done+offline/localscope+delivery.state+progress PASS/SPEC-CONSISTENCY+QUALITY/noopenfindings. FullP0false, M5.3paidliveblocked/realindex+modelblocked/nextM2.4, publicationflagsfalse, userphone/nativeproof explicit. Rootharness/diff/manifest-gates/collectorboundaryassertions exit0; evidence-only9docupdate, app/build/artifacts unchanged."
+          - "ACCEPTED within authorizedOFFLINE/localdelivery scope: user-confirmed physicalsite/3cards and BOTH2GIS+GoogleMaps exactБотаническийсад native destinations; prior laptopprivate390/1440/materiallinks/artifact/localdelivery gates PASS. Independent phone-cards-review SPEC/CONSISTENCY PASS, nofindings; rootharness/diff/manifestphone-live-budget-build-material-collectorassertions0. M7.1 waiverM5.3 retained; M5.3stillblocked ONLYpaidlive, M2/M4semantic/modelblocked, fullP0false/keyunchanged/noauth/paid0. No YouTube/upload/push/officialsubmission."
+          - "Original UIauthor updated7ownedcurrentdocs to physicalsite/3cards/BOTHnative mapdestinations userconfirmed; historical572/Blw62 artifacts/speech untouched, roottrackerfinalstatus referenced. Authorharness/owneddiff0, rootreadreport+actualdiff: /tmp/aituhack-mvp/phone-cards-docs.md. Rootmanifest physical/native/combinedtrue with explicituserbasis andpaidlivefalse; finalindependentreviewpending."
+          - "User explicitly confirms both mapbuttons opened exact chosen Ботанический сад in native apps, completing outstanding physicalphone site/cards/maps check. Existing laptopprivatecontext/materiallinks/artifact/localdelivery gates alreadyPASS. Finalphone-evidence docs integration and independentreview inprogress; no officialsubmission/upload/push claim."
+          - "Physical phone site+3realcards nowCONFIRMED by user after budget removal. Map buttons shown only; clicked destination/native apps unverified. Local delivery retained; M7.5 remainsblocked on remaining map/private-device acceptance, not cards. No upload/push/submission/paid/provider actions."
           - "M5.4 followup sourceceb34a5/buildNASkuokYCKTpTbx_JqKpo servedatSAMEcurrentURL, origin70029/tunnel64556 detached. Publicprivatebrowserstrict0/recovery3parksPASS3901440; userphysicalsiteopens confirmed, cards/nativehandoff stillpending. AcceptedPPTX/video immutablewithsource572/buildBlw snapshots explicitly retained; no uploads/push/officialsubmission."
           - "User physical-phone check now answered: siteopened but no_results. SuppliedWhatConsidered confirms strictbudget0 withEXPO/5km/60/solo/Хочу погулять/parks/profileNone/history0; controlledmobile+puredata probes match0budget→0/nullbudget→3. Siteaccessconfirmed, actualphonecards/native map links stillunverified; M5.4UIclarityfollowupstarted, no silentconstraintchange/keyretry."
           - "Local delivery COMPLETE and stage commit verified:da659ed52fd276ae3787f46a266d3730b96a42b2 docs:save verifiedstubdemoandsubmissionmaterials. Only11explicitdocs/PPTXpaths staged; collector/raw/private/env/videoexcluded. Final-PPTX436736B+localvideo14034370B exactacceptedhashes/readability;57localmateriallinksPASS; actualHTTPS200/PIDs64525+64556alive/3logcanariesabsent at00:06:48UTC. Freshartifact-era lint/harness/diff0, no appsourcechanges."
