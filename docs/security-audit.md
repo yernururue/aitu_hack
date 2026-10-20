@@ -109,3 +109,61 @@ ledger: совпадений0. При этом Git/full-history аудит M7.7 
 новая проверка имеет перечисленные границы. Source/build/catalog не менялись.
 Known charge$0.00024488,3settled, unknown/inFlight/reserved0; publicstub сохранён.
 [Тест, наблюдаемый alias blocker и план](live-p0-plan.md).
+
+## Дополнение live-кандидат270b427
+
+20.10.2026 18:31 новый known-key in-memory scan выполнен после новой сборки:
+252файла/59ZIPmembers/30.7MB, включая trackedsource/catalog/index и `.next/server`
+и `.next/static`. Findings0, env0600; значения/префиксы/credentialhashes не выводились.
+Receipt `/tmp/aituhack-mvp/release-source-scan-20261020/fresh-secret-scan.json`.
+StrictNFTgate:6traces/1569entries, actualcatalog/index включены; raw/normalized/
+private/cache/query/ledger/collector исключены. Новый source270b427 пока не опубликован
+как live. Это не повтор всего исторического Git-audit; scope указан явно.
+
+Рабочий stubURL заменён на [новый адрес](https://stats-corps-watt-reviews.trycloudflare.com).
+Origin70029/sourceceb/buildNASku неизменён, новыйtunnel7982; старый80285 остановлен
+после HTTPSproof.12currentassets byteequal,59privatepaths closed/API405/secretguardsPASS.
+Независимыйreview нашёл подавление AuditBlocked в приватном readinessprobe: original
+executor исправил fail-fast, повторный guarded sweep78GET/re-review SPEC/QUALITY PASS принят20.10 18:33.
+Платных/провайдерских вызовов при восстановлении0. Raw/collector не менялись.
+
+## Исторический AI-кандидат93bc531,20.10 19:44
+
+Freshknown-keyscan252tracked/catalog/index/server/staticfilesи59ZIPmembers,
+30.84MB:findings0/.env0600,0network. ЗначенияOPENROUTER_API_KEY/APIFY_TOKEN
+сравниваливпамяти/обычныеencodedvariants; не печатали и не сохранялиhashключа.
+NonsecretLIVE_EVAL_MAX_USD.80→1.00менялсяатомарно, остальныеcredentialbytesсохранены.
+Source93bc531/buildiXq-eM5ZeUgXm75TRI3m8; strictNFT6/1569includesrealindex,
+excludesprivatecache/querycache/ledger/raw/normalized/env. Freshreceipt600
+`/tmp/aituhack-mvp/release-source-scan-20261020/source-93bc531-secret-scan.json`.
+Это проверкаконкретныхбайтов, не доказательствоliveP0; новыйLunatimeout/no-cost
+остановилpaid. Публичнымостаётсяпроверенныйstub, не этаAI-сборка.
+
+## Новый offline кандидат3410a4a,20.10 21:53
+
+Root: lint/typecheck/52 targeted tests/build PASS, BUILD_ID fKShKXBBTO6GrZDupxTsU.
+Strict NFT6traces/1569entries включает каталог и настоящий индекс, исключает
+private/raw/normalized/env/cache/collector tooling. Автор full923unit PASS.
+Fresh known-key scan253files/59ZIP/30,892,336bytes: findings0, .env0600,
+0network. Проверены текущие серверные credentials только в памяти, без значений
+или hash ключей в выводе. Immutable receipt
+`/tmp/aituhack-mvp/release-source-scan-20261020/source-3410a4a-secret-scan.json`.
+Источник не опубликован live; независимое ревью pin SPEC/QUALITY PASS (344 targeted). Новый canonical
+unknown Qwen429 сохраняет paid STOP. Предыдущие scanned snapshots сохранены.
+
+## Восстановление текущего donate URL,20.10 22:00
+
+После DNS-отказа stats используется
+[новый HTTPS URL](https://donate-cooperation-quick-annual.trycloudflare.com).
+Неизменённый origin70029/sourceceb34a5/buildNASku обслуживает новыйCF39251.
+Автор234GET(156origin78public)/12assetsbyteequal/59privatepathsclosed/API405,
+credentialformats0; root дополнительно14current-known-key guardedpublicGET:
+2credential sourcesinmemory/0matches/12assetsbyteequal/no values-keyhashesprinted.
+ОтдельноrootavailabilityGET200, reviewer19freshGET/12assetsbyteequal/targetedprivatepaths
+и процессныеграницыPASS. UI390/1440дваactualSTUBPOST, оба3realparks/no-store,
+details/sources/maps/focus/overflowPASS; fourPNGs reviewed. IndependentjointSPEC/QUALITYPASS.
+GET405 Cache-Control отсутствует; POSTno-store проверено actualUI, не выведено изGET.
+ПослеPASS root завершил только старыйCF7982; origin70029/новый39251 сохранены.
+Новый physicalphone/liveAI не заявлены. Новыйrootproof и reviewedpackets:
+`/tmp/aituhack-mvp/public-stub-restore-20261020T1658Z/`,
+`/tmp/aituhack-mvp/public-stub-browser-20261020T1700Z/`.

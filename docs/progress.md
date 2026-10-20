@@ -1,165 +1,103 @@
 # Состояние проекта
 
+> 20.10 22:00 Asia/Almaty: после DNS-отказа stats hostname новый публичный
+> [адрес демо](https://donate-cooperation-quick-annual.trycloudflare.com) отвечает HTTPS200.
+> Fresh390/1440: два настоящих stub POST и три карточки; independent SPEC/QUALITY review PASS.
+
 Stage: implementation
 
-Дата: 20.10.2026, Asia/Almaty. План утверждён; повторное согласование не требуется.
-Статусы и следующий шаг — [tracker.yaml](../tracker.yaml). Полная история task evidence
-сохранена в трекере; этот файл — короткая передача текущего состояния.
+Статусы — [tracker.yaml](../tracker.yaml).
 
-## Выполнение MVP
+**Полный P0 с ИИ ещё не принят.** [Публичное демо](https://donate-cooperation-quick-annual.trycloudflare.com)
+работает в режиме stub: 298 настоящих мест, строгие фильтры, до трёх карточек,
+источники, подробности, демо-профили, сохранения и обе карты. Произвольный текст
+и настоящие ИИ-объяснения на публичном сайте пока не включены.
 
-20.10 около16:18 выполняется разрешённый полный live P0. Исходники изолированы
-в managed worktree `/Users/macbook/.codex/worktrees/live-p0/aituhack`, ветка `codex/live-p0`
-от `12d5ffe`; прежний origin/stub сохранён, временный URL требует замены при выпуске.
-Frozen install и свежий baseline554/554 PASS. Alias8996b05 принят отдельным ревьюером;
-реальная индексация CLIexit0:298uniquePOI/1536finite-nonzero/hash4677,
-274короткихдокумента+24дедупликации. IndexSHA568c855ff30dc866c8de4f0eed3038df4406898bd45fe25472f5afa318934d45.
-Проверенный ledger24settled: prep$0.000480181, включаяeval$0.00025514; demo0,
-unknown/inFlight/reserved0. Query-cache12vectors и semantic numerical gate приняты: root `pnpm eval:retrieval` exit0,
-12/12semantic/top3hit,macroRecall5=97.22%,micro93.75%,negative4/4/allhardPASS.
-Cache replay298reuse/0execute/0POST; исходные labels неизменны. M2.4/M2 done.
-Conservative endpoint-cache pricing6d02803 принято независимым review; отдельный
-fixed low-price Haiku route ещё проходит реализацию/ревью, новых chatPOST не было.
-Runtimepurpose/NFT sourceprepdc9e1d9 получил P2: обязательный ignored-index ломает
-clean stub CI; оригинальный исполнитель добавляет отдельный strict release gate.
-Трекер/docs пишет только root в основной папке; soleledger прежний absolutepath.
-Полный P0 пока не принят. Ниже сохраняется история ранее завершённых подзадач.
+Реальный RAG принят локально: индекс 298×1536, 12 cached query vectors,
+12/12 top3, macro Recall@5=97.22%, micro=93.75%, все hard filters и четыре
+отрицательных сценария PASS. Это development set, а не слепой бенчмарк.
 
-M2.6 done: новый серверный ключ authHTTP200. Реальная кампания3POST: embedding endpoint200
-($0.00000018/9tokens) остановлен на native-model alias mismatch до1536 validation;
-отдельные intent/explanation GPT‑6 Luna/OpenAI HTTP200, strict schema/evidence PASS
-($0.0001065+$0.0001382). Root сверил3settled entries с каноническим ledger0600:
-всего$0.00024488, unknown/inFlight/reserved0; остатки prep$1.99975512/eval$0.49975512/demo$4.
-Fresh62budget tests PASS; новый key-specific scan131files/59ZIP/findings0,
-финальный private-artifact scan46files/ledger0matches. Нет source/build/publicmode changes.
-[Уточнённый план](live-p0-plan.md): alias RED/fix/review → cached298index/semantic eval
-→ bounded quotes/full3model comparison → private live path → production cutover.
-Полный P0=false; публичный сайт пока stub, winner не выбран.
-Независимый итоговый SPEC/QUALITY review PASS для TEST+PLAN; diagnostic campaign3POST
-завершена, следующие реальные действия — по M2.4/плану и тому же ledger.
+Последняя принятая offline сборка: source3410a4a / BUILD_ID `fKShKXBBTO6GrZDupxTsU`.
+923 unit автора и 344 независимых targeted теста PASS; root lint/typecheck/
+52 targeted/build/strict NFT (6 traces/1569 entries) PASS. 64 браузерных сценария
+390/1440 проверили UI/runtime до последующих изменений CLI, финансовой политики
+и pin маршрута; реальный live UI этой сборки пока не проверен. Fresh audit
+253 файлов/59 членов ZIP: совпадений с локальными ключами нет, `.env.local`0600.
+Qwen закреплён за `alibaba/us-east-1`, independent SPEC/QUALITY PASS.
+Закрепление не доказывает устранение 429 или отдельную квоту.
 
-M7.8 done: публичный адрес восстановлен заменой только туннеля:
-[открыть демо](https://loan-begins-sleeps-unavailable.trycloudflare.com).
-20.10 около14:12 Asia/Almaty новыйHTTPS200,12clientassets byteequal/private55closed/GET405.
-Свежие8publicPOST без mocks: мобильный390 полный проверенный набор,
-настольный1440 базовый поиск;3realparks/hash4677, strict0/явнаяочисткабезPOST/null3,
-детали/источники/обе карты2режима/профиль/save/dismiss/reset/unknownclarify0PASS.
-Интегратор просмотрел текущие скриншоты. Origin70029/buildNASku/sourceceb сохранены,
-новый detachedtunnel80285; старый64556 остановлен после проверки замены.
-Пользователь подтвердил новыйURL на телефоне: «Открылся, три карточки есть».
-Повторный native-переход не сообщался; прежнее подтверждение обеих карт
-относится к той же сборке на прежнем адресе. Устройство и браузер не указаны.
-[Отчёт о готовности](readiness-report.md): текстовое stub-демо работает,
-полная P0 RAG остаётся незавершённой. Восстановление M7.8 не делало платных/auth/provider-вызовов. Независимый SPEC/QUALITY review PASS в рамках
-offline/stub; root harness/diff/94local links/manifest+неизменные hashes PASS.
+После трёх отдельных согласий пользователя применён и независимо проверен v4
+журнал расходов. Затем разрешённая квалификация Qwen 12×2=24 остановилась на
+ПЕРВОМ intent: HTTP 429, 1 POST, 0 повторов, стоимость неизвестна, объяснений нет.
+Модель не выбрана; оригинальные сравнения 72/48 этапов также не завершены.
+Новая четвёртая неизвестная стоимость снова блокирует ВСЕ платные вызовы.
 
-M7.7 ранее повторно подтвердил `data/normalized/astana/`:298мест/1953отзыва→591выдержка;
-приватный replay каталога/report byteEXACT. Local/Git/origin secret scan:
-known0/high0/unresolved0, .env.local0600. Исторический PUBLICDNSWARN относится
-к прежнему URL, новый внешний адрес перепроверен в M7.8. [Аудит](security-audit.md).
+## Расходы и текущий STOP
 
+Единственный canonical ledger: основной `data/private/openrouter-budget.json`,
+версия 4, 34 записи, 0600, uncertain=true/inFlight=0. Известные округлённые
+фактические расходы: prep $0.001908131, включая eval $0.00168309, demo $0.
+Три явно разрешённых верхних оценки: $0.264+$0.264+$0.384750001=$0.912750001,
+учтены по одному разу; их actual остаётся null. Это бюджетные выделения,
+а не восстановленная фактическая стоимость.
 
-После локальной передачи пользователь открыл сайт на физическом телефоне, но получил
-0мест при явно заданном бюджете0₸. Это корректный строгий фильтр: все298цен неизвестны.
-Тот же запрос EXPO/5км/«Хочу погулять» с пустым бюджетом даёт3реальныхпарка.
-M5.4: добавлены объяснение0vsпустое поле, подсказка у пустого результата, переход
-к бюджету и явная кнопка его снятия. Она сохраняет остальные условия и не запускает
-поиск автоматически. Независимый SPEC/QUALITY review PASS. Root fresh public smoke
-390/1440 подтвердил0→0/явнаяочисткабезPOST/повторныйпоиск→3, все остальные поля совпали.
-Текущий source`ceb34a5`, build`NASkuokYCKTpTbx_JqKpo`, origin70029/tunnel80285 после восстановления M7.8.
-PPTX/видео M7.1–M7.4 сохранены как снимок source572/buildBlw/554unit/62e2e.
-Финальный независимый integration/docs review SPEC/CONSISTENCY+QUALITY PASS;
-tracker/manifest/current build и неизменённые материалы согласованы.
-Пользователь подтвердил на физическом телефоне 3 из 3 карточки после снятия бюджета:
-Ботанический сад, Samal Park, Ғашықтар; EXPO/5км/60мин/solo/без профиля,
-версия данных `4677a7a004ef`. Пользователь также подтвердил: 2ГИС и Google Maps
-открыли выбранный Ботанический сад в приложениях. Live/semantic gates blocked.
+Новый unknown Qwen: `bf021306-da2b-43ca-a54e-6a7cfe23ac48`, резерв $0.26160384,
+actual=null. Budget spent prep $0.914658132/eval $0.914433091, вместе с новым
+резервом exposure $1.176261972/$1.176036931. Доступно после резерва prep
+$0.823738028/eval $0.323963069/demo $4. Потолки $2/$1.50/$4 сохранены.
+Четвёртого отдельного разрешения пока нет; guessed actual, reset/copy ledger,
+повтор старых one-use operators или автоматическое снятие STOP запрещены.
 
-Проверенный offline/stub текстовый путь работает на 298 реальных POI: фильтры,
-лексическое ранжирование, серверный API, адаптивный UI, подробности/источники,
-демо-профили, локальные сохранения/скрытия/сброс, 2ГИС и Google Maps walking/driving.
-Новые браузеры не получают профиль автоматически; текущие условия важнее истории.
-История хранит только профиль и ID, без запросов/координат/аудио.
+В Upstream Requests найден exact `gen-1792514522-MOmoVI0e8ysvVQp9YKDB`,
+20.10 21:42 Asia/Almaty, Alibaba Cloud Int., HTTP429, 1 attempt. Стоимости и
+точного endpoint tag в UI нет; официальный generation GET вернул 404.
+Отсутствие записи не доказывает нулевую стоимость. Региональный US endpoint
+присутствует в свежих public metadata с прежними ставками, но его квота и
+устранение ошибки не проверены. Новых модельных запросов после STOP не было.
 
-M1/M3 приняты, M2 offline code принят; M4.1/M4.2 numerical gate принят;
-M5.1/M5.2 приняты после независимого review. Последний UI P2 исправлен:
-HTTP provenance остаётся точным текстом, HTTPS — кликабельной ссылкой; RED2anchors →
-GREEN2viewport cases, независимый probe/re-review PASS. Голос M6 skipped по P1 gate,
-записи/транскрипции нет. M7 принят в рамках offline/local передачи по явному waiver;
-полная P0 RAG-приёмка остаётся незавершённой.
-По прямому запросу пользователя вся история отправлена обычным push в `main`
-[GitHub-репозитория](https://github.com/yernururue/aitu_hack). Исторический первый push включал11коммитов; затем опубликованы служебная запись
-и аудит датасета/ключей. Код/PPTX доступны в GitHub,
-видео остаётся локальным. YouTube и официальная отправка заявки не выполнялись.
+## Данные, предыдущий MVP и материалы
 
-## Последние проверки интегратора
+Использован именно `data/normalized/astana/`:298мест/1953отзыва из сохранённого
+2ГИС/Apify19.10.2026→app298POI/591короткаявыдержка/889provenance/7categories.
+Каталог synthetic=false, цены и подтверждённыеfacts298unknown. Canonical hash
+`4677a7a004ef0626f4b911814a8f3b825f81e61ab8b03f82cb00d977fe6950a6`, fileSHA
+`c72d13a1d8df327edc22adce02743b0246aec157e86330c96c408bc44fabb873`.
+Сборщик/raw/normalized/collectortracker сохранены, платного recollection нет;
+publication rights reviewtext не установлены. Исторический [аудит](security-audit.md).
 
-Все команды под Node24.21.0/pnpm11.0.8; платные режимы явно выключены.
+M1/M3/M5offline приняты: responsive text path, strict filters,0–3realcatalog IDs,
+profiles/localIDonly history/details/sources/maps. M5.4 исправляет UX0vsblankbudget:
+явное снятие ограничения не делает POST/не меняет другие поля. Пользователь подтвердил
+3карточки и оба native Maps на прежней сборке. M6voice skipped(P1). M7принят только
+как offline/local handoff, не fullP0. PPTX7slides/6min и WEBM110s/VP9/noaudio приняты
+и сохранены неизменными source572/buildBlw; не считать их новой AI-версией.
+Код/PPTX ранее push в main разрешён пользователем; видео локальноеignored.
+Постоянный hosting/YouTube/официальная отправка не выполнены.
 
-| Команда | Результат |
-|---|---|
-| `python3 scripts/check_harness.py` | exit0, документы/fixtures/ссылки |
-| `pnpm lint` | exit0, в том числе повтор после финальных материалов, без предупреждений |
-| `pnpm typecheck` | exit0, Next typegen + strict TS |
-| `pnpm test` | exit0, 554 теста /16 файлов после финального UI fix |
-| `APP_AI_MODE=stub OPENROUTER_PAID_ENABLED=false LIVE_EVAL_ENABLED=false pnpm build` | exit0, production |
-| `pnpm check:build-artifacts` | exit0, 6 NFT traces/1568 entries; каталог включён, raw/private/env/collector tooling исключены |
-| `pnpm test:e2e` | exit0, 64/64 за30.7s, 390/1440 Chromium после M5.4 |
-| `pnpm eval:retrieval` | exit1 ожидаемо: numericalPASS, semanticVerified=false/acceptancePassed=false |
-| `LIVE_EVAL_ENABLED=false pnpm eval:live` | exit0, disabled, 0rows/0network/0cost |
-| `git diff --check` | exit0 |
-
-Browser покрывает настоящий локальный API/каталог: 0–3 валидных ID, snapshot,
-источники, строгие unknown budget/facts, unknown query/conflicts, loading/errors,
-профили/history/reset/persistence failures, race/abort, denied/late geolocation,
-focus trap/restoration/Close и отсутствие горизонтального скролла. Scoped mocks
-используются только для гонок/отказов и явно synthetic literal-HTML review fixture.
-Root просмотрел реальные desktop/mobile скриншоты карточек и подробностей.
-Native-переходы 2ГИС и Google Maps на физическом телефоне отдельно подтверждены пользователем.
-
-## Данные и качество
-
-Каталог synthetic=false:298 POI,591 короткая буквальная выдержка отзывов,
-889 provenance records,7категорий. Проверенный срез36:3зоны/3категории.
-Сбор19.10.2026 18:24:24–18:35:43UTC; normalized snapshot18:41:06.854110UTC.
-File SHA256 `c72d13a1d8df327edc22adce02743b0246aec157e86330c96c408bc44fabb873`;
-canonical runtime snapshot `4677a7a004ef0626f4b911814a8f3b825f81e61ab8b03f82cb00d977fe6950a6`.
-Все298 price/facts неизвестны. Оригинальный collector/package/снимки сохранены;
-raw и пользовательские данные не коммитились. Права публикации review text не установлены.
-
-Frozen12RU positives:top3=12/12, macroRecall5=.9722222222, micro=.9375;
-4negative отдельно4/4, hardPASS. Macro denominator ровно12, не16.
-Это agent-curated development labels, не независимый blind benchmark.
-RAGOps supplemental сравнение baseline.8833333333→.9722222222 (+8.89pp) PASS;
-semantic/citation/live качество этим не подтверждается. Дополнительные4KK отдельно:
-4/4top3/.9166666667; native-speaker/liveKK не проверены. См. [решение по моделям](model-decision.md).
-Приватные eval receipts — ignored `output/evaluation/`; модели реальным данным не вызывались.
-
-## Внешние блокеры и расходы
-
-M2.4: настоящий embedding index отсутствует. M4.3/M4.4: live comparison/выбор модели
-не выполнены; actual production model=null, Luna provisional. Ключ обновлён, auth200
-и два chat diagnostics прошли. M2.4 теперь blocked на native-model alias comparison,
-не на прежнем401; полный индекс и live UI smoke ещё не выполнены.
-Haiku conservative reserve$1.32>$0.50 eval cap; лимиты не повышены.
-M5.3 blocked только на одном реальном paid live smoke, который не выполнен.
-Это не полная P0 RAG acceptance. Vercel session preflight403, нового login не было;
-временный QuickTunnel восстановлен и повторно проверен: [адрес/запуск](submission/links.md).
-Это process-bound preview, не стабильный hosting. Root fresh private contexts390/1440
-подтвердили реальный API/hash/3parks/детали/routes/unknowntext, overflow/errors0.
-12private404/GET405/POSTno-store/400/429 и canarylogs проверены снаружи/локально.
-После M5.4 повторены strictschema/0vsnull/400/isolated429/private404/GET405 и3private0600
-canarylogs; runtime report PASS, процессы живы в00:21:18UTC. Публичный browser390/1440 PASS.
-
-OpenRouter учтённый расход проекта$0.00024488; баланс аккаунта не проверен.
-Persistent guard (concurrency/reservation/usage/crash/failure) проверен независимо;
-публичный paid выключен, реальный единый ledger инициализирован0600 и содержит3settled entries. $2prep включает$0.50eval,
-$4demo reserve сохранён; serverless paid запрещён. Apify — отдельный ранее
-разрешённый сбор, его бюджет/collector tracker не изменялись.
-
-## Сохранённые этапы
-
-`10f4981` M1; `57ce0f2` M2 offline; `fd37acb` M3 offline;
-`0a6b53a` M4 labels/lexical. M5 offline feature snapshot — `572a813`; M7 материалы/демо — `da659ed`;
-M5.4 бюджет/recovery — `ceb34a5`.
+Исторические этапы:10f4981(M1),57ce0f2(M2offline),fd37acb(M3offline),
+0a6b53a(M4labels/lexical),572a813(M5offline),da659ed(M7materials),ceb34a5(M5.4),
+12d5ffe(TEST+PLAN),9f78742(realindex/semanticacceptance).
 Дедлайн20.10.2026 23:59, внутренняя цель20:00 Asia/Almaty.
+
+## Восстановление публичного адреса 20.10,22:00
+
+Новый current URL: [демо](https://donate-cooperation-quick-annual.trycloudflare.com).
+Stats URL перестал разрешаться в DNS21:55; локальный origin70029/3000 не менялся.
+Новый detached CF39251/PPID1 → тот же sourceceb34a5/buildNASkuokYCKTpTbx_JqKpo.
+Автор:156origin GET и78public GET (включая исправленное излишнее условие приватного
+probe к GET405), POST0/model0. Final:12staticassets byteequal/59privatepathsclosed/
+GETAPI405; Cache-Control у GET405 отсутствует. POSTno-store не выводится из этого GET.
+Root отдельно проверил current local keys только в памяти:14publicGET,
+12assetsbyteequal/0совпадений/0provider; ещё1rootavailabilityGET200.
+Fresh UI390/1440: по1actualstubPOST, всего2, три реальных парка,
+details/literalopinions/sourcedates/mapdestinationswalk-drive/focus/overflowPASS.
+Нового physicalphone/nativeapps подтверждения нет. Runtime/helper/browser evidence:
+`/tmp/aituhack-mvp/public-stub-restore-20261020T1658Z/` и
+`/tmp/aituhack-mvp/public-stub-browser-20261020T1700Z/`.
+Независимое review текущего восстановления пока идёт. Настоящий ИИ остаётся
+не выбранным/paidSTOP; это восстановление прежнего stub, не liveP0.
+
+После независимого PASS root завершил только старый CF7982; origin70029 и новый
+CF39251 сохранены. Reviewer выполнил19freshGET, проверил12assetsbyteequal,
+18runtimechecksums/8UIchecksums/4screenshots/дваactualstubPOST/sourceguard/3offlineguards.
+CurrentURL physicalphone не проверен; fullP0/живые ответы модели не заявлены.

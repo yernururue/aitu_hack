@@ -11,10 +11,33 @@ $0.00024488 внутри prep/live_eval, uncertain=false/inFlight0/reserved0, de
 validation. Это не full RAG acceptance. Ledger уже создан0600: **не повторять
 инициализацию ниже**, не менять путь. [План и receipts](live-p0-plan.md).
 
+## Текущее состояние 20.10, 21:55 Asia/Almaty
+
+Единственный canonical ledger: основной `data/private/openrouter-budget.json`,
+версия 4, 34 записи, 0600, uncertain=true/inFlight=0. Известные округлённые
+фактические расходы: prep $0.001908131, включая eval $0.00168309, demo $0.
+Три явно разрешённых верхних оценки: $0.264+$0.264+$0.384750001=$0.912750001,
+учтены по одному разу; их actual остаётся null. Это бюджетные выделения,
+а не восстановленная фактическая стоимость.
+
+Новый unknown Qwen: `bf021306-da2b-43ca-a54e-6a7cfe23ac48`, резерв $0.26160384,
+actual=null. Budget spent prep $0.914658132/eval $0.914433091, вместе с новым
+резервом exposure $1.176261972/$1.176036931. Доступно после резерва prep
+$0.823738028/eval $0.323963069/demo $4. Потолки $2/$1.50/$4 сохранены.
+Четвёртого отдельного разрешения пока нет; guessed actual, reset/copy ledger,
+повтор старых one-use operators или автоматическое снятие STOP запрещены.
+
+В Upstream Requests найден exact `gen-1792514522-MOmoVI0e8ysvVQp9YKDB`,
+20.10 21:42 Asia/Almaty, Alibaba Cloud Int., HTTP429, 1 attempt. Стоимости и
+точного endpoint tag в UI нет; официальный generation GET вернул 404.
+Отсутствие записи не доказывает нулевую стоимость. Региональный US endpoint
+присутствует в свежих public metadata с прежними ставками, но его квота и
+устранение ошибки не проверены. Новых модельных запросов после STOP не было.
+
 ## Границы бюджета
 
 - Подготовка, индексация, разработка, тесты и повторы: **не более $2**.
-- Live-eval: **не более $0.50 внутри этих $2**, отдельно включается
+- Live-eval: **не более $1.50 внутри этих $2**, отдельно включается
   `LIVE_EVAL_ENABLED=true`.
 - Демо: **отдельные $4**. Недостаток подготовки не переносит расход в demo.
 - Env может только уменьшать эти потолки. Пониженный потолок сохраняется в ledger
@@ -127,18 +150,35 @@ Timeout, abort, network error, неверный JSON HTTP-тела или HTTP e
 не была установлена; транспорт не освобождает такой резерв. Actual выше резерва
 записывается и тоже блокирует следующие расходы даже при остатке общего бюджета.
 
-Резерв использует зафиксированные публичные ставки моделей от 19.10.2026, включая
-максимальные context tiers/cache-write rates. Chat резервирует весь model context
-и весь provider max output; отправляет меньший явный output limit. Embeddings —
-8192 токена на каждый input при $0.02/M: 30 документов резервируют $0.00491520.
-Тело ограничено текстом и размером; при неизвестной модели/цене вызов запрещён.
-Большой резерв Haiku может не пройти $0.50 eval subcap — ограничение не ослаблять.
-Для более точного резерва нужен отдельно проверенный полный token bound.
+Резерв использует проверенные20.10.2026 model+endpoint ставки. Luna/Qwen учитывают
+наибольшие допустимые cache-write tiers, включая региональные варианты; quote соответственно
+$0.384750001/$0.26160384. Chat резервирует весь model context и весь provider max output,
+хотя отправляет400/1000. Скрытый framing/JSON Schema/Unicode/reasoning входят в эти полные
+границы; приблизительная оценка токенов по длине не используется. Embeddings —8192 токена
+на каждый input при $0.02/M. Тело ограничено текстом и размером; неизвестная цена запрещена.
+
+Для Haiku принят отдельно проверенный маршрут `only:["azure/global"]`: hard rate caps
+prompt$0.10/M, completion$0.50/M, no fallback. Полный1Mcontext по максимальной
+документированной2xcache-write ставке$0.20/M плюс128koutput дают reserve$0.264.
+Это опирается на официальный контракт `max_price` как потолка оплачиваемой ставки;
+запрос по недоступной цене должен быть отклонён. Conditional tiers выше потолка
+не разрешены. Pure `verifyQuoteMetadata` проверяет точный endpoint, параметры,
+context/output, все формы цен/cache multiplier и неожиданные оплачиваемые измерения.
+Изменение контракта/метаданных запрещает следующий вызов; unknown/overshoot остаются STOP.
+Доказательство и код3d92116 приняты независимым review,41focusedPASS/154author tests.
+Нативная schema-совместимость и полный model comparison — отдельные gates перед dispatch.
+
+Перед каждой последовательной попыткой резервируется её полный bound, после ответа
+settle учитывает известную actual цену. Сумма гипотетических максимумов всего расписания
+не обещает завершение: при недостатке остатка следующий batch запрещён, сравнение остаётся
+неполным. Неполный набор не даёт winner без явного изменения приёмки пользователем.
+Нельзя самостоятельно повышать текущие caps $2/$1.50/$4 или тратить demo на подготовку.
 
 `provider.max_price` — потолок **ставки**, не суммы запроса: prompt/completion
 в USD за миллион токенов; request/image/audio здесь равны 0. `allow_fallbacks=false`,
 `require_parameters=true`, динамические routers и новые ценовые измерения запрещены.
-Источник: [Provider Routing](https://openrouter.ai/docs/guides/routing/provider-selection#max-price).
+Источник: [Provider Routing](https://openrouter.ai/docs/guides/routing/provider-selection#max-price),
+[официальное объяснение rate caps](https://openrouter.ai/blog/tutorials/how-to-get-the-lowest-cost-llm-inference-on-openrouter/).
 [Reasoning tokens](https://openrouter.ai/docs/guides/best-practices/reasoning-tokens)
 тоже оплачиваются; [cache writes](https://openrouter.ai/docs/guides/best-practices/prompt-caching)
 могут быть дороже prompt. Не полагаться на экономию кеша или идеальную точность max_tokens.
@@ -191,3 +231,22 @@ M3.2 добавляет strict structured adapter: 15s на попытку, ис
 проверены injected tests. M2.6 проверил реальные known-cost settlements трёх
 диагностических вызовов; реальные abort/crash/reconciliation и полный pipeline
 этим не проверены.
+
+## Дополнительное явное разрешение20.10, 19:19
+
+Для второго exacttarget553ee649-3235-44e0-8a07-69ac0c8de613 пользователь
+разрешил budget upper-bound$0.264 с actual=null и eval$1 внутриprep$2;
+demo$4сохраняется. Первый exception .264 остаётся отдельно. Итого после
+reviewedv3/application: .528upperbounds+knownactual, не доказанный billedcost.
+Это разрешение уже применено и независимо проверено; будущий unknown сноваSTOP.
+Auth87921423-9345-419a-bd47-c90f0e8b0c38; никакого reset/copy/settle-guessedactual.
+
+## Третье явное разрешение20.10,19:49
+
+Для target3943a5d8-151c-42e4-980c-a50a869dfb8e пользователь отдельно разрешил
+upper bound .384750001/actualnull, cap live-eval1→1.50 внутриprep2/demo4.
+Auth00d1c10d-26b9-4daf-8107-964a5375bb67. Source/operator и canonicalv3→v4
+независимо проверены, все прошлые записи/два предыдущих grant сохранены;
+три bounds .912750001 учтены однократно. Изменён только nonsecret env cap1→1.5,
+остальные credential bytes равны в памяти. Новый Qwen429 unknown отдельный,
+это разрешение его не покрывает. Конструктор/env не повышают persisted limits.

@@ -1,62 +1,61 @@
 # Индекс и измерение retrieval
 
-Текущий каталог содержит 298 реальных POI. Настоящий embedding index пока не создан:
-новый ключ работает, но реальный probe выявил native-model alias mismatch в
-`createGuardedEmbedder`: `text-embedding-3-small` вместо requested slug. Сначала
-RED/verified alias allowlist/review по [плану](live-p0-plan.md), затем полный индекс.
-Публичный paid-режим выключен. Вектора из unit tests не
-используются как production data.
+20.10.2026 M2.4/M2 приняты. Построен настоящий индекс всех298POI, модель
+`openai/text-embedding-3-small`,1536finite/nonzeroизмерений. Адаптер принимает
+только exactslug либо проверенное nativeимя `text-embedding-3-small`; проверки
+полноты/индексов/размерности сохранены. Syntheticvectors в production не используются.
+Публичный сайт пока stub, новые платные вызовы остановлены из-за отдельного
+unknowncost при сравнении chatмоделей. Не запускать indexing повторно ради проверки.
+
+## Принятые артефакты
+
+| Артефакт | SHA-256 |
+|---|---|
+| Index298POI×1536 |568c855ff30dc866c8de4f0eed3038df4406898bd45fe25472f5afa318934d45|
+| Documentcache |e1b9938d840c61e8f1f8c0cf017686038d7c77f3179bc50aadb0d67d62ec571e|
+| Querycache12vectors |2788286068ef9d7d45e00ead9cf30c18de7ca6258acd939cc07c89e6b0cc38eb|
+| Canonicaldataset |4677a7a004ef0626f4b911814a8f3b825f81e61ab8b03f82cb00d977fe6950a6|
+
+Пути `data/index/places.json`, `cache.json`, `query-vectors.json` локальные,
+игнорируются Git. Документы versionpoi-v1:298мест/274uniquehash/24dedup,
+45770UTF-8bytes/max398bytes, без сырых отзывов и URL. Реальные9indexbatches стоили
+$0.000225041;12queryvectors$0.00001026. Эти суммы уже включены в canonicalledger.
+Cache replay298reused/0embedded/0execute/0POST, index/cache/ledger неизменны.
+
+Кеш документа связан с model/dimensions/documentVersion/documentHash; checkpoint
+сохраняется до следующего batch. Кеш запросов хранит raw-queryhash и vector,
+без текста. Sourcecatalog/labels/cache/index защищены от совпадения путей/symlink.
+Итоговый index появляется только после полной проверки. NFT releasegate включает
+точно index, исключая documentcache/querycache/ledger/raw/normalized/collector/env.
+`pnpm check:build-artifacts --require-index` PASS6traces/1569entries; cleanstubCI
+может не иметь локальногоignoredindex и проходит обычный gate.
+
+## Свежие offline проверки
 
 ```sh
 pnpm build:index
 pnpm eval:retrieval
 ```
 
-Первая команда — сухой прогон: 298 коротких документов, 45 770 UTF-8 байт, без
-записи векторов и сети. Документ содержит имя, категорию, теги, подтверждённые
-факты и описание; отзывы и URL исключены. Вторая команда читает замороженные
-labels и локальные кеши, печатает JSONL. Exit 1 означает непрохождение gate.
+Первая команда без execute — сухой прогон без сети и записи. Вторая использует
+неизменные12RUpositives/4negativeguards и принятые локальные queryvectors,0paidPOST.
+Exit0:12/12positives semantic/top3hit,macroRecall5=.9722222222222222,micro=.9375,
+negative4/4,allhardPASS,semanticVerified=true/acceptancePassed=true. Отрицательные
+кейсы дают0 по hardfilters до embedding; их lexicalcachemiss не ослабляет условий.
 
-После M4.2 поиск по словам: top-3 **12/12**, macro Recall@5 **97,22%**,
-micro Recall@5 **93,75%**, отрицательные сценарии4/4, жёсткие ограничения соблюдены.
-Исходный результат:11/12 и88,33%; улучшены нормализация содержательных слов и
-склонения без изменения labels/весов/порогов. Порог90% пройден численно;
-semantic gate не пройден, поэтому `pnpm eval:retrieval` по-прежнему возвращает exit1. Intent здесь фиксирован
-по UI-фильтрам и объявленным requiredFacts; качество разбора текста не измеряется.
-Gold-теги, названия и релевантные ID используются только при оценке результата.
+97.22% — потолок этого agent-curated developmentset: два релевантных набора
+содержат6IDs,top5можетвместить5. Это не blindbenchmark. UIintent фиксирован,
+качество LLMразбора здесь не измеряется; goldIDs/tags не попадают в retrievalprompt.
+Предыдущий lexicalрезультат M4.2 тоже12/12/97.22%; исходный был11/12/88.33%.
+Supplemental RAGOps acceptedlexical→semantic compare PASS,Recall97.22→97.22%,
+failedgates[],12RUdenominator/4guards unchanged,0provider/network. Генерацию и
+citationquality этот compare не доказывает. Отдельные4KKlexicalprobes4/4/91.67%,
+native-speaker/liveKK не проверены.
 
-Ожидаемая модель — `openai/text-embedding-3-small`, размерность 1536. Canonical
-хеш каталога: `4677a7a004ef0626f4b911814a8f3b825f81e61ab8b03f82cb00d977fe6950a6`.
-File SHA-256 проверяется отдельно по labels. Модель, размерность, хеш и полный набор
-ID валидируются перед векторным поиском; несовместимость даёт явный поиск по словам.
-
-После восстановления ключа и настройки [защиты бюджета](budget.md) доступны
-**платные** явные команды (Node 24; env-файл не печатать):
-
-```sh
-node --env-file=.env.local --import tsx scripts/build-index.ts --execute
-node --env-file=.env.local --import tsx scripts/eval-retrieval.ts --prepare-queries
-```
-
-Они здесь не запускались. Каждый embedding batch резервирует и учитывает стоимость.
-Индексация использует prep; подготовка оценочных запросов — вложенный live_eval
-лимит $0,50. Для второго режима нужен также `LIVE_EVAL_ENABLED=true` и уже готовый
-совместимый полный индекс. При неизвестном расходе новые платные вызовы блокируются.
-
-Пути: `data/index/places.json`, `data/index/cache.json`,
-`data/index/query-vectors.json` (все локальные, игнорируются Git). Кеш документов
-использует model/dimensions/documentVersion/documentHash; одинаковые документы
-не отправляются повторно, завершённые батчи сохраняются до следующего вызова.
-Кеш запросов хранит raw-query SHA-256 и вектор, без текста. Повторный обычный
-`pnpm eval:retrieval` использует его без сети.
-
-CLI защищает исходный каталог, labels, index и cache от совпадения путей, включая
-symlink aliases. Выходной index появляется только после полной проверки. Перед
-развёртыванием настоящего индекса потребуется явно включить проверенный asset в
-политику production tracing; текущая сборка содержит каталог, без фиктивных векторов.
-
-Четыре отдельные KK-пробы:4/4top3, macro Recall@5 91,67% при фиксированном UI intent.
-Они не входят в12RU denominator и не подтверждают live-языковой разбор.
-[Решение о модели и ограничения](model-decision.md). Локальные отчёты сохранены
-в `output/evaluation/` (игнорируются Git); дополнительный RAGOps сравнил только
-точный12RU Recall:88,33%→97,22%, +8,89п.п., PASS. Citation/semantic quality этим не проверялись.
+Model/dimensions/cataloghash/полныйнаборIDs проверяются перед semanticsearch;
+несовместимый/неполныйindex даёт явный lexicalfallback с теми же hardfilters.
+Будущие платные команды execute/prepare-queries допустимы только после снятия
+текущего unknowncostблокера и headroompreflight через прежнийsinglehostledger.
+Нельзя переинициализироватьledger, снова оплачиватьcachedдокументы или расходовать
+demoрезерв на dev. [Бюджет](budget.md), [выбормодели](model-decision.md),
+[текущаяпередача](handoff.md), [real labels](evaluation-labels.md).

@@ -4,15 +4,38 @@
 
 **Goal:** Завершить оставшиеся реальные AI/RAG gates M2.4 → M4.3 → M4.4 → M5.3 без потери работающего stub и без превышения разрешённых расходов.
 
-**Architecture:** Использовать существующие каталог, индекс/hash-cache, guarded OpenRouter transport, strict intent/explanation и UI. Сначала получить реальные измерения и исправлять только обнаруженные блокеры с RED → GREEN, без новой архитектуры. Публичный live включать после semantic retrieval, полного сравнения трёх моделей и валидного выбора; до этого публичный stub сохраняется.
+**Architecture:** Использовать существующие каталог, индекс/hash-cache, guarded OpenRouter transport, strict intent/explanation и UI. Сначала получить реальные измерения и исправлять только обнаруженные блокеры с RED → GREEN, без новой архитектуры. Публичный live включать после semantic retrieval, явно утверждённой квалификации модели и валидного выбора; до этого публичный stub сохраняется.
 
 **Tech Stack:** Node 24.21.0, pnpm 11.0.8, Next 16.4.2 / React 19.3.1, TypeScript strict, Zod 4.6.7, файловые POI/index/cache, OpenRouter, Vitest / Playwright.
 
 **Spec:** [product-spec.md](product-spec.md), [data-contract.md](data-contract.md), [исходный план](implementation-plan.md) M2.4/M4.3/M4.4/M5.3, [budget.md](budget.md), [indexing.md](indexing.md). Статус: [tracker.yaml](../tracker.yaml); контекст: [handoff.md](handoff.md), [progress.md](progress.md).
 
+## Действующее уточнение 20.10, 19:49 Asia/Almaty
+
+Пользователь разрешил третий exact budget bound $0.384750001 (actual=null),
+live-eval $1.50 внутри prep $2/demo $4 и Qwen на всех 12×2=24 этапах.
+Haiku/Azure и Luna не прошли текущие технические условия; их полная семантика
+не измерена. Исходные72 и48 incomplete, Qwen24 имеет отдельную qualificationflag.
+Три bounds применены/audited, v4. Новый Qwen429 без стоимости снова STOP;
+четвёртого разрешения нет. Критерии качества и независимое ревью сохраняются.
+Предыдущие утверждения и исходный план ниже — исторический журнал;
+действующий статус/остатки — [tracker](../tracker.yaml) и [handoff](handoff.md).
+
+## Предыдущее утверждённое изменение20.10, 19:19 Asia/Almaty
+
+Пользователь прямо разрешил второй budget upper bound$0.264 (actual=null),
+live-eval$1 внутри прежнихprep$2/demo$4 и изменение приёмки: Haiku/Azure
+технически не квалифицирована; Luna/Qwen проходят все12RU intent+explanation
+(48измеренныхэтапов). Originalfull3/72 остаётся незавершённым. Критерии100%ID/
+evidence/hard,0unsupportedfacts, минимум10/12валидныхpositive,4negativeguards
+и независимый human prose/intent review не меняются. Arbitrarysubset не даёт winner.
+Ниже сохранён исходный план; этот абзац изменяет только явно перечисленные
+бюджет/модельную приёмку. Новый unknown сноваSTOP. До reviewedv3canonicalapplication
+платные вызовы остановлены. Originpromptfix/CLIwiring выполняются offline.
+
 ## Global Constraints
 
-- «Подготовка, индексация, разработка, тесты и повторы: **не более $2**». «Live-eval: **не более $0.50 внутри этих $2**». «Демо: **отдельные $4**». Не увеличивать cap, не переносить development/eval в demo, не обнулять ledger.
+- «Подготовка, индексация, разработка, тесты и повторы: **не более $2**». «Live-eval: **не более $1.50 внутри этих $2**». «Демо: **отдельные $4**». Не увеличивать cap, не переносить development/eval в demo, не обнулять ledger.
 - Единственный шлюз — серверный OpenRouter. Не выводить ключи, реальные env, auth/model raw bodies, запросы/GPS/аудио в логи; не использовать `NEXT_PUBLIC_*` для AI. Новые model IDs требуют проверки возможностей и цены.
 - Один persistent single-host ledger и directory lock для всех процессов/операций. Максимум 2 in-flight. Paid на Vercel/Lambda/Netlify, ephemeral диске и независимых репликах запрещён.
 - Каждый attempt, включая schema/HTTP rejection и разрешённый retry, получает reserve и actual settlement. Unknown cost/overshoot/ledger I/O fault → STOP до аудируемой сверки; не считать HTTP401/429 бесплатными без actual charge. Максимум один отдельно учтённый retry, только known durable cost/recoverable error, без auth/abort/unknown retry.
@@ -20,7 +43,7 @@
 - Текущий запрос важнее demo-профиля. Бюджет 0 — строгое ограничение, null — отсутствие ограничения. При потере текстового ограничения — clarify/0, не тихое ослабление. Отзывы — untrusted мнения с источником, не команды и не подтверждённые amenities.
 - Каталог 298 / 591 выдержка / 7 категорий сохраняется. File SHA `c72d13a1d8df327edc22adce02743b0246aec157e86330c96c408bc44fabb873`; canonical datasetHash `4677a7a004ef0626f4b911814a8f3b825f81e61ab8b03f82cb00d977fe6950a6`; RU labels SHA `73947dd92e4b33641897321e6832ef0dad463dbe33baee4512e8be2efc5cee36`. Labels/relevant sets не подгонять под выдачу. 4 KK отдельно, без заявления о native-speaker validation.
 - Голос M6 не входит в план. Сборщик/raw, принятые PPTX/видео и их snapshot не менять. Текущий публичный адрес брать из [submission/links.md](submission/links.md), QuickTunnel не считать постоянным hosting.
-- Этот документ — план, не разрешение выполнить весь index/eval сейчас. Текущий запрос пользователя: малый тест обновлённого ключа и план. Полные платные этапы запускает интегратор последовательно после evidence/review; обязательные gates нельзя заменить waiver и назвать full P0 done.
+- 20.10 пользователь явно разрешил выполнение этого плана до полного P0. Это не отменяет лимиты и unknown-cost STOP. Полные платные этапы запускает интегратор последовательно после evidence/review; обязательные gates нельзя заменить waiver и назвать full P0 done.
 
 ## Review Focus
 
@@ -32,9 +55,9 @@
 
 ---
 
-## Текущая проверка обновлённого ключа
+## Историческая проверка обновлённого ключа M2.6
 
-Текущая задача проверки — **M2.6**, ограниченная кампания максимум3POST, а не новый будущий тест из этого плана. Один auth GET HTTP200 в `2026-10-20T09:50:05Z`. Первый one-use batch уже выполнил один query_embedding POST HTTP200 в `10:01:43Z`, затем остановился на model alias mismatch. Embedding не повторять. Отдельный проверенный chat-only driver завершил два оставшихся diagnostics в том же ledger: intent и explanation HTTP200, schema/evidence PASS. Всего3POST, расход$0.00024488. Старый401 — история. Значения ключа и auth response в документ не переносить.
+На момент составления плана задача проверки — **M2.6**, ограниченная кампания максимум3POST, а не новый будущий тест из этого плана. Один auth GET HTTP200 в `2026-10-20T09:50:05Z`. Первый one-use batch уже выполнил один query_embedding POST HTTP200 в `10:01:43Z`, затем остановился на model alias mismatch. Embedding не повторять. Отдельный проверенный chat-only driver завершил два оставшихся diagnostics в том же ledger: intent и explanation HTTP200, schema/evidence PASS. Всего3POST, расход$0.00024488. Старый401 — история. Значения ключа и auth response в документ не переносить.
 
 | Проверка | Результат на момент плана |
 |---|---|
@@ -99,16 +122,57 @@
 
 **Files (только при реализации доказанного исправления):** `src/lib/ai/{pricing,transport,openrouter}.ts`, `scripts/eval-live.ts`, `tests/unit/{budget,openrouter,eval}.test.ts`, `docs/budget.md` у интегратора.
 
-**Факт:** текущий chat quote резервирует полный model context и provider max output, хотя отправляет400/1000. Haiku reserve$1.32>$0.50 блокирует весь default3-model CLI до metadata/provider. Runner проверяет individual quote, затем `Math.max`, **не сумму всего прогона**. Luna/Qwen subset возможен только как diagnostic, без winner/full comparison. Суммарный прогноз — предлагаемое дополнительное preflight, не уже реализованная проверка.
+**Принятое уточнение реализации20.10:** исходный broad-route Haiku reserve$1.32,
+затем консервативная endpoint correction$1.42 действительно превышали$0.50.
+Полного доказанного payload-token bound не найдено; `quoteChatPayload` не внедряется.
+Вместо него сохранены full context/output bounds и принудительный потолок тарифа
+для точного `azure/global`. Официальный контракт OpenRouter `max_price` задаёт
+предел оплачиваемой ставки и отказ при недоступной цене. Для Haiku .10/.50M caps,
+наибольший документированный2xcache-write и full1M/128k дают reserve$0.264.
+Luna$0.384750001, Qwen$0.26160384. Нет предположений о byte/token ratio или скидках.
 
-**Предлагаемая узкая additive interface:** `quoteChatPayload(args:{operation:"intent"|"explanation";model:string;body:unknown;maxCompletionTokens:number}): Quote` в `pricing.ts`. Старый `quoteRequest` остаётся для embeddings и безопасного full-context fallback. Issued quote связывается с immutable body hash; transport перепроверяет тот же body перед dispatch. Никаких caller-supplied fake estimates/token counts.
-
-- [ ] Сначала доказать полный верхний token bound для каждого фиксированного model/provider: payload, system/roles/framing, JSON Schema, Unicode, cache tiers и reasoning/output. Только длина текста/число символов, обещание кеш-скидки или уменьшение одного output limit доказательством не являются. Если проверенного model-specific bound/принудительного потолка нет — **оставить blocked**, не внедрять более дешёвую оценку.
-- [ ] До изменения написать RED: body/schema mutation invalidates quote; весь framing/schema попадает в bound; максимальный cache/input tier и оплачиваемый reasoning учтены; неподтверждённый bound → send0; actual>reserve/unknown → globalSTOP; нельзя подделать Quote. Сохранить400/1000 и прежний deadline/retry.
-- [ ] Минимально подключить доказанный `quoteChatPayload` к adapter и eval preflight, сохранив provider price caps/require_parameters/allow_fallbacks=false. Посчитать upper bound текущего frozen расписания, включая максимум двух attempts на stage, query preparation и уже потраченные суммы. Если полный набор не помещается в remaining prep/live_eval — остановиться до следующего batch, не брать demo и не выкидывать Haiku.
-- [ ] `pnpm exec vitest run tests/unit/budget.test.ts tests/unit/openrouter.test.ts tests/unit/eval.test.ts` → GREEN; independent review proof+implementation. Допустим исход **BLOCKED** с точным расчётом, а не обещанием завершить P0. Снижение reserve разрешено только после доказательства, не вручную в ledger/env.
+- [x] Проверены публичные20.10 model+endpoint metadata, все context/cache tiers,
+  точный Haiku endpoint/requiredparams, неизменяемые issued quotes и no fallback.
+- [x] RED→GREEN: upward endpoint-cache correction6d02803 и fixedlowcap route3d92116;
+  author154tests/lint/strictTS PASS; independent41focused +actual3API snapshots PASS.
+  Issuer/body whitelist не допускают caller model/provider overrides; весь framing/schema/
+  reasoning покрыт полными границами. Unknown/overshoot/durable-I/O STOP сохранены.
+- [x] Independent SPEC/QUALITY PASS принят для rate-ceiling contract и реализации.
+  Body hash не нужен для full-context quote, поскольку граница не зависит от текста.
+- [x] Подключить accepted `verifyQuoteMetadata` к actual CLI/preflight, сохранить
+  same-candidate comparison/strictcorevalidation и подтвердить свежие combined tests.
+  Проверять remaining prep/live_eval перед каждой попыткой и actual после неё.
+  Гипотетическая сумма всех максимумов не обещает завершение; при нехватке headroom
+  остановить неполный прогон, не брать demo/не выбирать subset. Это исходное правило
+  бюджета; предлагаемое ранее sum-of-entire-run условие не вводится.
 
 **Acceptance:** все три модели допускаются по проверенной оценке и оставшемуся бюджету либо M4.3/M4.4 честно blocked. Повышение$0.50/$2, изменение model list или диагностический subset не закрывают этот gate.
+
+## Задача 3a — M4.3a: разрешённая политика верхней оценки
+
+Пользователь20.10 прямо разрешил бюджетную верхнюю оценку$0.264 для единственной
+неизвестной попытки и eval$0.80 внутри прежнихprep$2/demo$4. Authorization
+`c8e3d04e-7df9-4482-aabc-2338c4895b49`, targetreservation
+`ff7460a9-cf70-4248-8cd7-def9fcc5770e`. Это исключение из прежнего unknownSTOP,
+не доказанная фактическая цена. Новыеunknown снова останавливают вызовы.
+
+**Files:** `src/lib/ai/{config,ledger,budget}.ts`, budget/runtimepurpose unit tests;
+rootowns AGENTS/spec/harness/budget/envexample/tracker. Реальныйledgerне менятьдоreview.
+
+- [x] RED→GREEN/versioned v1→v2 сохранение всех27knownentries/history; targetactualnull,
+  explicitauthorized_upper_bound/budgetCharge.264/auditRef/time, countedonceprep+eval.
+  Единственный exactgrant поднимает persisted eval.50→.80; обычныйenv/constructor
+  не повышает v1cap. Prep2/demo4 и futureunknown/overshoot/durablefailureSTOP неизменны.
+  Идемпотентность/crossprocess/mismatchedtarget/caps/tamper/failure regression tests.
+- [x] Другой reviewer проверяет source+проверки. Rootоператор применяет exactgrant
+  единственный раз к прежнемуcanonicalledger, verifieshistory/actualnull/budgetbasis/
+  chargedtotals/caps, затемexplicit audit снимаетbarrier толькопри отсутствии других
+  unknown/unsettled/overcap. Никакого settle(.264) какactual/reset/newledger.
+- [x] Новый offlinegate, privateoperator/capsule.80 review/freshmetadata/preflight;
+  только после source+canonicalreceiptacceptance возобновитьfull3comparison.
+
+**Acceptance:** честный basis/расход/остатки и проверенный прежнийledger; capoverride
+сам по себе не завершаетmodelcomparison/qualitygate. Actualcost target остаётсяunknown.
 
 ## Задача 4 — M4.3/M4.4: frozen сравнение и валидный выбор
 
@@ -116,9 +180,9 @@
 
 **Interfaces:** `runLiveEvaluation({execute,input:{catalog,cases},models?,outputPath},deps)`; `deps.retrieve`, `createChat({model,onAttempt})`; `freezeLiveCases` и существующие `parseIntent` / `explain` / `validateExplanation`. Raw envelope `{items}` → validated `GeneratedItems` array. Не создавать второй grounding validator.
 
-- [ ] Зафиксировать12RU positives и отдельно4negative guards, prompt version, исходные raw queries, index/cache/source hashes. Для intent до получения ответов задать ожидаемые `Intent` и abstention/conflict; текущий optional `expected.intent` иначе оставляет `intentMatch=null`, что не является успешным intent eval. Никакого scoring по одному schemaPass.
-- [ ] Один раз заморозить≤8 кандидатов/случай из принятого semantic index и cached raw-query vectors через существующий `deps.retrieve`; gold IDs/tags/ожидаемый intent не идут в retrieval/prompt. Current default CLI freeze не подаёт queryVector/embed и может остаться lexical даже при наличии index: сначала pin RED/diagnostic на actual mode; при необходимости тонко подключить локальные index/cache в CLI, без сетевого retrieval внутри model loop.
-- [ ] RED → GREEN при недостающем wiring: все3модели получают одинаковые contextHash/candidateIds/prompt для explanation; смена gold не меняет context; intent scorer не borrowing explanation status; cache miss/missing intent labels запрещают объявлять полную оценку. `pnpm exec vitest run tests/unit/eval.test.ts tests/unit/index.test.ts` → PASS.
+- [x] Зафиксировать12RU positives и отдельно4negative guards, prompt version, исходные raw queries, index/cache/source hashes. Для intent до получения ответов задать ожидаемые `Intent` и abstention/conflict; текущий optional `expected.intent` иначе оставляет `intentMatch=null`, что не является успешным intent eval. Никакого scoring по одному schemaPass.
+- [x] Один раз заморозить≤8 кандидатов/случай из принятого semantic index и cached raw-query vectors через существующий `deps.retrieve`; gold IDs/tags/ожидаемый intent не идут в retrieval/prompt. Current default CLI freeze не подаёт queryVector/embed и может остаться lexical даже при наличии index: сначала pin RED/diagnostic на actual mode; при необходимости тонко подключить локальные index/cache в CLI, без сетевого retrieval внутри model loop.
+- [x] RED → GREEN при недостающем wiring: все3модели получают одинаковые contextHash/candidateIds/prompt для explanation; смена gold не меняет context; intent scorer не borrowing explanation status; cache miss/missing intent labels запрещают объявлять полную оценку. `pnpm exec vitest run tests/unit/eval.test.ts tests/unit/index.test.ts` → PASS.
 - [ ] Только после задач2–3/full budget GO: `LIVE_EVAL_ENABLED=true OPENROUTER_PAID_ENABLED=true OPENROUTER_STORAGE=single_host_persistent OPENROUTER_LEDGER_PATH=/Users/macbook/Yernur/projects/aituhack/data/private/openrouter-budget.json node --env-file=.env.local --import tsx scripts/eval-live.ts --execute`. Одинаковый context, все `openai/gpt-6-luna`, `anthropic/claude-haiku-5.5`, `qwen/qwen3.8-flash`;12positive×3×intent/explanation=72 logical stages (до144 attempts),4negative отдельно (runner может содержать все16; skipped stages не считать платными успешными измерениями). Headroom проверять до каждого batch/stage, actual ledger после него. Первый unknown/insufficient headroom → STOP и incomplete.
 - [ ] В receipt: actual model/responseModel/provider, prompt/context/dataset hashes, schemaPass, проверка каждой прозы по источникам/unsupported claims, intent correctness/abstention, usage/cost/all retries, total latency. `ttftMs=null` у non-streaming runner так и оставить, не выдумывать TTFT. Не логировать raw provider bodies/запросы/ключи; human grounding review использует валидированные why/activity с case ID и первичными источниками, без auth/raw protocol/production logging.
 - [ ] Интегратор+независимый reviewer выбирают только прошедшую модель: correctness/grounding → latency → cost. Нужны полный3-model comparison,100% ID/evidence/hard-filter invariants,0 неподтверждённых фактов и релевантный validated результат в top3 минимум10/12positive; все явные текстовые условия сохранены либо безопасный clarify. Непрошедшая схема/degraded или abstain на всех positive не маскируются валидной генерацией. Если все плохи — regression RED на конкретный исход, минимальный prompt/pipeline fix, повтор только с remaining budget. Иначе blocked, winner=null.
@@ -145,19 +209,30 @@
 
 **Interfaces:** `recommend(...,{purpose})` уже server-only. Предлагаемое server-only env `OPENROUTER_RUNTIME_PURPOSE="prep"|"demo"` даёт `readAiConfig().runtimePurpose:"prep"|"demo"`, defaultprep, invalid→configuration failure; route передаёт его через существующий handler/core factory. HTTP body purpose/model/provider/now/index не принимает. Не менять потолки guard.
 
-- [ ] RED → GREEN: valid `data/index/places.json` входит в production trace, но cache/query-cache/ledger/raw/normalized/collector/env остаются закрыты; stale/missing production index даёт явный lexical, не semantic claim. Включить только проверенный index asset в tracing/allowlist, не весь `data/index/**`.
-- [ ] RED → GREEN server purpose: development smoke prep, eval live_eval(внутри prep), actual demo demo. Клиент не выбирает bucket, default остаётся prep, invalid env fail closed; stub/disabled не строят live factories даже при paid flag. Текущий route без этой интеграции использует prep по умолчанию, значит один APP_AI_MODE=live не разрешает публичный демо-расход.
+- [x] RED → GREEN: valid `data/index/places.json` входит в production trace, но cache/query-cache/ledger/raw/normalized/collector/env остаются закрыты; stale/missing production index даёт явный lexical, не semantic claim. Включить только проверенный index asset в tracing/allowlist, не весь `data/index/**`.
+- [x] RED → GREEN server purpose: development smoke prep, eval live_eval(внутри prep), actual demo demo. Клиент не выбирает bucket, default остаётся prep, invalid env fail closed; stub/disabled не строят live factories даже при paid flag. Интеграция принята; один APP_AI_MODE=live не разрешает перенос development на demo.
 - [ ] После narrow fixes запустить offline gates с `OPENROUTER_PAID_ENABLED=false LIVE_EVAL_ENABLED=false`: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm check:build-artifacts`, `pnpm test:e2e`, `pnpm eval:retrieval`, `python3 scripts/check_harness.py`, `git diff --check` → PASS; `pnpm eval:live` без execute→disabled/0network. Не запускать весь e2e suite против paid-live сервера. Fresh independent review; integrator сразу обновляет оригинальные task IDs/evidence.
-- [ ] Обязательный localhost production probe в отдельной staging-копии, не перезаписывая `.next` работающего stub: build `APP_AI_MODE=stub OPENROUTER_PAID_ENABLED=false LIVE_EVAL_ENABLED=false pnpm build`; тот же build стартовать `APP_AI_MODE=live OPENROUTER_RUNTIME_PURPOSE=prep OPENROUTER_PAID_ENABLED=false LIVE_EVAL_ENABLED=false pnpm start --hostname 127.0.0.1 --port 3001`. Fresh browser GET должен показывать live freeform hint, без stub notice/пяти phrase-buttons; providerPOST=0. Проверить обратный runtime switch→stub. Текущий `page.tsx` уже делает `await connection()` до `configuredAiMode()` и передаёт aiMode в SearchForm, поэтому статическая ошибка не утверждается. Если probe найдёт stale mode — RED production regression и минимальный fix после чтения `node_modules/next/dist/docs/01-app/03-api-reference/04-functions/connection.md` и relevant caching guide. Затем лишь отдельный разрешённый private paid smoke, не платный build.
+- [x] Обязательный localhost production probe в отдельной staging-копии, не перезаписывая `.next` работающего stub: build `APP_AI_MODE=stub OPENROUTER_PAID_ENABLED=false LIVE_EVAL_ENABLED=false pnpm build`; тот же build стартовать `APP_AI_MODE=live OPENROUTER_RUNTIME_PURPOSE=prep OPENROUTER_PAID_ENABLED=false LIVE_EVAL_ENABLED=false pnpm start --hostname 127.0.0.1 --port 3001`. Fresh browser GET должен показывать live freeform hint, без stub notice/пяти phrase-buttons; providerPOST=0. Проверить обратный runtime switch→stub. Текущий `page.tsx` уже делает `await connection()` до `configuredAiMode()` и передаёт aiMode в SearchForm, поэтому статическая ошибка не утверждается. Если probe найдёт stale mode — RED production regression и минимальный fix после чтения `node_modules/next/dist/docs/01-app/03-api-reference/04-functions/connection.md` и relevant caching guide. Затем лишь отдельный разрешённый private paid smoke, не платный build.
 - [ ] Перед cutover повторить redacted security scan после изменения env/build и проверить private paths404, server-only key, no-store/strictAPI/429, отсутствие query/GPS/key/raw provider body в production logs/client assets. Использовать один постоянный host/ledger/path с оставшимися caps. Не сбрасывать ledger при рестарте и не переносить paid на serverless.
 - [ ] Только после M2.4/M4.3/M4.4/закрытого M5.3 PASS интегратор переключает проверенную production-сборку на выбранную live-модель, совместимый index и server purpose demo; development на резерв не переносится. Сохранить доступный stub как rollback, приватные cache/ledger не публиковать. Ограничить публичную частоту и provider/key cap; помнить, in-memory rate limiter не глобальный бюджет.
 - [ ] Fresh private browser390/1440 и телефон: новый live freeform→реальные ID/источники/детали/2maps, строгие unknown0, responsive/focus; сверить known charge с ledger. Записать actual build/model/index/hash/checktime/current URL/lifecycle. При unknown/cap/schema/grounding/security failure остановить paid, вернуть явный stub, сохранить ledger и blocker; не скрывать degradation. QuickTunnel остаётся process-bound.
 
-**Acceptance:** full P0=true только при всех обязательных оригинальных gates PASS и подтверждённом live пути, без обходов бюджета. Иначе root фиксирует точный незавершённый gate и продолжает рабочий честный stub. Публикация видео/официальная отправка не входят в этот план.
+**Acceptance:** full P0=true только при всех обязательных gates PASS с учётом явно утверждённого изменения приёмки20.10 и подтверждённом live пути, без обходов бюджета. Иначе root фиксирует точный незавершённый gate и продолжает рабочий честный stub. Публикация видео/официальная отправка не входят в этот план.
+
+## Текущий блокер20.10
+
+M2 и M4.3a/b/c/d/e приняты. Последняя offline сборка3410a4a/fKShKXBBTO6GrZDupxTsU:
+923authorunit/344independenttargeted/rootlint-types-build-strictNFT/keyscan0 PASS. Canonicalv4/caps2/1.5/4,
+три approved bounds .912750001/actualnull. Разрешён Qwen12×2=24 с отдельной
+qualification flag; исходные72/48 incomplete. Первый Qwen intent HTTP429/no-cost,
+1 POST/0 retries, новый unknown .26160384, allpaidSTOP/winnernull.
+Четвёртый grant пока не разрешён. US route3410a4a принят independent offline
+review без снижения reserve; устранение429/отдельная квота не доказаны.
+[Текущая передача](handoff.md) и [бюджет](budget.md) содержат точные остатки.
 
 ## Передача
 
-Checked substeps задачи1 означают доказанный preflight, первый settled query_embedding с protocol STOP и два отдельно принятых chat diagnostics. Кампания закрыта; повторных ключевых тестов нет. Остальные execution steps unchecked. Порядок paid действий последовательный; независимые RED/source-review задачи можно делегировать параллельно с разными owned files. После каждой приёмки только интегратор обновляет tracker/progress; stage commit — после review в пределах текущего разрешения. Автор этого плана не запускал сеть, auth, env/key reads, paid calls, индекс или live eval и не менял implementation/артефакты.
+Checked substeps задачи1 означают доказанный preflight, первый settled query_embedding с protocol STOP и два отдельно принятых chat diagnostics. Кампания закрыта; повторных ключевых тестов нет. Проверенные source/index/runtimeprobe substeps отмечены выше; полный modelcomparison/liveUI/cutover остаются незавершёнными. Порядок paid действий последовательный; независимые RED/source-review задачи можно делегировать параллельно с разными owned files. После каждой приёмки только интегратор обновляет tracker/progress; stage commit — после review в пределах текущего разрешения. Автор этого плана не запускал сеть, auth, env/key reads, paid calls, индекс или live eval и не менял implementation/артефакты.
 
 Итоговые приватные receipts: `/tmp/aituhack-mvp/live-key-check-20261020/campaign-report.md` (SHA256 `9559df5770c6751532a464a696f61af4e2b89a7e1cfd392be0e2b3a65378233e`), 46checksummed artifacts. Это проверка доступа/учёта, не выбор модели и не full P0.
 

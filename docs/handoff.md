@@ -1,106 +1,116 @@
 # Продолжение MVP
 
-План утверждён. Продолжать с `next_task_id` в [tracker.yaml](../tracker.yaml),
-сначала сверить in_progress reports; не повторять брейншторм и исследования.
-[progress.md](progress.md) содержит текущие проверки и ограничения.
+> 20.10 22:00 Asia/Almaty: после DNS-отказа stats hostname новый публичный
+> [адрес демо](https://donate-cooperation-quick-annual.trycloudflare.com) отвечает HTTPS200.
+> Fresh390/1440: два настоящих stub POST и три карточки; independent SPEC/QUALITY review PASS.
 
-Рабочая папка `/Users/macbook/Yernur/projects/aituhack`, ветка `main`; локальная `codex/p0-mvp` сохранена.
-20.10 пользователь разрешил полный live P0. Исходники и scoped tests сейчас в managed
-worktree `/Users/macbook/.codex/worktrees/live-p0/aituhack`, ветка `codex/live-p0` от12d5ffe.
-Root пишет tracker/docs в основной папке; исполнители эти файлы не меняют. Обычный merge
-после приёмки объединит исходники с документацией без перезаписи данных сборщика.
-Alias8996b05 принят независимым review; pinnedреальный индекс298/1536/hash4677 построен.
-Query-cache12vectors/semantic gate приняты:12/12top3hit/macro97.22%/negative4/4/hardPASS. Новые chat-вызовы ждут route/budget/source review.
-Перед каждым paid batch сверять headroom в единственном прежнем absolute ledger.
-Runtime Node24.21.0/pnpm11.0.8. Исполнители/review и briefs: `/tmp/aituhack-mvp/`;
-root — единственный writer tracker. Всегда implementer и другой независимый reviewer,
-непересекающиеся owned files; после каждой принятой подзадачи сразу status/evidence/next.
+**Полный P0 с ИИ ещё не принят.** [Публичное демо](https://donate-cooperation-quick-annual.trycloudflare.com)
+работает в режиме stub: 298 настоящих мест, строгие фильтры, до трёх карточек,
+источники, подробности, демо-профили, сохранения и обе карты. Произвольный текст
+и настоящие ИИ-объяснения на публичном сайте пока не включены.
 
-Принято: M1 scaffold/контракты/импорт 298 реальных POI; M2 offline filters/ranking,
-индексатор/кеш и persistent single-host spend guard; M3 API и полный текстовый UI;
-M4.1–M4.2 source-first labels и numerical lexical gate; M5.1–M5.2 профили, локальные
-ID-only preferences, подробности/источники и HTTPS walking/driving ссылки обеих карт.
-Root current lint/types/554unit/build/NFT/64e2e PASS, независимые task reviews PASS.
-RU12/12top3, macroRecall5 97.22%, negative4/4/hardPASS; KK отдельно4/4/91.67%.
-Это agent-curated dev set и lexical, не blind benchmark и не semantic/live acceptance.
-`eval:retrieval` exit1: semanticVerified=false/acceptancePassed=false при numericalPASS.
+Реальный RAG принят локально: индекс 298×1536, 12 cached query vectors,
+12/12 top3, macro Recall@5=97.22%, micro=93.75%, все hard filters и четыре
+отрицательных сценария PASS. Это development set, а не слепой бенчмарк.
 
-M2.4/M2 done: alias исправлен/принят, реальный индекс298/1536 +querycache12vectors;
-rootsemantic acceptance=true/12of12top3/macro97.22%/negative4of4. M4.3–M4.4
-сравнение/выбор модели blocked на безопасном reserve и дальнейшей приёмке.
-M2.6 done: обновлённый ключ auth200,3paid diagnostics/$0.00024488, два chat schema/evidencePASS.
-Embedding HTTP200 остановлен до1536 validation: text-embedding-3-small != openai/text-embedding-3-small.
-[Новый конкретный план](live-p0-plan.md); не повторять one-use diagnostics/не создавать новый ledger.
-M5.4: уточнение нулевого бюджета и явное снятие только этого ограничения.
-Пользователь подтвердил сайт и 3 карточки на физическом телефоне после снятия бюджета0.
-Обе кнопки 2ГИС/Google Maps открыли выбранный Ботанический сад в приложениях.
-M5.3 blocked только на реальном paid live smoke.
-M6 голос skipped: P1 gate не выполнен, UI/endpoint записи отсутствуют.
-Продолжение независимых offline/release задач разрешено пользователем со stubs;
-waivers записаны явно и не превращают внешние gates в done. Следующий шаг брать
-из tracker, а не из исторического текста этапа.
+Последняя принятая offline сборка: source3410a4a / BUILD_ID `fKShKXBBTO6GrZDupxTsU`.
+923 unit автора и 344 независимых targeted теста PASS; root lint/typecheck/
+52 targeted/build/strict NFT (6 traces/1569 entries) PASS. 64 браузерных сценария
+390/1440 проверили UI/runtime до последующих изменений CLI, финансовой политики
+и pin маршрута; реальный live UI этой сборки пока не проверен. Fresh audit
+253 файлов/59 членов ZIP: совпадений с локальными ключами нет, `.env.local`0600.
+Qwen закреплён за `alibaba/us-east-1`, independent SPEC/QUALITY PASS.
+Закрепление не доказывает устранение 429 или отдельную квоту.
 
-OpenRouter: $0.000480181 записанных prep-расходов, включаяeval$0.00025514; баланс аккаунта не проверен.
-$2prep incl$0.50eval/$4demo reserve. Пользователь подтвердил обновление ключа;
-auth200 и два GPT‑6 Luna chat diagnostics прошли. Ключ только в `.env.local`0600,
-не выводить его/сырые provider responses. Канонический ledger уже существует:
-`/Users/macbook/Yernur/projects/aituhack/data/private/openrouter-budget.json`,0600,
-24settled entries после индексации/queryprep, unknown/inFlight/reserved0. Остаток prep1.999519819/eval.49974486/demo4.
-Никогда не менять путь/не инициализировать второй ledger ради нового лимита.
-Публичные APP_AI_MODE=stub/paidfalse сохранены; actual production model=null,
-Luna provisional, Haiku reserve1.32>.50. Реальные будущие вызовы — только через guard
-после соответствующих gates/проверки цен. Single-host persistent, serverlesspaid запрещён.
+После трёх отдельных согласий пользователя применён и независимо проверен v4
+журнал расходов. Затем разрешённая квалификация Qwen 12×2=24 остановилась на
+ПЕРВОМ intent: HTTP 429, 1 POST, 0 повторов, стоимость неизвестна, объяснений нет.
+Модель не выбрана; оригинальные сравнения 72/48 этапов также не завершены.
+Новая четвёртая неизвестная стоимость снова блокирует ВСЕ платные вызовы.
 
-Сборщик `scripts/astana_data.py`, `scripts/collect_astana.py` и его тесты/данные
-сохранены отдельно, часть исходных файлов untracked. Не перетирать/авто-коммитить,
-не повторять paid collection. App catalog — `data/catalog/places.json`, отдельный
-[report/mapping](collection-import.md). Все price/facts неизвестны; ограничения
-не ослаблять. Synthetic fixtures только для тестов. Права публикации review text
-не установлены; raw/контакты/авторы/фото не входят в app. Не считать preview
-стабильным хостингом или локальный commit официальной сдачей.
+## Расходы и текущий STOP
 
-Дедлайн20.10.2026 23:59 Asia/Almaty, внутренняя цель20:00.
+Единственный canonical ledger: основной `data/private/openrouter-budget.json`,
+версия 4, 34 записи, 0600, uncertain=true/inFlight=0. Известные округлённые
+фактические расходы: prep $0.001908131, включая eval $0.00168309, demo $0.
+Три явно разрешённых верхних оценки: $0.264+$0.264+$0.384750001=$0.912750001,
+учтены по одному разу; их actual остаётся null. Это бюджетные выделения,
+а не восстановленная фактическая стоимость.
 
-## Финальные локальные материалы
+Новый unknown Qwen: `bf021306-da2b-43ca-a54e-6a7cfe23ac48`, резерв $0.26160384,
+actual=null. Budget spent prep $0.914658132/eval $0.914433091, вместе с новым
+резервом exposure $1.176261972/$1.176036931. Доступно после резерва prep
+$0.823738028/eval $0.323963069/demo $4. Потолки $2/$1.50/$4 сохранены.
+Четвёртого отдельного разрешения пока нет; guessed actual, reset/copy ledger,
+повтор старых one-use operators или автоматическое снятие STOP запрещены.
 
-M7.1–M7.4 приняты: [демо/файлы/lifecycle](submission/links.md),
-[manifest](submission/release-manifest.json), [сценарии](submission/scenarios.md),
-[ограничения](submission/limitations.md), [презентация/заметки](submission/presentation-outline.md).
-Actual temporary URL: https://loan-begins-sleeps-unavailable.trycloudflare.com .
-M7.8 заменил только tunnel: origin70029 и новый tunnel80285 detached/PPID1/ownPGIDs.
-Старый percentage-slim DNS недоступен, tunnel64556 остановлен после новогоHTTPS200.
-НовыйURL проверен actualAPI390/1440 и пользователем на телефоне:
-«Открылся, три карточки есть». Повторный native-переход этим ответом не подтверждён.
-Доступ остаётся зависимым от Mac/сети, постоянного hosting нет.
-Текущий launcher/log/probe: `/tmp/aituhack-mvp/release-runtime-M5.4-20261020T001928Z/`;
-новый tunnel/log пакет: `/tmp/aituhack-mvp/public-restore-20261020/`.
-Текущее приложение: source`ceb34a5`, build`NASkuokYCKTpTbx_JqKpo`.
-PPTX/видео неизменны: source572a813/buildBlwNsPwtVQoToEIUwspvC.
-PPTX7slides/6min и video110s приняты независимым reviewer и сохранены неизменными.
-Новая UI-сборка M5.4 отдельно прошла перечисленные выше проверки.
-Видео/privatebuild ignoredGit и доступны локально, не считать их публично загруженными.
-M7.5: доступ с телефона, 3 карточки и оба native-перехода к выбранному месту
-подтверждены пользователем. M5.3 realpaid smoke остаётся непроверенным.
-Первый оплаченный embedding test имеет alias blocker; два отдельных chat diagnostics
-не закрывают real end-to-end live smoke.
+В Upstream Requests найден exact `gen-1792514522-MOmoVI0e8ysvVQp9YKDB`,
+20.10 21:42 Asia/Almaty, Alibaba Cloud Int., HTTP429, 1 attempt. Стоимости и
+точного endpoint tag в UI нет; официальный generation GET вернул 404.
+Отсутствие записи не доказывает нулевую стоимость. Региональный US endpoint
+присутствует в свежих public metadata с прежними ставками, но его квота и
+устранение ошибки не проверены. Новых модельных запросов после STOP не было.
 
-Локальная передача/материалы сохранены stage commit`da659ed52fd276ae3787f46a266d3730b96a42b2`;
-Проверки сайта, карточек и обеих карт на физическом телефоне подтверждены пользователем;
-итоговый статус M7.5/M7 — в tracker.yaml. По прямому запросу пользователя история
-отправлена в `main` [GitHub](https://github.com/yernururue/aitu_hack) обычным push.
-YouTube/официальная отправка заявки не выполнялись.
-`next_task_id=M2.4`: сначала reviewed alias regression/fix,
-затем реальный индекс. Ключ уже работает. Учтённый расход$0.00024488, потолки
-$2prep/$0.50nested/$4demo reserve прежние.
+## Продолжение и сохранённая работа
 
-## Повторная проверка источника и ключей
+План и реализация разрешены; без повторного брейншторма. Начинать с `next_task_id`
+в [tracker.yaml](../tracker.yaml), сейчас M4.3. Root — единственный writer трекера;
+исполнитель и другой reviewer обязательны. После каждой принятой подзадачи сразу
+обновлять status/evidence/next. Node 24.21.0/pnpm 11.0.8.
 
-M7.7: [аудит](security-audit.md) подтверждает normalized→catalog298/591 и
-byteEXACT приватный replay. Known/high/unresolved secrets0 в локальных данных,
-Git и actualorigin; .env.local0600. M7.7 publicHTTP0/DNSWARN относится к прежнему URL.
-M7.8 новыйURL:HTTPS200/12clientassets byteequal/private55closed/GET405,
-actual8POST/mobile390+desktopbaseline1440PASS, без model/provider/auth/paid.
-[Текущая готовность](readiness-report.md): offline text demo готов, полная P0 RAG нет.
-При смене данных/.env/build повторить redacted scan перед отправкой провайдеру.
-M2.6 повторил проверку нового ключа в131files/59ZIP без совпадений;
-46final private artifacts/ledger тоже без ключей. Новые вызовы только по live-плану и guard.
+Managed worktree: `/Users/macbook/.codex/worktrees/live-p0/aituhack`,
+branch `codex/live-p0`. Принятый bd8e3da интегрирован обычным merge33ba8c6 в main;
+3410a4a также интегрирован обычным merge в main. Предыдущее разрешение push main сохраняется.
+Private receipts/reviews: `/tmp/aituhack-mvp/`; не повторять one-use operators.
+
+Следующий разрешённый шаг — завершить offline review браузерного driver и документации.
+Дальнейшие paid calls требуют фактической аудируемой сверки нового списания или
+нового явного решения пользователя. Затем новый reviewed Qwen24 прогон,
+независимый review каждого intent/why/activity, выбор модели, private paid smoke,
+public prep QA и телефон. Только после приёмки переключать purpose на demo.
+Критерии: 100% допустимых IDs/evidence/hard filters, 0 неподтверждённых фактов,
+минимум 10/12 релевантных validated positive, четыре negative guards; не ослаблять.
+
+Публичный fallback: source ceb34a5/build NASkuokYCKTpTbx_JqKpo, origin PID70029
+на 3000, новый CF PID39251 (предыдущий7982 завершён послеreview). Не пересобирать его `.next` и не останавливать до принятия
+нового адреса. Fresh 390/1440: два actual stub POST → три реальных парка,
+details/sources/maps/focus/overflow PASS. Текущий URL ещё не проверен физическим
+телефоном. Пользователь подтвердил три карточки на предыдущем loan URL,
+а обе нативные карты — на более раннем percentage URL той же stub-сборки.
+Ссылка зависит от включённых Mac/сервера/туннеля/сети, постоянного hosting нет.
+
+Использован именно `data/normalized/astana/`: 298 мест/1953 отзыва из сохранённого
+сбора 2ГИС через Apify 19.10 → app 298 POI/591 короткая выдержка/889 provenance,
+7 категорий. Dataset hash 4677a7a004ef, catalog file SHA
+`c72d13a1d8df327edc22adce02743b0246aec157e86330c96c408bc44fabb873`.
+Все цены и подтверждённые amenities остаются неизвестными. Повторного сбора нет;
+права публикации текстов источника не установлены. Сборщик/raw/normalized и его
+tracker section сохранены. Не auto-add шесть untracked collector paths, не коммитить
+ключи, raw, ledger, index/cache или WEBM. PPTX/WEBM сохраняют исторический
+source572/buildBlw, не считать их новой AI-версией. Голос M6 skipped P1,
+YouTube/постоянный hosting/официальная отправка не выполнены.
+
+Внутренняя цель 20:00 пропущена. Крайний срок: 20.10.2026 23:59 Asia/Almaty.
+
+## Восстановление публичного адреса 20.10,22:00
+
+Новый current URL: [демо](https://donate-cooperation-quick-annual.trycloudflare.com).
+Stats URL перестал разрешаться в DNS21:55; локальный origin70029/3000 не менялся.
+Новый detached CF39251/PPID1 → тот же sourceceb34a5/buildNASkuokYCKTpTbx_JqKpo.
+Автор:156origin GET и78public GET (включая исправленное излишнее условие приватного
+probe к GET405), POST0/model0. Final:12staticassets byteequal/59privatepathsclosed/
+GETAPI405; Cache-Control у GET405 отсутствует. POSTno-store не выводится из этого GET.
+Root отдельно проверил current local keys только в памяти:14publicGET,
+12assetsbyteequal/0совпадений/0provider; ещё1rootavailabilityGET200.
+Fresh UI390/1440: по1actualstubPOST, всего2, три реальных парка,
+details/literalopinions/sourcedates/mapdestinationswalk-drive/focus/overflowPASS.
+Нового physicalphone/nativeapps подтверждения нет. Runtime/helper/browser evidence:
+`/tmp/aituhack-mvp/public-stub-restore-20261020T1658Z/` и
+`/tmp/aituhack-mvp/public-stub-browser-20261020T1700Z/`.
+Независимое review текущего восстановления пока идёт. Настоящий ИИ остаётся
+не выбранным/paidSTOP; это восстановление прежнего stub, не liveP0.
+
+После независимого PASS root завершил только старый CF7982; origin70029 и новый
+CF39251 сохранены. Reviewer выполнил19freshGET, проверил12assetsbyteequal,
+18runtimechecksums/8UIchecksums/4screenshots/дваactualstubPOST/sourceguard/3offlineguards.
+CurrentURL physicalphone не проверен; fullP0/живые ответы модели не заявлены.

@@ -1,82 +1,61 @@
 # Проверенные ссылки и запуск
 
-[Открыть временное HTTPS-демо](https://loan-begins-sleeps-unavailable.trycloudflare.com).
-[Исходники в GitHub, ветка main](https://github.com/yernururue/aitu_hack/tree/main).
-[Отчёт: что готово и что осталось](../readiness-report.md).
+[Текущее временное HTTPS-демо](https://donate-cooperation-quick-annual.trycloudflare.com).
+[Исходники main](https://github.com/yernururue/aitu_hack/tree/main).
+[Готовность](../readiness-report.md), [ограничения](limitations.md),
+[manifest](release-manifest.json), [трекер](../../tracker.yaml).
 
-Проверка20.10.2026 около14:12 Asia/Almaty: новый адрес отвечаетHTTPS200.
-Прежний `percentage-slim-contemporary-appropriate.trycloudflare.com` не разрешался
-через DNS с машины аудита; старый connector сообщал о повторных обрывах соединения.
-Точная причина не установлена. Восстановлен только туннель, приложение/данные не менялись.
-Исторический DNS-WARN M7.7 сохранён в [аудите](../security-audit.md).
+20.10 около22:00 Asia/Almaty новый URL отвечает HTTPS200. На нём прежний
+проверенный stub: sourceceb34a5/buildNASkuokYCKTpTbx_JqKpo, paid=false.
+Новый detached CF39251/PPID1 направлен на origin70029/3000; origin не менялся.
+Предыдущий stats URL перестал разрешаться в DNS21:55. Старый tunnel7982 завершён только после независимого PASS; старые loan/percentage/stats ссылки не использовать.
 
-Свежие приватные Chromium contexts: мобильный390×844 и настольный1440×900.
-Всего8настоящих POST без mocks: мобильные поиск/бюджет0/явное снятие/повторный поиск,
-профиль/сохранение/скрытие/неизвестный текст и настольный базовый поиск.
-EXPO/«Хочу погулять»/5км/пустой бюджет→3реальныхпарка, canonical hash совпал.
-Бюджет0→0мест, кнопка снятия не делает POST, остальные условия сохранены;
-последующая отправка→3. Подробности/источники и обе HTTPS-карты в двух режимах,
-ID-only storage/reload/reset проверены. Overflow/page errors/devbadge0.
-Переходы во внешние карты в этой браузерной проверке не выполнялись.
+Fresh browser390/1440: ровно два actual stub POST, оба возвращают три реальных
+парка. Details, два literal review opinions, источники/даты, HTTPSdestinations
+2ГИС/Google Maps walk-drive, focus, отсутствиеoverflow/errors PASS.
+АвторGET-sweep:156origin/78public,12assetsbyteequal,59privatepathsclosed,
+GETAPI405. Первоначальное излишнее условие privateprobe к no-store у GET405
+исправлено; GET405 Cache-Control=null. Actual browser POST имеет no-store.
+Root дополнительно:14publicGET с текущими local credentials только в памяти,
+12assetsbyteequal/0matches; ещё1availabilityGET200. Provider/modelcalls0.
+Независимый joint review текущего восстановления SPEC/QUALITY PASS:19freshGET,
+12assetsbyteequal, packet/screenshots/actual2POSTdriver/sourceguard проверены.
 
-На той же сборке пользователь ранее подтвердил сайт и три карточки на физическом
-телефоне; обе карты открыли выбранный Ботанический сад в приложениях.
-Для нового URL пользователь ответил: «Открылся, три карточки есть».
-Повторный native-переход в этом ответе не подтверждён; устройство и браузер не указаны.
-Для показа: EXPO → «Хочу погулять» →5км →бюджет пустой →«Найти места».
+Для показа: **EXPO → «Хочу погулять» →5км → бюджет пустой → «Найти места»**.
+Ожидаются три реальных парка. Budget0 означает только подтверждённо бесплатные
+места и при неизвестных ценах даёт0. Явное снятие ограничения не делает POST
+и не меняет другие условия. Произвольный текст и настоящие ИИ-объяснения пока
+не включены; это восстановление stub, а не новая AI-сборка.
 
-Проверка публичной отдачи: все12clientassets200 побайтово совпали с текущей сборкой,
-все9ссылок из HTML покрыты;51приватный путь404, четыре directoryURL308 с отдельным
-каноническим404; GET API405. Known-secret URL/body guard включён, совпадений0.
-Три актуальных лога mode0600, canaries отсутствуют. Платных/provider/auth-вызовов0.
-Предыдущие проверки той же сборки:554unit/64e2e/lint/types/build/NFT PASS.
+Физический телефон на текущем donate URL пока не проверен. Пользователь подтвердил
+три карточки на прежнем loan URL; обе карты выбранного Ботанического сада
+в нативных приложениях — на более раннем percentage URL той же stub-сборки.
+Эти подтверждения не переносить на новый URL или liveAI.
 
-Локальный origin: [http://127.0.0.1:3000](http://127.0.0.1:3000).
-Текущие detached processes: PID70029 (Next) и80285 (cloudflared),
-PPID1/собственные process groups; launcher туннеля80282 завершился, ребёнок жив
-после завершения launcher и в следующем tool-call. Прежний tunnel64556 остановлен
-только после проверки нового адреса. Production-процесс не перезапускался.
-Это не системный service и не автоматический перезапуск. Mac, процессы и сеть
-должны работать; при новом туннеле URL меняется. Постоянный hosting/SLA не заявлен.
+Origin launcher/log: `/tmp/aituhack-mvp/release-runtime-M5.4-20261020T001928Z/`.
+Текущий tunnel/GETproof: `/tmp/aituhack-mvp/public-stub-restore-20261020T1658Z/`.
+Текущий browserproof: `/tmp/aituhack-mvp/public-stub-browser-20261020T1700Z/`.
+Исторический stats proof: `/tmp/aituhack-mvp/public-stub-restore-20261020T132952Z/`.
+Mac, сеть, origin и tunnel должны оставаться включёнными. QuickTunnel зависит от
+этих процессов; постоянного hosting/autorestart/SLA нет. Историческую `.next`
+основного checkout не пересобирать, пока она обслуживает этот сайт.
 
-Origin launcher/probe/log: `/tmp/aituhack-mvp/release-runtime-M5.4-20261020T001928Z/`.
-Текущий tunnel/probe/log: `/tmp/aituhack-mvp/public-restore-20261020/`.
-Свежая браузерная проверка: `/tmp/aituhack-mvp/public-ui-recheck/`.
-Build `NASkuokYCKTpTbx_JqKpo`, исходники `ceb34a5`; каталог не изменён.
+Новая offlineAI/RAG сборка находится отдельно:
+`/Users/macbook/.codex/worktrees/live-p0/aituhack`, source3410a4a,
+BUILD_IDfKShKXBBTO6GrZDupxTsU. Индекс298×1536/semantic12+4 принят.
+923authorunit/344independenttargeted/rootlint-types-build-strictNFT/knownkeyscan0
+PASS. QwenUSpin принят, но устранение429 не доказано. КвалификацияQwen24
+остановлена после первого intent429/no-cost; winnernull, public liveUI blocked.
+Canonicalv4 имеет три approved bounds.912750001(actualnull) и новый unknown
+reserve.26160384; caps2/1.5/4, demo0. Четвёртого разрешения нет, всеpaidSTOP.
+Не копировать/обнулять ledger, не повторять one-use operators и не тратить demo
+на разработку. [Бюджет](../budget.md), [передача](../handoff.md).
 
-Для ручного запуска выбрать Node24.21.0/pnpm11.0.8. Не пересобирать `.next`, пока
-текущий production использует эту папку. После остановки и сборки по README
-закрепить бесплатный режим и реальный каталог:
+PPTX/WEBM сохраняют исторический source572/buildBlw snapshot со старым URL.
+Материалы не перезаписаны и не демонстрируют новый AI-кандидат.
+YouTube/официальная отправка/постоянный hosting не выполнены.
 
-```sh
-NODE_ENV=production APP_AI_MODE=stub OPENROUTER_PAID_ENABLED=false LIVE_EVAL_ENABLED=false APP_USE_SYNTHETIC=false NEXT_TELEMETRY_DISABLED=1 APP_DATASET_PATH=/Users/macbook/Yernur/projects/aituhack/data/catalog/places.json pnpm start --hostname 127.0.0.1 --port 3000
-```
-
-Туннель использует verified cloudflared2026.10.1 без аккаунта/новыхcredentials.
-Остановка процессов прекращает доступ; перед остановкой сверить PID/команду.
-Не удалять ledger и не включать paid ради старта. Ключ остаётся только на сервере.
-
-[Release manifest](release-manifest.json), [три сценария](scenarios.md),
-[границы версии](limitations.md), [сбор и импорт](../collection-import.md),
-[решение по моделям](../model-decision.md).
-
-## Материалы, принятые независимо
-
-- [Презентация PowerPoint](../../output/submission/aituhack-demo.pptx) — 7 слайдов,
-  native текст/таблицы и заметки на6мин,436736bytes.
-- [Видео](../../output/submission/aituhack-demo.webm) — 110с,1440×900,VP9,беззвука,
-  14034370bytes; полный decode и независимая packet/frame проверка PASS.
-- [План выступления и источники](presentation-outline.md).
-
-PPTX/видео сохранены неизменными как снимок source`572a813`/build`BlwNsPwtVQoToEIUwspvC`
-(554unit/62e2e). Текущее приложение добавляет пояснение/явное снятие бюджета;
-новая сборка приложения указана отдельно. SHA-256 и sourceSnapshot обоих файлов
-записаны в release-manifest.json. Материалы проверены локально. PPTX также доступен
-[в GitHub](https://github.com/yernururue/aitu_hack/blob/main/output/submission/aituhack-demo.pptx)
-после разрешённого push; видео доступно владельцу workspace. Видео и private build/evidence игнорируются Git;
-локальная ссылка на них не означает публичную загрузку или доступность в новом clone.
-PPTX включает все четыре изображения внутри файла; native PowerPoint отдельно не открывался.
-Сайт, 3 карточки и оба native-перехода подтверждены пользователем на той же сборке
-по прежнему URL; для нового адреса подтверждены открытие сайта и три карточки,
-повторный запуск приложений карт не сообщался.
-GitHub push выполнен по запросу пользователя. YouTube upload и официальная отправка заявки не выполнялись.
+После независимого PASS root завершил только старый CF7982; origin70029 и новый
+CF39251 сохранены. Reviewer выполнил19freshGET, проверил12assetsbyteequal,
+18runtimechecksums/8UIchecksums/4screenshots/дваactualstubPOST/sourceguard/3offlineguards.
+CurrentURL physicalphone не проверен; fullP0/живые ответы модели не заявлены.

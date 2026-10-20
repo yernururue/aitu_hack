@@ -78,24 +78,117 @@
       "privateReportSha256": "9559df5770c6751532a464a696f61af4e2b89a7e1cfd392be0e2b3a65378233e",
       "independentFinalReview": "SPEC PASS / QUALITY PASS for TEST + PLAN",
       "independentReviewReportSha256": "6a31c103a110032d7f24d9707633aae676f3c0665766e92372ed72696c4542dd"
+    },
+    "candidate": {
+      "sourceCommit": "3410a4adfc0ffe55a9ba08326c59fd1970192c1e",
+      "buildId": "fKShKXBBTO6GrZDupxTsU",
+      "publiclyDeployed": false,
+      "semanticIndex": {
+        "poiCount": 298,
+        "dimensions": 1536,
+        "model": "openai/text-embedding-3-small",
+        "sha256": "568c855ff30dc866c8de4f0eed3038df4406898bd45fe25472f5afa318934d45",
+        "queryCacheCases": 12,
+        "semanticAccepted": true,
+        "top3Success": 12,
+        "macroRecallAt5": 0.9722222222222222,
+        "microRecallAt5": 0.9375,
+        "negativePassed": 4,
+        "hardConstraintsPassed": true
+      },
+      "unitTestsPassed": 923,
+      "unitFilesPassed": 20,
+      "lintTypecheckBuildStrictNftPassed": true,
+      "browserTestSourceCommitPrefix": "79a28be",
+      "liveComparisonComplete": false,
+      "liveAttemptRows": 1,
+      "winner": null,
+      "paidLiveSmokeVerified": false,
+      "blocker": "FirstQwenintentHTTP429/costunknown; no accepted model intent/prose, unknownSTOP, nofourthgrant",
+      "knownKeyScan": {
+        "files": 253,
+        "zipMembers": 59,
+        "findings": 0,
+        "envMode": "0600"
+      },
+      "policyIndependentReview": "SPEC PASS / QUALITY PASS",
+      "policyCanonicalApplied": true,
+      "originFixIndependentReview": "SPEC PASS / QUALITY PASS",
+      "originFixUnitTestsPassed": 778,
+      "policyCanonicalVersion": 4,
+      "secondPolicyCanonicalApplied": true,
+      "originalFullThreeModelComparisonComplete": false,
+      "amendedComparisonComplete": false,
+      "amendedProtocolAuthorized": true,
+      "haikuTechnicalQualification": "failed; first opaque unknown, second HTTP400 without cost; semantic quality not fully assessed",
+      "workingSourceCommit": "3410a4adfc0ffe55a9ba08326c59fd1970192c1e",
+      "buildSourceCommit": "3410a4adfc0ffe55a9ba08326c59fd1970192c1e",
+      "workingSourceHasNotBeenBuilt": false,
+      "finalSourceUnitTestsPassed": 923,
+      "finalSourceLintTypecheckPassed": true,
+      "browserTestsPassedBeforeCliOnlyFix": 64,
+      "qwenQualificationComplete": false,
+      "independentTargetedTestsPassed": 344,
+      "rootTargetedTestsPassed": 52,
+      "routePin": "alibaba/us-east-1",
+      "routePinIndependentReview": "SPEC PASS / QUALITY PASS",
+      "routePinProven429Fix": false,
+      "priorBd8eVerification": {
+        "sourceCommit": "bd8e3dacf2298a9de3b4cea1a00a7844c79a2707",
+        "unitTestsPassed": 907,
+        "unitFilesPassed": 19,
+        "buildId": "DF0KUMjEhjPG3gTG4-E-H"
+      },
+      "historical48MeasuredModels": [
+        "openai/gpt-6-luna",
+        "qwen/qwen3.8-flash"
+      ],
+      "currentQualificationProtocol": "approved-qwen-20261020",
+      "currentQualificationModels": [
+        "qwen/qwen3.8-flash"
+      ],
+      "modelDispositions": {
+        "anthropic/claude-haiku-5.5": "technical not qualified; first opaque unknown, second HTTP400; full semantics unassessed",
+        "openai/gpt-6-luna": "technical not qualified under current15s attemptSLO; remaining semantics unassessed",
+        "qwen/qwen3.8-flash": "qualification incomplete1/24 first intentHTTP429 without cost; no accepted intent/prose"
+      }
     }
   },
   "budget": {
     "currency": "USD",
-    "recordedProjectOpenRouterSpend": 0.00024488,
+    "recordedProjectOpenRouterSpend": 0.001908131,
     "accountBalanceVerified": false,
     "preparationCap": 2,
-    "liveEvalSubcapWithinPreparation": 0.5,
+    "liveEvalSubcapWithinPreparation": 1.5,
     "demoReserve": 4,
     "persistentGuardVerified": true,
     "realLedgerInitialized": true,
-    "recordedLiveEvalSpend": 0.00024488,
-    "remainingPreparation": 1.99975512,
-    "remainingLiveEval": 0.49975512,
+    "recordedLiveEvalSpend": 0.00168309,
+    "remainingPreparation": 0.823738028,
+    "remainingLiveEval": 0.323963069,
     "demoSpent": 0,
-    "ledgerUncertain": false,
+    "ledgerUncertain": true,
     "ledgerInFlight": 0,
-    "ledgerReserved": 0
+    "ledgerReserved": 0.26160384,
+    "unknownReservationCount": 1,
+    "paidCallsGloballyStopped": true,
+    "spendBasis": "Knownroundedactualprep.001908131/eval.00168309 plus3budgetbounds.912750001(actualnull), NEWunknownreserve.26160384; caps2/1.5/4, demo0.",
+    "proposedPolicyExceptionAuthorized": true,
+    "policyAuthorizationId": "87921423-9345-419a-bd47-c90f0e8b0c38",
+    "persistentLedgerLiveEvalCapBeforeMigration": 0.8,
+    "upperBoundBudgetChargeApplied": true,
+    "policyStatus": "v4 three exact grants applied/audited; NEWfourthunknownQwen429STOP no fourthgrant",
+    "ledgerVersion": 4,
+    "authorizedUpperBoundCharged": 0.912750001,
+    "secondUpperBoundApproved": 0.264,
+    "secondUpperBoundApplied": true,
+    "actualCostUnknownAuthorizedReservationCount": 3,
+    "newUnknownReservationId": "bf021306-da2b-43ca-a54e-6a7cfe23ac48",
+    "newUpperBoundExceptionAuthorized": false,
+    "thirdUpperBoundApproved": 0.384750001,
+    "thirdUpperBoundApplied": true,
+    "thirdPolicyAuthorizationId": "00d1c10d-26b9-4daf-8107-964a5375bb67",
+    "fourthUpperBoundExceptionAuthorized": false
   },
   "voice": {
     "enabled": false,
@@ -182,8 +275,21 @@
       "deviceBrowserVersionKnown": false
     },
     "historicalPhysicalPhoneUrl": "https://percentage-slim-contemporary-appropriate.trycloudflare.com",
-    "currentUrlPhysicalPhoneVerified": true,
-    "currentPublicBrowserRecheck": {
+    "currentUrlPhysicalPhoneVerified": false,
+    "currentUrlPhysicalPhoneSiteOpened": false,
+    "currentUrlPhysicalPhoneCardsVerified": false,
+    "currentUrlNativeMapHandoffRetestVerified": false,
+    "scope": "historical deployed stub snapshot; final AI-candidate gates are under ai.candidate",
+    "previousUrlPhysicalPhoneEvidence": {
+      "url": "https://loan-begins-sleeps-unavailable.trycloudflare.com",
+      "basis": "Direct user answer to the exact new-URL physical-phone retry question: EXPO / park phrase / 5km / blank budget",
+      "quote": "Открылся, три карточки есть",
+      "siteOpened": true,
+      "recommendationCount": 3,
+      "deviceBrowserVersionKnown": false,
+      "nativeMapAppsRetestConfirmed": false
+    },
+    "previousUrlPublicBrowserRecheck": {
       "url": "https://loan-begins-sleeps-unavailable.trycloudflare.com",
       "scope": "mobile390 complete targeted checks; desktop1440 baseline search",
       "publicPostCount": 8,
@@ -200,18 +306,36 @@
       "independentReview": "SPEC PASS / QUALITY PASS within offline-stub scope",
       "report": "docs/readiness-report.md"
     },
-    "currentUrlPhysicalPhoneSiteOpened": true,
-    "currentUrlPhysicalPhoneCardsVerified": true,
-    "currentUrlPhysicalPhoneEvidence": {
-      "url": "https://loan-begins-sleeps-unavailable.trycloudflare.com",
-      "basis": "Direct user answer to the exact new-URL physical-phone retry question: EXPO / park phrase / 5km / blank budget",
-      "quote": "Открылся, три карточки есть",
-      "siteOpened": true,
-      "recommendationCount": 3,
-      "deviceBrowserVersionKnown": false,
-      "nativeMapAppsRetestConfirmed": false
+    "currentPublicBrowserRecheck": {
+      "url": "https://donate-cooperation-quick-annual.trycloudflare.com",
+      "scope": "fresh390/1440 oneactualstubparksearch each aftersecondDNSrestoration",
+      "publicPostCount": 2,
+      "mockedResponses": false,
+      "allResponsesHttp200": true,
+      "catalogIdentityAndCanonicalHashMatch": true,
+      "detailsSourcesAndBothMapModes": true,
+      "horizontalOverflow": false,
+      "pageErrors": 0,
+      "externalMapAppsLaunched": false,
+      "physicalPhoneVerified": false,
+      "independentReview": "SPEC PASS / QUALITY PASS",
+      "report": "docs/readiness-report.md"
     },
-    "currentUrlNativeMapHandoffRetestVerified": false
+    "previousStatsPublicBrowserRecheck": {
+      "url": "https://stats-corps-watt-reviews.trycloudflare.com",
+      "scope": "fresh390/1440 oneactualstubparksearch each",
+      "publicPostCount": 2,
+      "mockedResponses": false,
+      "allResponsesHttp200": true,
+      "catalogIdentityAndCanonicalHashMatch": true,
+      "detailsSourcesAndBothMapModes": true,
+      "horizontalOverflow": false,
+      "pageErrors": 0,
+      "externalMapAppsLaunched": false,
+      "physicalPhoneVerified": false,
+      "independentReview": "SPEC PASS / QUALITY PASS",
+      "report": "docs/readiness-report.md"
+    }
   },
   "privacy": {
     "deviceLocationOptIn": true,
@@ -227,29 +351,46 @@
   "hosting": {
     "status": "temporary_public_https_verified",
     "type": "cloudflare_quick_tunnel",
-    "url": "https://loan-begins-sleeps-unavailable.trycloudflare.com",
-    "previousUrl": "https://percentage-slim-contemporary-appropriate.trycloudflare.com",
+    "url": "https://donate-cooperation-quick-annual.trycloudflare.com",
+    "previousUrl": "https://stats-corps-watt-reviews.trycloudflare.com",
     "origin": "http://127.0.0.1:3000",
     "stableHosting": false,
     "requiresLocalOriginAndTunnelAlive": true,
-    "checkedAtUtc": "2026-10-20T09:13:26.114907+00:00",
-    "publicPrivatePaths404": 55,
+    "checkedAtUtc": "2026-10-20T17:00:39.161117+00:00",
+    "publicPrivatePaths404": 59,
     "getApi405": true,
     "postNoStore": true,
     "controlledQueryGpsAudioCanariesAbsentFromLogs": true,
     "freshBrowserContextsVerified": true,
-    "physicalPhoneVerified": true,
+    "physicalPhoneVerified": false,
     "productionPid": 70029,
-    "tunnelPid": 80285,
+    "tunnelPid": 39251,
     "detachedProcesses": true,
     "launcherParentsExitedVerified": true,
     "runtimeEvidenceDirectory": "/tmp/aituhack-mvp/release-runtime-M5.4-20261020T001928Z",
     "previousProductionPid": 64525,
     "existingTunnelEvidenceDirectory": "/tmp/aituhack-mvp/release-runtime-restart-20261019T235726Z",
-    "physicalPhoneSiteOpened": true,
+    "physicalPhoneSiteOpened": false,
     "runtimeReportSha256": "8cfdea94b5eb7d9cc62f7cf8759e425265bf1325964688a8125db845d11c3414",
-    "physicalPhoneCardsVerified": true,
+    "physicalPhoneCardsVerified": false,
     "latestAvailabilityAudit": {
+      "checkedAtUtc": "2026-10-20T17:00:39.161117+00:00",
+      "url": "https://donate-cooperation-quick-annual.trycloudflare.com",
+      "originHttpStatus": 200,
+      "publicHttpStatus": 200,
+      "all12ClientAssetsHashEqualCurrentBuild": true,
+      "privateLocationsClosed": 59,
+      "getApi405": true,
+      "getApiCacheControl": null,
+      "knownSecretMatches": 0,
+      "providerAuthPaidCalls": 0,
+      "authorOriginGets": 156,
+      "authorPublicGets": 78,
+      "rootAdditionalPublicGets": 15,
+      "independentReview": "SPEC PASS / QUALITY PASS",
+      "reviewerFreshPublicGets": 19
+    },
+    "previousAvailabilityAudit": {
       "checkedAtUtc": "2026-10-20T09:13:26.114907+00:00",
       "url": "https://loan-begins-sleeps-unavailable.trycloudflare.com",
       "originHttpStatus": 200,
@@ -261,30 +402,23 @@
       "knownSecretMatches": 0,
       "providerAuthPaidCalls": 0
     },
-    "previousAvailabilityAudit": {
-      "checkedAtUtc": "2026-10-20T08:40:14.290001Z",
-      "originHttpStatus": 200,
-      "publicHttpResponses": 0,
-      "publicDnsVerifiedFromAuditHost": false,
-      "lastSuccessfulPublicCheckUtc": "2026-10-20T00:21:18.053126Z"
-    },
     "retiredUrls": [
       "https://converter-mirrors-commercial-gem.trycloudflare.com",
-      "https://percentage-slim-contemporary-appropriate.trycloudflare.com"
+      "https://percentage-slim-contemporary-appropriate.trycloudflare.com",
+      "https://loan-begins-sleeps-unavailable.trycloudflare.com",
+      "https://stats-corps-watt-reviews.trycloudflare.com"
     ],
-    "publicPrivatePathsDirect404": 51,
+    "publicPrivatePathsDirect404": 55,
     "publicDirectory308ThenCanonical404": 4,
-    "previousTunnelPid": 64556,
-    "tunnelEvidenceDirectory": "/tmp/aituhack-mvp/public-restore-20261020",
-    "publicBrowserEvidenceDirectory": "/tmp/aituhack-mvp/public-ui-recheck",
-    "publicBrowserCheckedAtUtcApproximate": "2026-10-20T09:11:00Z",
-    "previousUrlPhysicalPhoneVerified": true,
-    "previousUrlNativeMapHandoffVerified": true,
-    "physicalPhoneVerificationStatus": "current_url_site_and_three_cards_confirmed_by_user; native_map_retest_not_reported",
-    "restorationRuntimeReportSha256": "14ec785995571aa34a878fbe1cf5f5a81c10c1b39d7ea0db87aba3a81bfa3563",
-    "restorationPublicGetCount": 77,
-    "restorationIndependentReview": "SPEC PASS / QUALITY PASS within scanned boundaries",
-    "restorationReviewReportSha256": "300571ef5bf7206cf8d855bf729d8b8ec5a9b607c4a537387f77725dce452c75",
+    "previousTunnelPid": 7982,
+    "tunnelEvidenceDirectory": "/tmp/aituhack-mvp/public-stub-restore-20261020T1658Z",
+    "previousUrlPhysicalPhoneVerified": false,
+    "previousUrlNativeMapHandoffVerified": false,
+    "physicalPhoneVerificationStatus": "current_donate_and_previous_stats_urls_not_verified_on_physical_phone; earlier_loan_url_site_and_three_cards_confirmed; native_maps_confirmed_on_earlier_percentage_stub_url",
+    "restorationRuntimeReportSha256": "6d61855cf0c0305947fdbaa45290dfe005be581d1b2015e055f95835e97990a8",
+    "restorationPublicGetCount": 78,
+    "restorationIndependentReview": "SPEC PASS / QUALITY PASS within public STUB boundaries",
+    "restorationReviewReportSha256": "5bffb95ba333630f226243a5c6a7a9eaabf9f5f82a1653ec0b90908ff5d14307",
     "physicalPhoneEvidence": {
       "url": "https://loan-begins-sleeps-unavailable.trycloudflare.com",
       "basis": "Direct user answer to the exact new-URL physical-phone retry question: EXPO / park phrase / 5km / blank budget",
@@ -294,13 +428,43 @@
       "deviceBrowserVersionKnown": false,
       "nativeMapAppsRetestConfirmed": false
     },
-    "currentUrlNativeMapHandoffRetestVerified": false
+    "currentUrlNativeMapHandoffRetestVerified": false,
+    "previousPublicBrowserEvidenceDirectory": "/tmp/aituhack-mvp/public-ui-recheck",
+    "previousPublicBrowserCheckedAtUtcApproximate": "2026-10-20T09:11:00Z",
+    "publicBrowserEvidenceDirectory": "/tmp/aituhack-mvp/public-stub-browser-20261020T1700Z",
+    "currentAvailabilityVerified": true,
+    "latestAvailabilityInterruption": {
+      "observedAtUtc": "2026-10-20T16:55:00Z",
+      "scope": "nativeDNSgaierror twice for stats hostname; origin3000HTTP200/PIDs70029and7982alive",
+      "restorationInProgress": false,
+      "providerCalls": 0,
+      "replacedBy": "https://donate-cooperation-quick-annual.trycloudflare.com"
+    },
+    "previousStatsAvailabilityAudit": {
+      "checkedAtUtc": "2026-10-20T13:33:20.925489Z",
+      "url": "https://stats-corps-watt-reviews.trycloudflare.com",
+      "originHttpStatus": 200,
+      "publicHttpStatus": 200,
+      "publicDnsVerifiedFromAuditHost": true,
+      "all12ClientAssetsHashEqualCurrentBuild": true,
+      "privateLocationsClosed": 59,
+      "getApi405": true,
+      "knownSecretMatches": 0,
+      "providerAuthPaidCalls": 0,
+      "independentReview": "SPEC/QUALITYPASS after failfastfix1/78freshGET"
+    },
+    "oldStatsTunnelStillPreserved": false,
+    "previousTunnelStoppedAfterIndependentPass": true,
+    "oldTunnelCleanupReceipt": "old-tunnel-cleanup.json",
+    "publicRestorationAuthorTotalGets": 234,
+    "publicRestorationReviewerFreshGets": 19,
+    "earlierLoanUrlPhysicalPhoneVerified": true
   },
   "outstandingGates": [
-    "M2.4 real embeddings index",
-    "M4.3 frozen-context live comparison within unchanged budget",
-    "M4.4 validated model selection",
-    "M5.3 real paid live smoke"
+    "M4.3 reconcile fourth unknown Qwen HTTP429 actual cost or obtain separate explicit reviewed policy; all paid STOP",
+    "M4.3 complete user-approved Qwen24 qualification; original72 and Luna/Qwen48 remain incomplete",
+    "M4.4 independent intent/prose quality review and valid model selection",
+    "M5.3 private paid freeform smoke, public prep QA, phone and live cutover"
   ],
   "buildId": "NASkuokYCKTpTbx_JqKpo",
   "materials": [
@@ -324,7 +488,7 @@
       },
       "url": "https://github.com/yernururue/aitu_hack/blob/main/output/submission/aituhack-demo.pptx",
       "snapshotUrlMayBeUnavailable": true,
-      "currentDemoUrl": "https://loan-begins-sleeps-unavailable.trycloudflare.com"
+      "currentDemoUrl": "https://donate-cooperation-quick-annual.trycloudflare.com"
     },
     {
       "path": "output/submission/aituhack-demo.webm",
@@ -347,7 +511,7 @@
         "demoUrl": "https://percentage-slim-contemporary-appropriate.trycloudflare.com"
       },
       "snapshotUrlMayBeUnavailable": true,
-      "currentDemoUrl": "https://loan-begins-sleeps-unavailable.trycloudflare.com"
+      "currentDemoUrl": "https://donate-cooperation-quick-annual.trycloudflare.com"
     }
   ],
   "delivery": {
@@ -374,12 +538,12 @@
     },
     "readinessReport": "docs/readiness-report.md",
     "lastPublicUrlRestorationTask": "M7.8",
-    "currentDemoUrl": "https://loan-begins-sleeps-unavailable.trycloudflare.com",
-    "publicRestorationReview": "PASS; current-url physical site and three cards confirmed by user; native-map retest absent; fullP0Accepted=false",
+    "currentDemoUrl": "https://donate-cooperation-quick-annual.trycloudflare.com",
+    "publicRestorationReview": "JointSPEC/QUALITYPASS19freshGET/12assetsequal/actual3901440twoSTUBPOST/4screenshots; old7982stoppedafterPASS/new39251+70029alive; no newphone/liveproof",
     "liveP0Plan": "docs/live-p0-plan.md",
-    "liveP0PlanSha256": "42afbf766a64f0ea74b9926d2adf34fdc34b342ffb46994ee1e9d74e07b08d96"
+    "liveP0PlanSha256": "d02c2ddeb645cd65ba5c801993d291fe7f27ce41995b5ad16ce0fd619328cf24"
   },
-  "updatedAt": "2026-10-20T11:01:31.262902+00:00",
+  "updatedAt": "2026-10-20T17:06:13.863868+00:00",
   "applicationUpdate": {
     "taskId": "M5.4",
     "change": "Clarify strict zero versus blank budget and offer explicit budget removal without automatic search or changing other fields",
@@ -416,6 +580,29 @@
     "checkedAtUtc": "2026-10-20T08:40:14.290001Z",
     "publicRecheck": {
       "taskId": "M7.8",
+      "url": "https://donate-cooperation-quick-annual.trycloudflare.com",
+      "verdict": "PASS_WITHIN_SCANNED_BOUNDARIES",
+      "clientAssets200AndByteEqual": 12,
+      "privateLocationsClosed": 59,
+      "getApi405": true,
+      "knownSecretMatches": 0,
+      "providerAuthPaidCalls": 0,
+      "report": "docs/security-audit.md",
+      "independentReview": "SPEC PASS / QUALITY PASS"
+    },
+    "updatedCredentialRecheck": {
+      "taskId": "M2.6",
+      "serverCredentialSources": 2,
+      "currentFilesScanned": 131,
+      "zipMembersScanned": 59,
+      "finalPrivateArtifactsScanned": 46,
+      "knownSecretMatches": 0,
+      "credentialValuesOrHashesPrinted": false,
+      "envFileMode": "0600",
+      "report": "docs/security-audit.md"
+    },
+    "previousPublicRecheck": {
+      "taskId": "M7.8",
       "url": "https://loan-begins-sleeps-unavailable.trycloudflare.com",
       "checkedAtUtc": "2026-10-20T09:13:26.114907+00:00",
       "verdict": "PASS_WITHIN_SCANNED_BOUNDARIES",
@@ -428,15 +615,15 @@
       "previousPublicVerdictPreserved": true,
       "report": "docs/security-audit.md"
     },
-    "updatedCredentialRecheck": {
-      "taskId": "M2.6",
-      "serverCredentialSources": 2,
-      "currentFilesScanned": 131,
-      "zipMembersScanned": 59,
-      "finalPrivateArtifactsScanned": 46,
+    "previousStatsPublicRecheck": {
+      "taskId": "M7.8",
+      "url": "https://stats-corps-watt-reviews.trycloudflare.com",
+      "verdict": "PASS_WITHIN_SCANNED_BOUNDARIES",
+      "clientAssets200AndByteEqual": 12,
+      "privateLocationsClosed": 59,
+      "getApi405": true,
       "knownSecretMatches": 0,
-      "credentialValuesOrHashesPrinted": false,
-      "envFileMode": "0600",
+      "providerAuthPaidCalls": 0,
       "report": "docs/security-audit.md"
     }
   }

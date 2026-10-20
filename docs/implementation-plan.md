@@ -14,6 +14,22 @@ OpenRouter, JSON + embeddings, Vitest, Playwright, pnpm, Vercel.
 
 **Spec:** [product-spec.md](product-spec.md).
 
+## Текущий статус 20.10
+
+Реальный RAG принят: 298 POI×1536, 12 query-cache; 12/12 top3,
+Recall@5=97.22%, четыре negative guards и hard filters PASS. Source3410a4a в main:923 unit автора/344 независимых targeted, root lint/types/
+build/strict NFT PASS. Qwen US pin без уменьшения reserve принят независимым
+review; устранение429 не доказано.
+
+M4.3/M4.4/M5.3 не завершены. Три отдельные разрешённые верхние оценки
+.264+.264+.384750001 применены/audited, actual=null, canonical v4/caps2/1.5/4.
+Пользователь разрешил Qwen 12×2=24; Haiku/Azure и Luna технически не прошли,
+их полная семантика не оценена; исходные 72/48 остаются незавершёнными.
+Новый Qwen24 прогон: первый intent HTTP429/no-cost, 1 POST/0 повторов,
+новый reserve .26160384, uncertain=true, все paid STOP. Четвёртого grant нет.
+Public site остаётся рабочим stub. [Трекер](../tracker.yaml), [передача](handoff.md).
+Нижний журнал хранит исторический ход работ.
+
 ## Global Constraints
 
 - Выдавать 0–3 места только из загруженного каталога и прошедших фильтры.
@@ -22,9 +38,9 @@ OpenRouter, JSON + embeddings, Vitest, Playwright, pnpm, Vercel.
 - Основной язык — русский; точные координаты и аудио не сохраняются в логах.
 - Размеры QA: 390 и 1440 px. Навигация — внешние 2ГИС/Google Maps.
 - Бюджет OpenRouter: $2 на всю подготовку/индексацию/разработку/тесты/повторы,
-  $4 только на демо; live-сравнение максимум $0.50 внутри подготовительных $2.
+  $4 только на демо; live-сравнение максимум $1.50 внутри подготовительных $2.
 - План утверждён пользователем 19.10.2026. Реализация разрешена без повторного
-  согласования; следующий чат начинает этап 1 по tracker.yaml.
+  согласования; продолжение начинается с next_task_id в tracker.yaml.
 
 ## Review Focus
 
@@ -342,3 +358,9 @@ $0.00024488; два GPT‑6 Luna chat schema/evidencePASS, embedding HTTP200
 полный RAG пока не приняты. Уточнённые шаги в [live-p0-plan.md](live-p0-plan.md);
 следующий M2.4 — exact alias RED/fix/review, затем cached298index. Ledger уже
 инициализирован, повторять diagnostics/обнулять бюджет нельзя; publicstub сохранён.
+
+20.10,18:40: обновление после M2.6 выше — alias исправлен/принят, настоящий index
+и semantic gate выполнены. Source270b427/715unit/build/NFT принят, но full3model
+campaign остановлен на неизвестной стоимости Haiku explanation. M4.3/M4.4 blocked,
+paidUI/cutover не выполнены, полныйP0false. Текущий URL/расход/политика — в
+tracker/handoff/readiness, а предыдущие записи журнала остаются историческими.
