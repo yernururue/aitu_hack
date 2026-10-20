@@ -23,13 +23,24 @@ export type Quote = Readonly<{
   operation: Exclude<Operation, "audio">; model: string; estimatedUsd: number;
   inputCount?: number; maxCompletionTokens?: number; contextLength: number;
   outputParameter: "max_tokens" | "max_completion_tokens";
+  billing: Readonly<{ inputUsdPerToken: string; completionUsdPerToken: string; maxOutputTokens: number; cacheWriteMaxMultiplier?: 2 }>;
   provider: Readonly<{
+    only?: readonly [string];
     allow_fallbacks: false; require_parameters: true;
     max_price: Readonly<{ prompt: string; completion: string; request: "0"; image: "0"; audio: "0" }>;
   }>;
 }>;
 const issuedQuotes = new WeakSet<Quote>();
 export function isIssuedQuote(quote: Quote): boolean { return issuedQuotes.has(quote); }
+
+// Exact decimal unit conversion; float multiplication serialized Luna's intended
+// 0.2/M cap as 0.19999999999999998/M and rejected its own published tier.
+function perMillion(price: string): string {
+  const [whole, fraction = ""] = price.split(".");
+  const integer = (whole + fraction.slice(0, 6).padEnd(6, "0")).replace(/^0+(?=\d)/, "");
+  const remainder = fraction.slice(6).replace(/0+$/, "");
+  return integer + (remainder ? `.${remainder}` : "");
+}
 
 export function quoteRequest(args: { operation: Operation; model: string; inputCount?: number; maxCompletionTokens?: number }): Quote {
   if (!Object.hasOwn(models, args.model)) throw new Error("UNKNOWN_MODEL");
@@ -38,16 +49,26 @@ export function quoteRequest(args: { operation: Operation; model: string; inputC
   if ((!embedding && args.operation !== "intent" && args.operation !== "explanation") || (embedding ? model.kind !== "embedding" : model.kind !== "chat")) throw new Error("UNAUTHORIZED_OPERATION");
   if (embedding && (!Number.isSafeInteger(args.inputCount) || args.inputCount! < 1 || args.inputCount! > 64)) throw new Error("INVALID_INPUT_COUNT");
   if (!embedding && (!Number.isSafeInteger(args.maxCompletionTokens) || args.maxCompletionTokens! < 16 || args.maxCompletionTokens! > model.output)) throw new Error("INVALID_TOKEN_LIMIT");
-  const prompt = parseTokenPrice(model.prompt);
-  const completion = parseTokenPrice(model.completion);
-  const inputRate = Math.max(prompt, parseTokenPrice(model.cache));
+  // OpenRouter's max_price is the contractual accepted-rate ceiling, including
+  // conditional tiers. Higher tiers must reject instead of charging more.
+  // Only the verified global Azure endpoint supports this model's required
+  // parameters at these caps. Keep *full* context/output and allow the maximum
+  // documented 2x cache-write price even without requesting prompt caching.
+  const pinnedHaiku = args.model === "anthropic/claude-haiku-5.5";
+  const promptPrice = pinnedHaiku ? "0.0000001" : model.prompt;
+  const completionPrice = pinnedHaiku ? "0.0000005" : model.completion;
+  const inputPrice = pinnedHaiku ? "0.0000002" : parseTokenPrice(model.cache) > parseTokenPrice(promptPrice) ? model.cache : promptPrice;
+  const prompt = parseTokenPrice(promptPrice);
+  const completion = parseTokenPrice(completionPrice);
+  const inputRate = parseTokenPrice(inputPrice);
   const raw = embedding ? model.context * prompt * args.inputCount! : model.context * inputRate + model.output * completion;
   const quote: Quote = Object.freeze({
     operation: args.operation as Quote["operation"], model: args.model,
     estimatedUsd: nanoUsd(raw) / 1e9, contextLength: model.context,
     ...(embedding ? { inputCount: args.inputCount } : { maxCompletionTokens: args.maxCompletionTokens }),
     outputParameter: model.parameter,
-    provider: Object.freeze({ allow_fallbacks: false, require_parameters: true, max_price: Object.freeze({ prompt: String(prompt * 1e6), completion: String(completion * 1e6), request: "0", image: "0", audio: "0" }) }),
+    billing: Object.freeze({ inputUsdPerToken: inputPrice, completionUsdPerToken: completionPrice, maxOutputTokens: model.output, ...(pinnedHaiku ? { cacheWriteMaxMultiplier: 2 as const } : {}) }),
+    provider: Object.freeze({ ...(pinnedHaiku ? { only: Object.freeze(["azure/global"] as [string]) } : {}), allow_fallbacks: false, require_parameters: true, max_price: Object.freeze({ prompt: perMillion(promptPrice), completion: perMillion(completionPrice), request: "0", image: "0", audio: "0" }) }),
   });
   issuedQuotes.add(quote);
   return quote;

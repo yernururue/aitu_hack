@@ -34,6 +34,16 @@ function deferred<T>() {
 }
 
 describe("structured server chat", () => {
+  it.each([["intent", 400], ["explanation", 1000]] as const)("uses the issued fixed Haiku route and original %s output/deadline controls", async (stage, limit) => {
+    const send: ProviderSend = async (call) => {
+      expect(call.body).toMatchObject({ model: "anthropic/claude-haiku-5.5", max_completion_tokens: limit, stream: false, provider: { only: ["azure/global"], allow_fallbacks: false, require_parameters: true, max_price: { prompt: "0.1", completion: "0.5" } } });
+      const result = response();
+      return { ...result, body: { ...result.body, model: "anthropic/claude-haiku-5.5", provider: "Azure" } };
+    };
+    const chat = createChatJson({ model: "anthropic/claude-haiku-5.5", transport: new GuardedTransport({ guard, send, liveEvalEnabled: true }) });
+    await expect(chat(request({ stage, purpose: "live_eval" }))).resolves.toEqual({ ok: true });
+    expect(await guard.snapshot()).toMatchObject({ uncertain: false, inFlight: 0, caps: { prep: 2, live_eval: 0.5, demo: 4 }, spent: { prep: 0.001, live_eval: 0.001, demo: 0 } });
+  });
   it.each([["intent", 400], ["explanation", 1000]] as const)("sends strict schema and fixed %s output budget", async (stage, limit) => {
     const chat = client(async (call) => {
       expect(call.body).toMatchObject({ stream: false, max_completion_tokens: limit, provider: { require_parameters: true, allow_fallbacks: false }, response_format: { type: "json_schema", json_schema: { name: "intent_v1", strict: true, schema: { additionalProperties: false } } } });

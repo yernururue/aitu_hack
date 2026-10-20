@@ -210,8 +210,7 @@ describe("server config and conservative prices", () => {
     // Public endpoint metadata, 2026-10-20: the model-wide price omits these
     // regional/cache-write maxima. Reserve them even when a particular body
     // would probably stay in a cheaper tier or would not write a cache.
-    { model: "openai/gpt-6-luna", maximumUsd: 0.38475, promptCap: "0.19999999999999998", completionCap: "0.75" },
-    { model: "anthropic/claude-haiku-5.5", maximumUsd: 1.42, promptCap: "0.5", completionCap: "2.5" },
+    { model: "openai/gpt-6-luna", maximumUsd: 0.38475, promptCap: "0.2", completionCap: "0.75" },
     { model: "qwen/qwen3.8-flash", maximumUsd: 0.26160384, promptCap: "0.15", completionCap: "0.47" },
   ])("covers all endpoint cache/input tiers and full billable output for $model", ({ model, maximumUsd, promptCap, completionCap }) => {
     const intent = quoteRequest({ operation: "intent", model, maxCompletionTokens: 400 });
@@ -221,17 +220,52 @@ describe("server config and conservative prices", () => {
     expect(explanation.estimatedUsd).toBe(intent.estimatedUsd);
     expect(intent.provider).toMatchObject({ allow_fallbacks: false, require_parameters: true, max_price: { prompt: promptCap, completion: completionCap, request: "0", image: "0", audio: "0" } });
   });
+  it("bounds pinned Haiku by enforced low rates, full context/output and the maximum 2x cache-write multiplier", () => {
+    const intent = quoteRequest({ operation: "intent", model: "anthropic/claude-haiku-5.5", maxCompletionTokens: 400 });
+    const explanation = quoteRequest({ operation: "explanation", model: "anthropic/claude-haiku-5.5", maxCompletionTokens: 1000 });
+    expect(intent.estimatedUsd).toBeGreaterThanOrEqual(0.264);
+    expect(intent.estimatedUsd).toBeLessThanOrEqual(0.264000001);
+    expect(explanation.estimatedUsd).toBe(intent.estimatedUsd);
+    expect(intent.provider).toEqual({ only: ["azure/global"], allow_fallbacks: false, require_parameters: true, max_price: { prompt: "0.1", completion: "0.5", request: "0", image: "0", audio: "0" } });
+    expect(Object.isFrozen(intent.provider.only)).toBe(true);
+    expect(Reflect.set(intent.provider.only!, "0", "azure/us")).toBe(false);
+  });
 });
 
 describe("guarded endpoint transport (injected, no network)", () => {
   const plan = () => quoteRequest({ operation: "query_embedding", model: "openai/text-embedding-3-small", inputCount: 1 });
-  it("keeps Haiku blocked by the eval subcap even for a tiny text/schema body", async () => {
+  it("keeps pinned Haiku blocked when prior actual spend leaves insufficient eval headroom", async () => {
     const guard = new BudgetGuard({ path });
+    await guard.settle(await guard.reserve(args(0.3, "live_eval")), 0.3);
     const send = vi.fn(async () => ({ status: 200, body: { usage: { cost: 0 } } }));
     const transport = new GuardedTransport({ guard, send, liveEvalEnabled: true });
     await expect(transport.execute({ purpose: "live_eval", quote: quoteRequest({ operation: "intent", model: "anthropic/claude-haiku-5.5", maxCompletionTokens: 400 }), body: { messages: [{ role: "user", content: "x" }], response_format: { type: "json_schema", json_schema: { name: "x", strict: true, schema: { type: "object", properties: {}, required: [], additionalProperties: false } } } } })).rejects.toThrow("BUDGET_EXCEEDED");
     expect(send).not.toHaveBeenCalled();
-    expect(await guard.snapshot()).toMatchObject({ caps: { prep: 2, live_eval: 0.5, demo: 4 }, uncertain: false, inFlight: 0, spent: { prep: 0, live_eval: 0, demo: 0 } });
+    expect(await guard.snapshot()).toMatchObject({ caps: { prep: 2, live_eval: 0.5, demo: 4 }, uncertain: false, inFlight: 0, spent: { prep: 0.3, live_eval: 0.3, demo: 0 } });
+    expect(JSON.parse(await readFile(path, "utf8")).entries).toHaveLength(1);
+  });
+  it("dispatches pinned Haiku with the immutable route/rate caps and settles separately", async () => {
+    const guard = new BudgetGuard({ path });
+    const send = vi.fn(async (request: { body: Record<string, unknown> }) => {
+      expect(request.body.provider).toEqual({ only: ["azure/global"], allow_fallbacks: false, require_parameters: true, max_price: { prompt: "0.1", completion: "0.5", request: "0", image: "0", audio: "0" } });
+      expect(request.body.max_completion_tokens).toBe(400);
+      return { status: 200, body: { usage: { cost: 0.0001 } } };
+    });
+    await new GuardedTransport({ guard, send, liveEvalEnabled: true }).execute({ purpose: "live_eval", quote: quoteRequest({ operation: "intent", model: "anthropic/claude-haiku-5.5", maxCompletionTokens: 400 }), body: { messages: [{ role: "user", content: "x" }] } });
+    expect(send).toHaveBeenCalledTimes(1);
+    expect(await guard.snapshot()).toMatchObject({ uncertain: false, inFlight: 0, spent: { prep: 0.0001, live_eval: 0.0001, demo: 0 } });
+  });
+  it.each([
+    { provider: { only: ["anthropic"] } }, { cache_control: { type: "ephemeral" } },
+    { tools: [{ type: "web_search" }] }, { plugins: [{ id: "web" }] },
+  ])("never enables caller-selected routing/caching/tools under the pinned quote: %j", async (extra) => {
+    const guard = new BudgetGuard({ path });
+    const send = vi.fn(async () => ({ status: 200, body: { usage: { cost: 0 } } }));
+    const quote = quoteRequest({ operation: "intent", model: "anthropic/claude-haiku-5.5", maxCompletionTokens: 400 });
+    const transport = new GuardedTransport({ guard, send, liveEvalEnabled: true });
+    await expect(transport.execute({ purpose: "live_eval", quote, body: { messages: [{ role: "user", content: "x" }], ...extra } })).rejects.toThrow("UNSUPPORTED_REQUEST");
+    await expect(transport.execute({ purpose: "live_eval", quote: { ...quote, provider: { ...quote.provider, only: ["anthropic"] } }, body: { messages: [{ role: "user", content: "x" }] } })).rejects.toThrow("INVALID_QUOTE");
+    expect(send).not.toHaveBeenCalled();
     expect(JSON.parse(await readFile(path, "utf8")).entries).toEqual([]);
   });
   it("records an unexpected chat charge above its full reserve and globally blocks later attempts", async () => {
