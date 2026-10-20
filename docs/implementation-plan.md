@@ -333,3 +333,10 @@ byteEXACT/private55closed/GET405/secretguardPASS. Текущий адрес и �
 подтвердил открытие сайта и три карточки; повторный native-переход не сообщался.
 Прежние native-карты подтверждены пользователем на той же сборке по старому адресу.
 Независимый SPEC/QUALITY review PASS. Никаких auth/provider/paid-вызовов; fullP0Accepted=false.
+
+M2.6: пользователь обновил ключ, auth200. Ровно3paid diagnostic POST стоят
+$0.00024488; два GPT‑6 Luna chat schema/evidencePASS, embedding HTTP200
+остановлен на native-model alias до1536 validation. Реальный индекс/выбор модели/
+полный RAG пока не приняты. Уточнённые шаги в [live-p0-plan.md](live-p0-plan.md);
+следующий M2.4 — exact alias RED/fix/review, затем cached298index. Ledger уже
+инициализирован, повторять diagnostics/обнулять бюджет нельзя; publicstub сохранён.

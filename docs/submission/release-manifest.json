@@ -56,17 +56,46 @@
       "Боулинг с друзьями",
       "Кафе с розеткой"
     ],
-    "unknownTextBehavior": "needs_clarification with zero recommendations"
+    "unknownTextBehavior": "needs_clarification with zero recommendations",
+    "diagnostics": {
+      "taskId": "M2.6",
+      "authStatus": 200,
+      "campaignPaidPosts": 3,
+      "embeddingEndpointStatus": 200,
+      "embeddingResponseModel": "text-embedding-3-small",
+      "embeddingRequestedModel": "openai/text-embedding-3-small",
+      "embeddingValidation": "stopped_at_model_alias_before_dimensions",
+      "embedding1536Verified": false,
+      "chatModel": "openai/gpt-6-luna",
+      "chatProvider": "OpenAI",
+      "intentHttpStatus": 200,
+      "explanationHttpStatus": 200,
+      "intentSchemaVerified": true,
+      "explanationSchemaAndEvidenceVerified": true,
+      "fullPipelineVerified": false,
+      "actualCostUsd": 0.00024488,
+      "report": "docs/live-p0-plan.md",
+      "privateReportSha256": "9559df5770c6751532a464a696f61af4e2b89a7e1cfd392be0e2b3a65378233e",
+      "independentFinalReview": "SPEC PASS / QUALITY PASS for TEST + PLAN",
+      "independentReviewReportSha256": "6a31c103a110032d7f24d9707633aae676f3c0665766e92372ed72696c4542dd"
+    }
   },
   "budget": {
     "currency": "USD",
-    "recordedProjectOpenRouterSpend": 0,
+    "recordedProjectOpenRouterSpend": 0.00024488,
     "accountBalanceVerified": false,
     "preparationCap": 2,
     "liveEvalSubcapWithinPreparation": 0.5,
     "demoReserve": 4,
     "persistentGuardVerified": true,
-    "realLedgerInitialized": false
+    "realLedgerInitialized": true,
+    "recordedLiveEvalSpend": 0.00024488,
+    "remainingPreparation": 1.99975512,
+    "remainingLiveEval": 0.49975512,
+    "demoSpent": 0,
+    "ledgerUncertain": false,
+    "ledgerInFlight": 0,
+    "ledgerReserved": 0
   },
   "voice": {
     "enabled": false,
@@ -346,9 +375,11 @@
     "readinessReport": "docs/readiness-report.md",
     "lastPublicUrlRestorationTask": "M7.8",
     "currentDemoUrl": "https://loan-begins-sleeps-unavailable.trycloudflare.com",
-    "publicRestorationReview": "PASS; current-url physical site and three cards confirmed by user; native-map retest absent; fullP0Accepted=false"
+    "publicRestorationReview": "PASS; current-url physical site and three cards confirmed by user; native-map retest absent; fullP0Accepted=false",
+    "liveP0Plan": "docs/live-p0-plan.md",
+    "liveP0PlanSha256": "42afbf766a64f0ea74b9926d2adf34fdc34b342ffb46994ee1e9d74e07b08d96"
   },
-  "updatedAt": "2026-10-20T09:35:05.476473+00:00",
+  "updatedAt": "2026-10-20T11:01:31.262902+00:00",
   "applicationUpdate": {
     "taskId": "M5.4",
     "change": "Clarify strict zero versus blank budget and offer explicit budget removal without automatic search or changing other fields",
@@ -395,6 +426,17 @@
       "sourceBuildDataChanged": false,
       "providerAuthPaidCalls": 0,
       "previousPublicVerdictPreserved": true,
+      "report": "docs/security-audit.md"
+    },
+    "updatedCredentialRecheck": {
+      "taskId": "M2.6",
+      "serverCredentialSources": 2,
+      "currentFilesScanned": 131,
+      "zipMembersScanned": 59,
+      "finalPrivateArtifactsScanned": 46,
+      "knownSecretMatches": 0,
+      "credentialValuesOrHashesPrinted": false,
+      "envFileMode": "0600",
       "report": "docs/security-audit.md"
     }
   }

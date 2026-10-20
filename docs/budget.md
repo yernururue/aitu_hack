@@ -3,7 +3,13 @@
 Платный режим по умолчанию выключен (`OPENROUTER_PAID_ENABLED=false`). Ключ
 проверяется только на сервере; его наличие не разрешает вызовы. На момент M2.3
 проверка ключа интегратором вернула HTTP 401. Эта реализация проверена только
-локальными provider stubs; платных или авторизованных сетевых вызовов в ней не было.
+локальными provider stubs; это историческое состояние M2.3.
+
+M2.6: обновлённый ключ auth200, реальные3diagnostic POST учтены в едином ledger:
+$0.00024488 внутри prep/live_eval, uncertain=false/inFlight0/reserved0, demo$4.
+Два chat schema/evidence PASS; embedding HTTP200 остановлен на model alias до1536
+validation. Это не full RAG acceptance. Ledger уже создан0600: **не повторять
+инициализацию ниже**, не менять путь. [План и receipts](live-p0-plan.md).
 
 ## Границы бюджета
 
@@ -182,4 +188,6 @@ M3.2 добавляет strict structured adapter: 15s на попытку, ис
 Безопасный fsync учёта нельзя принудительно прервать. HTTP core ограничивает срок
 ответа отдельно, а accounting cleanup может завершиться позже; после отмены
 отложенная запись диска не должна приводить к поздней отправке провайдеру. Эти случаи
-проверены injected tests; реальный provider/биллинг пока не проверялся.
+проверены injected tests. M2.6 проверил реальные known-cost settlements трёх
+диагностических вызовов; реальные abort/crash/reconciliation и полный pipeline
+этим не проверены.

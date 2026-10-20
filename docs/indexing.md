@@ -1,7 +1,10 @@
 # Индекс и измерение retrieval
 
 Текущий каталог содержит 298 реальных POI. Настоящий embedding index пока не создан:
-ключ OpenRouter вернул 401, платный режим выключен. Вектора из unit tests не
+новый ключ работает, но реальный probe выявил native-model alias mismatch в
+`createGuardedEmbedder`: `text-embedding-3-small` вместо requested slug. Сначала
+RED/verified alias allowlist/review по [плану](live-p0-plan.md), затем полный индекс.
+Публичный paid-режим выключен. Вектора из unit tests не
 используются как production data.
 
 ```sh

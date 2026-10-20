@@ -77,8 +77,8 @@ private-key markers, credentials в URL, чувствительные query/frag
 
 Сканирование нужно повторить при изменении входных данных, .env или сборки,
 прежде чем передавать данные провайдерам или публиковать новую версию. Действующие
-ограничения неизменны: stubs, paid/eval выключены, расход OpenRouter $0; реальный
-индекс/live/model gates ожидают подтверждённого обновления ключа.
+на момент M7.7 действовали stubs, paid/eval off и расход$0; обновление ключа и
+последующий диагностический тест отражены в отдельном дополнении M2.6 ниже.
 
 Приватные скрипты, redacted receipts и подробные отчёты сохранены локально:
 `/tmp/aituhack-mvp/dataset-secret-audit/` и
@@ -98,3 +98,14 @@ Origin70029, sourceceb/buildNASku, каталог и .env содержимое �
 Это отдельная проверка новогоURL, а не изменение исторического verdict M7.7.
 [Проверки доступности](submission/links.md) и [готовность](readiness-report.md).
 Локальные redacted receipts: `/tmp/aituhack-mvp/public-restore-20261020/`.
+
+## Дополнение M2.6: обновлённый ключ и диагностический тест
+
+После подтверждения обновления `.env.local` выполнен новый in-memory known-secret
+scan:2server credential sources,131files/59ZIP members, findings0. Значения, префиксы
+и credential hashes не выводились. Права.env0600; никаких NEXT_PUBLIC secret vars.
+После ровно3guarded POST проверены46private artifacts, command logs и канонический
+ledger: совпадений0. При этом Git/full-history аудит M7.7 остаётся историческим;
+новая проверка имеет перечисленные границы. Source/build/catalog не менялись.
+Known charge$0.00024488,3settled, unknown/inFlight/reserved0; publicstub сохранён.
+[Тест, наблюдаемый alias blocker и план](live-p0-plan.md).

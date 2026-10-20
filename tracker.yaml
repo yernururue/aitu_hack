@@ -18,10 +18,10 @@ budget:
   demo_reserved: 4.0
   live_eval_subcap: 0.5
   live_eval_included_in: "preparation_testing_cap"
-  recorded_openrouter_spend_usd: 0.0
-  spend_basis: "No paid OpenRouter project calls recorded; not an account balance verification; separate collector/Apify billing is excluded"
+  recorded_openrouter_spend_usd: 0.00024488
+  spend_basis: "Canonical durable ledger:3guarded diagnostic POSTs, knownactualtotal0.00024488USD/live_evalwithinprep, no uncertainty; not accountbalanceverification; separate Apifybilling excluded."
   account_balance_verified: false
-  enforcement: "Implemented and independently reviewed persistent single-host guard; paid mode off; Vercel/Lambda/Netlify paid mode prohibited; credentials HTTP401"
+  enforcement: "Persistent single-host guard independently reviewed/fresh62testsPASS and real3POSTcostsettlementverified; publicpaidmodeoff. Updatedkey auth200, chatdiagnosticsPASS, productionembeddingaliasblocker beforeindex. Serverlesspaid prohibited."
   before_first_paid_call:
     - "Configure server-only OpenRouter credentials without exposing secrets"
     - "Implement and test cost guard, preflight estimates, usage ledger and bounded retries"
@@ -29,8 +29,8 @@ budget:
   dataset_volume: "298 accepted real POI /591 short sourced review excerpts; verified36 in3zones/3categories; original298/1953collector snapshot preserved"
 handoff:
   state: "ready"
-  application_state: "offline_stub_demo_and_materials_verified_external_gates_pending"
-  current_scope: "M7.8 done: restored public demo, browser/security checks and independent SPEC/QUALITY PASS. User now confirmed newURL opens on physicalphone with3cards; latest reply does not repeat native-map clicks. Offline/stub scope remains, fullP0=false. Next M2.4 blocked until user confirms updated server key; no auth retry or paid calls."
+  application_state: "public_stub_diagnostics_verified_index_adapter_blocked"
+  current_scope: "M2.6 done TEST+PLAN: updatedkey auth200, campaign3knownsettledPOST/0.00024488USD, GPT6Luna intent+explanationlocalchecksPASS; embeddingnativealiasSTOP before1536validation. IndependentreviewPASS; nofullindex/modelwinner/P0claim, publicstub unchanged. NextM2.4 reviewedaliasfix thenrealindex; useexistingcanonicalledger, remainingprep1.99975512/eval.49975512/demo4. No morediagnosticcalls underconsumed3slot authorization."
   internal_deadline: "2026-10-20T20:00:00+05:00"
   submission_deadline: "2026-10-20T23:59:00+05:00"
   collector_work:
@@ -200,7 +200,7 @@ stages:
           - "Stage commit created and git log verified: 10f4981 feat: add validated real catalog and responsive search shell. Collector data/README, data/collection and original Python collector files remain untracked/preserved, not auto-committed with app."
   - id: "M2"
     title: "Retrieval, distance and hard constraints"
-    status: "blocked"
+    status: "in_progress"
     tasks:
       - id: "M2.1"
         title: "Write failing filter and retrieval behavior tests"
@@ -245,6 +245,7 @@ stages:
           - "M2.3"
         acceptance: "Check remaining budget before paid indexing; index only prepared documents; preserve model/dimensions/hash; avoid unchanged reindexing; runner emits expected/actual JSONL; incompatible index uses labelled lexical fallback."
         evidence:
+          - "Updatedkey auth200 removes historical401hold. Realpaidprobe now exposes concrete indexadapter blocker: provider returns native modeltext-embedding-3-small vs requestedslugopenai/text-embedding-3-small; production createGuardedEmbedder index.ts138 uses same exactcomparison. Plan RED forverifiedslug/nativealiaspair with strictothermodel/dimension rejection, minimalfix+review BEFOREfullindex. Index/vector1536 notvalidated bythisprobe, realindexstillabsent; no sourcefix/fullindexexecuted in TEST+PLAN scope."
           - "Implementation ACCEPTED after3P2fix RED→GREEN, independent scoped re-review allADDRESSED/specPASS/qualityPASS. Root256tests/typecheck/lint/build/check-build-artifacts exit0. Semanticrunner reachable in syntheticofflinecache/injected tests; canonicalpathprotection and durableperbatch checkpoints verified."
           - "Remaining external acceptance BLOCKED: no realembeddingindex/querycache because keyHTTP401/paidoff. Rootdryrun298docs/45770bytes exit0 noartifacts; real lexicaleval exit1 (top3=11/12, macroRecall5=.8833333333, micro=.8125, negative4/4, hardPASS), no semanticqualityclaim orpaidcalls."
           - "Fix1 RED reproduces all3reviewfindings atassertion level:4failed syntheticcases for envcatalog overwrite, absentcheckpoint afterinterruption and unreachable semantic evaluation via cache/injection. Zero realfile/network/auth/paid effects. Implementing originalauthor fixes before re-review."
@@ -266,6 +267,25 @@ stages:
           - "Root integrated Node24 gates:256unit/7suites,typecheck,lint,productionbuild,check-build-artifacts,harness,diff-check exit0. Dryindex298docs/45770bytes noartifacts. Real lexicaleval exit1 explicitlyrecorded belowRecall/semantic gates; actualindexmodelnone. ScopedindependentreviewPASS forindex/cache/pathfixes."
           - "Stage commit57ce0f2 verified gitlog; originalcollectoruntrackedfiles preserved andnotstaged. Earlypreviewunavailable: Vercel GET/v2/user403, no localprojectlink/CLI; no deploymentclaimed. M2.4 remainsblocked onlyrealindex/key401, offlinecontinuation dependencywaiver documents directuserstubauthorization."
           - "Offline continuation authorized by user instruction without key use stubs; M2.4 code/review accepted, only actualpaidindex gate unmet. Root integrated256tests/typecheck/lint/build/NFT exit0; actualcatalog298, indexmodelnone (configuredembeddingcandidate only). Vercelread-only /v2/user HTTP403; earlypreview unavailable, no deployment."
+      - id: "M2.6"
+        title: "Verify updated OpenRouter key and plan real AI/RAG P0"
+        status: "done"
+        owner: "root_integrator"
+        depends_on:
+          - "M2.3"
+          - "M7.7"
+        acceptance: "User confirmed key updated and explicitly authorized a minimal real test plus plan. Secure auth/metadata and refreshed key-specific leak preflight; existing durable spend guard before any paid POST; tiny bounded embedding/chat smoke with actual usage/cost or honest fail-closed blocker; independently reviewed incremental P0 plan with exact tasks/gates/budget, no silent full-P0 claim or public paid flip."
+        evidence:
+          - "ACCEPTED TEST+PLAN: independentfinal SPEC/QUALITY PASS/noopendeliveryfindings, /tmp/aituhack-mvp/live-key-check-review.md SHA6a31c103a110032d7f24d9707633aae676f3c0665766e92372ed72696c4542dd. Reviewerverified46campaign+26originalchecksums/rawcanonical3settled244880nano/fullcaps/healthy and complete13-filecurrentdocs/plan consistency. Plan docs/live-p0-plan.md SHA42afbf766a64f0ea74b9926d2adf34fdc34b342ffb46994ee1e9d74e07b08d96:6incremental tasks, actualauth+3diagnostics/checkpoints accepted; futurealiasRED/review,cached298index/semanticgate,boundedreserve/full3comparison,privatelive+productionpurpose/tracing/security/cutover. Keyworks, chat2HTTP200/localvalidatorsPASS, embeddingaliasSTOP-before1536honest; no index/winner/fullP0 claim. RecordedUSD0.00024488; remainingprep1.99975512/eval0.49975512/demo4. Diagnostic3POSTauthorizationconsumed/no morecallsinthisTESTscope. Publicstub/source/build/catalog/hosting/materials/collector preserved. NextM2.4concretealias/indexwork, historical401hold superseded."
+          - "TEST completed/STOP, exactoriginalcampaign3POST allknownsettledtotal0.00024488USD; independentreviewer verified46campaign checksums and actualledger180+106500+138200nano/fullcaps/healthy. Finalprivatereport /tmp/aituhack-mvp/live-key-check-20261020/campaign-report.md SHA9559df5770c6751532a464a696f61af4e2b89a7e1cfd392be0e2b3a65378233e. Rootintegratedactualreceipts/costs/nativealias blocker+no1536proof into6taskincrementalplan,currentdocs/manifest; source/build/catalog/hosting/materials/collector unchanged. Rootselfreviewagainstspec/exactcommands: futurepaidstagesexplicitper-processflags+sameabsoluteledger, no rerun/reinit. Freshharness/diff/JSON+protectedhash/scope checks0,65localchanged-doclinksPASS/highconfidencekeypatterns0. ReviewerP3READMEunqualifiedsmoke wording fixedtofullend-to-endlive; finalunifiedverdict pending."
+          - "REAL CHAT TEST ACCEPTED locally/rootreceipt+canonicalledgerread: separatechatdriverexit0, intentHTTP200/OpenAI/openai/gpt-6-luna/4026ms/541tokens/cost0.0001065; explanationHTTP200/3624ms/714tokens/cost0.0001382; actualcorestrictIntent+Explanation schema/samePOIevidence checksPASS. Campaignexact3POST (embedding1nativealiasSTOP+chat2), no retries/authrepeat/source/runtime/publicflip. Ledger3settledentries/total244880nano=0.00024488USD prep+live_eval, uncertainfalse/inFlight0/reserved0/mode600/nolock; availableprep1.99975512/eval0.49975512/demo4. Vector1536/fullRAG/endtoend25/modelwinner notclaimed. Combinedindependentreview+currentplan/docs sync pending."
+          - "Remainingchatdiagnosticpreflight ACCEPTED: independentreviewer GO exactsmoke-chat-only.mjs SHA979a3297f09c4234e5babbc21f7dc3ec2bf0672c20c1fdc3dc3e24d34154ba5d; rootreadfullscript. Priororiginalreceipthashes pinned, sameexistingcanonicalledger exactsettled180nano/fullcaps/healthy/noinitreset. Newwxmarker, onlyintent+explanationmax1each, actualsendcampaignprior1+new<=3, noembedding/auth/retries, sequentialknowncost/headroom/15s25s. SeparateoperatorbatchnotfullRAG orfullpathdeadlineclaim. Readynewrootone-runGO; noextraPOSTyet."
+          - "Firstpaidtest actualreceipt rootread:10:01:42–43Z query_embedding1POST HTTP200/OpenAI responseModeltext-embedding-3-small/9tokens/knowncost0.00000018USD/948ms. Canonicaldata/private/openrouter-budget.json firstinitializedexclusively0600; durableafter uncertainfalse/inFlight0/reserved0, prep+live_evalspent0.00000018, availableprep1.99999982/eval0.49999982/demo4. Testexit2 at exactmodelaliasassert expectedopenai/text-embedding-3-small BEFOREvector1536validation; doNOTclaim1536PASS/fullRAG. No chat/retry sent. Originalreceiptimmutable; remaining2independentchatdiagnostics beingpreparedfornewscopedreview/GO, campaigntotal<=3 andsameledger/noembeddingrepeat."
+          - "PREPAID SAFETY ACCEPTED: rootread auth200receipt, dedicatedembeddingmodel8192/.00000002 and currentLunamax context1050000/output128000/tiers; newknownkeyscan2sources131files/59ZIPmembers/findings0; fresh62budgettestsPASS. Independentreviewer GO frozenprivate smoke.mjs SHA390582b060b51ead8c65736314d97ad552d16519b43f5acaf79c6299310eaf00; rootread+SHAassert and actualhaversinedistancefix. Canonicalledger verifiedabsent/notinitialized; scriptone-usewx marker+first-onlyinit, original2/.50/4caps, directGuardedTransport/max3POST/onceoperation/no retries, sequentialknownsettlement+headroom,15s/25s, costbeforeparse. Readyrootone-runGO; noPOSTyet; publicstub/source/build/catalog/collector unchanged."
+          - "Fresh budget verification before any paidPOST: env PATH=Node24... pnpm exec vitest run tests/unit/budget.test.ts exit0/62tests/1file12.91s; rootreadcompletion. Independentreview existingcanonicaldurableguard prelimPASS, warns monotoniccaps cannot shrink forsmoke and adapter retries mustbeharddisabled; executorproposes per-stage1attempt/global3POSTmax withoriginal2/.50/4caps. Metadata/keyscan/scriptreview remainpending; no paidcallsorledgerinitialization yet."
+          - "Secureauth subtask: one GET https://openrouter.ai/api/v1/key HTTP200 at09:50:05Z with updatedlocalkey; .env.local0600/gitignored/untracked/noNEXT_PUBLICsecretvars, credentialvalues/prefixes/hashes/body neverprinted. Publicmodel/endpoints metadata fetched; paidPOST0/ledgernotinitialized. Auth401 historicalhold cleared for metadataonly; paidGO stillrequires freshpricing/key-specificleakscan/concretescriptreview. Rootfreshbudgetunit run inprogress. Source/build/catalog/publicstub/collector unchanged, prep2/liveeval.50nested/demo4 preserved."
+          - "Direct user confirmation updated local API token revokes earlier no-auth-retry hold for this test. Assigned one AIexecutor metadata-only phaseA, no providerPOST before rootGO/safetyreview; independent reviewer and separate planexecutor docs/live-p0-plan.md. Publicstub/runtime/build/catalog/collector preserved. Limits prep2/liveeval0.50nested/demo4 unchanged. Current nextM2.4 remains index gate after this explicittest+plan subtask."
+
   - id: "M3"
     title: "Structured RAG and full text path"
     status: "done"

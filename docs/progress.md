@@ -8,6 +8,19 @@ Stage: implementation
 
 ## Выполнение MVP
 
+M2.6 done: новый серверный ключ authHTTP200. Реальная кампания3POST: embedding endpoint200
+($0.00000018/9tokens) остановлен на native-model alias mismatch до1536 validation;
+отдельные intent/explanation GPT‑6 Luna/OpenAI HTTP200, strict schema/evidence PASS
+($0.0001065+$0.0001382). Root сверил3settled entries с каноническим ledger0600:
+всего$0.00024488, unknown/inFlight/reserved0; остатки prep$1.99975512/eval$0.49975512/demo$4.
+Fresh62budget tests PASS; новый key-specific scan131files/59ZIP/findings0,
+финальный private-artifact scan46files/ledger0matches. Нет source/build/publicmode changes.
+[Уточнённый план](live-p0-plan.md): alias RED/fix/review → cached298index/semantic eval
+→ bounded quotes/full3model comparison → private live path → production cutover.
+Полный P0=false; публичный сайт пока stub, winner не выбран.
+Независимый итоговый SPEC/QUALITY review PASS для TEST+PLAN; diagnostic campaign3POST
+завершена, следующие реальные действия — по M2.4/плану и тому же ledger.
+
 M7.8 done: публичный адрес восстановлен заменой только туннеля:
 [открыть демо](https://loan-begins-sleeps-unavailable.trycloudflare.com).
 20.10 около14:12 Asia/Almaty новыйHTTPS200,12clientassets byteequal/private55closed/GET405.
@@ -20,7 +33,7 @@ M7.8 done: публичный адрес восстановлен заменой
 Повторный native-переход не сообщался; прежнее подтверждение обеих карт
 относится к той же сборке на прежнем адресе. Устройство и браузер не указаны.
 [Отчёт о готовности](readiness-report.md): текстовое stub-демо работает,
-полная P0 RAG остаётся незавершённой. Платных/auth/provider-вызовов0. Независимый SPEC/QUALITY review PASS в рамках
+полная P0 RAG остаётся незавершённой. Восстановление M7.8 не делало платных/auth/provider-вызовов. Независимый SPEC/QUALITY review PASS в рамках
 offline/stub; root harness/diff/94local links/manifest+неизменные hashes PASS.
 
 M7.7 ранее повторно подтвердил `data/normalized/astana/`:298мест/1953отзыва→591выдержка;
@@ -108,8 +121,9 @@ semantic/citation/live качество этим не подтверждаетс
 ## Внешние блокеры и расходы
 
 M2.4: настоящий embedding index отсутствует. M4.3/M4.4: live comparison/выбор модели
-не выполнены; actual model=null, Luna provisional. Ключ401; пользователь подтвердил,
-что не обновлял его и поручил продолжать со stubs. Auth/paid retries не выполнять.
+не выполнены; actual production model=null, Luna provisional. Ключ обновлён, auth200
+и два chat diagnostics прошли. M2.4 теперь blocked на native-model alias comparison,
+не на прежнем401; полный индекс и live UI smoke ещё не выполнены.
 Haiku conservative reserve$1.32>$0.50 eval cap; лимиты не повышены.
 M5.3 blocked только на одном реальном paid live smoke, который не выполнен.
 Это не полная P0 RAG acceptance. Vercel session preflight403, нового login не было;
@@ -120,9 +134,9 @@ M5.3 blocked только на одном реальном paid live smoke, ко
 После M5.4 повторены strictschema/0vsnull/400/isolated429/private404/GET405 и3private0600
 canarylogs; runtime report PASS, процессы живы в00:21:18UTC. Публичный browser390/1440 PASS.
 
-OpenRouter учтённый расход проекта$0; баланс аккаунта не проверен.
+OpenRouter учтённый расход проекта$0.00024488; баланс аккаунта не проверен.
 Persistent guard (concurrency/reservation/usage/crash/failure) проверен независимо;
-paid выключен, реальный ledger не инициализирован. $2prep включает$0.50eval,
+публичный paid выключен, реальный единый ledger инициализирован0600 и содержит3settled entries. $2prep включает$0.50eval,
 $4demo reserve сохранён; serverless paid запрещён. Apify — отдельный ранее
 разрешённый сбор, его бюджет/collector tracker не изменялись.
 
