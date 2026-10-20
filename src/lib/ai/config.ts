@@ -2,7 +2,10 @@
 import { cwd } from "node:process";
 import { isAbsolute, resolve } from "node:path";
 
-export const HARD_CAPS = Object.freeze({ prep: 2, live_eval: 0.5, demo: 4 });
+export const HARD_CAPS = Object.freeze({ prep: 2, live_eval: 0.8, demo: 4 });
+// Existing/newly initialized v1 ledgers cannot acquire the approved v2 cap
+// through a constructor or environment override. Migration is operator-only.
+export const LEGACY_CAPS = Object.freeze({ prep: 2, live_eval: 0.5, demo: 4 });
 export type BudgetCaps = Readonly<{ prep: number; live_eval: number; demo: number }>;
 export type Purpose = keyof BudgetCaps;
 export type RuntimePurpose = "prep" | "demo";
@@ -60,7 +63,7 @@ export function readAiConfig(env: Record<string, string | undefined> = process.e
     liveEvalEnabled: flag(env.LIVE_EVAL_ENABLED),
     caps: budgetCaps({
       prep: envCap(env.OPENROUTER_PREP_MAX_USD, 2),
-      live_eval: envCap(env.LIVE_EVAL_MAX_USD, 0.5),
+      live_eval: envCap(env.LIVE_EVAL_MAX_USD, HARD_CAPS.live_eval),
       demo: envCap(env.OPENROUTER_DEMO_RESERVE_USD, 4),
     }),
   };
