@@ -191,7 +191,8 @@ export function SearchForm({ onSearch, loading, aiMode, synthetic, preferences, 
         <div>
           <label className="field-label" htmlFor="search-budget">Бюджет на человека, ₸<span className="optional-label">необязательно</span></label>
           <Input ref={budgetRef} id="search-budget" name="budget" type="number" min="0" step="any" inputMode="decimal" placeholder="Без ограничения" value={budget} onChange={(event) => { setBudget(event.target.value); updateFilter("maxSpendKzt", event.target.value === "" ? null : Number(event.target.value)); }} aria-describedby={error && errorField === "budget" ? "search-validation-error budget-hint" : "budget-hint"} aria-invalid={Boolean(error) && errorField === "budget"} />
-          <p className="field-hint" id="budget-hint">При заданном бюджете подойдут только места с известной ценой.</p>
+          <p className="field-hint" id="budget-hint">0 ₸ — только подтверждённо бесплатные места. Пустое поле — без ограничения бюджета. При заданном бюджете нужна известная цена.</p>
+          {budget !== "" && <Button type="button" variant="ghost" className="budget-clear" onClick={() => { setBudget(""); updateFilter("maxSpendKzt", null); budgetRef.current?.focus(); }}>Убрать ограничение бюджета</Button>}
         </div>
         <label className="open-checkbox"><input type="checkbox" checked={filters.openNow} onChange={(event) => updateFilter("openNow", event.target.checked)} /><span>По расписанию открыто сейчас</span></label>
       </div>

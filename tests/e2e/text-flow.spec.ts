@@ -97,6 +97,8 @@ test("actual mandatory outlet request returns no places rather than unknown amen
   await expect(page.getByRole("heading", { name: "Мест по этим условиям нет" })).toBeVisible();
   await expect(page.getByLabel("Что учтено").getByText("Требуется: розетки", { exact: true })).toBeVisible();
   await expect(page.getByRole("article")).toHaveCount(0);
+  await expect(page.locator(".empty-next-step")).toContainText("Попробуйте увеличить радиус или изменить категорию");
+  await expect(page.getByRole("link", { name: "Изменить бюджет", exact: true })).toHaveCount(0);
 });
 
 test("actual per-person budget rejects the catalogue's unknown prices", async ({ page }) => {
@@ -110,6 +112,65 @@ test("actual per-person budget rejects the catalogue's unknown prices", async ({
   expect(result.recommendations).toEqual([]);
   expect(result.usedContext.filters.maxSpendKzt).toBe(2500);
   await expect(page.getByRole("heading", { name: "Мест по этим условиям нет" })).toBeVisible();
+  await expect(page.locator(".empty-next-step")).toContainText("места с неизвестной ценой исключаются");
+  await expect(page.getByRole("link", { name: "Изменить бюджет", exact: true })).toHaveAttribute("href", "#search-budget");
+});
+
+test("zero budget stays strict and explicit budget recovery preserves the request", async ({ page }, info) => {
+  await page.goto("/");
+  const requests: unknown[] = [];
+  page.on("request", (request) => {
+    if (new URL(request.url()).pathname === "/api/recommend" && request.method() === "POST") requests.push(request.postDataJSON());
+  });
+  await page.getByRole("button", { name: "EXPO", exact: true }).click();
+  await page.getByRole("button", { name: "Хочу погулять", exact: true }).click();
+  await page.getByLabel("Парки", { exact: true }).check();
+  await page.getByLabel("5 км", { exact: true }).check();
+  await page.getByLabel("60 минут", { exact: true }).check();
+  const budget = page.getByLabel("Бюджет на человека, ₸");
+  await budget.fill("0");
+  const zero = await submit(page);
+  expect(zero.result.status).toBe("no_results");
+  expect(zero.result.recommendations).toEqual([]);
+  expect(zero.result.usedContext.filters.maxSpendKzt).toBe(0);
+  await expect(budget).toHaveValue("0");
+  await expect(page.locator("#budget-hint")).toContainText("0 ₸ — только подтверждённо бесплатные места");
+  await expect(page.locator("#budget-hint")).toContainText("Пустое поле — без ограничения бюджета");
+  const guidance = page.locator(".empty-next-step");
+  await expect(guidance).toContainText("места с неизвестной ценой исключаются");
+  await expect(guidance).not.toContainText("увеличить радиус");
+  await guidance.scrollIntoViewIfNeeded();
+  await page.screenshot({ path: `output/playwright/budget-empty-${info.project.name}.png` });
+  await page.getByRole("link", { name: "Изменить бюджет", exact: true }).click();
+  await expect(budget).toBeFocused();
+  await expect(budget).toBeInViewport();
+  await expect(budget).toHaveValue("0");
+  const clear = page.getByRole("button", { name: "Убрать ограничение бюджета", exact: true });
+  await expect(clear).toBeInViewport();
+  await page.screenshot({ path: `output/playwright/budget-controls-${info.project.name}.png` });
+  await clear.click();
+  await expect(budget).toHaveValue("");
+  await expect(clear).toHaveCount(0);
+  await expect(page.getByLabel("Чем хочется заняться?")).toHaveValue("Хочу погулять");
+  await expect(page.getByLabel("Парки", { exact: true })).toBeChecked();
+  await expect(page.getByLabel("5 км", { exact: true })).toBeChecked();
+  await expect(page.getByLabel("60 минут", { exact: true })).toBeChecked();
+  await expect(page.getByLabel("Один / одна", { exact: true })).toBeChecked();
+  await expect(page.getByLabel("По расписанию открыто сейчас", { exact: true })).not.toBeChecked();
+  await expect(page.getByLabel("Демо-профиль", { exact: true })).toHaveValue("");
+  await expect(page.getByText("Сохранено: 0", { exact: true })).toBeVisible();
+  await expect(page.getByText("Скрыто: 0", { exact: true })).toBeVisible();
+  await expect(page.getByRole("article")).toHaveCount(0);
+  expect(requests).toHaveLength(1);
+  const recovered = await submit(page);
+  expect(requests).toHaveLength(2);
+  expect(recovered.result.status).toBe("degraded");
+  expect(recovered.result.recommendations).toHaveLength(3);
+  const initialRequest = zero.http.request().postDataJSON();
+  expect(recovered.http.request().postDataJSON()).toEqual({ ...initialRequest, filters: { ...initialRequest.filters, maxSpendKzt: null } });
+  expect(recovered.http.request().postDataJSON().explicitFilterKeys).toContain("maxSpendKzt");
+  await expect(page.getByRole("link", { name: "Изменить бюджет", exact: true })).toHaveCount(0);
+  await assertNoOverflow(page);
 });
 
 test("actual unknown suffix requires clarification and retains the whole request", async ({ page }) => {
@@ -122,6 +183,7 @@ test("actual unknown suffix requires clarification and retains the whole request
   expect(http.request().postDataJSON().query).toBe(query);
   await expect(page.getByRole("heading", { name: "Нужно немного уточнить" })).toBeVisible();
   await expect(page.getByLabel("Чем хочется заняться?")).toHaveValue(query);
+  await expect(page.getByRole("link", { name: "Изменить бюджет", exact: true })).toHaveCount(0);
 });
 
 test("actual text conflict keeps the explicitly selected category", async ({ page }) => {

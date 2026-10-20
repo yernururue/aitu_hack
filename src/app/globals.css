@@ -115,6 +115,7 @@
 .company-options .segment-option input:checked + span { background: var(--secondary); border-color: #a8bff2; }
 .optional-label { font-size: 9px; font-weight: 400; margin-left: auto; color: var(--muted-foreground); }
 #search-budget { height: 42px; background: #f9fbfe; border-radius: 9px; font-size: 12px; }
+.budget-clear { min-height: 44px; height: auto; margin-top: 6px; padding: 8px 10px; white-space: normal; font-size: 11px; text-align: left; }
 .open-checkbox { display: flex; align-items: center; gap: 9px; cursor: pointer; font-size: 11px; line-height: 1.45; }
 .open-checkbox input { margin: 0; height: 17px; width: 17px; flex-shrink: 0; accent-color: var(--primary); }
 .form-action { padding: 20px 23px 18px; }
@@ -153,6 +154,7 @@
 .empty-copy h3 { font-size: 20px; font-weight: 650; letter-spacing: -.6px; line-height: 1.4; }
 .empty-copy p { font-size: 12px; color: #5f748d; line-height: 1.9; margin-top: 12px; }
 .empty-copy .empty-next-step { color: #315784; }
+.empty-next-step a { display: inline-block; min-height: 44px; padding: 8px 4px; color: var(--primary); text-decoration: underline; text-underline-offset: 3px; }
 .empty-caption { display: flex; flex-wrap: wrap; justify-content: center; gap: 13px; padding-top: 27px; margin-top: auto; }
 .empty-caption span { display: flex; align-items: center; gap: 5px; font-size: 9px; line-height: 1.6; color: #6b7f97; }
 .empty-caption svg { height: 12px; width: 12px; }
