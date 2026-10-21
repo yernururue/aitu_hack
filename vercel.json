@@ -1,0 +1,28 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "installCommand": "npx --yes pnpm@11.0.8 install --frozen-lockfile",
+  "buildCommand": "npx --yes pnpm@11.0.8 build",
+  "env": {
+    "APP_AI_MODE": "disabled",
+    "OPENROUTER_PAID_ENABLED": "false",
+    "OPENROUTER_API_KEY": "",
+    "LIVE_EVAL_ENABLED": "false",
+    "OPENROUTER_RUNTIME_PURPOSE": "prep",
+    "APP_USE_SYNTHETIC": "false",
+    "APP_TIMEZONE": "Asia/Almaty",
+    "NEXT_TELEMETRY_DISABLED": "1"
+  },
+  "build": {
+    "env": {
+      "APP_AI_MODE": "disabled",
+      "OPENROUTER_PAID_ENABLED": "false",
+      "OPENROUTER_API_KEY": "",
+      "LIVE_EVAL_ENABLED": "false",
+      "OPENROUTER_RUNTIME_PURPOSE": "prep",
+      "APP_USE_SYNTHETIC": "false",
+      "APP_TIMEZONE": "Asia/Almaty",
+      "NEXT_TELEMETRY_DISABLED": "1"
+    }
+  }
+}

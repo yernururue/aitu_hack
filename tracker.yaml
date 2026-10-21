@@ -29,8 +29,8 @@ budget:
   dataset_volume: "298 accepted real POI /591 short sourced review excerpts; verified36 in3zones/3categories; original298/1953collector snapshot preserved"
 handoff:
   state: "ready"
-  application_state: "redesigned_minimal_ui_offline_public_ai_unknown_stop"
-  current_scope: "Warmminimalredesign4aff3b4/build6OQ accepted1055unit70e2e+independentreview; publicdisabled72511/70740/categorysourcesmaps works. OneactualDEMOintent newunknown.028096/actualnull => allpaidSTOP; successfulnewAIvideoR1.4blocked. Separateoffline81.52s andfailedattempt49.52s reviewed; README/media publishedmainec020c2verified, R1.5done. Originalruntime/media/collector preserved; fullqualification/currentphysicalphone incomplete; useralready submitted/noresubmit."
+  application_state: "repaired_category_first_offline_public_ai_unknown_stop"
+  current_scope: "Vercelproduction https://aituhack-city-guide.vercel.app READY dpl_7rgJDVWJjbm6tUeJprLshaNgp9ac, existingHobby/public298/catalogindexpackaged, disabled/paidfalse/keyempty; category-firstUI6disabled+70stub+independentreview. R2.4done/R2.3normalmainpublicationpending. Localfallback92201/89576 preserved; R1.4successfulAIvideoblocked/newunknownSTOP, no grant/retry/resubmit. Originaldata/media/collector retained."
   internal_deadline: "2026-10-20T20:00:00+05:00"
   submission_deadline: "2026-10-20T23:59:00+05:00"
   collector_work:
@@ -41,7 +41,7 @@ handoff:
       - "scripts/collect_astana.py"
       - "scripts/test_astana_data.py"
     notes: "M1.3 independently accepted298realPOI/591excerpts and reviewed36demo slice. Original collector code/snapshots preserved separately, no paid recollection. Collection C6 remains owned by collector integrator; publication rights not established."
-next_task_id: "R1.4"
+next_task_id: "R2.3"
 workflow:
   tracker_writer: "Single main integrator updates tracker after every finished task"
   completion_rule: "Mark done only after acceptance verification; record exact commands, exit codes and limitations here and in docs/progress.md"
@@ -935,6 +935,60 @@ stages:
         evidence:
           - "PUBLISHED ordinarygitpushoriginmain500274a->ec020c25587bd9bb05b4ce6ee2d1eb46b94ebfa1, remote refs/heads/main EXACTverified at2026-10-20T19:15:44.617016+00:00. Rootoutgoingknownkeyscan3commits46blobs3.17MB0findings,33changedpaths exclude env/raw/normalized/private/index/collector. Primarymainffonly/6originalcollectoruntrackedpathsunchanged; runtimebuildNOTrebuilt. Currentpublic200/9assetsequal/8private404+disablednotice,17originalhashes preserved. Independentfinaldocs+publicationreceipt-only report /tmp/aituhack-redesign-runtime/final-docs-review.md SPEC/QUALITYPASS, no findings. R1.5done for acceptedofflineUI+honestmaterials; R1parent/R1.4remainBLOCKED for successfulnewAIvideo, allpaidSTOP/noresubmission."
           - "FinalindependentDOCS SPEC/QUALITYPASS/noopenfindings: currentREADME/handoff/budget/readiness/limitations/links/scenarios/submit-now/manifest/tracker truthfuldisabled40entries1unknown/.028096reserved/actualnull/paidSTOP, successfulAIvideoBLOCKED,1055unit70e2e/useralready submitted/noresubmit. Root59localrefs0missing/17originals+2collectorblocks+6frozenassets+3historicalmanifestobjects exact; freshknownkeysourcebuild280files177ZIP37.8MB0findings. FinalpublicGET200/9assetsequal/8private404/currentminimalhero+disablednotice/canonicalunchanged. Mainnormalpush pending; R1.5notdoneyet."
+
+
+  - id: "R2"
+    title: "Diagnose and restore the reported broken public demo"
+    status: "in_progress"
+    owner: "root_integrator"
+    tasks:
+      - id: "R2.1"
+        title: "Reproduce current failure in browser and locate failing layer"
+        status: "done"
+        owner: "root_integrator"
+        depends_on: ["R1.5"]
+        acceptance: "CurrentURL/local/public/rootassets and main user interaction checked; exact failing behavior and cause recorded, no guess or paid retry; original runtime/build/data/media preserved."
+        evidence:
+          - "ActualChromiumlocaldisabledUI reproduced: exactparktext -> onePOST -> needs_clarification/0places, visiblemessage suggests retrytext/filters whiletextretained. No providercalls; canonicalafterSHA3969ea0ebb10af4eb6a5b9bee79657550d99986a5aeb7195058e2ebc25700f87 exactbefore. CLI snapshot /tmp/.playwright-cli/page-2026-10-21T07-14-30-714Z.yml. Runtime independentlyconfirms bothpublichostnames NXDOMAIN viaCloudflare+GoogleDNS and oldCFalivebut Unauthorized:Tunnelnotfound; localhost9assetsbyteequal/8private404."
+          - "ROOTCAUSE verified21October: currentpublichostname DNS getaddrinfoErrno8 and actualChromium net::ERR_NAME_NOT_RESOLVED; noHTTPresponse. Local3004HTTP200/currentminimalhero+disablednotice/allPIDs alive. Separate source-proven disabledUX loop: editablequery always conflicts beforeretrieval; categories remaincollapsed and categoryselection preservesnonemptyquery. Browseractualsafe disabledsubmit reproduction underway. No paidcalls; old/currentruntime/build preserved."
+          - "User reports demo not working21October. RootreadAGENTS/tracker/handoff/progress; original+currentorigin/tunnel allalive,3004listening. Assigned runtime+UI read-only causaldiagnosis separately. CanonicalnewunknownSTOP remains; no paidattempt/newgrant implied."
+      - id: "R2.1a"
+        title: "Restore public tunnel without rebuilding or restarting the working origin"
+        status: "done"
+        owner: "runtime_media_executor"
+        depends_on: ["R2.1"]
+        acceptance: "Fresh detached tunnel resolves publicly and serves accepted origin/assets; private paths closed; canonical/original origins unchanged."
+        evidence:
+          - "Independentcausal/spec review+rootChromiumfreshURLPASS: https://tutorials-island-written-format.trycloudflare.com, newCF89576/PPID1/PGID89576->existing72511:3004.07:16UTC2DNSresolvers status0/2answers;HTTP200/9acceptedassetsequal/8private404/currentAIoffnotice. Canonicalexact3969…00f87/nooriginrestart/nokey/provider/auth/modelcalls. Old70740/39251/56483/72511preserved; /tmp/aituhack-demo-repair-runtime/tunnel-20261021/public-proof.json."
+      - id: "R2.2"
+        title: "Implement and deploy the smallest verified demo repair"
+        status: "done"
+        owner: "ui_executor"
+        depends_on: ["R2.1"]
+        acceptance: "Fix reproduced failure, honestAIstate/strictfilters preserved; behavior test plus independent review; build outside servingoutput, verify replacement before cutover."
+        evidence:
+          - "DEPLOYED21October07:25UTC afterindependentUI/helper/preview/rollbackSPECQUALITYPASS: source7486fe645aeff5de2b32fb90083cccd37aa95624/buildOMfE5AIxdwz51pOXvdkLt, origin92201/PPID1/PGID92201/cwdrepair/3004; retainedCF89576/currentURL. Newpreview91521acceptedbeforeexactold72511SIGTERM; revieweddisabledrollbackoldcd2c/build6OQ ready. Local/public200+2DNSpositive/9NEWassetsbyteequal/8private404/selectYES/textareaNO/AIoffYES/canonicalunchanged. Original56483/39251+old70740/oldbuild/data/media/collector preserved; no provider/key/envread/mutation."
+          - "UI source7486fe6 frozen: disablednativecategoryselect/noeditableunsupportedtext/visibleprimaryaction; live-stub/strictfilters/backendunchanged. Genuine3112disabledREDmissingselect -> GREEN6/6desktop1440+360/6.3s; old70STUBPASS29.2s; lint/types/diff0. Retainedtextmode-transitionbranch defensivelyfailsclosed/explicitclear, unreachablethroughfreshfixed-servermode andnotartificiallytested. RootnewbuildOMfE5AIxdwz51pOXvdkLt/NFT6-1569requireindex/harness0/knownkey274files177ZIP29.3MB0. IndependentUI/helper/preview/rollback SPEC/QUALITYPASS; actual360previewonePOST3realparks/sources/focus/noscroll. No oldlivebuildrebuild, no paidcalls. CutoveracceptedrootGO pendingverification."
+
+      - id: "R2.4"
+        title: "Deploy accepted application to permanent hosting using existing account"
+        status: "done"
+        owner: "runtime_media_executor"
+        depends_on: ["R2.2"]
+        acceptance: "StableproductionURL independentofMac/tunnel; existingaccount/planchecked, explicitallowlistupload of app/config/catalog/index only, AIoff/paidfalse/keyempty atbuild+runtime, no canonical/env/raw/normalized/userdata; deploymentindependentlyreviewed and publicmainpathchecked."
+        evidence:
+          - "PRODUCTION DONE https://aituhack-city-guide.vercel.app READY dpl_7rgJDVWJjbm6tUeJprLshaNgp9ac; independentactualproductionSPEC/SAFETYPASS/freshanonymousGET200. ExactfinalCLIupload51files10,452,280B/0missing0unexpected/manifest59a3ea679265e5393a6d19972d3233d9d646aeb8dda9006075095157dda8bd7c; initialignore9fileomissionfixedBEFOREupload, deltaindependentlyPASS, autoOIDCenvremovedUNREAD/excluded.9publicassets200/8private404/real298/AIoff/selectYES/textareaNO; rootactual360categoryPOST3realparks. ProductionHTML+9assets866771B/3knowncredentials0findings, no secretsprinted. No Mac/tunneldependency; originalfallbackretained; allpaidSTOP/ledgernotuploaded. ClouddeploymentID distinctfromlocalfallbackOMf/stagingvalidationGUH."
+          - "ExistingVercelbrowseraccount+CLIreauthsuccess, sanitizedaccountAPI Hobby/active/yernur-s-projects; no payment/upgrade/newaccount. Frozen51file10.45MBallowlist+47Gitprovenancechecks/c72catalog+568index exact, onlyNodeengine24.x+fixeddisabledconfig adaptations. IsolatedbuildGUHhrZq_VP3OUzA9yHDFg/NFT6-1567requiredata/privateexcludedPASS, serving.nextuntouched. Independentpayload/config/buildSPEC/SAFETYPASS /tmp/aituhack-vercel-deploy/proofs/independent-review.md; rootGOauthorizedproductionpublish, realURLacceptancepending."
+          - "Directusersteering: просто задеплой чувак. ExistingVercelauthfilepresence+cachedCLI located withoutsecretoutput; runtimeexecutorassignedplan/authcheck, isolatedallowliststaging/build andproductiondeployment. Source7486fe6 accepted, currentlocalpublicfallback92201/89576 retained. Reviewerassignedpayload/configvalidation; no provider/paid/key/ledgeroperation authorized."
+      - id: "R2.3"
+        title: "Verify public desktop/mobile path and publish repair receipt"
+        status: "in_progress"
+        owner: "root_integrator"
+        depends_on: ["R2.2", "R2.4"]
+        acceptance: "Realpublicdesktop/mobile mainflow/results/source/route/empty outcome, currentlinks and review checked; cleanknownkey/outgoing scan, ordinarymainpush+remoteverification, tracker/handoff truthful."
+        evidence:
+          - "RootactualVercelproduction1440+360screenshotsrecaptured/Chromeuserdeadtabreplacedstableapp: Park/EXPO5km60blank ->3realcards/source drawer/dates/2GISdestination; width360=scroll360/focusresults. Secondactualproduction0budgetPOST ->0results/explicitlimit+unknownpriceexcluded;2offlinePOST/0provider/canonical3969…00f87unchanged.6disabled+70stub/lint/types/build/NFT alreadyPASS;57localdocsrefs0missing/17originals+2collectorblocks+6frozenassets+3historyobjects unchanged. Sourcebuild284files177ZIP29.5MB0keyfindings;productionHTML+9assets3credentials0findings. Finalindependentproduction/docsreview andmainpush receipts pending."
+
 
 # Data collector section. Updated only by this chat's main collector integrator.
 # This does not mark application ingestion task M1.3 as complete.

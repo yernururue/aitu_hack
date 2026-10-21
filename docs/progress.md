@@ -1,3 +1,15 @@
+# Current production deployment — 21 October 2026
+
+R2.4 DONE: https://aituhack-city-guide.vercel.app, Vercel Hobby READY/production `dpl_7rgJDVWJjbm6tUeJprLshaNgp9ac`. Existingaccount/normalCLIreauth, no newaccount/payment/upgrade. Exact51file10,452,280Bpayload/0missing0unexpected, source7486+revieweddeploymentconfigs, catalog/index exact; generatedOIDCenvremovedunread/notuploaded. IsolatedbuildGUH/NFT6-1567 and independentpayload/config/actualproductionSPEC/SAFETYPASS. AnonymousGET200/9assets200/8private404/real298/AIoff/selectYES/textareaNO; rootactual360categoryPark5km60blankPOST returns3realparks, focus/width360 preserved. SecondactualproductionPOST withstrict0budget returns0places, explicitlimit/unknown-priceexclusionretained; total2offlinePOST/0providercalls/canonicalunchanged. FreshproductionHTML+9assets866771B/3knowncredentials0findings. Source/ledger/caps unchanged; paidSTOP/R1.4blocked.
+
+R2.3 current README/screenshots/docs/configs/mainpublication remains in_progress until ordinarypush+remoteverification. Primaryhosting now Vercel; localfallback92201/89576 and preview91521 preserved, oldclosedCFhostname is historical. Productiondeployment identity differs from localfallbackOMf and isolatedvalidationGUH. No resubmission.
+
+## Earlier tunnel repair checkpoint
+
+R2.1 DONE: old public URL is NXDOMAIN (both public resolvers), actual Chromium ERR_NAME_NOT_RESOLVED; original cloudflared remained alive but logged Unauthorized: Tunnel not found. Local3004/acceptedbuild remained healthy. Separately reproduced one safe disabled-mode text request -> clarification0places with the text retained, confirming a misleading freeform form; old70e2e force stub and miss this mode. No provider calls/canonical change.
+
+R2.1a DONE: fresh detached tunnel89576 initially restored72511:3004. R2.2 DONE: after acceptedpreview91521, replacedonly72511 with92201:3004/newsource7486fe6/buildOMfE5AIxdwz51pOXvdkLt; current https://tutorials-island-written-format.trycloudflare.com hasDNS/HTTPS200/9NEWassetsequal/8private404/selectYES/textareaNO/AIoffYES. Rootactualpublic360onePark5km60blankPOST ->3realcards/sourcedrawer/GoogleMapsnewtab; width360=scrollWidth360 andresultsfocused.6disabled+70stub/lint/types/build/NFT+independentreviewPASS; canonicalunchanged. R2.3 deployment/publication in progress. User now explicitly asks actual permanent deployment; existingVercelaccount feasibility checked before sanitized productiondeploy, currenttunnel remainsfallback. PaidSTOP/R1.4blocked unchanged; no resubmission.
+
 # Verified main publication — 21 October 2026
 
 R1.5 DONE: normal `git push origin main` published redesigned source, README, four current screenshots and two honestly labelled new MP4. Remote `refs/heads/main` exactly `ec020c25587bd9bb05b4ce6ee2d1eb46b94ebfa1`, verified 2026-10-20T19:15:44.617016+00:00; no force push or resubmission. Outgoing known-key scan3commits/46blobs/3.17MB0findings; source/build280files177ZIP37.8MB0findings. Accepted source4aff3b4/build6OQ remains running without rebuilding live output; current public disabled/paidfalse, original rollback runtime/media/collector preserved.

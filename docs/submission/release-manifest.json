@@ -4,12 +4,15 @@
   "scope": "redesigned_offline_ui_after_single_live_unknown",
   "fullP0Accepted": false,
   "featuresFrozen": true,
-  "sourceCommit": "4aff3b4763d689ea31ffdb76f540c03dc7b59987",
+  "sourceCommit": "7486fe645aeff5de2b32fb90083cccd37aa95624",
   "runtime": {
-    "node": "24.21.0",
+    "node": "24.x",
     "pnpm": "11.0.8",
     "next": "16.4.2",
-    "react": "19.3.1"
+    "react": "19.3.1",
+    "localValidationNode": "24.21.0",
+    "productionNodeRange": "24.x",
+    "remoteExactNode": null
   },
   "dataset": {
     "path": "data/catalog/places.json",
@@ -160,7 +163,11 @@
     "offlineBrowserTestsPassed": 70,
     "successfulNewAiRecording": false,
     "failedActualLiveAttempts": 1,
-    "offlineCategoryRecordingAccepted": true
+    "offlineCategoryRecordingAccepted": true,
+    "disabledModeBrowserTestsPassed": 6,
+    "stubModeBrowserTestsPassed": 70,
+    "repairTotalBrowserTestsPassed": 76,
+    "unitTestsScope": "1055 accepted at earlier redesign; not rerun for UI-only repair"
   },
   "privacy": {
     "deviceLocationOptIn": true,
@@ -174,34 +181,40 @@
     "rawOrCollectorFilesInProductionNft": false
   },
   "hosting": {
-    "status": "temporary_public_https_offline_after_live_unknown_verified",
-    "type": "cloudflare_quick_tunnel",
-    "url": "https://facing-workshops-quote-finding.trycloudflare.com",
-    "origin": "http://127.0.0.1:3004",
-    "productionPid": 72511,
-    "tunnelPid": 70740,
-    "detachedProcesses": true,
-    "requiresLocalOriginAndTunnelAlive": true,
-    "stableHosting": false,
-    "checkedAtUtc": "2026-10-20T18:59:20+00:00",
+    "status": "production_ready_verified",
+    "type": "vercel",
+    "plan": "hobby",
+    "url": "https://aituhack-city-guide.vercel.app",
+    "deploymentId": "dpl_7rgJDVWJjbm6tUeJprLshaNgp9ac",
+    "production": true,
+    "origin": null,
+    "productionPid": null,
+    "tunnelPid": null,
+    "requiresLocalOriginAndTunnelAlive": false,
+    "stableHosting": true,
+    "checkedAtUtc": "2026-10-21T09:22:04.086318+00:00",
     "publicHttpStatus": 200,
-    "assetsByteEqual": 9,
+    "assetsPublic200": 9,
+    "assetsByteEqual": null,
     "privateLocations404": 8,
     "knownKeyFindings": 0,
-    "providerQaPosts": 1,
+    "knownCredentialSourcesScanned": 3,
+    "providerQaPosts": 0,
+    "offlineCategoryUiPosts": 2,
     "physicalPhoneVerified": false,
     "nativeMapAppsVerifiedForThisLiveRelease": false,
     "mode": "disabled",
     "paidEnabled": false,
-    "offlineCategoryUiPosts": 1
+    "runtimeNextBuildId": null,
+    "localValidationBuildId": "GUHhrZq_VP3OUzA9yHDFg"
   },
   "outstandingGates": [
     "Successful current live AI result/explanation/source/map recording BLOCKED by new unknown cost; no new grant or retry",
     "Original full model qualification12/72/48/Qwen24 incomplete",
     "Current physical phone/native Maps handoff unverified",
-    "Permanent hosting, voice and YouTube upload not completed"
+    "Voice and YouTube upload not completed"
   ],
-  "buildId": "6OQMmPb1YJ3ddzPsvzGf9",
+  "buildId": null,
   "materials": [
     {
       "path": "output/submission/aituhack-demo.pptx",
@@ -288,7 +301,7 @@
     }
   ],
   "delivery": {
-    "state": "redesign_offline_ui_and_honest_media_published",
+    "state": "production_vercel_verified_repair_git_pending",
     "publicUploadPerformed": true,
     "youtubeUploadPerformed": false,
     "gitPushPerformed": true,
@@ -310,7 +323,7 @@
     },
     "readinessReport": "docs/readiness-report.md",
     "lastPublicUrlRestorationTask": "M7.8",
-    "currentDemoUrl": "https://facing-workshops-quote-finding.trycloudflare.com",
+    "currentDemoUrl": "https://aituhack-city-guide.vercel.app",
     "liveP0Plan": "docs/live-p0-plan.md",
     "liveP0PlanSha256": "ee1d0772fe998984db50c591784f86161388ff114675b3e02f430141ed4e6a26",
     "submitNowPacket": "docs/submission/submit-now.md",
@@ -332,7 +345,7 @@
     "resubmissionPerformed": false,
     "redesignPublicationPending": false
   },
-  "updatedAt": "2026-10-20T19:15:44.617016+00:00",
+  "updatedAt": "2026-10-21T09:22:04.086318+00:00",
   "applicationUpdate": {
     "taskId": "M5.4",
     "change": "Clarify strict zero versus blank budget and offer explicit budget removal without automatic search or changing other fields",
@@ -422,7 +435,7 @@
   "submissionNow": {
     "scope": "already_submitted_by_user_current_redesign_offline",
     "fullP0Accepted": false,
-    "demoUrl": "https://facing-workshops-quote-finding.trycloudflare.com",
+    "demoUrl": "https://aituhack-city-guide.vercel.app",
     "packet": "docs/submission/submit-now.md",
     "presentation": "output/submission/aituhack-live-demo.pptx",
     "mp4": "output/submission/aituhack-redesign-offline.mp4",
@@ -431,7 +444,7 @@
     "officiallySubmitted": true,
     "officialSubmissionBasis": "User confirmation",
     "resubmissionPerformed": false,
-    "publishedToMain": true,
+    "publishedToMain": false,
     "verifiedMainTipBeforeReceipt": "ec020c25587bd9bb05b4ce6ee2d1eb46b94ebfa1"
   },
   "historicalOfflineStubManifest": {
@@ -1359,5 +1372,91 @@
       "findings": 0,
       "head": "ec020c25587bd9bb05b4ce6ee2d1eb46b94ebfa1"
     }
+  },
+  "historicalRedesignHostingBeforeRepair": {
+    "status": "temporary_public_https_offline_after_live_unknown_verified",
+    "type": "cloudflare_quick_tunnel",
+    "url": "https://facing-workshops-quote-finding.trycloudflare.com",
+    "origin": "http://127.0.0.1:3004",
+    "productionPid": 72511,
+    "tunnelPid": 70740,
+    "detachedProcesses": true,
+    "requiresLocalOriginAndTunnelAlive": true,
+    "stableHosting": false,
+    "checkedAtUtc": "2026-10-20T18:59:20+00:00",
+    "publicHttpStatus": 200,
+    "assetsByteEqual": 9,
+    "privateLocations404": 8,
+    "knownKeyFindings": 0,
+    "providerQaPosts": 1,
+    "physicalPhoneVerified": false,
+    "nativeMapAppsVerifiedForThisLiveRelease": false,
+    "mode": "disabled",
+    "paidEnabled": false,
+    "offlineCategoryUiPosts": 1
+  },
+  "demoRepair": {
+    "taskId": "R2",
+    "status": "production_accepted_publication_pending",
+    "rootCauses": [
+      "unrecognized/removed QuickTunnel session: NXDOMAIN and Unauthorized: Tunnel not found; removal mechanism unproven",
+      "disabled UI offered unsupported freeform text; categories hidden"
+    ],
+    "publicUrl": "https://aituhack-city-guide.vercel.app",
+    "paidStopUnchanged": true,
+    "canonicalUnchanged": true,
+    "providerCalls": 0,
+    "sourceCommit": "7486fe645aeff5de2b32fb90083cccd37aa95624",
+    "buildId": null,
+    "disabledBrowserTestsPassed": 6,
+    "stubBrowserTestsPassed": 70,
+    "aiRestored": false,
+    "knownKeysSourceBuildFindings": 0,
+    "independentReview": "UI/helper/preview/rollback/payload/config/actualproduction SPEC PASS / QUALITY PASS",
+    "oldBuildPreserved": true,
+    "oldProcess72511ReplacedAfterPreview": true,
+    "newScreenshots": [
+      "docs/submission/images/repair-desktop-home-1440.png",
+      "docs/submission/images/repair-mobile-home-360.png"
+    ],
+    "publicationPending": true,
+    "deploymentId": "dpl_7rgJDVWJjbm6tUeJprLshaNgp9ac",
+    "hosting": "vercel_hobby",
+    "localFallbackBuildId": "OMfE5AIxdwz51pOXvdkLt",
+    "localValidationBuildId": "GUHhrZq_VP3OUzA9yHDFg",
+    "productionRuntimeNextBuildId": null,
+    "productionOfflineBrowserPosts": 2,
+    "productionKnownKeyScanFindings": 0,
+    "productionKnownCredentialSources": 3,
+    "deploymentConfigIntegratedToRepository": true,
+    "uploadManifestSha256": "59a3ea679265e5393a6d19972d3233d9d646aeb8dda9006075095157dda8bd7c",
+    "uploadFileCount": 51,
+    "uploadBytes": 10452280,
+    "localFallbackOriginPid": 92201,
+    "localPreviewPid": 91521,
+    "localFallbackTunnelPid": 89576,
+    "productionStrictZeroBudgetPassed": true
+  },
+  "historicalLocalRepairHostingBeforeVercel": {
+    "status": "temporary_public_https_offline_after_live_unknown_verified",
+    "type": "cloudflare_quick_tunnel",
+    "url": "https://tutorials-island-written-format.trycloudflare.com",
+    "origin": "http://127.0.0.1:3004",
+    "productionPid": 92201,
+    "tunnelPid": 89576,
+    "detachedProcesses": true,
+    "requiresLocalOriginAndTunnelAlive": true,
+    "stableHosting": false,
+    "checkedAtUtc": "2026-10-21T07:28:52.185228+00:00",
+    "publicHttpStatus": 200,
+    "assetsByteEqual": 9,
+    "privateLocations404": 8,
+    "knownKeyFindings": 0,
+    "providerQaPosts": 0,
+    "physicalPhoneVerified": false,
+    "nativeMapAppsVerifiedForThisLiveRelease": false,
+    "mode": "disabled",
+    "paidEnabled": false,
+    "offlineCategoryUiPosts": 1
   }
 }

@@ -1,24 +1,25 @@
 # Передача — 21 октября 2026
 
-Заявка уже отправлена пользователем. Повторная отправка не выполнялась и не нужна.
+Заявка уже отправлена пользователем. Повторная отправка не нужна и не выполнялась.
 
-## Текущее состояние
+## Production
 
-[Публичный интерфейс](https://facing-workshops-quote-finding.trycloudflare.com) — новый тёплый минимальный городской гид, сейчас **ИИ отключён / paid=false**. Категории, строгие фильтры, реальные места, источники и маршруты работают без ИИ. Source `4aff3b4763d689ea31ffdb76f540c03dc7b59987`, build `6OQMmPb1YJ3ddzPsvzGf9`; origin72511/3004 и tunnel70740 detached. Runtime не пересобирать на месте. Старые origin56483/tunnel39251 и live-p0 buildP3a сохранены; они используют тот же заблокированный canonical ledger, а не обход блокировки.
+[Демо](https://aituhack-city-guide.vercel.app) опубликовано на существующем Vercel Hobby, deployment `dpl_7rgJDVWJjbm6tUeJprLshaNgp9ac` — READY/production. Адрес не зависит от Mac/QuickTunnel. AnonymousGET200,9assets200,8privatepaths404,298реальныхмест; явные disabled/paidfalse/keyempty, категория сразу на экране, недоступного текстового поля нет. Root360на production: Парки/EXPO/5км/60мин/пустойбюджет →3реальныхпарка, фокус/источники/маршруты сохранены, scrollWidth360. Второй productionPOST с0₸ →0мест с явным сохранением лимита; всего2offlinePOST/0provider. Физический телефон для этого URL не проверялся.
 
-Редизайн: бумага/чернила/оливковый/терракота, системная Georgia с кириллицей, короткий поиск, видимые основные и активные условия, дополнительные сведения по раскрытию. Субагент реализовал, другой независимо проверил; root — единственный writer tracker. Последняя просьба пользователя — минимум контента, без повторяющихся лозунгов и неактивных настроек.
+Код UI `7486fe645aeff5de2b32fb90083cccd37aa95624`; deployment добавляет ровно Nodeengine24.x, `vercel.json` и `.vercelignore`, которые теперь сохранены в репозитории. Payload51files/10,452,280B: app/config+catalog+индекс, без env/ключей/ledger/raw/normalized/docs/media/collector. ManifestSHA59a3ea679265e5393a6d19972d3233d9d646aeb8dda9006075095157dda8bd7c. Payload/config/actualproduction независимо SPEC/SAFETY PASS. Нового аккаунта/платежа/upgrade не было; существующий CLI прошёл обычную реавторизацию.
 
-## Почему новое успешное ИИ-видео не готово
+Локальный fallback: checkout demo-repair, origin92201:3004+tunnel89576, build`OMfE5AIxdwz51pOXvdkLt`; preview91521:3007. Исходный origin56483/tunnel39251 и старый build6OQ сохранены.72511 заменён только после проверки preview/disabledrollback. Работающий `.next` не пересобирать. Staging validation build`GUHhrZq_VP3OUzA9yHDFg` не является remoteNextBUILD_ID; идентификатор cloud-release — deployment выше.
 
-Одна разрешённая реальная попытка20октября23:54 вернула HTTP200/needs_clarification/0мест. Добавлен ровно один demo:intent:unknown: `87d82508-47ff-4ef5-9981-7aa1cfb196dc`, резерв$0.028096, actual=null. Ни upstreamHTTPstatus, ни generationID не сохранились; не придумывать причину или нулевую стоимость. Все платные вызовы остановлены, повторов не было. Успешный ролик с ИИ/местами/источниками/маршрутом — R1.4 **blocked**.
+## ИИ остаётся остановлен
 
-Canonical — только основной `data/private/openrouter-budget.json`, v6/40entries, uncertaintrue/unknown1/inFlight0/0600. SHA после попытки `3969ea0ebb10af4eb6a5b9bee79657550d99986a5aeb7195058e2ebc25700f87`. Prep$2/eval$1.50внутриprep/demo$4 неизменны. Известный actualprep$0.002178331; пять ранее разрешённых оценок$1.435957681 отдельно отactual; demo knownactual0 **не значит бесплатно**, резерв$0.028096/не зарезервировано$3.971904. Новый grant не дан. Не reset/copy ledger, не угадывать actual, не повторять исторические one-use operators. Возобновление paid требует подтверждённой стоимости/разрешения и отдельного reviewed решения для той же canonical ledger.
+Одна реальная запись20октября дала needs_clarification/0мест и неизвестную стоимость. Canonicalv6/40entries/uncertaintrue/unknown1/inFlight0/0600, reservation`87d82508-47ff-4ef5-9981-7aa1cfb196dc`, резерв$0.028096/actualnull; SHA3969ea0ebb10af4eb6a5b9bee79657550d99986a5aeb7195058e2ebc25700f87 не изменён. Caps prep$2/eval$1.50внутри/demo$4 неизменны. Нет повторов/новогоgrant/предположенияcost0.
 
-## Материалы и проверки
+R1.4 успешное новое AI-видео всё ещё blocked. В Vercel не загружены OpenRouter-ключ или canonicalledger. Не включать paidAI на serverless без разрешённого закрытия unknown и отдельно проверенного durable общего учёта. Категории/строгиефильтры/источники/маршруты работают без ИИ. Старые реальные smokes и новый offlineMP4 не выдавать за успешную новую AI-запись.
 
-- [Новый UI-ролик без ИИ](../output/submission/aituhack-redesign-offline.mp4) и текущие screenshots в README; отдельная [неудавшаяся live-попытка](../output/submission/aituhack-redesign-live-attempt.mp4),49.52s. Не выдавать offline/старыйstub за успешный новыйAI.
-- Lint/typecheck, root1055unit/22suites59.43s,70offlinee2e34.0s, build, strictNFT6traces/1569entries с каталогом+индексом, harness/diff прошли. UI/content/helper/failure audit independently SPEC/QUALITY PASS; финальное media/docs SPEC/QUALITY PASS, открытых замечаний нет; evidence в tracker.
-- Реальные данные298POI/591выдержка/7категорий, catalogc72d13…/dataset4677a7…/index568c85…/298×1536 сохранены; повторного сбора/индексации не было. Raw/normalized/env/ledger/index не публикуются. Шесть untracked originals сборщика и data_collection tracker block не трогать.
-- Original MP4/WEBM/PPTX сохранены. Физический телефон/новые native maps, полная модельная квалификация12/72/48/Qwen24, голос и постоянный hosting не закрыты. Ссылка зависит от Mac/сети/двух процессов.
+## Проверки и материалы
 
-Принятый UI и честно помеченные материалы опубликованы обычным push в main `ec020c25587bd9bb05b4ce6ee2d1eb46b94ebfa1`; удалённый commit проверен 2026-10-20T19:15:44.617016+00:00. Квитанция — [tracker](../tracker.yaml) и [progress](progress.md). R1.4 остаётся blocked даже после публикации. Рабочие receipts/reviews: `/tmp/aituhack-redesign-runtime/`, `/tmp/aituhack-redesign-integration/`.
+6настоящихdisabled+70stub браузерных сценариев, lint/typecheck, локальныйbuild/NFT6-1569 и stagingbuild/NFT6-1567 прошли;1055unit относятся к прежней приёмке редизайна, повторно для UI-only ремонта не запускались. FreshproductionHTML+9assets/3knowncredentials/0findings; source/build и outgoingGit проверяются перед публикацией. Каталог298POI/591выдержка и индекс298×1536 сохранены без повторного сбора/индексации;17оригиналов/collectorblock неизменны.
+
+README содержит текущие production screenshots и оба честно помеченных новых MP4: offline81.52s и failedlive49.52s. Предыдущие MP4/WEBM/PPTX сохранены. Шесть untrackedoriginals сборщика и `data_collection` trackerblock не трогать.
+
+R2.4 deployment done; R2.3 обычныйmainpush/remoteverification выполняется. Финальная квитанция — [tracker](../tracker.yaml) и [progress](progress.md). Evidence: `/tmp/aituhack-vercel-deploy/`, `/tmp/aituhack-demo-repair-integration/`, `/tmp/aituhack-demo-repair-runtime/`. Полная модельная квалификация, голос и текущий physicalphone/native-app handoff не закрыты.
