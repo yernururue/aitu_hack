@@ -42,6 +42,15 @@ export const FIFTH_HISTORICAL_UPPER_BOUND_AUTHORIZATION = Object.freeze({
   approvedAt: "2026-10-20T17:56:12.000000+00:00",
   budgetCharge: 261603840,
 });
+// Narrow interpretation of the direct request to enable AI; the user did not
+// name this amount. This exact historical charge is not actual-cost evidence.
+export const SIXTH_HISTORICAL_UPPER_BOUND_AUTHORIZATION = Object.freeze({
+  reservationId: "87d82508-47ff-4ef5-9981-7aa1cfb196dc",
+  authorizationId: "95b0b6df-9082-4012-b812-f60887a6dd7b",
+  grantRef: "user-direct-enable-ai-20261021",
+  approvedAt: "2026-10-21T09:35:05.091Z",
+  budgetCharge: 28096000,
+});
 const auditIdSchema = z.string().regex(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
 export const upperBoundGrantInputSchema = z.strictObject({
   reservationId: z.literal(HISTORICAL_UPPER_BOUND_AUTHORIZATION.reservationId),
@@ -73,6 +82,12 @@ export const fifthUpperBoundGrantInputSchema = z.strictObject({
   grantRef: z.literal(FIFTH_HISTORICAL_UPPER_BOUND_AUTHORIZATION.grantRef),
   approvedAt: z.literal(FIFTH_HISTORICAL_UPPER_BOUND_AUTHORIZATION.approvedAt), auditId: auditIdSchema,
 });
+export const sixthUpperBoundGrantInputSchema = z.strictObject({
+  reservationId: z.literal(SIXTH_HISTORICAL_UPPER_BOUND_AUTHORIZATION.reservationId),
+  authorizationId: z.literal(SIXTH_HISTORICAL_UPPER_BOUND_AUTHORIZATION.authorizationId),
+  grantRef: z.literal(SIXTH_HISTORICAL_UPPER_BOUND_AUTHORIZATION.grantRef),
+  approvedAt: z.literal(SIXTH_HISTORICAL_UPPER_BOUND_AUTHORIZATION.approvedAt), auditId: auditIdSchema,
+});
 const entrySchema = z.strictObject({
   id: z.uuid(), purpose: z.enum(["prep", "live_eval", "demo"]),
   operation: z.enum(["index_embedding", "query_embedding", "intent", "explanation"]),
@@ -95,6 +110,10 @@ const fourthAuthorizedEntrySchema = thirdAuthorizedEntrySchema.extend({
   reserved: z.literal(261603840), budgetCharge: z.literal(261603840),
 });
 const fifthAuthorizedEntrySchema = fourthAuthorizedEntrySchema.extend({ id: z.literal(FIFTH_HISTORICAL_UPPER_BOUND_AUTHORIZATION.reservationId) });
+const sixthAuthorizedEntrySchema = fifthAuthorizedEntrySchema.extend({
+  id: z.literal(SIXTH_HISTORICAL_UPPER_BOUND_AUTHORIZATION.reservationId), purpose: z.literal("demo"),
+  reserved: z.literal(28096000), budgetCharge: z.literal(28096000),
+});
 const legacyLedgerSchema = z.strictObject({
   version: z.literal(1), caps: capsSchema, uncertain: z.boolean(), entries: z.array(entrySchema),
   reconciliations: z.array(z.strictObject({ id: z.uuid(), at: units })),
@@ -124,7 +143,12 @@ const v6LedgerSchema = legacyLedgerSchema.extend({
   entries: z.array(z.union([entrySchema, authorizedEntrySchema, secondAuthorizedEntrySchema, thirdAuthorizedEntrySchema, fourthAuthorizedEntrySchema, fifthAuthorizedEntrySchema])),
   policyGrants: z.tuple([upperBoundGrantInputSchema.extend({ appliedAt: units }), secondUpperBoundGrantInputSchema.extend({ appliedAt: units }), thirdUpperBoundGrantInputSchema.extend({ appliedAt: units }), fourthUpperBoundGrantInputSchema.extend({ appliedAt: units }), fifthUpperBoundGrantInputSchema.extend({ appliedAt: units })]),
 });
-const ledgerSchema = z.discriminatedUnion("version", [legacyLedgerSchema, v2LedgerSchema, v3LedgerSchema, v4LedgerSchema, v5LedgerSchema, v6LedgerSchema]);
+const v7LedgerSchema = v6LedgerSchema.extend({
+  version: z.literal(7),
+  entries: z.array(z.union([entrySchema, authorizedEntrySchema, secondAuthorizedEntrySchema, thirdAuthorizedEntrySchema, fourthAuthorizedEntrySchema, fifthAuthorizedEntrySchema, sixthAuthorizedEntrySchema])),
+  policyGrants: z.tuple([upperBoundGrantInputSchema.extend({ appliedAt: units }), secondUpperBoundGrantInputSchema.extend({ appliedAt: units }), thirdUpperBoundGrantInputSchema.extend({ appliedAt: units }), fourthUpperBoundGrantInputSchema.extend({ appliedAt: units }), fifthUpperBoundGrantInputSchema.extend({ appliedAt: units }), sixthUpperBoundGrantInputSchema.extend({ appliedAt: units })]),
+});
+const ledgerSchema = z.discriminatedUnion("version", [legacyLedgerSchema, v2LedgerSchema, v3LedgerSchema, v4LedgerSchema, v5LedgerSchema, v6LedgerSchema, v7LedgerSchema]);
 export type Ledger = z.infer<typeof ledgerSchema>;
 export type LedgerEntry = Ledger["entries"][number];
 

@@ -19,9 +19,9 @@ budget:
   live_eval_subcap: 1.5
   live_eval_included_in: "preparation_testing_cap"
   recorded_openrouter_spend_usd: 0.002178331
-  spend_basis: "Current canonicalv6/40entries:34known+5authorizedupperbounds(actualnull)+1NEWdemo-intentunknown. Prepactual.002178331/eval.00168309; approvedbounds1.435957681; prepspent1.438136012/eval1.437640771 unchanged. Demo actualknown0 is NOT confirmedfree: unknownreserve.028096/available3.971904. AllpaidSTOP; no futuregrant inferred."
+  spend_basis: "Canonicalv7/40entries:34known+6authorizedupperbounds(actualnull),unknown0/uncertainfalse. Prepactual.002178331/eval.00168309; oldbounds1.435957681; prepspent1.438136012/eval1.437640771 unchanged. New$.028096historicaldemo upperbound, actualnull; demoavailable3.971904. Narrow direct-enable interpretation independentlyreviewed; no capraise or newpaidcalls."
   account_balance_verified: false
-  enforcement: "STOP after new demo intent unknown87d82508-47ff-4ef5-9981-7aa1cfb196dc; uncertaintrue/inFlight0/reserved.028096/actualnull. Caps2/1.5/4 unchanged, no retries/reset/ledgercopy/guessedactual/newupperbound. OfflineUI/testing/publicationcontinues; successfulrealAIrecordingblocked."
+  enforcement: "Exactv7oneusegrant applied tosamecanonical thenindependentlyaudited/separatelycleared at2026-10-21T09:40:43Z, SHA2df753de24626b7f5fbbd976557e3554dd216b692c91912329dfedb549a84434. Existing$.028096demoreserveonly/actualnull/caps2-1.5-4 unchanged. Any futureunknown STOP; no ledgercopy/reset/guessedactual/generalbypass. Vercelpaidfalse/keyempty -> protectedsinglehostbridge activation pending."
   before_first_paid_call:
     - "Configure server-only OpenRouter credentials without exposing secrets"
     - "Implement and test cost guard, preflight estimates, usage ledger and bounded retries"
@@ -41,7 +41,7 @@ handoff:
       - "scripts/collect_astana.py"
       - "scripts/test_astana_data.py"
     notes: "M1.3 independently accepted298realPOI/591excerpts and reviewed36demo slice. Original collector code/snapshots preserved separately, no paid recollection. Collection C6 remains owned by collector integrator; publication rights not established."
-next_task_id: "R1.4"
+next_task_id: "R3.2"
 workflow:
   tracker_writer: "Single main integrator updates tracker after every finished task"
   completion_rule: "Mark done only after acceptance verification; record exact commands, exit codes and limitations here and in docs/progress.md"
@@ -989,6 +989,34 @@ stages:
         evidence:
           - "DONE normalgitpushoriginmain cd2c653->7904f94a60f5525bdf9c7c26135add34a3d13a94; remote refs/heads/main EXACTverified 2026-10-21T09:28:05.624658+00:00. Outgoing2commits21blobs541880B0knownkeyfindings; acceptedsource+deploymentconfigs+README+2productionPNG/docs published, no env/index/raw/normalized/private/collector. Finalindependentproduction/docs SPEC/QUALITYPASS, no findings. R2deployment/repair complete; R1.4successfulnewAIvideo remainsblocked and allpaidSTOP, no resubmission. Original17files/collectorblock preserved."
           - "RootactualVercelproduction1440+360screenshotsrecaptured/Chromeuserdeadtabreplacedstableapp: Park/EXPO5km60blank ->3realcards/source drawer/dates/2GISdestination; width360=scroll360/focusresults. Secondactualproduction0budgetPOST ->0results/explicitlimit+unknownpriceexcluded;2offlinePOST/0provider/canonical3969…00f87unchanged.6disabled+70stub/lint/types/build/NFT alreadyPASS;57localdocsrefs0missing/17originals+2collectorblocks+6frozenassets+3historyobjects unchanged. Sourcebuild284files177ZIP29.5MB0keyfindings;productionHTML+9assets3credentials0findings. Finalindependentproduction/docsreview andmainpush receipts pending."
+
+
+  - id: "R3"
+    title: "Enable real AI on the published guide under existing caps"
+    status: "in_progress"
+    tasks:
+      - id: "R3.1"
+        title: "Prepare exact demo budget reactivation and guarded hosting path"
+        status: "done"
+        owner: "root_integrator"
+        depends_on: ["R2.3"]
+        acceptance: "Exact existing unknown remains actualnull; caps unchanged; no generalized bypass or ephemeral serverless ledger. Reviewed single-host canonical guard and proxy ready before production activation."
+        evidence:
+          - "User directly demands enableAI quickly after AIoff/budgetSTOP disclosure; broad checks waived. Executors assigned disjoint budget source and runtime staging; separate reviewer evaluates exact$.028096 necessary historical reserve interpretation. No paidcall/ledger mutation yet; previous production preserved. Independent reviewer permits narrow operator interpretation, root records it in AGENTS: existing$.028096demo reserve only/actualnull/no capraise/futureunknownSTOP; exact v7 implementation pending review. Read-only reviewerreport /tmp/aituhack-ai-reactivation-review/review.md: no savedgenerationID foractual; fastestguardedproxy compatible, AIdependsMac/tunnel. Inertoneuseoperator prepared /tmp/aituhack-ai-reactivation-integration/apply-demo-policy.mjs; separate migration and independent-clear phases. Reviewedv7source/method/operatorPASS; budget323+new16tests/types/eslint0, proxy21PASSafteractualcleanupregression. Frozenexactsource plan0writes then--apply0: samecanonicalv6->v7/40entries/6grants/actualnull/$.028096demoonly; barrierSTILLactive, independentmigrationaudit/clearGO pending. No providercalls. IndependentactualmigrationAUDITPASS:39others/prior5grants/history/caps exact; rootseparate--clear0/finalv7healthySHA2df753…84434. Targeted339budget+21proxy/types/eslintPASS; isolatedbuildpm4QceUaRvxmCVBFzETAL/NFT6-1567 andexact52fileuploadPASS; helperreview/activation pending."
+        # Parent activation depends on the separate production cutover below.
+      - id: "R3.2"
+        title: "Activate real guarded backend and update permanent deployment"
+        status: "in_progress"
+        depends_on: ["R3.1"]
+        acceptance: "Production accepts actual freeform input and calls existing guarded backend; persistent canonical ledger/key remain server-only; former deployment available for rollback. No broad eval or recording retries."
+        owner: "runtime_media_executor"
+        evidence:
+          - "R3.1 accepted: independentexactgrant/migrationaudit/clear/helper/proxy/payloadSPEC-SAFETYPASS;339budget+21proxy/types/eslint0, buildpm4/NFT6-1567/exact52upload0, rootknown4credentials510files177ZIP31.1MB0. RootGO launchlive3008/newtunnel/tokenbridge+productiondeploy; oldimmutableproduction/fallbackpreserved; no paidtest/validPOST."
+      - id: "R3.3"
+        title: "Publish activation state and verify remote commit"
+        status: "todo"
+        depends_on: ["R3.2"]
+        acceptance: "Truthful README/handoff/tracker, minimal required deployment/secret checks, ordinary main push and remote SHA verification."
 
 
 # Data collector section. Updated only by this chat's main collector integrator.

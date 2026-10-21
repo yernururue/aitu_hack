@@ -4,7 +4,7 @@
   "installCommand": "npx --yes pnpm@11.0.8 install --frozen-lockfile",
   "buildCommand": "npx --yes pnpm@11.0.8 build",
   "env": {
-    "APP_AI_MODE": "disabled",
+    "APP_AI_MODE": "live",
     "OPENROUTER_PAID_ENABLED": "false",
     "OPENROUTER_API_KEY": "",
     "LIVE_EVAL_ENABLED": "false",
