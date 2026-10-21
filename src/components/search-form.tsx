@@ -46,9 +46,10 @@ export function SearchForm({ onSearch, loading, aiMode, synthetic, preferences, 
   const [geoMessage, setGeoMessage] = useState("");
   const [locating, setLocating] = useState(false);
   const [error, setError] = useState("");
-  const [errorField, setErrorField] = useState<"query" | "budget" | null>(null);
+  const [errorField, setErrorField] = useState<"query" | "budget" | "category" | null>(null);
   const geoSequence = useRef(0);
   const queryRef = useRef<HTMLTextAreaElement>(null);
+  const categoryRef = useRef<HTMLSelectElement>(null);
   const budgetRef = useRef<HTMLInputElement>(null);
 
   function updateFilter<Key extends keyof Filters>(key: Key, value: Filters[Key]) {
@@ -94,6 +95,18 @@ export function SearchForm({ onSearch, loading, aiMode, synthetic, preferences, 
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (aiMode === "disabled" && query.trim()) {
+      setErrorField("category");
+      setError("Текстовый поиск недоступен. Очистите сохранённый текст и выберите категорию.");
+      categoryRef.current?.focus();
+      return;
+    }
+    if (aiMode === "disabled" && filters.categories.length === 0) {
+      setErrorField("category");
+      setError("Выберите категорию места.");
+      categoryRef.current?.focus();
+      return;
+    }
     if (!query.trim() && filters.categories.length === 0) {
       setErrorField("query");
       setError("Опишите желание или выберите хотя бы одну категорию.");
@@ -126,16 +139,25 @@ export function SearchForm({ onSearch, loading, aiMode, synthetic, preferences, 
   return (
     <form className="search-form" onSubmit={submit} noValidate aria-label="Поиск мест">
       <div className="form-section query-section">
-        <label className="field-label" htmlFor="search-query">Чем хочется заняться?</label>
-        <div className="query-entry"><textarea
+        <label className="field-label" htmlFor={aiMode === "disabled" ? "search-category" : "search-query"}>{aiMode === "disabled" ? "Категория места" : "Чем хочется заняться?"}</label>
+        <div className="query-entry">{aiMode === "disabled" ? <select
+          ref={categoryRef} id="search-category" name="category" value={filters.categories.length > 1 ? "current" : filters.categories[0] ?? ""}
+          onChange={(event) => { if (event.target.value !== "current") updateFilter("categories", event.target.value ? [event.target.value as Poi["category"]] : []); }}
+          aria-describedby={error && errorField === "category" ? "search-validation-error query-hint" : "query-hint"} aria-invalid={Boolean(error) && errorField === "category"}
+        >
+          <option value="">Выберите категорию</option>
+          {filters.categories.length > 1 && <option value="current">Выбрано: {filters.categories.map((category) => CATEGORY_LABELS[category]).join(", ")}</option>}
+          {CATEGORIES.map(({ value }) => <option key={value} value={value}>{CATEGORY_LABELS[value]}</option>)}
+        </select> : <textarea
           ref={queryRef} id="search-query" name="query" rows={3} maxLength={1000}
-          placeholder={aiMode === "stub" ? "Например, «Хочу погулять»" : aiMode === "disabled" ? "Выберите категорию ниже, оставив текст пустым" : "Например, выпить кофе в тихом месте или прогуляться у воды"}
+          placeholder={aiMode === "stub" ? "Например, «Хочу погулять»" : "Например, выпить кофе в тихом месте или прогуляться у воды"}
           value={query} onChange={(event) => { setQuery(event.target.value); setError(""); }}
           aria-describedby={error && errorField === "query" ? "search-validation-error" : "query-hint"} aria-invalid={Boolean(error) && errorField === "query"}
-        />
+        />}
         <Button type="submit" className="search-submit" size="lg" aria-label="Найти места" aria-busy={loading}><Search aria-hidden="true" />{loading ? "Ищем…" : "Найти места"}<ArrowUpRight aria-hidden="true" /></Button></div>
         {error && <p id="search-validation-error" role="alert" className="validation-error">{error}</p>}
-        <p id="query-hint" className="field-hint">{aiMode === "stub" ? "Готовую фразу можно сочетать с фильтрами. При конфликте попросим уточнение." : aiMode === "disabled" ? "Категории работают без ИИ. Фильтры сохранят выбранные ограничения." : "Опишите желание или выберите категорию."}</p>
+        <p id="query-hint" className="field-hint">{aiMode === "stub" ? "Готовую фразу можно сочетать с фильтрами. При конфликте попросим уточнение." : aiMode === "disabled" ? "Выберите категорию. Учтём выбранные условия." : "Опишите желание или выберите категорию."}</p>
+        {aiMode === "disabled" && query.trim() && <div className="unavailable-query" role="note"><p>Сохранённый текст: «{query}». Его условия не будут проигнорированы.</p><Button variant="outline" onClick={() => { setQuery(""); setError(""); categoryRef.current?.focus(); }}>Очистить текст и выбрать категорию</Button></div>}
         {aiMode === "stub" && <div className="demo-phrase-options" aria-label="Готовые фразы демо-разбора">
           <span className="demo-phrase-label">Попробуйте точную фразу</span>
           {DEMO_PHRASES.map((phrase) => <Button key={phrase} variant="ghost" className="demo-phrase-button" onClick={() => { setQuery(phrase); setError(""); queryRef.current?.focus(); }}>{phrase}</Button>)}
@@ -144,12 +166,12 @@ export function SearchForm({ onSearch, loading, aiMode, synthetic, preferences, 
       <SearchSummary filters={filters} locationLabel={locationLabel} profileId={preferences.profileId} savedCount={preferences.savedIds.length} dismissedCount={preferences.dismissedIds.length} budgetInvalid={budgetInvalid} label="Текущие условия поиска" />
         {aiMode !== "live" && <div className="search-mode-notice" role="note" aria-label="Режим текстового поиска">
           <strong>{aiMode === "stub" ? "Демо-разбор текста" : "ИИ-разбор отключён"}</strong>
-          <p>{aiMode === "stub" ? "Распознаём только пять готовых фраз выше. ИИ-объяснения недоступны." : "Выберите категории и фильтры без текста. Для текстового запроса потребуется уточнение; ИИ-объяснения недоступны."}</p>
+          <p>{aiMode === "stub" ? "Распознаём только пять готовых фраз выше. ИИ-объяснения недоступны." : "Доступен поиск по категориям. Свободный текст и ИИ-объяснения недоступны."}</p>
           <span>{synthetic ? "Места из синтетического тестового каталога." : "Места из реального каталога; данные могут быть неполными."}</span>
         </div>}
       <div className="form-disclosures">
       <details id="search-conditions" className="conditions-disclosure" ref={conditionsRef}><summary><SlidersHorizontal aria-hidden="true" />Условия поиска<ChevronDown aria-hidden="true" /></summary><div className="conditions-content">
-        <fieldset className="categories-fieldset">
+        {aiMode !== "disabled" && <fieldset className="categories-fieldset">
           <legend className="sr-only">Категории мест</legend>
           <div className="category-options">
             {CATEGORIES.map(({ value, icon }) => (
@@ -159,7 +181,7 @@ export function SearchForm({ onSearch, loading, aiMode, synthetic, preferences, 
               </label>
             ))}
           </div>
-        </fieldset>
+        </fieldset>}
 
       <div className="form-section location-section">
         <div className="field-title-row"><span className="field-label"><MapPin aria-hidden="true" />Откуда начнём?</span><span className="location-selection">{locationLabel}</span></div>
