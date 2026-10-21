@@ -2,7 +2,7 @@
 
 R2.4 DONE: https://aituhack-city-guide.vercel.app, Vercel Hobby READY/production `dpl_7rgJDVWJjbm6tUeJprLshaNgp9ac`. Existingaccount/normalCLIreauth, no newaccount/payment/upgrade. Exact51file10,452,280Bpayload/0missing0unexpected, source7486+revieweddeploymentconfigs, catalog/index exact; generatedOIDCenvremovedunread/notuploaded. IsolatedbuildGUH/NFT6-1567 and independentpayload/config/actualproductionSPEC/SAFETYPASS. AnonymousGET200/9assets200/8private404/real298/AIoff/selectYES/textareaNO; rootactual360categoryPark5km60blankPOST returns3realparks, focus/width360 preserved. SecondactualproductionPOST withstrict0budget returns0places, explicitlimit/unknown-priceexclusionretained; total2offlinePOST/0providercalls/canonicalunchanged. FreshproductionHTML+9assets866771B/3knowncredentials0findings. Source/ledger/caps unchanged; paidSTOP/R1.4blocked.
 
-R2.3 current README/screenshots/docs/configs/mainpublication remains in_progress until ordinarypush+remoteverification. Primaryhosting now Vercel; localfallback92201/89576 and preview91521 preserved, oldclosedCFhostname is historical. Productiondeployment identity differs from localfallbackOMf and isolatedvalidationGUH. No resubmission.
+R2.3 DONE: current README/screenshots/docs/configs published by ordinary main push, exact remote `7904f94a60f5525bdf9c7c26135add34a3d13a94` verified 2026-10-21T09:28:05.624658+00:00. Outgoing2commits/21blobs/541880B/0knownkeyfindings; independent finalproduction/docs SPEC/QUALITY PASS. R2 repair/deployment complete. Primaryhosting now Vercel; localfallback92201/89576 and preview91521 preserved, oldclosedCFhostname is historical. Productiondeployment identity differs from localfallbackOMf and isolatedvalidationGUH. No resubmission.
 
 ## Earlier tunnel repair checkpoint
 

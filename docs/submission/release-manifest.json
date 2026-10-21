@@ -301,14 +301,14 @@
     }
   ],
   "delivery": {
-    "state": "production_vercel_verified_repair_git_pending",
+    "state": "production_vercel_and_repair_published_main",
     "publicUploadPerformed": true,
     "youtubeUploadPerformed": false,
     "gitPushPerformed": true,
     "officialSubmissionPerformed": true,
     "stageCommit": "da659ed52fd276ae3787f46a266d3730b96a42b2",
     "localMarkdownLinksChecked": 104,
-    "lastDeliveryCheckUtc": "2026-10-20T19:15:44.617016+00:00",
+    "lastDeliveryCheckUtc": "2026-10-21T09:28:05.624658+00:00",
     "scope": "Reviewed warm minimal UI + explicitly offline current video; successful live video blocked; failed attempt preserved",
     "phoneEvidenceRecordedAtUtc": "2026-10-20T00:35:05.943338+00:00",
     "phoneEvidenceIndependentReview": "SPEC/CONSISTENCY PASS",
@@ -316,10 +316,10 @@
       "repositoryUrl": "https://github.com/yernururue/aitu_hack",
       "branch": "main",
       "defaultBranch": "main",
-      "verifiedHistoryTipBeforeReceipt": "ec020c25587bd9bb05b4ce6ee2d1eb46b94ebfa1",
+      "verifiedHistoryTipBeforeReceipt": "7904f94a60f5525bdf9c7c26135add34a3d13a94",
       "documentationReceiptAdditionalCommits": 1,
       "forcePush": false,
-      "verifiedAtUtc": "2026-10-20T19:15:44.617016+00:00"
+      "verifiedAtUtc": "2026-10-21T09:28:05.624658+00:00"
     },
     "readinessReport": "docs/readiness-report.md",
     "lastPublicUrlRestorationTask": "M7.8",
@@ -345,7 +345,7 @@
     "resubmissionPerformed": false,
     "redesignPublicationPending": false
   },
-  "updatedAt": "2026-10-21T09:22:04.086318+00:00",
+  "updatedAt": "2026-10-21T09:28:05.624658+00:00",
   "applicationUpdate": {
     "taskId": "M5.4",
     "change": "Clarify strict zero versus blank budget and offer explicit budget removal without automatic search or changing other fields",
@@ -444,8 +444,8 @@
     "officiallySubmitted": true,
     "officialSubmissionBasis": "User confirmation",
     "resubmissionPerformed": false,
-    "publishedToMain": false,
-    "verifiedMainTipBeforeReceipt": "ec020c25587bd9bb05b4ce6ee2d1eb46b94ebfa1"
+    "publishedToMain": true,
+    "verifiedMainTipBeforeReceipt": "7904f94a60f5525bdf9c7c26135add34a3d13a94"
   },
   "historicalOfflineStubManifest": {
     "schemaVersion": "1.0",
@@ -1397,7 +1397,7 @@
   },
   "demoRepair": {
     "taskId": "R2",
-    "status": "production_accepted_publication_pending",
+    "status": "production_accepted_main_published",
     "rootCauses": [
       "unrecognized/removed QuickTunnel session: NXDOMAIN and Unauthorized: Tunnel not found; removal mechanism unproven",
       "disabled UI offered unsupported freeform text; categories hidden"
@@ -1419,7 +1419,7 @@
       "docs/submission/images/repair-desktop-home-1440.png",
       "docs/submission/images/repair-mobile-home-360.png"
     ],
-    "publicationPending": true,
+    "publicationPending": false,
     "deploymentId": "dpl_7rgJDVWJjbm6tUeJprLshaNgp9ac",
     "hosting": "vercel_hobby",
     "localFallbackBuildId": "OMfE5AIxdwz51pOXvdkLt",
@@ -1435,7 +1435,19 @@
     "localFallbackOriginPid": 92201,
     "localPreviewPid": 91521,
     "localFallbackTunnelPid": 89576,
-    "productionStrictZeroBudgetPassed": true
+    "productionStrictZeroBudgetPassed": true,
+    "deploymentConfigCommit": "7904f94a60f5525bdf9c7c26135add34a3d13a94",
+    "publication": {
+      "branch": "main",
+      "verifiedMainTipBeforeReceipt": "7904f94a60f5525bdf9c7c26135add34a3d13a94",
+      "verifiedAtUtc": "2026-10-21T09:28:05.624658+00:00",
+      "forcePush": false
+    },
+    "outgoingKnownKeyScan": {
+      "commits": 2,
+      "blobs": 21,
+      "findings": 0
+    }
   },
   "historicalLocalRepairHostingBeforeVercel": {
     "status": "temporary_public_https_offline_after_live_unknown_verified",

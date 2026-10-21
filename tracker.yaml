@@ -30,7 +30,7 @@ budget:
 handoff:
   state: "ready"
   application_state: "repaired_category_first_offline_public_ai_unknown_stop"
-  current_scope: "Vercelproduction https://aituhack-city-guide.vercel.app READY dpl_7rgJDVWJjbm6tUeJprLshaNgp9ac, existingHobby/public298/catalogindexpackaged, disabled/paidfalse/keyempty; category-firstUI6disabled+70stub+independentreview. R2.4done/R2.3normalmainpublicationpending. Localfallback92201/89576 preserved; R1.4successfulAIvideoblocked/newunknownSTOP, no grant/retry/resubmit. Originaldata/media/collector retained."
+  current_scope: "Vercelproduction https://aituhack-city-guide.vercel.app READY dpl_7rgJDVWJjbm6tUeJprLshaNgp9ac, existingHobby/public298/catalogindexpackaged, disabled/paidfalse/keyempty; category-firstUI6disabled+70stub+independentreview. R2done/normalmainpublished7904f94remoteverified. Localfallback92201/89576 preserved; R1.4successfulAIvideoblocked/newunknownSTOP, no grant/retry/resubmit. Originaldata/media/collector retained."
   internal_deadline: "2026-10-20T20:00:00+05:00"
   submission_deadline: "2026-10-20T23:59:00+05:00"
   collector_work:
@@ -41,7 +41,7 @@ handoff:
       - "scripts/collect_astana.py"
       - "scripts/test_astana_data.py"
     notes: "M1.3 independently accepted298realPOI/591excerpts and reviewed36demo slice. Original collector code/snapshots preserved separately, no paid recollection. Collection C6 remains owned by collector integrator; publication rights not established."
-next_task_id: "R2.3"
+next_task_id: "R1.4"
 workflow:
   tracker_writer: "Single main integrator updates tracker after every finished task"
   completion_rule: "Mark done only after acceptance verification; record exact commands, exit codes and limitations here and in docs/progress.md"
@@ -939,7 +939,7 @@ stages:
 
   - id: "R2"
     title: "Diagnose and restore the reported broken public demo"
-    status: "in_progress"
+    status: "done"
     owner: "root_integrator"
     tasks:
       - id: "R2.1"
@@ -982,11 +982,12 @@ stages:
           - "Directusersteering: просто задеплой чувак. ExistingVercelauthfilepresence+cachedCLI located withoutsecretoutput; runtimeexecutorassignedplan/authcheck, isolatedallowliststaging/build andproductiondeployment. Source7486fe6 accepted, currentlocalpublicfallback92201/89576 retained. Reviewerassignedpayload/configvalidation; no provider/paid/key/ledgeroperation authorized."
       - id: "R2.3"
         title: "Verify public desktop/mobile path and publish repair receipt"
-        status: "in_progress"
+        status: "done"
         owner: "root_integrator"
         depends_on: ["R2.2", "R2.4"]
         acceptance: "Realpublicdesktop/mobile mainflow/results/source/route/empty outcome, currentlinks and review checked; cleanknownkey/outgoing scan, ordinarymainpush+remoteverification, tracker/handoff truthful."
         evidence:
+          - "DONE normalgitpushoriginmain cd2c653->7904f94a60f5525bdf9c7c26135add34a3d13a94; remote refs/heads/main EXACTverified 2026-10-21T09:28:05.624658+00:00. Outgoing2commits21blobs541880B0knownkeyfindings; acceptedsource+deploymentconfigs+README+2productionPNG/docs published, no env/index/raw/normalized/private/collector. Finalindependentproduction/docs SPEC/QUALITYPASS, no findings. R2deployment/repair complete; R1.4successfulnewAIvideo remainsblocked and allpaidSTOP, no resubmission. Original17files/collectorblock preserved."
           - "RootactualVercelproduction1440+360screenshotsrecaptured/Chromeuserdeadtabreplacedstableapp: Park/EXPO5km60blank ->3realcards/source drawer/dates/2GISdestination; width360=scroll360/focusresults. Secondactualproduction0budgetPOST ->0results/explicitlimit+unknownpriceexcluded;2offlinePOST/0provider/canonical3969…00f87unchanged.6disabled+70stub/lint/types/build/NFT alreadyPASS;57localdocsrefs0missing/17originals+2collectorblocks+6frozenassets+3historyobjects unchanged. Sourcebuild284files177ZIP29.5MB0keyfindings;productionHTML+9assets3credentials0findings. Finalindependentproduction/docsreview andmainpush receipts pending."
 
 
