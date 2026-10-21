@@ -1,4 +1,16 @@
-# Текущий checkpoint — 21 октября 2026
+# Текущее разрешённое восстановление — 21 октября 2026
+
+Прямая команда включить ИИ после раскрытого STOP принята интегратором и независимым reviewer как узкое разрешение учесть только уже зарезервированные $0.028096 demo intent87d82508-47ff-4ef5-9981-7aa1cfb196dc. Пользователь буквально сумму не называл; это явно записанная операторская интерпретация необходимого шага, не общее разрешение на будущие unknown. Exact authorization95b0b6df-9082-4012-b812-f60887a6dd7b/refuser-direct-enable-ai-20261021; actual остаётся null.
+
+Reviewed v7/operator применён к прежней canonical, затем отдельный независимый actual migration audit и root clear:40entries/34known+6upperbounds/unknown0/uncertainfalse; SHA2df753de24626b7f5fbbd976557e3554dd216b692c91912329dfedb549a84434.39остальныхentries,5priorgrants,history/caps сохранены. Prep exposure$1.438136012/eval$1.437640771 неизменны; demo charge$0.028096/available$3.971904, actualdemo0 НЕ означает бесплатно. Caps prep$2/eval$1.50внутри/demo$4 прежние. Новый unknown снова STOP.
+
+Новый сервер закрепляет MistralSmall3.2/DeepInfra и purpose demo; Vercel paidfalse/keyempty и только proxy в один persistentbackend. Ключ/ledger на Mac, токен bridge только server env. Новых paid smoke/eval/генераций после восстановления не было по прямой просьбе пользователя о скорости.
+
+---
+
+# Исторический checkpoint до включения ИИ — 21 октября 2026
+
+Этот раздел сохраняет прежнее состояние без ИИ и v6 STOP. Текущие v7 и включение описаны выше.
 
 [Новый интерфейс](https://aituhack-city-guide.vercel.app) работает в явно обозначенном режиме **без ИИ / paid=false**. Категории, строгие фильтры, реальные места, источники и маршруты доступны. Исправление21октября: видимый выбор категории вместо недоступного текста;6disabled+70stub браузерных проверок, lint/types/build/strictNFT/harness прошли; source7486fe6 плюс проверенные deployment-конфиги; production dpl_7rgJDVWJjbm6tUeJprLshaNgp9ac. Локальный fallback buildOMf сохранён.1055unit относятся к предыдущей приёмке редизайна, повторно в этом UI-исправлении не запускались. Актуальные материалы и проверки — в [README](../README.md).
 

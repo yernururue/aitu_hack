@@ -21,7 +21,7 @@ budget:
   recorded_openrouter_spend_usd: 0.002178331
   spend_basis: "Canonicalv7/40entries:34known+6authorizedupperbounds(actualnull),unknown0/uncertainfalse. Prepactual.002178331/eval.00168309; oldbounds1.435957681; prepspent1.438136012/eval1.437640771 unchanged. New$.028096historicaldemo upperbound, actualnull; demoavailable3.971904. Narrow direct-enable interpretation independentlyreviewed; no capraise or newpaidcalls."
   account_balance_verified: false
-  enforcement: "Exactv7oneusegrant applied tosamecanonical thenindependentlyaudited/separatelycleared at2026-10-21T09:40:43Z, SHA2df753de24626b7f5fbbd976557e3554dd216b692c91912329dfedb549a84434. Existing$.028096demoreserveonly/actualnull/caps2-1.5-4 unchanged. Any futureunknown STOP; no ledgercopy/reset/guessedactual/generalbypass. Vercelpaidfalse/keyempty -> protectedsinglehostbridge activation pending."
+  enforcement: "Exactv7oneusegrant applied tosamecanonical thenindependentlyaudited/separatelycleared at2026-10-21T09:40:43Z, SHA2df753de24626b7f5fbbd976557e3554dd216b692c91912329dfedb549a84434. Existing$.028096demoreserveonly/actualnull/caps2-1.5-4 unchanged. Any futureunknown STOP; no ledgercopy/reset/guessedactual/generalbypass. Vercelpaidfalse/keyempty -> protectedsinglehostbridge enabled onstableURL; no newvalidPOST/provider calls."
   before_first_paid_call:
     - "Configure server-only OpenRouter credentials without exposing secrets"
     - "Implement and test cost guard, preflight estimates, usage ledger and bounded retries"
@@ -29,8 +29,8 @@ budget:
   dataset_volume: "298 accepted real POI /591 short sourced review excerpts; verified36 in3zones/3categories; original298/1953collector snapshot preserved"
 handoff:
   state: "ready"
-  application_state: "repaired_category_first_offline_public_ai_unknown_stop"
-  current_scope: "Vercelproduction https://aituhack-city-guide.vercel.app READY dpl_7rgJDVWJjbm6tUeJprLshaNgp9ac, existingHobby/public298/catalogindexpackaged, disabled/paidfalse/keyempty; category-firstUI6disabled+70stub+independentreview. R2done/normalmainpublished7904f94remoteverified. Localfallback92201/89576 preserved; R1.4successfulAIvideoblocked/newunknownSTOP, no grant/retry/resubmit. Originaldata/media/collector retained."
+  application_state: "public_live_ai_bridge_enabled_without_new_paid_smoke"
+  current_scope: "RealAIenabledon https://aituhack-city-guide.vercel.app READY dpl_G2L8nuN5hBTvRUnKc69bgeYekKMM/source80342d4; protectedsinglehost2516/3008+CF2572/canonicalv7healthy, Vercelpaidfalse/keyempty/proxyonly.339budget+21proxy/types/lint/build/NFT/independentreviewPASS; newvalidPOST/provider0 perlatestrequest, no newAIresponse/video claim. Oldproduction/fallback/media/collector preserved. R3.3 docs/mainpublicationinprogress, R1.4 successfulnewvideo TODO; no resubmission."
   internal_deadline: "2026-10-20T20:00:00+05:00"
   submission_deadline: "2026-10-20T23:59:00+05:00"
   collector_work:
@@ -41,7 +41,7 @@ handoff:
       - "scripts/collect_astana.py"
       - "scripts/test_astana_data.py"
     notes: "M1.3 independently accepted298realPOI/591excerpts and reviewed36demo slice. Original collector code/snapshots preserved separately, no paid recollection. Collection C6 remains owned by collector integrator; publication rights not established."
-next_task_id: "R3.2"
+next_task_id: "R3.3"
 workflow:
   tracker_writer: "Single main integrator updates tracker after every finished task"
   completion_rule: "Mark done only after acceptance verification; record exact commands, exit codes and limitations here and in docs/progress.md"
@@ -866,7 +866,7 @@ stages:
 
   - id: "R1"
     title: "City guide redesign, real AI browser demo and main publication"
-    status: "blocked"
+    status: "in_progress"
     owner: "root_integrator"
     tasks:
       - id: "R1.1"
@@ -912,11 +912,12 @@ stages:
           - "Independent scopedSPEC/QUALITYPASS /tmp/aituhack-redesign-ui-review.md; currentdesktop/mobile/strictbudgetvisuals inspected. Rootfreshfull1055unit/22suites59.43s, executor70e2e34.0s/attribution4/lint/types all0; rootfinalbuild6OQMmPb1YJ3ddzPsvzGf9/NFT6-1569requiredindex/harness/diff0, sourcebuildknownkey268files177ZIP35.7MBfindings0. Hero1subtitle, core+activeconditions, no duplicatelabels/slogans, data disclosure; activeunknown/opinion/empty/error/degraded retained. No paidcalls."
       - id: "R1.4"
         title: "Record one real AI browser scenario and verify new MP4"
-        status: "blocked"
+        status: "todo"
         owner: "runtime_media_executor"
         depends_on: ["R1.3", "R1.2b"]
         acceptance: "Canonical guard healthy before one real query through browser; no mocked provider/response; video shows query/result/explanation/sources/map navigation; new H264/yuv420p/faststart MP4 decodes and plays, previous video preserved; new unknown stops paid."
         evidence:
+          - "R3 removed the historical budget block on21October through reviewedexactv7grant/independentaudit/clear; actualremainsnull/capsunchanged/futureunknownSTOP. Successfulnewvideo stillNOTproduced; latestpriority is immediateAIactivation withpaidcheckswaived, so no newvalidrequest orrecording performed. Task returnsTODO, historicalSTOP below is past evidence rather than currentstate."
           - "ExactlyONE authorizednewpublicUI POST returnedHTTP200/needs_clarification/0places; canonical40entries adds demo:intent:unknown reservation87d82508-47ff-4ef5-9981-7aa1cfb196dc, reserve.028096/actualnull/uncertaintrue/inflight0/availabledemo3.971904. AllpaidSTOP, noresubmit/upperbound/reconciliation; no generationID or upstreamstatus retained so actualcannotbeconfirmed. Failedactualattemptrecord preserved; successfulAIresult/source/mapvideo NOTachieved. Offlinepublicationcontinues perusercontingency; independentfailureaudit+finalmedia SPEC/QUALITYPASS in failed-live-review.md and offline-review.md. No subsequent provider attempt."
       - id: "R1.4a"
         title: "Publish explicit offline fallback and record current functional UI without paid calls"
@@ -1006,15 +1007,16 @@ stages:
         # Parent activation depends on the separate production cutover below.
       - id: "R3.2"
         title: "Activate real guarded backend and update permanent deployment"
-        status: "in_progress"
+        status: "done"
         depends_on: ["R3.1"]
         acceptance: "Production accepts actual freeform input and calls existing guarded backend; persistent canonical ledger/key remain server-only; former deployment available for rollback. No broad eval or recording retries."
         owner: "runtime_media_executor"
         evidence:
+          - "DONE same https://aituhack-city-guide.vercel.app READY productiondpl_G2L8nuN5hBTvRUnKc69bgeYekKMM/immutable9250vdtp7; source80342d41bc9f18301ce300fd8fca55086d8e211a. Livebackend2516/3008+detachedCF2572, requiredtoken, samecanonicalv7SHA2df753…84434 unchanged/healthy. AnonymousGET200/livefreeform/real298/9assets200/8private404, originunauth401/authINVALID400 beforecore,0validPOST/provider. RootactualIABliveformopened/deliverable andpublicHTML+9assets870255B/known4credentials0findings. Cloudpaidfalse/keyempty; oldproduction/fallback preserved; Mac/tunneldependency disclosed. No successfulnewAIresponse claimed."
           - "R3.1 accepted: independentexactgrant/migrationaudit/clear/helper/proxy/payloadSPEC-SAFETYPASS;339budget+21proxy/types/eslint0, buildpm4/NFT6-1567/exact52upload0, rootknown4credentials510files177ZIP31.1MB0. RootGO launchlive3008/newtunnel/tokenbridge+productiondeploy; oldimmutableproduction/fallbackpreserved; no paidtest/validPOST."
       - id: "R3.3"
         title: "Publish activation state and verify remote commit"
-        status: "todo"
+        status: "in_progress"
         depends_on: ["R3.2"]
         acceptance: "Truthful README/handoff/tracker, minimal required deployment/secret checks, ordinary main push and remote SHA verification."
 

@@ -1,3 +1,5 @@
+> Текущее состояние21октября: [ИИ включён на демо](https://aituhack-city-guide.vercel.app), Vercel proxy к защищённому backend на Mac. Mac/туннель должны оставаться включёнными. Прежний unknown учтён точным reviewed v7 grant по верхнему резерву$0.028096, actualnull/caps прежние; будущий unknown STOP. Новых платных проверок и успешного AI-видео после включения нет. Ниже сохранены сведения предыдущей приёмки; текущие факты — в README и tracker.
+
 # Демо и материалы — 21 октября 2026
 
 [**Новый интерфейс**](https://aituhack-city-guide.vercel.app) · [README](../../README.md) · [GitHub main](https://github.com/yernururue/aitu_hack)

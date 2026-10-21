@@ -1,3 +1,7 @@
+# ИИ включён — 21 октября 2026
+
+R3.2 DONE: тот же https://aituhack-city-guide.vercel.app, READY production dpl_G2L8nuN5hBTvRUnKc69bgeYekKMM/source80342d4. Vercel paidfalse/keyempty -> token-auth singlehost2516/3008+CF2572, live/demo/MistralSmall3.2/DeepInfra, samecanonical v7 healthy SHA2df753…84434 unchanged. AnonymousGET200/9assets200/8private404/liveform; bridge401/authINVALID400 доcore; validPOST/provider0. Root actual1440/360 production screenshots обновлены, IABdeliverable открыт; publicHTML+9assets870255B/known4credentials0findings. Новая успешная модельная генерация не проверена по прямой просьбе; AI зависит от Mac/туннеля. Старые production/fallback/media/collector сохранены. R3.3 docs/main push в процессе; R1.4 видео TODO, бюджетный блок снят.
+
 # Срочное включение ИИ — 21 октября 2026, в процессе
 
 R3: последняя прямая команда включить ИИ после раскрытого STOP принята как узкое разрешение существующего demo-резерва $0.028096; пользователь буквально сумму не называл. Новый exact v7 grant/source/operator независимо PASS;339целевых budget+21proxy tests/types/lint0. Canonical40entries/34known6upperbounds/actualnull/caps2-1.5-4 сохранены,39другихentries/prior5grants/audithistory byte-preserved. После применения выполнен независимый actual migration audit и отдельный root clear: SHA2df753de24626b7f5fbbd976557e3554dd216b692c91912329dfedb549a84434, uncertainfalse/unknown0. Новых provider calls нет. Будущий unknown снова STOP.
