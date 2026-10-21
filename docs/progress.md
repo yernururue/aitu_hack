@@ -1,3 +1,7 @@
+# Публикация включённого ИИ — 2026-10-21T09:49:47.914670+00:00
+
+R3 DONE: обычный push origin main369b5e8→301ec397fc32a61b302e07d3d58318f88e1040f6, точный remote refs/heads/main проверен. Source80342d4 и текущие README/скриншоты/документы опубликованы. Независимое actualdeployment/docs review PASS;3замечания документации исправлены и перепроверены, открытых нет. Outgoing2commits/24blobs/759750B/known4credentials0;17оригиналов/2collectorblocks/6frozenmedia/3historicalobjects/51localrefs сохранены, tracker73IDs/deps/harness/diff0. Stable demo с liveform открыто в IAB; no validPOST/provider по просьбе пользователя. R1.4 новое успешное видео TODO; прежний бюджетный блок снят. Новая неизвестная стоимость снова STOP, Mac/туннель нужны для ИИ. Заявка повторно не отправлялась.
+
 # ИИ включён — 21 октября 2026
 
 R3.2 DONE: тот же https://aituhack-city-guide.vercel.app, READY production dpl_G2L8nuN5hBTvRUnKc69bgeYekKMM/source80342d4. Vercel paidfalse/keyempty -> token-auth singlehost2516/3008+CF2572, live/demo/MistralSmall3.2/DeepInfra, samecanonical v7 healthy SHA2df753…84434 unchanged. AnonymousGET200/9assets200/8private404/liveform; bridge401/authINVALID400 доcore; validPOST/provider0. Root actual1440/360 production screenshots обновлены, IABdeliverable открыт; publicHTML+9assets870255B/known4credentials0findings. Новая успешная модельная генерация не проверена по прямой просьбе; AI зависит от Mac/туннеля. Старые production/fallback/media/collector сохранены. R3.3 docs/main push в процессе; R1.4 видео TODO, бюджетный блок снят.

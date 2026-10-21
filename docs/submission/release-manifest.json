@@ -327,8 +327,8 @@
     "officialSubmissionPerformed": true,
     "stageCommit": "da659ed52fd276ae3787f46a266d3730b96a42b2",
     "localMarkdownLinksChecked": 104,
-    "lastDeliveryCheckUtc": "2026-10-21T09:28:05.624658+00:00",
-    "scope": "Reviewed warm minimal UI + explicitly offline current video; successful live video blocked; failed attempt preserved",
+    "lastDeliveryCheckUtc": "2026-10-21T09:49:47.914670+00:00",
+    "scope": "live_ai_bridge_enabled_without_new_paid_smoke",
     "phoneEvidenceRecordedAtUtc": "2026-10-20T00:35:05.943338+00:00",
     "phoneEvidenceIndependentReview": "SPEC/CONSISTENCY PASS",
     "gitPublication": {
@@ -364,7 +364,7 @@
     "resubmissionPerformed": false,
     "redesignPublicationPending": false
   },
-  "updatedAt": "2026-10-21T09:47:04.739121+00:00",
+  "updatedAt": "2026-10-21T09:49:47.914670+00:00",
   "applicationUpdate": {
     "taskId": "M5.4",
     "change": "Clarify strict zero versus blank budget and offer explicit budget removal without automatic search or changing other fields",
@@ -464,7 +464,7 @@
     "officialSubmissionBasis": "User confirmation",
     "resubmissionPerformed": false,
     "publishedToMain": true,
-    "verifiedMainTipBeforeReceipt": "7904f94a60f5525bdf9c7c26135add34a3d13a94"
+    "verifiedMainTipBeforeReceipt": "301ec397fc32a61b302e07d3d58318f88e1040f6"
   },
   "historicalOfflineStubManifest": {
     "schemaVersion": "1.0",
@@ -1536,6 +1536,14 @@
     "knownSecretFindings": 0,
     "backendRequiresMacAndTunnel": true,
     "oldDeploymentPreserved": true,
-    "publicationPending": true
+    "publicationPending": false,
+    "publication": {
+      "branch": "main",
+      "verifiedCommitBeforeReceipt": "301ec397fc32a61b302e07d3d58318f88e1040f6",
+      "verifiedAtUtc": "2026-10-21T09:49:47.914670+00:00",
+      "sourceCommit": "80342d41bc9f18301ce300fd8fca55086d8e211a",
+      "independentDeploymentDocsReview": "PASS",
+      "outgoingKnownSecretFindings": 0
+    }
   }
 }

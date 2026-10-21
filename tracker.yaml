@@ -30,7 +30,7 @@ budget:
 handoff:
   state: "ready"
   application_state: "public_live_ai_bridge_enabled_without_new_paid_smoke"
-  current_scope: "RealAIenabledon https://aituhack-city-guide.vercel.app READY dpl_G2L8nuN5hBTvRUnKc69bgeYekKMM/source80342d4; protectedsinglehost2516/3008+CF2572/canonicalv7healthy, Vercelpaidfalse/keyempty/proxyonly.339budget+21proxy/types/lint/build/NFT/independentreviewPASS; newvalidPOST/provider0 perlatestrequest, no newAIresponse/video claim. Oldproduction/fallback/media/collector preserved. R3.3 docs/mainpublicationinprogress, R1.4 successfulnewvideo TODO; no resubmission."
+  current_scope: "RealAIenabledon https://aituhack-city-guide.vercel.app READY dpl_G2L8nuN5hBTvRUnKc69bgeYekKMM/source80342d4; protectedsinglehost2516/3008+CF2572/canonicalv7healthy, Vercelpaidfalse/keyempty/proxyonly.339budget+21proxy/types/lint/build/NFT/independentreviewPASS; newvalidPOST/provider0 perlatestrequest, no newAIresponse/video claim. Oldproduction/fallback/media/collector preserved. R3done/normalmainpublished301ec39/remoteverified, R1.4 successfulnewvideo TODO; no resubmission."
   internal_deadline: "2026-10-20T20:00:00+05:00"
   submission_deadline: "2026-10-20T23:59:00+05:00"
   collector_work:
@@ -41,7 +41,7 @@ handoff:
       - "scripts/collect_astana.py"
       - "scripts/test_astana_data.py"
     notes: "M1.3 independently accepted298realPOI/591excerpts and reviewed36demo slice. Original collector code/snapshots preserved separately, no paid recollection. Collection C6 remains owned by collector integrator; publication rights not established."
-next_task_id: "R3.3"
+next_task_id: "R1.4"
 workflow:
   tracker_writer: "Single main integrator updates tracker after every finished task"
   completion_rule: "Mark done only after acceptance verification; record exact commands, exit codes and limitations here and in docs/progress.md"
@@ -994,7 +994,7 @@ stages:
 
   - id: "R3"
     title: "Enable real AI on the published guide under existing caps"
-    status: "in_progress"
+    status: "done"
     tasks:
       - id: "R3.1"
         title: "Prepare exact demo budget reactivation and guarded hosting path"
@@ -1016,9 +1016,12 @@ stages:
           - "R3.1 accepted: independentexactgrant/migrationaudit/clear/helper/proxy/payloadSPEC-SAFETYPASS;339budget+21proxy/types/eslint0, buildpm4/NFT6-1567/exact52upload0, rootknown4credentials510files177ZIP31.1MB0. RootGO launchlive3008/newtunnel/tokenbridge+productiondeploy; oldimmutableproduction/fallbackpreserved; no paidtest/validPOST."
       - id: "R3.3"
         title: "Publish activation state and verify remote commit"
-        status: "in_progress"
+        status: "done"
         depends_on: ["R3.2"]
         acceptance: "Truthful README/handoff/tracker, minimal required deployment/secret checks, ordinary main push and remote SHA verification."
+        owner: "root_integrator"
+        evidence:
+          - "DONE normalpushoriginmain369b5e8->301ec397fc32a61b302e07d3d58318f88e1040f6; exactremoterefs/heads/main verified. Acceptedsource80342d4+README/current1440-360PNGs/livehosting-budgetmanifest/docs published; independentactualdeployment/DOCSCONSISTENCYPASS/0openfindings after3doccorrections. Outgoing2commits24blobs759750B/known4credentials0, preserved17originals/2collectorblocks/6frozenmedia/3historicalobjects/51links; tracker73uniqueIDs/deps/harness/diff0. No validPOST/provider/newAIvideo; previousmedia/rollback preserved, no resubmission. R3complete/currentliveconfigured, R1.4successfulnewvideo remainsTODO rather than budgetblocked."
 
 
 # Data collector section. Updated only by this chat's main collector integrator.
